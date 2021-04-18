@@ -43,7 +43,8 @@ import { MintFormComponent } from './mint-form/mint-form.component';
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
-    FormsModule
+    FormsModule,
+   // ApiModule
   ],
   providers: [],
   bootstrap: [AppComponent]

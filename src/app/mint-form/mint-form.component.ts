@@ -7,12 +7,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MintFormComponent implements OnInit {
 
-  public name: string = "";
-  public amount: number = 1;
+  name: string = "";
+  amount: number = 0;
+  breakpoint: number = 0;
+
+  public tokens = [{}, {}, {}, {}, {}];
+
+  //public orders: MintOrder[] = [];
 
   constructor() { }
 
+  cols = 1;
+
   ngOnInit(): void {
+    this.breakpoint = window.innerWidth / 500;
+  }
+
+  onResize(event: any) {
+    this.breakpoint = window.innerWidth / 500;
+  }
+
+  addToken() {
+    this.tokens.push({});
   }
 
   onSubmit() {
