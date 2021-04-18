@@ -1,3 +1,5 @@
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 import { ApiModule } from 'src/cardano-tools-client';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -20,10 +22,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MintFormComponent } from './mint-form/mint-form.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MintTokenComponent } from './mint-token/mint-token.component';
+
 
 @NgModule({
   declarations: [
@@ -48,7 +51,10 @@ import { MintTokenComponent } from './mint-token/mint-token.component';
     MatSelectModule,
     MatRadioModule,
     FormsModule,
-    ApiModule
+    ApiModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

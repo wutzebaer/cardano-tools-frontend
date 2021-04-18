@@ -12,7 +12,7 @@ export class MintFormComponent implements OnInit {
   name: string = "";
   amount: number = 0;
 
-  public mintOrderSubmission: MintOrderSubmission = { tokens: [{ assetName: "", amount: 1 }, { assetName: "", amount: 1 }, { assetName: "", amount: 1 }] };
+  public mintOrderSubmission: MintOrderSubmission = { tokens: [{ assetName: "", amount: 1 }] };
 
   constructor() { }
 

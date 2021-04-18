@@ -1,6 +1,12 @@
 <div class="grid-container">
     <h1 class="mat-h1">Mint Cardano NFTs</h1>
-    <form #form="ngForm" (ngSubmit)="form.valid && onSubmit()" fxLayout="column" fxLayoutGap="10px">
+    <form #form="ngForm" (ngSubmit)="form.valid && onSubmit()" fxLayout="column" fxLayoutGap="15px">
+
+        <div>
+            <mat-form-field fxFlex="275px">
+                <input matInput placeholder="Account" value="">
+            </mat-form-field>
+        </div>
 
         <div>
             <div fxLayout="row wrap" fxLayoutGap="10px grid">
@@ -11,11 +17,9 @@
             </div>
         </div>
 
-        <button mat-fab (click)="addToken()" type="button">
-            <mat-icon>add</mat-icon>
-        </button>
 
-        <div>
+        <div fxLayout="row" fxLayoutGap="10px">
+            <button mat-raised-button color="accent" type="button" (click)="addToken()">Add Token</button>
             <button mat-raised-button color="primary" type="submit">Submit</button>
         </div>
 
