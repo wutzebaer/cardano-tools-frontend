@@ -12,6 +12,8 @@ export class MintTokenComponent implements OnInit {
 
   @Input() token!: TokenSubmission;
 
+  metadata: any = { name: "", type: "", image: "" };
+
   constructor() { }
 
   ngOnInit(): void {
