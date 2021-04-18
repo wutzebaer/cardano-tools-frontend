@@ -1,0 +1,27 @@
+<div class="grid-container">
+    <h1 class="mat-h1">Mint Cardano NFT</h1>
+    <form #form="ngForm" (ngSubmit)="form.valid && onSubmit()">
+
+
+        <mat-card class="shipping-card">
+            <mat-card-header>
+                <mat-card-title></mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div fxLayout="column">
+                    <mat-form-field>
+                        <input matInput placeholder="Name" [(ngModel)]="name" name="name" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput type="number" placeholder="Amount" [(ngModel)]="amount" name="amount" required>
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="primary" type="submit">Submit</button>
+            </mat-card-actions>
+        </mat-card>
+
+    </form>
+
+</div>

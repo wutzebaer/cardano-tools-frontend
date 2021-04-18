@@ -16,15 +16,15 @@ import { DashComponent } from './dash/dash.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
-import { AddressFormComponent } from './address-form/address-form.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { MintFormComponent } from './mint-form/mint-form.component';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, DashComponent, AddressFormComponent,
+    AppComponent, NavComponent, DashComponent, MintFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,7 +43,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
-    ReactiveFormsModule
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
