@@ -2,19 +2,23 @@
     <h1 class="mat-h1">Mint Cardano NFTs</h1>
     <form #form="ngForm" (ngSubmit)="form.valid && onSubmit()" fxLayout="column" fxLayoutGap="10px">
 
-        <mat-grid-list [cols]="breakpoint" (window:resize)="onResize($event)" rowHeight="fit">
-            <mat-grid-tile *ngFor="let token of mintOrderSubmission.tokens">
-                <app-mint-token [token]=token></app-mint-token>
-            </mat-grid-tile>
-        </mat-grid-list>
+        <div>
+            <div fxLayout="row wrap" fxLayoutGap="10px grid">
+                <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%"
+                    *ngFor="let token of mintOrderSubmission.tokens; let i = index">
+                    <app-mint-token [token]=token [index]=i></app-mint-token>
+                </div>
+            </div>
+        </div>
 
-        <button mat-fab (click)="addToken()">
+        <button mat-fab (click)="addToken()" type="button">
             <mat-icon>add</mat-icon>
         </button>
 
         <div>
             <button mat-raised-button color="primary" type="submit">Submit</button>
         </div>
+
 
     </form>
 

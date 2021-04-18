@@ -11,6 +11,7 @@ import { TokenSubmission } from 'src/cardano-tools-client';
 export class MintTokenComponent implements OnInit {
 
   @Input() token!: TokenSubmission;
+  @Input() index!: number;
 
   metadata: any = { name: "", type: "", image: "" };
 

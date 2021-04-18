@@ -3,20 +3,20 @@
         <mat-card-title></mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <h3>Token</h3>
+        <h3>Token #{{index+1}}</h3>
         <div fxLayout="row" fxLayoutGap="10px">
             <mat-form-field fxFlex>
-                <input matInput placeholder="Asset Name" [(ngModel)]="token.assetName" name="name" required>
+                <input matInput placeholder="Asset Name" [(ngModel)]="token.assetName" name="assetName{{index+1}}" required>
             </mat-form-field>
             <mat-form-field fxFlex=25>
-                <input matInput type="number" placeholder="Amount" [(ngModel)]="token.amount" name="amount" min=1
+                <input matInput type="number" placeholder="Amount" [(ngModel)]="token.amount" name="amount{{index+1}}" min=1
                     required>
             </mat-form-field>
         </div>
         <h3>Metadata</h3>
         <div fxLayout="column" fxLayoutGap="10px">
             <mat-form-field *ngFor="let entry of metadata | keyvalue">
-                <input matInput placeholder="{{entry.key}}" [(ngModel)]="entry.value" name="{{entry.key}}" required>
+                <input matInput placeholder="{{entry.key}}" [(ngModel)]="entry.value" name="{{entry.key}}{{index+1}}" required>
             </mat-form-field>
         </div>
     </mat-card-content>
