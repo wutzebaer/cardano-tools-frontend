@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MintOrderSubmission } from './../../cardano-tools-client/model/mintOrderSubmission';
 
 @Component({
   selector: 'app-mint-form',
@@ -11,9 +12,7 @@ export class MintFormComponent implements OnInit {
   amount: number = 0;
   breakpoint: number = 0;
 
-  public tokens = [{}, {}, {}, {}, {}];
-
-  //public orders: MintOrder[] = [];
+  public mintOrderSubmission: MintOrderSubmission = { tokens: [{ assetName: "", amount: 1 },{ assetName: "", amount: 1 },{ assetName: "", amount: 1 }] };
 
   constructor() { }
 
@@ -28,7 +27,7 @@ export class MintFormComponent implements OnInit {
   }
 
   addToken() {
-    this.tokens.push({});
+    this.mintOrderSubmission.tokens?.push({ assetName: "", amount: 1 });
   }
 
   onSubmit() {

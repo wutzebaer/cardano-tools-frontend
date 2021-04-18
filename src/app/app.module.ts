@@ -1,3 +1,4 @@
+import { ApiModule } from 'src/cardano-tools-client';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,10 +22,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import { MintFormComponent } from './mint-form/mint-form.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MintTokenComponent } from './mint-token/mint-token.component';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, DashComponent, MintFormComponent,
+    AppComponent, NavComponent, DashComponent, MintFormComponent, MintTokenComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +38,7 @@ import { MintFormComponent } from './mint-form/mint-form.component';
     MatIconModule,
     MatButtonModule,
     LayoutModule,
+    HttpClientModule,
     MatSidenavModule,
     MatListModule,
     MatGridListModule,
@@ -44,7 +48,7 @@ import { MintFormComponent } from './mint-form/mint-form.component';
     MatSelectModule,
     MatRadioModule,
     FormsModule,
-   // ApiModule
+    ApiModule
   ],
   providers: [],
   bootstrap: [AppComponent]
