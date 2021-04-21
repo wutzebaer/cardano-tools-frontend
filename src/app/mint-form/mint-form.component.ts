@@ -15,13 +15,18 @@ export class MintFormComponent implements OnInit {
 
   static counter = 0;
 
-  availableMetaFields: string[] = ['Image', 'Name', 'Type', 'Artist', 'Publisher'];
+  availableMetaFields: string[] = ['Image', 'Name', 'Type', 'Traits', 'Artist', 'Publisher'];
+  listFields: string[] = ['Traits'];
+
   file!: File | null;
   url!: SafeUrl;
   metadata: any = {};
 
+
   constructor(private sanitizer: DomSanitizer) {
   }
+
+  asStringArray(val: any): string[] { return val; }
 
   ngOnInit(): void {
     MintFormComponent.counter++;
@@ -40,9 +45,12 @@ export class MintFormComponent implements OnInit {
     if (metaField in this.metadata) {
       delete this.metadata[metaField];
     } else {
-      this.metadata[metaField] = "";
+      if (this.listFields.indexOf(metaField) != -1) {
+        this.metadata[metaField] = [];
+      } else {
+        this.metadata[metaField] = "";
+      }
     }
-
   }
 
   dropFile(event: any) {

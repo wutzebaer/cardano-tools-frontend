@@ -26,11 +26,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MintComponent } from './mint/mint.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MintFormComponent } from './mint-form/mint-form.component';
+import { ChiplistComponent } from './chiplist/chiplist.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, DashComponent, MintComponent, MintFormComponent,
+    AppComponent, NavComponent, DashComponent, MintComponent, MintFormComponent, ChiplistComponent,
   ],
   imports: [
     BrowserModule,

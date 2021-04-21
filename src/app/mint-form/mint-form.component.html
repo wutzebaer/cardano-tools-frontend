@@ -47,10 +47,16 @@
 
 
         <div fxLayout="column" fxLayoutGap="10px">
-            <mat-form-field *ngFor="let entry of metadata | keyvalue">
-                <input matInput placeholder="{{entry.key}}" [(ngModel)]="entry.value" name="{{entry.key}}{{counter}}"
-                    required>
-            </mat-form-field>
+            <div *ngFor="let entry of metadata | keyvalue" fxLayout="column">
+                <mat-form-field *ngIf="entry.key != 'Traits'">
+                    <input matInput placeholder="{{entry.key}}" [(ngModel)]="entry.value"
+                        name="{{entry.key}}{{counter}}">
+                </mat-form-field>
+                <app-chiplist *ngIf="entry.key == 'Traits'" label="Traits" placeholder="add trait..."
+                    [(items)]="$any(entry).value"></app-chiplist>
+            </div>
+
+
         </div>
 
         <div fxLayout="row">
