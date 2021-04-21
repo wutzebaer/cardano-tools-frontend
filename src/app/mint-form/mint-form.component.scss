@@ -1,17 +1,42 @@
-.grid-container {
-    margin: 20px;
+mat-card {
+    height: 100%;
+    box-sizing: border-box;
   }
 
-  app-mint-token {
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
+  .upload-wrapper {
+    width: 300px;
+    height: 300px;
+    margin-bottom: 30px;
   }
 
-  .token-wrapper {
-    position: relative;
+  label {
+    cursor: pointer;
+    outline: 2px dashed rgb(224, 224, 224);
   }
-  .delete {
-    position: absolute;
-    right: calc(10px - 10px);
-    top: calc(0px - 10px);
+
+  .dropArea {
+    width: 100%;
+    height: 100%;
+    svg {
+      width: 75%; 
+      height: 75%; 
+      fill:rgb(224, 224, 224);
+    }
+    
+  }
+
+  .preview {
+    width: 100%;
+    height: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: scale-down;
+    }
+    audio {
+      width: 100%;
+    }
+    video {
+      width: 100%;
+    }
   }

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MintTokenComponent } from './mint-token.component';
+import { MintComponent } from './mint.component';
 
-describe('MintTokenComponent', () => {
-  let component: MintTokenComponent;
-  let fixture: ComponentFixture<MintTokenComponent>;
+describe('MintFormComponent', () => {
+  let component: MintComponent;
+  let fixture: ComponentFixture<MintComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MintTokenComponent ]
+      declarations: [ MintComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MintTokenComponent);
+    fixture = TestBed.createComponent(MintComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MintFormComponent } from './mint-form.component';
 
-describe('MintFormComponent', () => {
+describe('MintTokenComponent', () => {
   let component: MintFormComponent;
   let fixture: ComponentFixture<MintFormComponent>;
 

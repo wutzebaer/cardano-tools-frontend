@@ -23,14 +23,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MintFormComponent } from './mint-form/mint-form.component';
+import { MintComponent } from './mint/mint.component';
 import { HttpClientModule } from '@angular/common/http';
-import { MintTokenComponent } from './mint-token/mint-token.component';
+import { MintFormComponent } from './mint-form/mint-form.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, DashComponent, MintFormComponent, MintTokenComponent,
+    AppComponent, NavComponent, DashComponent, MintComponent, MintFormComponent,
   ],
   imports: [
     BrowserModule,
