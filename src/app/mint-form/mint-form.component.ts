@@ -24,12 +24,12 @@ export class MintFormComponent implements OnInit {
 
 
   constructor(private sanitizer: DomSanitizer) {
+    MintFormComponent.counter++;
   }
 
   asStringArray(val: any): string[] { return val; }
 
   ngOnInit(): void {
-    MintFormComponent.counter++;
     this.token.assetName = "Token #" + MintFormComponent.counter;
   }
 
@@ -41,7 +41,7 @@ export class MintFormComponent implements OnInit {
     return Object.keys(this.metadata).length > 0;
   }
 
-  metaChipClick(metaField: string) {
+  addMetaField(metaField: string) {
     if (metaField in this.metadata) {
       delete this.metadata[metaField];
     } else {

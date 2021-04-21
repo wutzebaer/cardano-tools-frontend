@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { MintOrderSubmission } from '../../cardano-tools-client/model/mintOrderSubmission';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -8,6 +8,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   styleUrls: ['./mint.component.scss']
 })
 export class MintComponent implements OnInit {
+
+  @ViewChildren('appMintForm') appMintForms!: QueryList<ElementRef>
 
   name: string = "";
   amount: number = 0;
@@ -30,6 +32,7 @@ export class MintComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.appMintForms.length)
     alert("Tanks");
   }
 }

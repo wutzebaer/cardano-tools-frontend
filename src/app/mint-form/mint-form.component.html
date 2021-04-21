@@ -61,7 +61,7 @@
 
         <div fxLayout="row">
             <mat-chip-list #chipList>
-                <mat-chip *ngFor="let metaField of availableMetaFields" (click)="metaChipClick(metaField)">
+                <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)">
                     {{metaField}}
                 </mat-chip>
             </mat-chip-list>
