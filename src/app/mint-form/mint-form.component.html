@@ -14,9 +14,10 @@
             <div fxLayout="row wrap" fxLayoutGap="10px grid">
                 <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%"
                     *ngFor="let token of mintOrderSubmission.tokens; let i = index">
-                    <app-mint-token [token]=token [index]=i></app-mint-token>
+                    <app-mint-token [token]=token></app-mint-token>
                     <!-- delete button -->
-                    <button [fxHide]="mintOrderSubmission.tokens.length==1" (click)="removeToken(i)" class="delete" mat-mini-fab>
+                    <button [fxHide]="mintOrderSubmission.tokens.length==1" (click)="removeToken(i)" class="delete"
+                        mat-mini-fab>
                         <mat-icon>clear</mat-icon>
                     </button>
                 </div>
@@ -25,8 +26,14 @@
 
 
         <div fxLayout="row" fxLayoutGap="10px">
-            <button mat-raised-button color="accent" type="button" (click)="addToken()">Add Token</button>
-            <button mat-raised-button color="primary" type="submit">Submit</button>
+            <button mat-raised-button color="accent" type="button" (click)="addToken()">
+                <mat-icon>add</mat-icon>
+                Add
+            </button>
+            <button mat-raised-button color="primary" type="submit">
+                <mat-icon>savings</mat-icon>
+                Mint
+            </button>
         </div>
 
 

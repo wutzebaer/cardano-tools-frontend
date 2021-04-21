@@ -12,10 +12,10 @@ import { TokenSubmission } from 'src/cardano-tools-client';
 export class MintTokenComponent implements OnInit {
 
   @Input() token!: TokenSubmission;
-  @Input() index!: number;
+
+  static counter = 0;
 
   availableMetaFields: string[] = ['Image', 'Name', 'Type', 'Artist', 'Publisher'];
-
   file!: File | null;
   url!: SafeUrl;
   metadata: any = {};
@@ -24,7 +24,8 @@ export class MintTokenComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.token.assetName = "Token #" + (this.index + 1);
+    MintTokenComponent.counter++;
+    this.token.assetName = "Token #" + MintTokenComponent.counter ;
   }
 
   metadataPresent(): boolean {
