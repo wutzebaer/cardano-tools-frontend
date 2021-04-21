@@ -35,11 +35,11 @@
 
         <div fxLayout="row" fxLayoutGap="10px">
             <mat-form-field fxFlex>
-                <input matInput placeholder="Asset Name" [(ngModel)]="token.assetName" name="assetName{{index+1}}"
+                <input matInput placeholder="Asset Name" [(ngModel)]="token.assetName" name="assetName{{counter}}"
                     required>
             </mat-form-field>
             <mat-form-field fxFlex=25>
-                <input matInput type="number" placeholder="Amount" [(ngModel)]="token.amount" name="amount{{index+1}}"
+                <input matInput type="number" placeholder="Amount" [(ngModel)]="token.amount" name="amount{{counter}}"
                     min=1 required>
             </mat-form-field>
         </div>
@@ -48,7 +48,7 @@
 
         <div fxLayout="column" fxLayoutGap="10px">
             <mat-form-field *ngFor="let entry of metadata | keyvalue">
-                <input matInput placeholder="{{entry.key}}" [(ngModel)]="entry.value" name="{{entry.key}}{{index+1}}"
+                <input matInput placeholder="{{entry.key}}" [(ngModel)]="entry.value" name="{{entry.key}}{{counter}}"
                     required>
             </mat-form-field>
         </div>

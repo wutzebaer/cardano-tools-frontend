@@ -25,7 +25,11 @@ export class MintTokenComponent implements OnInit {
 
   ngOnInit(): void {
     MintTokenComponent.counter++;
-    this.token.assetName = "Token #" + MintTokenComponent.counter ;
+    this.token.assetName = "Token #" + MintTokenComponent.counter;
+  }
+
+  get counter() {
+    return MintTokenComponent.counter;
   }
 
   metadataPresent(): boolean {
