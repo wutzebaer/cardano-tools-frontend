@@ -1,4 +1,5 @@
 <div class="grid-container">
+
     <h1 class="mat-h1">Mint Cardano NFTs</h1>
     <form #form="ngForm" (ngSubmit)="form.valid && onSubmit()" fxLayout="column" fxLayoutGap="15px">
 
@@ -11,9 +12,13 @@
 
         <div>
             <div fxLayout="row wrap" fxLayoutGap="10px grid">
-                <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%"
+                <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%"
                     *ngFor="let token of mintOrderSubmission.tokens; let i = index">
                     <app-mint-token [token]=token [index]=i></app-mint-token>
+                    <!-- delete button -->
+                    <button [fxHide]="mintOrderSubmission.tokens.length==1" (click)="removeToken(i)" class="delete" mat-mini-fab>
+                        <mat-icon>clear</mat-icon>
+                    </button>
                 </div>
             </div>
         </div>

@@ -12,15 +12,21 @@ export class MintFormComponent implements OnInit {
   name: string = "";
   amount: number = 0;
 
-  public mintOrderSubmission: MintOrderSubmission = { tokens: [{ assetName: "", amount: 1 }] };
+  public mintOrderSubmission: MintOrderSubmission = { tokens: [] };
 
   constructor() { }
 
   ngOnInit(): void {
+    this.addToken();
   }
 
   addToken() {
-    this.mintOrderSubmission.tokens?.push({ assetName: "", amount: 1 });
+    let token = { assetName: "", amount: 1 };
+    this.mintOrderSubmission.tokens.push(token);
+  }
+
+  removeToken(index: number) {
+    this.mintOrderSubmission.tokens.splice(index, 1);
   }
 
   onSubmit() {

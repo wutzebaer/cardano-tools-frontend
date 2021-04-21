@@ -6,3 +6,12 @@
     width: calc(100% - 10px);
     height: calc(100% - 10px);
   }
+
+  .token-wrapper {
+    position: relative;
+  }
+  .delete {
+    position: absolute;
+    right: calc(10px - 10px);
+    top: calc(0px - 10px);
+  }

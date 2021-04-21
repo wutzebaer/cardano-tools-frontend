@@ -1,11 +1,7 @@
-import { Observable } from 'rxjs';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ControlContainer, FormControl, NgForm } from '@angular/forms';
-import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { Component, Input, OnInit } from '@angular/core';
+import { ControlContainer, NgForm } from '@angular/forms';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TokenSubmission } from 'src/cardano-tools-client';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { startWith, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-mint-token',
@@ -18,24 +14,24 @@ export class MintTokenComponent implements OnInit {
   @Input() token!: TokenSubmission;
   @Input() index!: number;
 
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  fruitCtrl = new FormControl();
-  fruits: string[] = ['Image', 'Name', 'Type', 'Artist', 'Publisher'];
-  @ViewChild('fruitInput') fruitInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('auto') matAutocomplete!: MatAutocomplete;
+  availableMetaFields: string[] = ['Image', 'Name', 'Type', 'Artist', 'Publisher'];
 
+  file!: File | null;
+  url!: SafeUrl;
   metadata: any = {};
 
-  constructor() {
+  constructor(private sanitizer: DomSanitizer) {
   }
 
   ngOnInit(): void {
+    this.token.assetName = "Token #" + (this.index + 1);
   }
 
   metadataPresent(): boolean {
     return Object.keys(this.metadata).length > 0;
   }
-  chipClick(metaField: string) {
+
+  metaChipClick(metaField: string) {
     if (metaField in this.metadata) {
       delete this.metadata[metaField];
     } else {
@@ -44,23 +40,27 @@ export class MintTokenComponent implements OnInit {
 
   }
 
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    // Add our fruit
-    if ((value || '').trim()) {
-      this.metadata[value.trim()] = "";
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-
-    this.fruitCtrl.setValue(null);
+  dropFile(event: any) {
+    event.preventDefault();
+    this.appendFilelist(event.dataTransfer.files);
   }
 
+  addFile(event: any) {
+    console.log(event)
+    this.appendFilelist(event.target.files);
+    event.target.value = '';
+  }
+
+  appendFilelist(fileList: FileList) {
+    this.file = fileList.item(0);
+    console.log(this.file)
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.file as Blob);
+    reader.onload = _event => {
+      this.url = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
+    };
+  }
 
 
 }
