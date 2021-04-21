@@ -27,6 +27,9 @@ import { MintComponent } from './mint/mint.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MintFormComponent } from './mint-form/mint-form.component';
 import { ChiplistComponent } from './chiplist/chiplist.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar'; 
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'; 
+import {OverlayModule} from '@angular/cdk/overlay'; 
 
 
 @NgModule({
@@ -55,7 +58,10 @@ import { ChiplistComponent } from './chiplist/chiplist.component';
     ApiModule,
     MatChipsModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    OverlayModule
   ],
   providers: [],
   bootstrap: [AppComponent]

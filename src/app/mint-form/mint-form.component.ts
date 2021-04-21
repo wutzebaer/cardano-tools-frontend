@@ -15,7 +15,7 @@ export class MintFormComponent implements OnInit {
 
   static counter = 0;
 
-  availableMetaFields: string[] = ['Image', 'Name', 'Type', 'Traits', 'Artist', 'Publisher'];
+  availableMetaFields: string[] = ['Image', 'Audio', 'Video', 'Name', 'Type', 'Traits', 'Artist', 'Publisher'];
   listFields: string[] = ['Traits'];
 
   file!: File | null;
