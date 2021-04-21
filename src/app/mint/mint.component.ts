@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { MintOrderSubmission } from '../../cardano-tools-client/model/mintOrderSubmission';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { RestInterfaceService } from 'src/cardano-tools-client/api/restInterface.service';
+import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 
 @Component({
   selector: 'app-mint',
@@ -16,7 +16,7 @@ export class MintComponent implements OnInit {
 
   public mintOrderSubmission: MintOrderSubmission = { tokens: [] };
 
-  constructor() { }
+  constructor(private api: RestInterfaceService) { }
 
   ngOnInit(): void {
     this.addToken();
@@ -34,5 +34,11 @@ export class MintComponent implements OnInit {
   onSubmit() {
     console.log(this.appMintForms.length)
     alert("Tanks");
+  }
+
+  calcFee() {
+    this.api.mintFee(this.mintOrderSubmission).subscribe(fee => {
+      console.log(fee);
+    });
   }
 }

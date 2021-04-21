@@ -30,7 +30,7 @@ export class MintFormComponent implements OnInit {
   asStringArray(val: any): string[] { return val; }
 
   ngOnInit(): void {
-    this.token.assetName = "Token #" + MintFormComponent.counter;
+    this.token.assetName = "Token" + MintFormComponent.counter;
   }
 
   get counter() {

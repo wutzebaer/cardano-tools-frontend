@@ -1,3 +1,5 @@
+import { AjaxInterceptor } from './ajax.interceptor';
+import { BASE_PATH } from './../cardano-tools-client/variables';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { ApiModule } from 'src/cardano-tools-client';
@@ -24,12 +26,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MintComponent } from './mint/mint.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MintFormComponent } from './mint-form/mint-form.component';
 import { ChiplistComponent } from './chiplist/chiplist.component';
-import {MatProgressBarModule} from '@angular/material/progress-bar'; 
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'; 
-import {OverlayModule} from '@angular/cdk/overlay'; 
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 
 @NgModule({
@@ -63,7 +65,17 @@ import {OverlayModule} from '@angular/cdk/overlay';
     MatProgressSpinnerModule,
     OverlayModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AjaxInterceptor,
+      multi: true
+    },
+    {
+      provide: BASE_PATH,
+      useValue: '.'
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
