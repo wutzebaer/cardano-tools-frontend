@@ -16,28 +16,18 @@ export interface MetaValue {
 })
 export class MintFormComponent implements OnInit {
 
-
-  @Input() token!: TokenSubmission;
-
   static counter = 0;
-
   availableMetaFields: string[] = ['Image', 'Audio', 'Video', 'Name', 'Type', 'Traits', 'Artist', 'Publisher'];
   listFields: string[] = ['Traits'];
 
+  @Input() token!: TokenSubmission;
+  metadata: Map<String, MetaValue> = new Map();
   file!: File | null;
   url!: SafeUrl;
-  metadata: Map<String, MetaValue> = new Map();
-
 
   constructor(private sanitizer: DomSanitizer) {
     MintFormComponent.counter++;
   }
-
-  logMetadata() {
-    console.log(this.metadata);
-  }
-
-  asStringArray(val: any): string[] { return val; }
 
   ngOnInit(): void {
     this.token.assetName = "Token" + MintFormComponent.counter;
@@ -49,10 +39,6 @@ export class MintFormComponent implements OnInit {
 
   isListField(key: any) {
     return this.listFields.indexOf(key) != -1;
-  }
-
-  metadataPresent(): boolean {
-    return Object.keys(this.metadata).length > 0;
   }
 
   addMetaField(metaField: string) {

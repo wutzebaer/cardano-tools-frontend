@@ -44,18 +44,17 @@
             </mat-form-field>
         </div>
 
-
-
         <div fxLayout="column" fxLayoutGap="10px">
             <div *ngFor="let entry of metadata | keyvalue" fxLayout="column">
                 <!-- Simple Metafield-->
                 <mat-form-field *ngIf="!isListField(entry.key)">
                     <input matInput placeholder="{{entry.key}}" name="{{entry.key}}{{counter}}" maxlength="64"
-                        [(ngModel)]="entry.value.value" (input)="logMetadata()">
+                        [(ngModel)]="entry.value.value">
                 </mat-form-field>
                 <!-- List Metafied -->
                 <app-chiplist *ngIf="isListField(entry.key)" label="{{entry.key}}" placeholder="add {{entry.key}}..."
-                    [(items)]="entry.value.listValue"></app-chiplist>
+                    [(items)]="entry.value.listValue">
+                </app-chiplist>
             </div>
         </div>
 
