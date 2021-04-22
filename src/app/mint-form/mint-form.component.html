@@ -50,7 +50,7 @@
             <div *ngFor="let entry of metadata | keyvalue" fxLayout="column">
                 <mat-form-field *ngIf="entry.key != 'Traits'">
                     <input matInput placeholder="{{entry.key}}" [(ngModel)]="entry.value"
-                        name="{{entry.key}}{{counter}}">
+                        name="{{entry.key}}{{counter}}" maxlength="64">
                 </mat-form-field>
                 <app-chiplist *ngIf="entry.key == 'Traits'" label="Traits" placeholder="add trait..."
                     [(items)]="$any(entry).value"></app-chiplist>

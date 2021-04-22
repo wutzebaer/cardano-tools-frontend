@@ -66,9 +66,10 @@ import { OverlayModule } from '@angular/cdk/overlay';
     OverlayModule
   ],
   providers: [
+    AjaxInterceptor,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AjaxInterceptor,
+      useExisting: AjaxInterceptor,
       multi: true
     },
     {
