@@ -3,6 +3,11 @@ import { ControlContainer, NgForm } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TokenSubmission } from 'src/cardano-tools-client';
 
+export interface MetaValue {
+  value: string;
+  listValue: string[];
+}
+
 @Component({
   selector: 'app-mint-form',
   templateUrl: './mint-form.component.html',
@@ -10,6 +15,7 @@ import { TokenSubmission } from 'src/cardano-tools-client';
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
 export class MintFormComponent implements OnInit {
+
 
   @Input() token!: TokenSubmission;
 
@@ -20,11 +26,15 @@ export class MintFormComponent implements OnInit {
 
   file!: File | null;
   url!: SafeUrl;
-  metadata: any = {};
+  metadata: Map<String, MetaValue> = new Map();
 
 
   constructor(private sanitizer: DomSanitizer) {
     MintFormComponent.counter++;
+  }
+
+  logMetadata() {
+    console.log(this.metadata);
   }
 
   asStringArray(val: any): string[] { return val; }
@@ -37,19 +47,20 @@ export class MintFormComponent implements OnInit {
     return MintFormComponent.counter;
   }
 
+  isListField(key: any) {
+    return this.listFields.indexOf(key) != -1;
+  }
+
   metadataPresent(): boolean {
     return Object.keys(this.metadata).length > 0;
   }
 
   addMetaField(metaField: string) {
+    console.log(this.metadata);
     if (metaField in this.metadata) {
-      delete this.metadata[metaField];
+      this.metadata.delete(metaField);
     } else {
-      if (this.listFields.indexOf(metaField) != -1) {
-        this.metadata[metaField] = [];
-      } else {
-        this.metadata[metaField] = "";
-      }
+      this.metadata.set(metaField, { value: "", listValue: [] });
     }
   }
 

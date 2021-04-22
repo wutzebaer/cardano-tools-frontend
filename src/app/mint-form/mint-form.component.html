@@ -32,10 +32,12 @@
         </div>
 
         <div fxLayout="row" fxLayoutGap="10px">
+            <!-- Asset Name -->
             <mat-form-field fxFlex>
                 <input matInput placeholder="Asset Name" [(ngModel)]="token.assetName" name="assetName{{counter}}"
                     required pattern="[a-zA-Z0-9-]{1,32}" maxlength="32">
             </mat-form-field>
+            <!-- Amount -->
             <mat-form-field fxFlex=25>
                 <input matInput type="number" placeholder="Amount" [(ngModel)]="token.amount" name="amount{{counter}}"
                     min=1 required>
@@ -46,15 +48,15 @@
 
         <div fxLayout="column" fxLayoutGap="10px">
             <div *ngFor="let entry of metadata | keyvalue" fxLayout="column">
-                <mat-form-field *ngIf="entry.key != 'Traits'">
-                    <input matInput placeholder="{{entry.key}}" [(ngModel)]="entry.value"
-                        name="{{entry.key}}{{counter}}" maxlength="64">
+                <!-- Simple Metafield-->
+                <mat-form-field *ngIf="!isListField(entry.key)">
+                    <input matInput placeholder="{{entry.key}}" name="{{entry.key}}{{counter}}" maxlength="64"
+                        [(ngModel)]="entry.value.value" (input)="logMetadata()">
                 </mat-form-field>
-                <app-chiplist *ngIf="entry.key == 'Traits'" label="Traits" placeholder="add trait..."
-                    [(items)]="$any(entry).value"></app-chiplist>
+                <!-- List Metafied -->
+                <app-chiplist *ngIf="isListField(entry.key)" label="{{entry.key}}" placeholder="add {{entry.key}}..."
+                    [(items)]="entry.value.listValue"></app-chiplist>
             </div>
-
-
         </div>
 
     </mat-card-content>
