@@ -1,9 +1,7 @@
 <mat-card>
-    <mat-card-header>
-        <mat-card-title></mat-card-title>
-    </mat-card-header>
     <mat-card-content>
 
+        <!--<app-loading-overlay [show]="true"></app-loading-overlay>-->
         <h3>{{token.assetName}}</h3>
 
         <div fxLayout="row" fxLayoutAlign="center center">
@@ -59,6 +57,8 @@
 
         </div>
 
+    </mat-card-content>
+    <mat-card-actions>
         <div fxLayout="row">
             <mat-chip-list #chipList>
                 <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)">
@@ -66,9 +66,5 @@
                 </mat-chip>
             </mat-chip-list>
         </div>
-
-
-    </mat-card-content>
-    <mat-card-actions>
     </mat-card-actions>
 </mat-card>

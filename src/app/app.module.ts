@@ -32,11 +32,12 @@ import { ChiplistComponent } from './chiplist/chiplist.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { LoadingOverlayComponent } from './loading-overlay/loading-overlay.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, DashComponent, MintComponent, MintFormComponent, ChiplistComponent,
+    AppComponent, NavComponent, DashComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent,
   ],
   imports: [
     BrowserModule,
