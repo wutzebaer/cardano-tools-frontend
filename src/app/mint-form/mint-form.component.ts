@@ -42,8 +42,7 @@ export class MintFormComponent implements OnInit {
   }
 
   addMetaField(metaField: string) {
-    console.log(this.metadata);
-    if (metaField in this.metadata) {
+    if (this.metadata.has(metaField)) {
       this.metadata.delete(metaField);
     } else {
       this.metadata.set(metaField, { value: "", listValue: [] });

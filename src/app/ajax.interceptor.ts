@@ -21,16 +21,17 @@ export class AjaxInterceptor implements HttpInterceptor {
     this.ajaxStatusChanged$.emit(true);
     const response = next.handle(request);
     return response.pipe(
-      tap(next => { console.log("Event Http"); },
-        error => {
+      tap({
+        next: () => { },
+        error: () => {
           console.log("Error Http");
           this.ajaxStatusChanged$.emit(false);
         },
-        () => {
+        complete: () => {
           console.log("End Http");
           this.ajaxStatusChanged$.emit(false);
         }
-      )
+      })
     );
   }
 }
