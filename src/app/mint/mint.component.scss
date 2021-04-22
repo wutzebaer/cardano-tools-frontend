@@ -12,6 +12,7 @@
   }
   .delete {
     position: absolute;
-    right: calc(10px - 10px);
-    top: calc(0px - 10px);
+    right: calc(10px - 15px);
+    top: calc(0px - 15px);
+    z-index: 2;
   }

@@ -28,19 +28,22 @@
         </div>
 
         <!-- Buttons -->
-        <div fxLayout="row" fxLayoutGap="10px">
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
             <button mat-raised-button color="accent" type="button" (click)="addToken()">
-                <mat-icon>add</mat-icon>
+                <mat-icon>generating_tokens</mat-icon>
                 Add
             </button>
+            <!--
             <button mat-raised-button color="accent" type="button" (click)="calcFee()">
                 <mat-icon>add</mat-icon>
                 Fee
             </button>
+            -->
             <button mat-raised-button color="primary" type="submit">
                 <mat-icon>savings</mat-icon>
                 Mint
             </button>
+            <!--<span>Fee {{fee/1000000 | number:'.0-4'}} ₳</span>-->
         </div>
 
 

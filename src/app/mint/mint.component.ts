@@ -13,6 +13,7 @@ export class MintComponent implements OnInit {
 
   name: string = "";
   amount: number = 0;
+  fee: number = 0;
 
   public mintOrderSubmission: MintOrderSubmission = { tokens: [] };
 
@@ -38,7 +39,7 @@ export class MintComponent implements OnInit {
 
   calcFee() {
     this.api.mintFee(this.mintOrderSubmission).subscribe(fee => {
-      console.log(fee);
+      this.fee = fee;
     });
   }
 }
