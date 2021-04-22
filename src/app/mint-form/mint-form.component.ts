@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TokenSubmission } from 'src/cardano-tools-client';
@@ -55,15 +55,12 @@ export class MintFormComponent implements OnInit {
   }
 
   addFile(event: any) {
-    console.log(event)
     this.appendFilelist(event.target.files);
     event.target.value = '';
   }
 
   appendFilelist(fileList: FileList) {
     this.file = fileList.item(0);
-    console.log(this.file)
-
     const reader = new FileReader();
     reader.readAsDataURL(this.file as Blob);
     reader.onload = _event => {
