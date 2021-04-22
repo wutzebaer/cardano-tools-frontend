@@ -1,5 +1,5 @@
+import { RestInterfaceService } from 'src/cardano-tools-client/api/restInterface.service';
 import { Body } from './../../cardano-tools-client/model/body';
-import { RestInterfaceService } from './../../cardano-tools-client/api/restInterface.service';
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Output } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -19,25 +19,26 @@ export interface MetaValue {
 })
 export class MintFormComponent implements OnInit {
 
-  static counter = 0;
+  static globalCounter = 0;
+
+  counter!: number;
   availableMetaFields: string[] = ['Image', 'Audio', 'Video', 'Binary', 'Filename', 'MimeType', 'Name', 'Type', 'Traits', 'Artist', 'Publisher', 'Copyright', 'Homepage'];
   listFields: string[] = ['Traits'];
+  uploadProgress: number = 0;
 
   @Input() token!: TokenSubmission;
   metadata: Map<String, MetaValue> = new Map();
   file!: File | null;
-  url!: SafeUrl;
+  url!: SafeUrl | null;;
 
   constructor(private sanitizer: DomSanitizer, private api: RestInterfaceService) {
-    MintFormComponent.counter++;
+    MintFormComponent.globalCounter++;
+    this.counter = MintFormComponent.globalCounter;
+    console.log("Construct", this.counter)
   }
 
   ngOnInit(): void {
-    this.token.assetName = "Token" + MintFormComponent.counter;
-  }
-
-  get counter() {
-    return MintFormComponent.counter;
+    this.token.assetName = "Token" + this.counter;
   }
 
   isListField(key: any) {
@@ -58,6 +59,7 @@ export class MintFormComponent implements OnInit {
   }
 
   addFile(event: any) {
+    console.log("addfile", this.counter, event)
     this.appendFilelist(event.target.files);
     event.target.value = '';
   }
@@ -68,19 +70,22 @@ export class MintFormComponent implements OnInit {
     this.api.addFileForm(file as Blob, 'events', true).subscribe({
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress) {
-          //this.spinnerValue = event.loaded * 100 / event.total;
           if (event.total) {
-            console.log(event.loaded * 100 / event.total);
+            this.uploadProgress = event.loaded * 100 / event.total;
           }
         } else if (event.type === HttpEventType.Response) {
           console.log(event);
 
           // create preview url
-          const reader = new FileReader();
-          reader.readAsDataURL(file as Blob);
-          reader.onload = _event => {
-            this.url = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
-          };
+          if (file?.type?.startsWith('image') || file?.type?.startsWith('video') || file?.type?.startsWith('audio')) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file as Blob);
+            reader.onload = _event => {
+              this.url = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
+            };
+          } else {
+            this.url = null;
+          }
 
           // store file
           this.file = file;
@@ -102,6 +107,7 @@ export class MintFormComponent implements OnInit {
           }
           this.metadata.set("Filename", { value: file?.name as string, listValue: [] });
           this.metadata.set("MimeType", { value: file?.type as string, listValue: [] });
+          this.uploadProgress = 0;
 
         }
       }

@@ -8,8 +8,8 @@
 
             <div class="upload-wrapper">
 
-                <input id="input-file-id" fxHide type="file" (change)="addFile($event)" />
-                <label for="input-file-id" (drop)="dropFile($event)" (dragover)="$event.preventDefault();">
+                <input id="file{{counter}}" fxHide type="file" (change)="addFile($event)" name="file{{counter}}" />
+                <label for="file{{counter}}" (drop)="dropFile($event)" (dragover)="$event.preventDefault();">
                     <div [fxHide]="file != null" class="dropArea" fxLayout="column" fxLayoutAlign="center center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43">
                             <path
@@ -24,7 +24,7 @@
                         <video [fxShow]="file?.type?.startsWith('video')" controls [src]="url"></video>
                     </div>
                 </label>
-
+                <mat-progress-bar [fxShow]="uploadProgress!=0" mode="determinate" strokeWidth="20" [value]="uploadProgress"></mat-progress-bar>
 
 
             </div>
