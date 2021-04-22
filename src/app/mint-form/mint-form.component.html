@@ -61,8 +61,8 @@
     </mat-card-content>
     <mat-card-actions>
         <div fxLayout="row">
-            <mat-chip-list #chipList>
-                <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)">
+            <mat-chip-list #chipList multiple>
+                <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)" [selected]="metadata.has(metaField)">
                     {{metaField}}
                 </mat-chip>
             </mat-chip-list>

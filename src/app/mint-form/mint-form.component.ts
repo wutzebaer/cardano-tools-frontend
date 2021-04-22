@@ -20,7 +20,7 @@ export interface MetaValue {
 export class MintFormComponent implements OnInit {
 
   static counter = 0;
-  availableMetaFields: string[] = ['Image', 'Audio', 'Video', 'Name', 'Type', 'Traits', 'Artist', 'Publisher', 'Copyright', 'Homepage'];
+  availableMetaFields: string[] = ['Image', 'Audio', 'Video', 'Binary', 'Filename', 'MimeType', 'Name', 'Type', 'Traits', 'Artist', 'Publisher', 'Copyright', 'Homepage'];
   listFields: string[] = ['Traits'];
 
   @Input() token!: TokenSubmission;
@@ -74,20 +74,35 @@ export class MintFormComponent implements OnInit {
           }
         } else if (event.type === HttpEventType.Response) {
           console.log(event);
-          this.file = file;
+
+          // create preview url
           const reader = new FileReader();
-          reader.readAsDataURL(this.file as Blob);
+          reader.readAsDataURL(file as Blob);
           reader.onload = _event => {
             this.url = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
           };
 
+          // store file
+          this.file = file;
+
+          this.metadata.delete("Image");
+          this.metadata.delete("Video");
+          this.metadata.delete("Audio");
+          this.metadata.delete("Binary");
+
+          // create metadata
           if (file?.type?.startsWith('image')) {
             this.metadata.set("Image", { value: "ipfs://" + event.body as string, listValue: [] });
           } else if (file?.type?.startsWith('video')) {
             this.metadata.set("Video", { value: "ipfs://" + event.body as string, listValue: [] });
           } else if (file?.type?.startsWith('audio')) {
             this.metadata.set("Audio", { value: "ipfs://" + event.body as string, listValue: [] });
+          } else {
+            this.metadata.set("Binary", { value: "ipfs://" + event.body as string, listValue: [] });
           }
+          this.metadata.set("Filename", { value: file?.name as string, listValue: [] });
+          this.metadata.set("MimeType", { value: file?.type as string, listValue: [] });
+
         }
       }
     });
