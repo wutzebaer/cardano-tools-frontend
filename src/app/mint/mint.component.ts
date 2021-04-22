@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RestInterfaceService } from 'src/cardano-tools-client/api/restInterface.service';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 
@@ -17,7 +18,7 @@ export class MintComponent implements OnInit {
 
   public mintOrderSubmission: MintOrderSubmission = { tokens: [] };
 
-  constructor(private api: RestInterfaceService) { }
+  constructor(private api: RestInterfaceService, private _formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.addToken();
@@ -38,7 +39,7 @@ export class MintComponent implements OnInit {
   }
 
   calcFee() {
-    this.api.mintFee(this.mintOrderSubmission).subscribe(fee => {
+    this.api.calculateFee(this.mintOrderSubmission).subscribe(fee => {
       this.fee = fee;
     });
   }

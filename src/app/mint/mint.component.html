@@ -1,52 +1,62 @@
-<div class="grid-container">
+<h1 class="mat-h1">Mint Cardano NFTs</h1>
 
-    <h1 class="mat-h1">Mint Cardano NFTs</h1>
-    <form #form="ngForm" (ngSubmit)="form.valid && onSubmit()" fxLayout="column" fxLayoutGap="15px">
 
-        <!-- Key input -->
-        <div fxLayout="column">
-            <mat-form-field fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%" appearance="outline">
-                <mat-label>Account key</mat-label>
-                <input matInput>
-            </mat-form-field>
-        </div>
+<mat-horizontal-stepper linear="true" #stepper>
 
-        <!-- Token Cards-->
-        <div>
-            <div fxLayout="row wrap" fxLayoutGap="10px grid">
-                <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%"
-                    *ngFor="let token of mintOrderSubmission.tokens; let i = index">
-                    <!-- Mint Card -->
-                    <app-mint-form #appMintForm [token]=token></app-mint-form>
-                    <!-- delete button -->
-                    <button [fxHide]="mintOrderSubmission.tokens.length==1" (click)="removeToken(i)" class="delete"
-                        mat-mini-fab>
-                        <mat-icon>clear</mat-icon>
+    <mat-step [stepControl]="nftForm.control">
+        <ng-template matStepLabel>Configure NFTs</ng-template>
+        <form #nftForm="ngForm">
+            <div fxLayout="column" fxLayoutGap="15px">
+                <!-- Token Cards-->
+                <div>
+                    <div fxLayout="row wrap" fxLayoutGap="10px grid">
+                        <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%"
+                            fxFlex.gt-lg="25%" *ngFor="let token of mintOrderSubmission.tokens; let i = index">
+                            <!-- Mint Card -->
+                            <app-mint-form #appMintForm [token]=token></app-mint-form>
+                            <!-- delete button -->
+                            <button [fxHide]="mintOrderSubmission.tokens.length==1" (click)="removeToken(i)"
+                                class="delete" mat-mini-fab>
+                                <mat-icon>clear</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+                    <button mat-raised-button color="accent" type="button" (click)="addToken()">
+                        <mat-icon>generating_tokens</mat-icon>
+                        Add
                     </button>
+                    <button mat-raised-button color="primary" matStepperNext>
+                        <mat-icon>upload</mat-icon>
+                        Proceed
+                    </button>
+                    <!--
+                    <button mat-raised-button color="accent" type="button" (click)="calcFee()">
+                        <mat-icon>add</mat-icon>
+                        Fee
+                    </button>
+                -->
+                    <!--
+                    <button mat-raised-button color="primary" matStepperNext>
+                        <mat-icon>savings</mat-icon>
+                        Mint
+                    </button>
+                    -->
+                    <!--<span>Fee {{fee/1000000 | number:'.0-4'}} ₳</span>-->
                 </div>
             </div>
-        </div>
+        </form>
+    </mat-step>
 
-        <!-- Buttons -->
-        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-            <button mat-raised-button color="accent" type="button" (click)="addToken()">
-                <mat-icon>generating_tokens</mat-icon>
-                Add
-            </button>
-            <!--
-            <button mat-raised-button color="accent" type="button" (click)="calcFee()">
-                <mat-icon>add</mat-icon>
-                Fee
-            </button>
-            -->
-            <button mat-raised-button color="primary" type="submit">
-                <mat-icon>savings</mat-icon>
-                Mint
-            </button>
-            <!--<span>Fee {{fee/1000000 | number:'.0-4'}} ₳</span>-->
-        </div>
+    <mat-step>
+        <ng-template matStepLabel>Fund Account</ng-template>
+    </mat-step>
 
+    <mat-step>
+        <ng-template matStepLabel>Review and submit</ng-template>
+    </mat-step>
 
-    </form>
-
-</div>
+</mat-horizontal-stepper>

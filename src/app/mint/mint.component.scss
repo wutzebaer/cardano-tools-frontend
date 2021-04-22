@@ -1,18 +1,19 @@
-.grid-container {
-    margin: 20px;
-  }
+form {
+  margin-top: 20px;
+}
 
-  app-mint-token {
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
-  }
+.token-wrapper {
+  position: relative;
+}
 
-  .token-wrapper {
-    position: relative;
-  }
-  .delete {
-    position: absolute;
-    right: calc(10px - 15px);
-    top: calc(0px - 15px);
-    z-index: 2;
-  }
+app-mint-token {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+}
+
+.delete {
+  position: absolute;
+  right: calc(10px - 15px);
+  top: calc(0px - 15px);
+  z-index: 2;
+}
