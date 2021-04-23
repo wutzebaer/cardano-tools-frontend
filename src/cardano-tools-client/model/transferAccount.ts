@@ -10,11 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface Account { 
+export interface TransferAccount { 
     key?: string;
-    createdAt: Date;
     address: string;
-    skey: string;
-    vkey: string;
     blanace: number;
 }

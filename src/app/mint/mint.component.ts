@@ -1,10 +1,9 @@
-import { MintFormComponent } from './../mint-form/mint-form.component';
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RestInterfaceService } from 'src/cardano-tools-client/api/restInterface.service';
-import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
-import { MatStepper } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatStepper } from '@angular/material/stepper';
+import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
+import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
+import { LocalStorageService } from '../local-storage.service';
 
 @Component({
   selector: 'app-mint',
@@ -17,11 +16,12 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   name: string = "";
   amount: number = 0;
-  fee: number = 0;
+  fee: number | null = null;
+  account: TransferAccount | null = null;
 
   mintOrderSubmission: MintOrderSubmission = { tokens: [] };
 
-  constructor(private api: RestInterfaceService) { }
+  constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
     this.addToken();
@@ -32,7 +32,19 @@ export class MintComponent implements OnInit, AfterViewInit {
       if (event.selectedIndex == 0) {
       } else if (event.selectedIndex == 1) {
         this.api.calculateFee(this.mintOrderSubmission).subscribe(fee => {
+
           this.fee = fee;
+          this.account = this.localStorageService.retrieveAccount()
+
+          if (this.account == null) {
+            this.api.createAccount().subscribe(
+              account => {
+                this.localStorageService.storeAccount(account)
+                this.account = account
+              }
+            );
+          }
+
         });
       }
     });

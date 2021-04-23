@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { MintOrder } from '../model/mintOrder';
 import { MintOrderSubmission } from '../model/mintOrderSubmission';
+import { TransferAccount } from '../model/transferAccount';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -55,64 +56,6 @@ export class RestInterfaceService {
         return false;
     }
 
-
-    /**
-     * 
-     * 
-     * @param file 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public addFileForm(file?: Blob, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public addFileForm(file?: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public addFileForm(file?: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public addFileForm(file?: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'multipart/form-data'
-        ];
-
-        const canConsumeForm = this.canConsumeForm(consumes);
-
-        let formParams: { append(param: string, value: any): void; };
-        let useForm = false;
-        let convertFormParamsToString = false;
-        // use FormData to transmit files using content-type "multipart/form-data"
-        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
-        useForm = canConsumeForm;
-        if (useForm) {
-            formParams = new FormData();
-        } else {
-            formParams = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        }
-
-        if (file !== undefined) {
-            formParams = formParams.append('file', <any>file) as any || formParams;
-        }
-
-        return this.httpClient.request<string>('post',`${this.basePath}/api/addFile`,
-            {
-                body: convertFormParamsToString ? formParams.toString() : formParams,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
 
     /**
      * 
@@ -167,9 +110,9 @@ export class RestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createAccount(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public createAccount(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public createAccount(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public createAccount(observe?: 'body', reportProgress?: boolean): Observable<TransferAccount>;
+    public createAccount(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TransferAccount>>;
+    public createAccount(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TransferAccount>>;
     public createAccount(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -187,7 +130,7 @@ export class RestInterfaceService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<string>('post',`${this.basePath}/api/createAccount`,
+        return this.httpClient.request<TransferAccount>('post',`${this.basePath}/api/createAccount`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -204,13 +147,13 @@ export class RestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAddress(key: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getAddress(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getAddress(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getAddress(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAccount(key: string, observe?: 'body', reportProgress?: boolean): Observable<TransferAccount>;
+    public getAccount(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TransferAccount>>;
+    public getAccount(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TransferAccount>>;
+    public getAccount(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (key === null || key === undefined) {
-            throw new Error('Required parameter key was null or undefined when calling getAddress.');
+            throw new Error('Required parameter key was null or undefined when calling getAccount.');
         }
 
         let headers = this.defaultHeaders;
@@ -228,48 +171,7 @@ export class RestInterfaceService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<string>('get',`${this.basePath}/api/getAddress/${encodeURIComponent(String(key))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param key 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getBalance(key: string, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public getBalance(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public getBalance(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public getBalance(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (key === null || key === undefined) {
-            throw new Error('Required parameter key was null or undefined when calling getBalance.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<number>('get',`${this.basePath}/api/getBalance/${encodeURIComponent(String(key))}`,
+        return this.httpClient.request<TransferAccount>('get',`${this.basePath}/api/account/${encodeURIComponent(String(key))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -323,6 +225,100 @@ export class RestInterfaceService {
     /**
      * 
      * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTip(observe?: 'body', reportProgress?: boolean): Observable<number>;
+    public getTip(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
+    public getTip(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
+    public getTip(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<number>('get',`${this.basePath}/api/tip`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param file 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postFileForm(file?: Blob, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public postFileForm(file?: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public postFileForm(file?: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public postFileForm(file?: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): void; };
+        let useForm = false;
+        let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        }
+
+        if (file !== undefined) {
+            formParams = formParams.append('file', <any>file) as any || formParams;
+        }
+
+        return this.httpClient.request<string>('post',`${this.basePath}/api/file`,
+            {
+                body: convertFormParamsToString ? formParams.toString() : formParams,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param body 
      * @param key 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -363,42 +359,6 @@ export class RestInterfaceService {
         return this.httpClient.request<any>('post',`${this.basePath}/api/mintCoinOrder/${encodeURIComponent(String(key))}`,
             {
                 body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public tip(observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public tip(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public tip(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public tip(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<number>('get',`${this.basePath}/api/tip`,
-            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

@@ -1,9 +1,7 @@
-import { RestInterfaceService } from 'src/cardano-tools-client/api/restInterface.service';
-import { Body } from './../../cardano-tools-client/model/body';
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Output } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { TokenSubmission } from 'src/cardano-tools-client';
+import { RestInterfaceService, TokenSubmission } from 'src/cardano-tools-client';
 import { HttpEventType } from '@angular/common/http';
 
 
@@ -80,7 +78,7 @@ export class MintFormComponent implements OnInit {
       return;
     }
 
-    this.api.addFileForm(file as Blob, 'events', true).subscribe({
+    this.api.postFileForm(file as Blob, 'events', true).subscribe({
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress) {
           if (event.total) {
