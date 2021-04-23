@@ -51,11 +51,11 @@
         </form>
     </mat-step>
 
-    <mat-step>
+    <mat-step [stepControl]="fundForm.control">
         <ng-template matStepLabel>Fund Account</ng-template>
-        <div class="step-content" fxLayoutAlign="center">
+        <form #fundForm="ngForm" class="step-content" fxLayoutAlign="center">
             <app-fund-account fxFlex="100%" fxFlex.gt-md="991px" [fee]="fee" [account]="account"></app-fund-account>
-        </div>
+        </form>
     </mat-step>
 
     <mat-step>

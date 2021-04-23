@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-import { interval, timer } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { ControlContainer, NgForm } from '@angular/forms';
+import { interval } from 'rxjs';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
 
 
@@ -7,13 +8,15 @@ import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client'
 @Component({
   selector: 'app-fund-account',
   templateUrl: './fund-account.component.html',
-  styleUrls: ['./fund-account.component.scss']
+  styleUrls: ['./fund-account.component.scss'],
+  viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
 export class FundAccountComponent implements OnInit {
 
   @Input() fee!: number | null;
   @Input() account!: TransferAccount | null;
   constructor(private api: RestInterfaceService) { }
+  muh = 0
 
   ngOnInit(): void {
     interval(10000).subscribe(() => {

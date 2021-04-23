@@ -10,6 +10,10 @@
                 <b>{{minAdaBalance}}&nbsp;₳</b>
             </div>
             <div>Curent balance: <b>{{adaBalance}}&nbsp;₳</b></div>
+            <mat-form-field fxHide>
+                <input #adaBalanceInput="ngModel" matInput type="number" [ngModel]="adaBalance" name="adaBalance"
+                    [appMinValidator]="1">
+            </mat-form-field>
         </mat-card-content>
     </mat-card>
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
@@ -17,7 +21,7 @@
             <mat-icon>refresh</mat-icon>
             Refresh
         </button>
-        <button [disabled]="adaBalance < minAdaBalance" mat-raised-button color="primary" matStepperNext>
+        <button [disabled]="adaBalanceInput.invalid" mat-raised-button color="primary" matStepperNext>
             <mat-icon>fast_forward</mat-icon>
             Proceed
         </button>

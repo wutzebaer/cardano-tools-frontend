@@ -1,3 +1,4 @@
+import { MinValidatorDirective } from './../min-validator.directive';
 import { AjaxInterceptor } from './ajax.interceptor';
 import { BASE_PATH } from './../cardano-tools-client/variables';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -39,7 +40,7 @@ import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, DashComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent,
+    AppComponent, NavComponent, DashComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective
   ],
   imports: [
     BrowserModule,

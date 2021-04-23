@@ -1,7 +1,6 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
-import { mergeMap } from 'rxjs/operators';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { LocalStorageService } from '../local-storage.service';
