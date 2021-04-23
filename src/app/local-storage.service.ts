@@ -9,16 +9,11 @@ export class LocalStorageService {
 
   constructor() { }
 
-  storeAccount(account: TransferAccount) {
-    localStorage.setItem("account", JSON.stringify(account));
+  storeAccountKey(accountKey: string) {
+    localStorage.setItem("accountKey", accountKey);
   }
 
-  retrieveAccount(): TransferAccount | null {
-    let accountJson: string | null = localStorage.getItem("account");
-    if (accountJson) {
-      return JSON.parse(accountJson);
-    } else {
-      return null;
-    }
+  retrieveAccountKey(): string | null {
+    return localStorage.getItem("accountKey");
   }
 }

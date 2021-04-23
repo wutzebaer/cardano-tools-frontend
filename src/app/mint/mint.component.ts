@@ -1,6 +1,7 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
+import { mergeMap } from 'rxjs/operators';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { LocalStorageService } from '../local-storage.service';
@@ -28,24 +29,23 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    let accountKey = this.localStorageService.retrieveAccountKey();
     this.stepper.selectionChange.subscribe((event: StepperSelectionEvent) => {
       if (event.selectedIndex == 0) {
       } else if (event.selectedIndex == 1) {
+
         this.api.calculateFee(this.mintOrderSubmission).subscribe(fee => {
+          this.fee = fee
+        })
 
-          this.fee = fee;
-          this.account = this.localStorageService.retrieveAccount()
+        let accountObservable;
+        if (accountKey == null) { accountObservable = this.api.createAccount(); }
+        else { accountObservable = this.api.getAccount(accountKey); }
+        accountObservable.subscribe(account => {
+          this.localStorageService.storeAccountKey(account.key)
+          this.account = account
+        })
 
-          if (this.account == null) {
-            this.api.createAccount().subscribe(
-              account => {
-                this.localStorageService.storeAccount(account)
-                this.account = account
-              }
-            );
-          }
-
-        });
       }
     });
   }

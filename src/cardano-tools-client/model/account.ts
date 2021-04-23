@@ -17,4 +17,5 @@ export interface Account {
     skey: string;
     vkey: string;
     blanace: number;
+    lastUpdate: number;
 }

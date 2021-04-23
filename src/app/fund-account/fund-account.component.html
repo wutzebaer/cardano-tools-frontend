@@ -1,14 +1,25 @@
 <div fxLayout="column" fxLayoutGap="15px">
     <mat-card>
         <mat-card-content>
-            <div>Please fund the address <b>{{account?.address}}</b> with at least <b>{{((fee || 0)) / 1000000 + 1}}&nbsp;₳</b></div>
-            <div>Curent balance: <b>{{(account?.blanace || 0) / 1000000}}&nbsp;₳</b></div>
+            <div>
+                Please fund the address
+                <mat-form-field style="width: 465px">
+                    <input matInput value="{{account?.address}}" readonly>
+                </mat-form-field>
+                with at least
+                <b>{{minAdaBalance}}&nbsp;₳</b>
+            </div>
+            <div>Curent balance: <b>{{adaBalance}}&nbsp;₳</b></div>
         </mat-card-content>
     </mat-card>
-    <div>
-        <button mat-raised-button color="primary" matStepperNext>
-            <mat-icon>savings</mat-icon>
-            Mint
+    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+        <button mat-raised-button color="accent" (click)="refresh()">
+            <mat-icon>refresh</mat-icon>
+            Refresh
+        </button>
+        <button [disabled]="adaBalance < minAdaBalance" mat-raised-button color="primary" matStepperNext>
+            <mat-icon>fast_forward</mat-icon>
+            Proceed
         </button>
     </div>
 </div>

@@ -13,11 +13,12 @@ import { tap } from 'rxjs/operators';
 export class AjaxInterceptor implements HttpInterceptor {
 
   public ajaxStatusChanged$: EventEmitter<Boolean> = new EventEmitter();
-
-  constructor() { }
+  constructor() {}
+  counter = 0;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     console.log("Start Http");
+    this.counter++
     this.ajaxStatusChanged$.emit(true);
     const response = next.handle(request);
     return response.pipe(
@@ -26,10 +27,12 @@ export class AjaxInterceptor implements HttpInterceptor {
         },
         error: error => {
           alert(error.message)
-          this.ajaxStatusChanged$.emit(false);
+          this.counter--
+          this.ajaxStatusChanged$.emit(this.counter > 0);
         },
         complete: () => {
-          this.ajaxStatusChanged$.emit(false);
+          this.counter--
+          this.ajaxStatusChanged$.emit(this.counter > 0);
         }
       })
     );
