@@ -8,7 +8,8 @@
 
             <div class="upload-wrapper">
 
-                <input id="file{{counter}}" fxHide type="file" (change)="addFile($event)" name="file{{counter}}" />
+                <input id="file{{counter}}" fxHide type="file" (change)="addFile($event)" name="file{{counter}}"
+                    maxlength="" />
                 <label for="file{{counter}}" (drop)="dropFile($event)" (dragover)="$event.preventDefault();">
                     <div [fxHide]="file != null" class="dropArea" fxLayout="column" fxLayoutAlign="center center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43">
@@ -22,9 +23,14 @@
                         <img [fxShow]="file?.type?.startsWith('image')" [src]="url">
                         <audio [fxShow]="file?.type?.startsWith('audio')" controls [src]="url"></audio>
                         <video [fxShow]="file?.type?.startsWith('video')" controls [src]="url"></video>
+                        <div>
+                            <mat-icon class="big-icon" color="primary" [fxShow]="!isFileTypeKnown()" fontSet="material-icons-outlined">description
+                            </mat-icon>
+                        </div>
                     </div>
                 </label>
-                <mat-progress-bar [fxShow]="uploadProgress!=0" mode="determinate" strokeWidth="20" [value]="uploadProgress"></mat-progress-bar>
+                <mat-progress-bar [fxShow]="uploadProgress!=0" mode="determinate" strokeWidth="20"
+                    [value]="uploadProgress"></mat-progress-bar>
 
 
             </div>
@@ -62,7 +68,8 @@
     <mat-card-actions>
         <div fxLayout="row">
             <mat-chip-list #chipList multiple>
-                <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)" [selected]="metadata.has(metaField)">
+                <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)"
+                    [selected]="metadata.has(metaField)">
                     {{metaField}}
                 </mat-chip>
             </mat-chip-list>

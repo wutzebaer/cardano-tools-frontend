@@ -24,6 +24,7 @@ export class MintFormComponent implements OnInit {
   counter!: number;
   availableMetaFields: string[] = ['Image', 'Audio', 'Video', 'Binary', 'Filename', 'MimeType', 'Name', 'Type', 'Traits', 'Artist', 'Publisher', 'Copyright', 'Homepage'];
   listFields: string[] = ['Traits'];
+  knownMimeTypes = ['image', 'video', 'audio'];
   uploadProgress: number = 0;
 
   @Input() token!: TokenSubmission;
@@ -35,6 +36,18 @@ export class MintFormComponent implements OnInit {
     MintFormComponent.globalCounter++;
     this.counter = MintFormComponent.globalCounter;
     console.log("Construct", this.counter)
+  }
+
+  getFileType() {
+    if (!this.file) {
+      return "";
+    } else {
+      return this.file.type.split("/")[0];
+    }
+  }
+
+  isFileTypeKnown() {
+    return this.knownMimeTypes.indexOf(this.getFileType()) != -1;
   }
 
   ngOnInit(): void {
@@ -67,6 +80,11 @@ export class MintFormComponent implements OnInit {
   appendFilelist(fileList: FileList) {
     let file = fileList.item(0);
 
+    if (file?.size as number > 52428800) {
+      alert("Max 50mb");
+      return;
+    }
+
     this.api.addFileForm(file as Blob, 'events', true).subscribe({
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress) {
@@ -76,8 +94,11 @@ export class MintFormComponent implements OnInit {
         } else if (event.type === HttpEventType.Response) {
           console.log(event);
 
+          // store file
+          this.file = file;
+
           // create preview url
-          if (file?.type?.startsWith('image') || file?.type?.startsWith('video') || file?.type?.startsWith('audio')) {
+          if (this.isFileTypeKnown()) {
             const reader = new FileReader();
             reader.readAsDataURL(file as Blob);
             reader.onload = _event => {
@@ -87,20 +108,17 @@ export class MintFormComponent implements OnInit {
             this.url = null;
           }
 
-          // store file
-          this.file = file;
-
           this.metadata.delete("Image");
           this.metadata.delete("Video");
           this.metadata.delete("Audio");
           this.metadata.delete("Binary");
 
           // create metadata
-          if (file?.type?.startsWith('image')) {
+          if (this.getFileType() == 'image') {
             this.metadata.set("Image", { value: "ipfs://" + event.body as string, listValue: [] });
-          } else if (file?.type?.startsWith('video')) {
+          } else if (this.getFileType() == 'video') {
             this.metadata.set("Video", { value: "ipfs://" + event.body as string, listValue: [] });
-          } else if (file?.type?.startsWith('audio')) {
+          } else if (this.getFileType() == 'audio') {
             this.metadata.set("Audio", { value: "ipfs://" + event.body as string, listValue: [] });
           } else {
             this.metadata.set("Binary", { value: "ipfs://" + event.body as string, listValue: [] });
