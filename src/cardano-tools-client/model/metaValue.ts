@@ -9,10 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { MetaValue } from './metaValue';
 
-export interface TokenSubmission { 
-    assetName: string;
-    amount: number;
-    metaData: { [key: string]: MetaValue; };
+export interface MetaValue { 
+    value?: string;
+    listValue: Array<string>;
 }

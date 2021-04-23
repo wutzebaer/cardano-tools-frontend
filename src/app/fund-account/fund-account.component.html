@@ -1,0 +1,13 @@
+<div fxLayout="column" fxLayoutGap="15px">
+    <mat-card>
+        <mat-card-content>
+            <span>Fee {{fee/1000000 | number:'.0-4'}} ₳</span>
+        </mat-card-content>
+    </mat-card>
+    <div>
+        <button mat-raised-button color="primary" matStepperNext>
+            <mat-icon>savings</mat-icon>
+            Mint
+        </button>
+    </div>
+</div>

@@ -6,10 +6,6 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TokenSubmission } from 'src/cardano-tools-client';
 import { HttpEventType } from '@angular/common/http';
 
-export interface MetaValue {
-  value: string;
-  listValue: string[];
-}
 
 @Component({
   selector: 'app-mint-form',
@@ -28,7 +24,6 @@ export class MintFormComponent implements OnInit {
   uploadProgress: number = 0;
 
   @Input() token!: TokenSubmission;
-  metadata: Map<String, MetaValue> = new Map();
   file!: File | null;
   url!: SafeUrl | null;;
 
@@ -59,10 +54,10 @@ export class MintFormComponent implements OnInit {
   }
 
   addMetaField(metaField: string) {
-    if (this.metadata.has(metaField)) {
-      this.metadata.delete(metaField);
+    if (this.token.metaData[metaField]) {
+      delete this.token.metaData[metaField];
     } else {
-      this.metadata.set(metaField, { value: "", listValue: [] });
+      this.token.metaData[metaField] = { value: "", listValue: [] };
     }
   }
 
@@ -108,23 +103,23 @@ export class MintFormComponent implements OnInit {
             this.url = null;
           }
 
-          this.metadata.delete("Image");
-          this.metadata.delete("Video");
-          this.metadata.delete("Audio");
-          this.metadata.delete("Binary");
+          delete this.token.metaData["Image"];
+          delete this.token.metaData["Video"];
+          delete this.token.metaData["Audio"];
+          delete this.token.metaData["Binary"];
 
           // create metadata
           if (this.getFileType() == 'image') {
-            this.metadata.set("Image", { value: "ipfs://" + event.body as string, listValue: [] });
+            this.token.metaData["Image"] = { value: "ipfs://" + event.body as string, listValue: [] };
           } else if (this.getFileType() == 'video') {
-            this.metadata.set("Video", { value: "ipfs://" + event.body as string, listValue: [] });
+            this.token.metaData["Video"] = { value: "ipfs://" + event.body as string, listValue: [] };
           } else if (this.getFileType() == 'audio') {
-            this.metadata.set("Audio", { value: "ipfs://" + event.body as string, listValue: [] });
+            this.token.metaData["Audio"] = { value: "ipfs://" + event.body as string, listValue: [] };
           } else {
-            this.metadata.set("Binary", { value: "ipfs://" + event.body as string, listValue: [] });
+            this.token.metaData["Binary"] = { value: "ipfs://" + event.body as string, listValue: [] };
           }
-          this.metadata.set("Filename", { value: file?.name as string, listValue: [] });
-          this.metadata.set("MimeType", { value: file?.type as string, listValue: [] });
+          this.token.metaData["Filename"] = { value: file?.name as string, listValue: [] };
+          this.token.metaData["MimeType"] = { value: file?.type as string, listValue: [] };
           this.uploadProgress = 0;
 
         }
@@ -133,29 +128,4 @@ export class MintFormComponent implements OnInit {
 
   }
 
-  /*
-    this.kundeControllerService.uploadMitarbeiterMessage(this.msgIsVip, this.message, this.files, 'events', true).subscribe(
-      {
-        next: (event) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            this.spinnerValue = event.loaded * 100 / event.total;
-          }
-        },
-        complete: () => {
-          this.isLoadingResults = false;
-          alert(this.translateService.instant('pnupload.upload_success'));
-          this.reset();
-        },
-        error: (e: HttpErrorResponse) => {
-          this.isLoadingResults = false;
-          if (e.status !== 0) {
-            const errMsg = e.error.usermessage;
-            if (errMsg && errMsg.indexOf('Virus') > 0) {
-              this.removeAllAttachments();
-            }
-          }
-        }
-      }
-    );
-  */
 }

@@ -5,7 +5,7 @@
 
     <mat-step [stepControl]="nftForm.control">
         <ng-template matStepLabel>Configure NFTs</ng-template>
-        <form #nftForm="ngForm">
+        <form #nftForm="ngForm" class="step-content">
             <div fxLayout="column" fxLayoutGap="15px">
                 <!-- Token Cards-->
                 <div>
@@ -13,7 +13,7 @@
                         <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%"
                             fxFlex.gt-lg="25%" *ngFor="let token of mintOrderSubmission.tokens; let i = index">
                             <!-- Mint Card -->
-                            <app-mint-form #appMintForm [token]=token></app-mint-form>
+                            <app-mint-form [token]=token></app-mint-form>
                             <!-- delete button -->
                             <button [fxHide]="mintOrderSubmission.tokens.length==1" (click)="removeToken(i)"
                                 class="delete" mat-mini-fab>
@@ -30,7 +30,7 @@
                         Add
                     </button>
                     <button mat-raised-button color="primary" matStepperNext>
-                        <mat-icon>upload</mat-icon>
+                        <mat-icon>fast_forward</mat-icon>
                         Proceed
                     </button>
                     <!--
@@ -53,6 +53,9 @@
 
     <mat-step>
         <ng-template matStepLabel>Fund Account</ng-template>
+        <div class="step-content" fxLayoutAlign="center">
+            <app-fund-account fxFlex="100%" fxFlex.gt-md="991px" [fee]="fee"></app-fund-account>
+        </div>
     </mat-step>
 
     <mat-step>

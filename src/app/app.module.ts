@@ -33,12 +33,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { LoadingOverlayComponent } from './loading-overlay/loading-overlay.component';
-import {MatStepperModule} from '@angular/material/stepper'; 
+import {MatStepperModule} from '@angular/material/stepper';
+import { FundAccountComponent } from './fund-account/fund-account.component'; 
 
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, DashComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent,
+    AppComponent, NavComponent, DashComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent,
   ],
   imports: [
     BrowserModule,
