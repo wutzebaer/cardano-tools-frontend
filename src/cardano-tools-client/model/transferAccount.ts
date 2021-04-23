@@ -13,5 +13,5 @@
 export interface TransferAccount { 
     key: string;
     address: string;
-    blanace: number;
+    balance: number;
 }

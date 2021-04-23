@@ -16,6 +16,6 @@ export interface Account {
     address: string;
     skey: string;
     vkey: string;
-    blanace: number;
+    balance: number;
     lastUpdate: number;
 }

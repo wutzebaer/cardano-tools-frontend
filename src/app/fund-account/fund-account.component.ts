@@ -27,14 +27,14 @@ export class FundAccountComponent implements OnInit {
   }
 
   get adaBalance() {
-    return ((this.account?.blanace || 0)) / 1000000;
+    return ((this.account?.balance || 0)) / 1000000;
   }
 
   refresh() {
     if (this.account) {
       this.api.getAccount(this.account.key as string).subscribe(account => {
         if (this.account != null) {
-          this.account.blanace = account.blanace;
+          this.account.balance = account.balance;
         }
       });
     }
