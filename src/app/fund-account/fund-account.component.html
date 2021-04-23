@@ -2,14 +2,14 @@
     <mat-card>
         <mat-card-content>
             <div>
-                Please fund the address
-                <mat-form-field style="width: 465px">
-                    <input matInput value="{{account?.address}}" readonly>
-                </mat-form-field>
-                with at least
-                <b>{{minAdaBalance}}&nbsp;₳</b>
+                <p>Please fund the address <b>{{account?.address}}</b></p>
+                <p>with at least <b>{{minAdaBalance}}&nbsp;₳</b></p>
             </div>
-            <div>Curent balance: <b>{{adaBalance}}&nbsp;₳</b></div>
+            <p fyLayout="row" fxLayoutAlign="start center">
+                <span>Curent balance: <b>{{adaBalance}}&nbsp;₳</b></span>
+                <mat-icon class="green" [fxShow]="adaBalanceInput.valid">done</mat-icon>
+                <mat-icon color="warn" [fxShow]="adaBalanceInput.invalid">dangerous</mat-icon>
+            </p>
             <mat-form-field fxHide>
                 <input #adaBalanceInput="ngModel" matInput type="number" [ngModel]="adaBalance" name="adaBalance"
                     [appMinValidator]="1">
