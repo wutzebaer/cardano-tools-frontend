@@ -1,0 +1,50 @@
+<div fxLayout="column" fxLayoutGap="15px">
+    <mat-card>
+        <mat-card-content>
+            <div>
+                <p>Account address<br><b class="address">{{account?.address}}</b></p>
+                <p>Fees<br><b>{{adaFee}}&nbsp;₳</b></p>
+                <p>Min transaction volume<br><b>{{1}}&nbsp;₳</b></p>
+                <p>Curent balance<br><b>{{adaBalance}}&nbsp;₳</b></p>
+                <p>
+                    <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"><span>Target address</span><mat-icon class="help" matTooltip="You can only choose adresses which have send ada to this account">help</mat-icon></span>
+                    <b>
+                        <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress"
+                            name="item">
+                            <mat-option *ngFor="let address of account?.fundingAddresses" [value]="address">
+                                {{address}}
+                            </mat-option>
+                        </mat-select>
+                    </b>
+                </p>
+                <p>Change<br><b>{{adaChange}}&nbsp;₳</b></p>
+                <p fxLayout="column" fxLayoutGap="10px">
+                    <span><b>What to to with the change?</b></span>
+                    <span>
+                        <mat-radio-group aria-label="Select an option" fxLayout="column" fxLayoutGap="10px"
+                            name="changeAction" #adaBalanceInput="ngModel"
+                            [(ngModel)]="mintOrderSubmission.changeAction">
+                            <mat-radio-button value="RETURN">also send to target address</mat-radio-button>
+                            <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                                <mat-radio-button [disabled]="adaChange < 1" value="KEEP">keep on the account address to
+                                    use it later</mat-radio-button>
+                                <mat-icon class="help" matTooltip="Needs at least 1&nbsp;₳ change">help</mat-icon>
+                            </span>
+                            <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                                <mat-radio-button [disabled]="adaChange < 1" value="TIP">tip it to the [EURO]-Pool
+                                </mat-radio-button>
+                                <mat-icon class="help" matTooltip="Needs at least 1&nbsp;₳ change">help</mat-icon>
+                            </span>
+                        </mat-radio-group>
+                    </span>
+                </p>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+        <button mat-raised-button color="primary" matStepperNext>
+            <mat-icon>fast_forward</mat-icon>
+            Proceed
+        </button>
+    </div>
+</div>

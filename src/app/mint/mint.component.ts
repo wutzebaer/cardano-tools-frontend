@@ -19,7 +19,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   fee: number | null = null;
   account: TransferAccount | null = null;
 
-  mintOrderSubmission: MintOrderSubmission = { tokens: [] };
+  mintOrderSubmission: MintOrderSubmission = { tokens: [], targetAddress: "", changeAction: 'RETURN' };
 
   constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService) { }
 
@@ -43,8 +43,8 @@ export class MintComponent implements OnInit, AfterViewInit {
         accountObservable.subscribe(account => {
           this.localStorageService.storeAccountKey(account.key)
           this.account = account
+          this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
         })
-
       }
     });
   }

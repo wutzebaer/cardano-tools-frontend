@@ -1,0 +1,28 @@
+<div fxLayout="column" fxLayoutGap="15px">
+    <mat-card>
+        <mat-card-content>
+            <div>
+                <p>Mint <b class="address">{{mintOrderSubmission.tokens.length}}</b> tokens</p>
+                <p>Send tokens to<br><b class="address">{{mintOrderSubmission.targetAddress}}</b></p>
+                <p *ngIf="mintOrderSubmission.changeAction == 'RETURN'">
+                    Also return the change of <b>{{adaChange}}&nbsp;₳</b> to<br
+                    ><b class="address">{{mintOrderSubmission.targetAddress}}</b>
+                </p>
+                <p *ngIf="mintOrderSubmission.changeAction == 'KEEP'">
+                    Keep the change of <b>{{adaChange}}&nbsp;₳</b> in account address<br>
+                    <b class="address">{{account?.address}}</b>
+                </p>
+                <p *ngIf="mintOrderSubmission.changeAction == 'TIP'">
+                    Tip the change of <b>{{adaChange}}&nbsp;₳</b> to the [EURO]-Pool address<br>
+                    <b class="address">addr1qx6pnsm9n3lrvtwx24kq7a0mfwq2txum2tvtaevnpkn4mpyghzw2ukr33p5k45j42w62pqysdkf65p34mrvl4yu4n72s7yfgkq</b>
+                </p>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+        <button mat-raised-button color="primary" matStepperNext>
+            <mat-icon>savings</mat-icon>
+            Mint
+        </button>
+    </div>
+</div>

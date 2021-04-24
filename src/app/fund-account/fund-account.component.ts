@@ -29,6 +29,10 @@ export class FundAccountComponent implements OnInit {
     return ((this.fee || 0)) / 1000000 + 1;
   }
 
+  get minAdaTipBalance() {
+    return ((this.fee || 0)) / 1000000 + 2;
+  }
+
   get adaBalance() {
     return ((this.account?.balance || 0)) / 1000000;
   }

@@ -16,6 +16,7 @@ export interface Account {
     address: string;
     skey: string;
     vkey: string;
+    fundingAddresses: Array<string>;
     balance: number;
     lastUpdate: number;
 }

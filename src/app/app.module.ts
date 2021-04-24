@@ -17,7 +17,6 @@ import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { DashComponent } from './dash/dash.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
@@ -36,11 +35,14 @@ import { LoadingOverlayComponent } from './loading-overlay/loading-overlay.compo
 import { MatStepperModule } from '@angular/material/stepper';
 import { FundAccountComponent } from './fund-account/fund-account.component';
 import { MatTableModule } from '@angular/material/table';
+import { MintReviewAndSubmitComponent } from './mint-review-and-submit/mint-review-and-submit.component';
+import { MintChangeComponent } from './mint-change/mint-change.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, DashComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintChangeComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +71,8 @@ import { MatTableModule } from '@angular/material/table';
     MatProgressSpinnerModule,
     OverlayModule,
     MatStepperModule,
-    MatTableModule
+    MatTableModule,
+    MatTooltipModule
   ],
   providers: [
     AjaxInterceptor,

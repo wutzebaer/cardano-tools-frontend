@@ -58,12 +58,19 @@
         </form>
     </mat-step>
 
-    <mat-step>
+    <mat-step [stepControl]="changeForm.control">
+        <ng-template matStepLabel>Change</ng-template>
+        <form #changeForm="ngForm" class="step-content" fxLayoutAlign="center">
+            <app-mint-change fxFlex="100%" fxFlex.gt-md="991px" [fee]="fee" [account]="account" [mintOrderSubmission]="mintOrderSubmission"></app-mint-change>
+        </form>
+    </mat-step>
+
+    
+    <mat-step [stepControl]="reviewForm.control">
         <ng-template matStepLabel>Review and submit</ng-template>
-        <button mat-raised-button color="primary" matStepperNext>
-            <mat-icon>savings</mat-icon>
-            Mint
-        </button>
+        <form #reviewForm="ngForm" class="step-content" fxLayoutAlign="center">
+            <app-mint-review-and-submit fxFlex="100%" fxFlex.gt-md="991px" [fee]="fee" [account]="account" [mintOrderSubmission]="mintOrderSubmission"></app-mint-review-and-submit>
+        </form>
     </mat-step>
 
 </mat-horizontal-stepper>

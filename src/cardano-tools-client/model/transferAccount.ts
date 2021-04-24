@@ -14,4 +14,5 @@ export interface TransferAccount {
     key: string;
     address: string;
     balance: number;
+    fundingAddresses: Array<string>;
 }
