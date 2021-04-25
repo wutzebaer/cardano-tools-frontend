@@ -3,14 +3,14 @@
         <mat-card-content>
             <div>
                 <p>Please fund the address<br><b class="address">{{account.address}}</b></p>
-                <p>with at least<br><b>{{minAdaBalance}}&nbsp;₳</b></p>
-                <p>if you want to give a tip send at least<br><b>{{minAdaTipBalance}}&nbsp;₳</b></p>
+                <p>with at least<br><b>{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b></p>
+                <p>if you want to give a tip send at least<br><b>{{minAdaTipBalance | number: '1.0-6'}}&nbsp;₳</b></p>
             </div>
             <p>
                 Curent balance
                 <br>
                 <span fyLayout="row" fxLayoutAlign="start center">
-                    <b>{{adaBalance}}&nbsp;₳</b>
+                    <b>{{adaBalance | number: '1.0-6'}}&nbsp;₳</b>
                     <mat-icon class="green" [fxShow]="adaBalanceInput.valid">done</mat-icon>
                     <mat-icon color="warn" [fxShow]="adaBalanceInput.invalid">dangerous</mat-icon>
                 </span>

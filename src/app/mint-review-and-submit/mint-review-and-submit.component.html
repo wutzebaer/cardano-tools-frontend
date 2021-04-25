@@ -17,15 +17,15 @@
                 </p>
 
                 <p *ngIf="mintOrderSubmission.changeAction == 'RETURN'">
-                    Also return the change of <b>{{adaChange}}&nbsp;₳</b> to<br
+                    Also return the change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> to<br
                     ><b class="address">{{mintOrderSubmission.targetAddress}}</b>
                 </p>
                 <p *ngIf="mintOrderSubmission.changeAction == 'KEEP'">
-                    Keep the change of <b>{{adaChange}}&nbsp;₳</b> in account address<br>
+                    Keep the change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> in account address<br>
                     <b class="address">{{account.address}}</b>
                 </p>
                 <p *ngIf="mintOrderSubmission.changeAction == 'TIP'">
-                    Tip the change of <b>{{adaChange}}&nbsp;₳</b> to the [EURO]-Pool address<br>
+                    Tip the change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> to the [EURO]-Pool address<br>
                     <b class="address">addr1qx6pnsm9n3lrvtwx24kq7a0mfwq2txum2tvtaevnpkn4mpyghzw2ukr33p5k45j42w62pqysdkf65p34mrvl4yu4n72s7yfgkq</b>
                 </p>
             </div>

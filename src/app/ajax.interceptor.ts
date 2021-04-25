@@ -13,7 +13,7 @@ import { tap } from 'rxjs/operators';
 export class AjaxInterceptor implements HttpInterceptor {
 
   public ajaxStatusChanged$: EventEmitter<Boolean> = new EventEmitter();
-  constructor() {}
+  constructor() { }
   counter = 0;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -25,8 +25,8 @@ export class AjaxInterceptor implements HttpInterceptor {
       tap({
         next: event => {
         },
-        error: error => {
-          alert(error.message)
+        error: errorResponse => {
+          alert(errorResponse.error.message || errorResponse.message);
           this.counter--
           this.ajaxStatusChanged$.emit(this.counter > 0);
         },
