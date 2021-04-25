@@ -17,4 +17,16 @@ export interface MintOrder {
     createdAt: Date;
     account: Account;
     tokens?: Array<Token>;
+    targetAddress: string;
+    changeAction: MintOrder.ChangeActionEnum;
+    txid?: string;
+    policyScript?: string;
+}
+export namespace MintOrder {
+    export type ChangeActionEnum = 'RETURN' | 'KEEP' | 'TIP';
+    export const ChangeActionEnum = {
+        RETURN: 'RETURN' as ChangeActionEnum,
+        KEEP: 'KEEP' as ChangeActionEnum,
+        TIP: 'TIP' as ChangeActionEnum
+    };
 }

@@ -14,36 +14,32 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
 
-  name: string = "";
-  amount: number = 0;
-  fee: number | null = null;
-  account: TransferAccount | null = null;
+  account: TransferAccount = { key: "", address: "", balance: 0, fundingAddresses: [] };
 
-  mintOrderSubmission: MintOrderSubmission = { tokens: [], targetAddress: "", changeAction: 'RETURN' };
+  mintOrderSubmission: MintOrderSubmission = { tokens: [], targetAddress: "", changeAction: 'RETURN', fee: 0 };
 
-  constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService) { }
+  constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService) {
+    let accountKey = this.localStorageService.retrieveAccountKey();
+    let accountObservable;
+    if (accountKey == null) { accountObservable = this.api.createAccount(); }
+    else { accountObservable = this.api.getAccount(accountKey); }
+    accountObservable.subscribe(account => {
+      this.localStorageService.storeAccountKey(account.key)
+      this.account = account
+      this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+    })
+  }
 
   ngOnInit(): void {
     this.addToken();
   }
 
   ngAfterViewInit() {
-    let accountKey = this.localStorageService.retrieveAccountKey();
     this.stepper.selectionChange.subscribe((event: StepperSelectionEvent) => {
       if (event.selectedIndex == 0) {
       } else if (event.selectedIndex == 1) {
-
-        this.api.calculateFee(this.mintOrderSubmission).subscribe(fee => {
-          this.fee = fee
-        })
-
-        let accountObservable;
-        if (accountKey == null) { accountObservable = this.api.createAccount(); }
-        else { accountObservable = this.api.getAccount(accountKey); }
-        accountObservable.subscribe(account => {
-          this.localStorageService.storeAccountKey(account.key)
-          this.account = account
-          this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+        this.api.calculateFee(this.mintOrderSubmission, this.account.key).subscribe(fee => {
+          this.mintOrderSubmission.fee = fee
         })
       }
     });

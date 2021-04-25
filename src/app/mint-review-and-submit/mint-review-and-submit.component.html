@@ -3,14 +3,26 @@
         <mat-card-content>
             <div>
                 <p>Mint <b class="address">{{mintOrderSubmission.tokens.length}}</b> tokens</p>
-                <p>Send tokens to<br><b class="address">{{mintOrderSubmission.targetAddress}}</b></p>
+
+                <p>
+                    <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"><span>Send tokens to</span><mat-icon class="help" matTooltip="You can only choose adresses which have send ada to this account">help</mat-icon></span>
+                    <b style="display: block; max-width: 837px;">
+                        <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress"
+                            name="item">
+                            <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
+                                {{address}}
+                            </mat-option>
+                        </mat-select>
+                    </b>
+                </p>
+
                 <p *ngIf="mintOrderSubmission.changeAction == 'RETURN'">
                     Also return the change of <b>{{adaChange}}&nbsp;₳</b> to<br
                     ><b class="address">{{mintOrderSubmission.targetAddress}}</b>
                 </p>
                 <p *ngIf="mintOrderSubmission.changeAction == 'KEEP'">
                     Keep the change of <b>{{adaChange}}&nbsp;₳</b> in account address<br>
-                    <b class="address">{{account?.address}}</b>
+                    <b class="address">{{account.address}}</b>
                 </p>
                 <p *ngIf="mintOrderSubmission.changeAction == 'TIP'">
                     Tip the change of <b>{{adaChange}}&nbsp;₳</b> to the [EURO]-Pool address<br>
@@ -20,7 +32,7 @@
         </mat-card-content>
     </mat-card>
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-        <button mat-raised-button color="primary" matStepperNext>
+        <button mat-raised-button color="primary" matStepperNext (click)="mint()">
             <mat-icon>savings</mat-icon>
             Mint
         </button>

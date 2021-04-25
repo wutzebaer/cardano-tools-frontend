@@ -61,16 +61,21 @@ export class RestInterfaceService {
      * 
      * 
      * @param body 
+     * @param key 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public calculateFee(body: MintOrderSubmission, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public calculateFee(body: MintOrderSubmission, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public calculateFee(body: MintOrderSubmission, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public calculateFee(body: MintOrderSubmission, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public calculateFee(body: MintOrderSubmission, key: string, observe?: 'body', reportProgress?: boolean): Observable<number>;
+    public calculateFee(body: MintOrderSubmission, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
+    public calculateFee(body: MintOrderSubmission, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
+    public calculateFee(body: MintOrderSubmission, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling calculateFee.');
+        }
+
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling calculateFee.');
         }
 
         let headers = this.defaultHeaders;
@@ -93,7 +98,7 @@ export class RestInterfaceService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<number>('post',`${this.basePath}/api/mintFee`,
+        return this.httpClient.request<number>('post',`${this.basePath}/api/mintFee/${encodeURIComponent(String(key))}`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -1,3 +1,4 @@
+import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { Component, Input, OnInit } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { interval } from 'rxjs';
@@ -13,10 +14,10 @@ import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client'
 })
 export class FundAccountComponent implements OnInit {
 
-  @Input() fee!: number | null;
-  @Input() account!: TransferAccount | null;
+  @Input() account!: TransferAccount;
+  @Input() mintOrderSubmission!: MintOrderSubmission;
+
   constructor(private api: RestInterfaceService) { }
-  muh = 0
 
   ngOnInit(): void {
     interval(10000).subscribe(() => {
@@ -26,15 +27,15 @@ export class FundAccountComponent implements OnInit {
   }
 
   get minAdaBalance() {
-    return ((this.fee || 0)) / 1000000 + 1;
+    return ((this.mintOrderSubmission.fee || 0)) / 1000000 + 1;
   }
 
   get minAdaTipBalance() {
-    return ((this.fee || 0)) / 1000000 + 2;
+    return ((this.mintOrderSubmission.fee || 0)) / 1000000 + 2;
   }
 
   get adaBalance() {
-    return ((this.account?.balance || 0)) / 1000000;
+    return ((this.account.balance || 0)) / 1000000;
   }
 
   refresh() {
