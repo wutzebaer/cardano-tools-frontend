@@ -20,10 +20,11 @@
                     </mat-radio-group>
                 </span>
             </p>
+
             <!-- fund instruction-->
-            <div>
-                <p>Please fund the account address <b class="address">{{account.address}}</b> with at least <b>{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b></p>
-            </div>
+            <p>Please send at least <b>{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b> to this address</p>
+
+            <p style="text-align: center;"><b class="address">{{account.address}}</b></p>
 
             <!-- current balance -->
             <p>
@@ -40,14 +41,6 @@
                 <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span>Change </span>
                     <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b>
-                </span>
-            </p>
-
-            <!-- target address -->
-            <p>
-                <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span>The tokens will be send to </span>
-                    <b>{{mintOrderSubmission.targetAddress}}</b>
                 </span>
             </p>
 

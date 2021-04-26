@@ -40,8 +40,7 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.stepper.selectionChange.subscribe((event: StepperSelectionEvent) => {
-      if (event.selectedIndex == 0) {
-      } else if (event.selectedIndex == 1) {
+      if (event.previouslySelectedIndex == 0) {
         this.updateMintTransaction()
       }
     });

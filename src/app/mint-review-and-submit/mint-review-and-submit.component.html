@@ -2,22 +2,20 @@
     <mat-card>
         <mat-card-content>
             <div>
-                <p>Mint <b class="address">{{mintOrderSubmission.tokens.length}}</b> tokens</p>
+                <p>Mint <b>{{mintOrderSubmission.tokens.length}}</b> tokens</p>
 
                 <p>
-                    Send tokens to <b>{{mintOrderSubmission.targetAddress}}</b>
+                    Send tokens to <b class="address">{{mintOrderSubmission.targetAddress}}</b>
                 </p>
 
                 <p *ngIf="mintOrderSubmission.changeAction == 'RETURN'">
                     Also return the change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> to this address
                 </p>
                 <p *ngIf="mintOrderSubmission.changeAction == 'KEEP'">
-                    Keep the change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> in account address<br>
-                    <b class="address">{{account.address}}</b>
+                    Keep the change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> in account address <b class="address">{{account.address}}</b>
                 </p>
                 <p *ngIf="mintOrderSubmission.changeAction == 'TIP'">
-                    Tip the change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> to the [EURO]-Pool address<br>
-                    <b class="address">addr1qx6pnsm9n3lrvtwx24kq7a0mfwq2txum2tvtaevnpkn4mpyghzw2ukr33p5k45j42w62pqysdkf65p34mrvl4yu4n72s7yfgkq</b>
+                    The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will be sent to the [EURO]-Pool pledge. <b>Thank you!</b><br>
                 </p>
 
                 <mat-accordion class="example-headers-align">
