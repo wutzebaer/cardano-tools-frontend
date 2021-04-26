@@ -12,12 +12,15 @@
                         <mat-radio-group aria-label="Select an option" fxLayout="column" fxLayoutGap="10px"
                             name="changeAction" #adaBalanceInput="ngModel"
                             [(ngModel)]="mintOrderSubmission.changeAction" (change)="updateChangeActionFee()">
+                            <!-- RETURN -->
                             <mat-radio-button value="RETURN">also send to target address</mat-radio-button>
+                            <!-- KEEP -->
                             <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                                 <mat-radio-button [disabled]="adaChange < 1" value="KEEP">keep on the account address to
                                     use it later</mat-radio-button>
                                 <mat-icon class="help" matTooltip="Needs at least 1&nbsp;₳ change">help</mat-icon>
                             </span>
+                            <!-- TIP -->
                             <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                                 <mat-radio-button [disabled]="adaChange < 1" value="TIP">tip it to the [EURO]-Pool
                                 </mat-radio-button>
