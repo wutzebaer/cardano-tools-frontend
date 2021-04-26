@@ -1,8 +1,9 @@
+import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
+import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
-import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { LocalStorageService } from '../local-storage.service';
 
 @Component({
@@ -15,19 +16,21 @@ export class MintComponent implements OnInit, AfterViewInit {
   @ViewChild('stepper') stepper!: MatStepper;
 
   account: TransferAccount = { key: "", address: "", balance: 0, fundingAddresses: [] };
-
-  mintOrderSubmission: MintOrderSubmission = { tokens: [], targetAddress: "", changeAction: 'RETURN', fee: 0 };
+  mintOrderSubmission: MintOrderSubmission = { tokens: [], targetAddress: "", changeAction: 'RETURN' };
+  mintTransaction: MintTransaction = {
+    rawData: "",
+    txId: "",
+    fee: 0,
+    policyId: "",
+    outputs: "",
+    inputs: "",
+    metaDataJson: "",
+    policy: "",
+    mintOrderSubmission: this.mintOrderSubmission
+  }
 
   constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService) {
-    let accountKey = this.localStorageService.retrieveAccountKey();
-    let accountObservable;
-    if (accountKey == null) { accountObservable = this.api.createAccount(); }
-    else { accountObservable = this.api.getAccount(accountKey); }
-    accountObservable.subscribe(account => {
-      this.localStorageService.storeAccountKey(account.key)
-      this.account = account
-      this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
-    })
+    this.updateAccount();
   }
 
   ngOnInit(): void {
@@ -38,9 +41,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.stepper.selectionChange.subscribe((event: StepperSelectionEvent) => {
       if (event.selectedIndex == 0) {
       } else if (event.selectedIndex == 1) {
-        this.api.calculateFee(this.mintOrderSubmission, this.account.key).subscribe(fee => {
-          this.mintOrderSubmission.fee = fee
-        })
+        this.updateMintTransaction()
       }
     });
   }
@@ -52,6 +53,24 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   removeToken(index: number) {
     this.mintOrderSubmission.tokens.splice(index, 1);
+  }
+
+  updateAccount() {
+    let accountKey = this.localStorageService.retrieveAccountKey();
+    let accountObservable;
+    if (accountKey == null) { accountObservable = this.api.createAccount(); }
+    else { accountObservable = this.api.getAccount(accountKey); }
+    accountObservable.subscribe(account => {
+      this.localStorageService.storeAccountKey(account.key)
+      this.account = account
+      this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+    })
+  }
+
+  updateMintTransaction() {
+    this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
+      this.mintTransaction = mintTransaction;
+    })
   }
 
 }

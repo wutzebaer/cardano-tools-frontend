@@ -17,8 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { MintOrder } from '../model/mintOrder';
 import { MintOrderSubmission } from '../model/mintOrderSubmission';
+import { MintTransaction } from '../model/mintTransaction';
 import { TransferAccount } from '../model/transferAccount';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -65,17 +65,17 @@ export class RestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public calculateFee(body: MintOrderSubmission, key: string, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public calculateFee(body: MintOrderSubmission, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public calculateFee(body: MintOrderSubmission, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public calculateFee(body: MintOrderSubmission, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public buildMintTransaction(body: MintOrderSubmission, key: string, observe?: 'body', reportProgress?: boolean): Observable<MintTransaction>;
+    public buildMintTransaction(body: MintOrderSubmission, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MintTransaction>>;
+    public buildMintTransaction(body: MintOrderSubmission, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MintTransaction>>;
+    public buildMintTransaction(body: MintOrderSubmission, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling calculateFee.');
+            throw new Error('Required parameter body was null or undefined when calling buildMintTransaction.');
         }
 
         if (key === null || key === undefined) {
-            throw new Error('Required parameter key was null or undefined when calling calculateFee.');
+            throw new Error('Required parameter key was null or undefined when calling buildMintTransaction.');
         }
 
         let headers = this.defaultHeaders;
@@ -98,7 +98,7 @@ export class RestInterfaceService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<number>('post',`${this.basePath}/api/mintFee/${encodeURIComponent(String(key))}`,
+        return this.httpClient.request<MintTransaction>('post',`${this.basePath}/api/buildMintTransaction/${encodeURIComponent(String(key))}`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -177,47 +177,6 @@ export class RestInterfaceService {
         ];
 
         return this.httpClient.request<TransferAccount>('get',`${this.basePath}/api/account/${encodeURIComponent(String(key))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param key 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getMintCoinOrder(key: string, observe?: 'body', reportProgress?: boolean): Observable<MintOrder>;
-    public getMintCoinOrder(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MintOrder>>;
-    public getMintCoinOrder(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MintOrder>>;
-    public getMintCoinOrder(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (key === null || key === undefined) {
-            throw new Error('Required parameter key was null or undefined when calling getMintCoinOrder.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<MintOrder>('get',`${this.basePath}/api/mintCoinOrder/${encodeURIComponent(String(key))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -329,17 +288,17 @@ export class RestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postMintCoinOrder(body: MintOrderSubmission, key: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public postMintCoinOrder(body: MintOrderSubmission, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public postMintCoinOrder(body: MintOrderSubmission, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public postMintCoinOrder(body: MintOrderSubmission, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public submitMintTransaction(body: MintTransaction, key: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public submitMintTransaction(body: MintTransaction, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public submitMintTransaction(body: MintTransaction, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public submitMintTransaction(body: MintTransaction, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling postMintCoinOrder.');
+            throw new Error('Required parameter body was null or undefined when calling submitMintTransaction.');
         }
 
         if (key === null || key === undefined) {
-            throw new Error('Required parameter key was null or undefined when calling postMintCoinOrder.');
+            throw new Error('Required parameter key was null or undefined when calling submitMintTransaction.');
         }
 
         let headers = this.defaultHeaders;
@@ -361,7 +320,7 @@ export class RestInterfaceService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/mintCoinOrder/${encodeURIComponent(String(key))}`,
+        return this.httpClient.request<any>('post',`${this.basePath}/api/submitMintTransaction/${encodeURIComponent(String(key))}`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

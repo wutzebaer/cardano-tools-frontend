@@ -9,14 +9,16 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MintOrderSubmission } from './mintOrderSubmission';
 
-export interface Account { 
-    key?: string;
-    createdAt: Date;
-    address: string;
-    skey: string;
-    vkey: string;
-    fundingAddresses: Array<string>;
-    balance: number;
-    lastUpdate: number;
+export interface MintTransaction { 
+    mintOrderSubmission: MintOrderSubmission;
+    rawData: string;
+    txId: string;
+    fee: number;
+    policyId: string;
+    outputs: string;
+    inputs: string;
+    metaDataJson: string;
+    policy: string;
 }

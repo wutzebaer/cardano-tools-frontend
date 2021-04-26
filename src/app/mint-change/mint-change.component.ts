@@ -1,7 +1,8 @@
-import { ControlContainer, NgForm } from '@angular/forms';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
+import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
+import { ControlContainer, NgForm } from '@angular/forms';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-mint-change',
@@ -12,6 +13,11 @@ import { Component, OnInit, Input } from '@angular/core';
 export class MintChangeComponent implements OnInit {
 
   @Input() account!: TransferAccount;
+  @Output() updateAccount = new EventEmitter<void>();
+
+  @Input() mintTransaction!: MintTransaction;
+  @Output() updateMintTransaction = new EventEmitter<void>();
+
   @Input() mintOrderSubmission!: MintOrderSubmission;
 
   selectedAddress: string = "";
@@ -22,21 +28,19 @@ export class MintChangeComponent implements OnInit {
   }
 
   updateChangeActionFee() {
-    this.api.calculateFee(this.mintOrderSubmission, this.account.key).subscribe(fee => {
-      this.mintOrderSubmission.fee = fee
-    })
+    this.updateMintTransaction.emit();
   }
 
   get adaChange() {
-    return ((this.account.balance || 0) - (this.mintOrderSubmission.fee || 0) - 1000000) / 1000000;
+    return ((this.account.balance || 0) - (this.mintTransaction.fee || 0) - 1000000) / 1000000;
   }
 
   get adaFee() {
-    return ((this.mintOrderSubmission.fee || 0)) / 1000000;
+    return ((this.mintTransaction.fee || 0)) / 1000000;
   }
 
   get minAdaBalance() {
-    return ((this.mintOrderSubmission.fee || 0)) / 1000000 + 1;
+    return ((this.mintTransaction.fee || 0)) / 1000000 + 1;
   }
 
   get adaBalance() {

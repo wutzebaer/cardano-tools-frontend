@@ -1,5 +1,6 @@
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
-import { Component, Input, OnInit } from '@angular/core';
+import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { interval } from 'rxjs';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
@@ -15,6 +16,11 @@ import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client'
 export class FundAccountComponent implements OnInit {
 
   @Input() account!: TransferAccount;
+  @Output() updateAccount = new EventEmitter<void>();
+
+  @Input() mintTransaction!: MintTransaction;
+  @Output() updateMintTransaction = new EventEmitter<void>();
+
   @Input() mintOrderSubmission!: MintOrderSubmission;
 
   constructor(private api: RestInterfaceService) { }
@@ -27,11 +33,11 @@ export class FundAccountComponent implements OnInit {
   }
 
   get minAdaBalance() {
-    return ((this.mintOrderSubmission.fee || 0)) / 1000000 + 1;
+    return ((this.mintTransaction.fee || 0)) / 1000000 + 1;
   }
 
   get minAdaTipBalance() {
-    return ((this.mintOrderSubmission.fee || 0)) / 1000000 + 2;
+    return ((this.mintTransaction.fee || 0)) / 1000000 + 2;
   }
 
   get adaBalance() {
@@ -39,13 +45,7 @@ export class FundAccountComponent implements OnInit {
   }
 
   refresh() {
-    if (this.account) {
-      this.api.getAccount(this.account.key as string).subscribe(account => {
-        if (this.account != null) {
-          this.account.balance = account.balance;
-        }
-      });
-    }
+   this.updateAccount.emit();
   }
 
 }

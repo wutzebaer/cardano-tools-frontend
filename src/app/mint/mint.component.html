@@ -25,27 +25,16 @@
 
                 <!-- Buttons -->
                 <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+                    <!-- add token -->
                     <button mat-raised-button color="accent" type="button" (click)="addToken()">
                         <mat-icon>generating_tokens</mat-icon>
                         Add
                     </button>
+                    <!-- next step -->
                     <button mat-raised-button color="primary" matStepperNext>
                         <mat-icon>fast_forward</mat-icon>
                         Proceed
                     </button>
-                    <!--
-                    <button mat-raised-button color="accent" type="button" (click)="calcFee()">
-                        <mat-icon>add</mat-icon>
-                        Fee
-                    </button>
-                -->
-                    <!--
-                    <button mat-raised-button color="primary" matStepperNext>
-                        <mat-icon>savings</mat-icon>
-                        Mint
-                    </button>
-                    -->
-                    <!--<span>Fee {{fee/1000000 | number:'.0-4'}} ₳</span>-->
                 </div>
             </div>
         </form>
@@ -54,16 +43,22 @@
     <mat-step [stepControl]="fundForm.control">
         <ng-template matStepLabel>Fund Account</ng-template>
         <form #fundForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-fund-account fxFlex="100%" fxFlex.gt-md="991px" [account]="account"
-                [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
+            <app-fund-account fxFlex="100%" fxFlex.gt-md="991px" 
+            [account]="account" (updateAccount)="updateAccount()" 
+            [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()"
+            [mintOrderSubmission]="mintOrderSubmission"
+            ></app-fund-account>
         </form>
     </mat-step>
 
     <mat-step [stepControl]="changeForm.control">
         <ng-template matStepLabel>Change</ng-template>
         <form #changeForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-mint-change fxFlex="100%" fxFlex.gt-md="991px" [account]="account"
-                [mintOrderSubmission]="mintOrderSubmission"></app-mint-change>
+            <app-mint-change fxFlex="100%" fxFlex.gt-md="991px"
+            [account]="account" (updateAccount)="updateAccount()" 
+            [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()"
+            [mintOrderSubmission]="mintOrderSubmission"
+            ></app-mint-change>
         </form>
     </mat-step>
 
@@ -71,8 +66,11 @@
     <mat-step [stepControl]="reviewForm.control">
         <ng-template matStepLabel>Review and submit</ng-template>
         <form #reviewForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-mint-review-and-submit fxFlex="100%" fxFlex.gt-md="991px" [account]="account"
-                [mintOrderSubmission]="mintOrderSubmission"></app-mint-review-and-submit>
+            <app-mint-review-and-submit fxFlex="100%" fxFlex.gt-md="991px"
+            [account]="account" (updateAccount)="updateAccount()" 
+            [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()"
+            [mintOrderSubmission]="mintOrderSubmission"
+            ></app-mint-review-and-submit>
         </form>
     </mat-step>
 

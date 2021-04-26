@@ -1,7 +1,8 @@
+import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
+import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { ControlContainer, NgForm } from '@angular/forms';
-import { MintOrderSubmission } from './../../cardano-tools-client/model/mintOrderSubmission';
 import { TransferAccount } from './../../cardano-tools-client/model/transferAccount';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { RestInterfaceService } from 'src/cardano-tools-client';
 
 @Component({
@@ -13,6 +14,11 @@ import { RestInterfaceService } from 'src/cardano-tools-client';
 export class MintReviewAndSubmitComponent implements OnInit {
 
   @Input() account!: TransferAccount;
+  @Output() updateAccount = new EventEmitter<void>();
+
+  @Input() mintTransaction!: MintTransaction;
+  @Output() updateMintTransaction = new EventEmitter<void>();
+
   @Input() mintOrderSubmission!: MintOrderSubmission;
 
   selectedAddress: string = "";
@@ -23,15 +29,15 @@ export class MintReviewAndSubmitComponent implements OnInit {
   }
 
   get adaChange() {
-    return ((this.account.balance || 0) - (this.mintOrderSubmission.fee || 0) - 1000000) / 1000000;
+    return ((this.account.balance || 0) - (this.mintTransaction.fee || 0) - 1000000) / 1000000;
   }
 
   get adaFee() {
-    return ((this.mintOrderSubmission.fee || 0)) / 1000000;
+    return ((this.mintTransaction.fee || 0)) / 1000000;
   }
 
   get minAdaBalance() {
-    return ((this.mintOrderSubmission.fee || 0)) / 1000000 + 1;
+    return ((this.mintTransaction.fee || 0)) / 1000000 + 1;
   }
 
   get adaBalance() {
@@ -39,7 +45,7 @@ export class MintReviewAndSubmitComponent implements OnInit {
   }
 
   mint() {
-    this.api.postMintCoinOrder(this.mintOrderSubmission, this.account.key).subscribe();
+    this.api.submitMintTransaction(this.mintTransaction, this.account.key).subscribe();
   }
 
 }

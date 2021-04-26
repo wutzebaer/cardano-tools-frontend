@@ -15,7 +15,6 @@ export interface MintOrderSubmission {
     tokens: Array<TokenSubmission>;
     targetAddress: string;
     changeAction: MintOrderSubmission.ChangeActionEnum;
-    fee: number;
 }
 export namespace MintOrderSubmission {
     export type ChangeActionEnum = 'RETURN' | 'KEEP' | 'TIP';
