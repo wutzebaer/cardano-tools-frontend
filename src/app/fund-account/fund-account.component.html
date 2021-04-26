@@ -1,31 +1,81 @@
 <div fxLayout="column" fxLayoutGap="15px">
     <mat-card>
         <mat-card-content>
+
+            <!-- change -->
+            <p fxLayout="column" fxLayoutGap="10px">
+                <span><b>What to to with the change?</b></span>
+                <span>
+                    <mat-radio-group aria-label="Select an option" fxLayout="column" fxLayoutGap="10px" name="changeAction" #adaChangeInput="ngModel" [(ngModel)]="mintOrderSubmission.changeAction" (change)="emitUpdateMintTransaction()">
+                        <!-- RETURN -->
+                        <mat-radio-button value="RETURN">also send back with the tokens</mat-radio-button>
+                        <!-- KEEP -->
+                        <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                            <mat-radio-button value="KEEP">keep on the account address to use it later</mat-radio-button>
+                        </span>
+                        <!-- TIP -->
+                        <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                            <mat-radio-button value="TIP">tip it to the [EURO]-Pool </mat-radio-button>
+                        </span>
+                    </mat-radio-group>
+                </span>
+            </p>
+            <!-- fund instruction-->
             <div>
-                <p>Please fund the address<br><b class="address">{{account.address}}</b></p>
-                <p>with at least<br><b>{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b></p>
-                <p>if you want to give a tip send at least<br><b>{{minAdaTipBalance | number: '1.0-6'}}&nbsp;₳</b></p>
+                <p>Please fund the account address <b class="address">{{account.address}}</b> with at least <b>{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b></p>
             </div>
+
+            <!-- current balance -->
             <p>
-                Curent balance
-                <br>
-                <span fyLayout="row" fxLayoutAlign="start center">
+                <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span>Curent account balance </span>
                     <b>{{adaBalance | number: '1.0-6'}}&nbsp;₳</b>
                     <mat-icon class="green" [fxShow]="adaBalanceInput.valid">done</mat-icon>
                     <mat-icon color="warn" [fxShow]="adaBalanceInput.invalid">dangerous</mat-icon>
                 </span>
             </p>
+
+            <!-- change -->
+            <p>
+                <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span>Change </span>
+                    <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b>
+                </span>
+            </p>
+
+            <!-- target address -->
+            <p>
+                <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span>The tokens will be send to </span>
+                    <b>{{mintOrderSubmission.targetAddress}}</b>
+                </span>
+            </p>
+
+            <!-- security hint -->
             <p>
                 <b>For security reasons don't fund more than 10&nbsp;₳!</b>
             </p>
+
+            <!-- receiver address-->
+            <mat-form-field fxHide appearance="outline" style="width: 50%">
+                <mat-label>Send tokens to</mat-label>
+                <b>
+                    <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" name="item">
+                        <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
+                            {{address}}
+                        </mat-option>
+                    </mat-select>
+                </b>
+            </mat-form-field>
+
+
             <mat-form-field fxHide>
-                <input #adaBalanceInput="ngModel" matInput type="number" [ngModel]="adaBalance" name="adaBalance"
-                    [appMinValidator]="1">
+                <input #adaBalanceInput="ngModel" matInput type="number" [ngModel]="adaBalance" name="adaBalance" [appMinValidator]="minAdaBalance">
             </mat-form-field>
         </mat-card-content>
     </mat-card>
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-        <button mat-raised-button color="accent" (click)="refresh()">
+        <button mat-raised-button color="accent" (click)="emitUpdateAccount()">
             <mat-icon>refresh</mat-icon>
             Refresh
         </button>

@@ -1,7 +1,7 @@
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
 import { LocalStorageService } from '../local-storage.service';
@@ -14,6 +14,7 @@ import { LocalStorageService } from '../local-storage.service';
 export class MintComponent implements OnInit, AfterViewInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
+  accountUpdate = new EventEmitter<void>();
 
   account: TransferAccount = { key: "", address: "", balance: 0, fundingAddresses: [] };
   mintOrderSubmission: MintOrderSubmission = { tokens: [], targetAddress: "", changeAction: 'RETURN' };
@@ -63,6 +64,9 @@ export class MintComponent implements OnInit, AfterViewInit {
     accountObservable.subscribe(account => {
       this.localStorageService.storeAccountKey(account.key)
       this.account = account
+      if (account.balance != this.account.balance) {
+        this.updateMintTransaction();
+      }
       this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
     })
   }

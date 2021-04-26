@@ -1,6 +1,6 @@
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { interval } from 'rxjs';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
@@ -28,24 +28,33 @@ export class FundAccountComponent implements OnInit {
   ngOnInit(): void {
     interval(10000).subscribe(() => {
       if (this.adaBalance < this.minAdaBalance)
-        this.refresh();
+        this.emitUpdateAccount();
     });
   }
 
-  get minAdaBalance() {
-    return ((this.mintTransaction.fee || 0)) / 1000000 + 1;
+  emitUpdateAccount() {
+    this.updateAccount.emit();
   }
 
-  get minAdaTipBalance() {
-    return ((this.mintTransaction.fee || 0)) / 1000000 + 2;
+  emitUpdateMintTransaction() {
+    this.updateMintTransaction.emit();
+  }
+
+  get adaChange() {
+    return (Math.max((this.account.balance || 0) - (this.mintTransaction.fee || 0) - 1000000, 0)) / 1000000;
+  }
+
+  get minAdaBalance() {
+    if (this.mintOrderSubmission.changeAction == 'RETURN')
+      return ((this.mintTransaction.fee || 0)) / 1000000 + 1;
+    else
+      return ((this.mintTransaction.fee || 0)) / 1000000 + 2;
   }
 
   get adaBalance() {
     return ((this.account.balance || 0)) / 1000000;
   }
 
-  refresh() {
-   this.updateAccount.emit();
-  }
+
 
 }
