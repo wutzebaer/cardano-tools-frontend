@@ -1,21 +1,17 @@
 <div fxLayout="column" fxLayoutGap="15px">
     <mat-card>
         <mat-card-content>
+
+            <h2>Review and Submit</h2>
+
             <div>
-                <p><b>{{mintTransaction.mintOrderSubmission.tokens.length}}</b> token will be mint</p>
+                <p>The tokens will be sent back to your address</p>
 
-                <p>
-                    The tokens will be sent to <b class="address">{{mintTransaction.mintOrderSubmission.targetAddress}}</b>
+                <p *ngIf="!mintTransaction.mintOrderSubmission.tip">
+                    The change of <b>{{adaTip | number: '1.0-6'}}&nbsp;₳</b> will also be sent to your address
                 </p>
-
-                <p *ngIf="mintTransaction.mintOrderSubmission.changeAction == 'RETURN'">
-                    The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will also be sent to this address
-                </p>
-                <p *ngIf="mintTransaction.mintOrderSubmission.changeAction == 'KEEP'">
-                    The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will be kept in account address <b class="address">{{account.address}}</b> to use it later
-                </p>
-                <p *ngIf="mintTransaction.mintOrderSubmission.changeAction == 'TIP'">
-                    The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will be sent to the [EURO]-Pool pledge. <b>Thank you!</b><br>
+                <p *ngIf="mintTransaction.mintOrderSubmission.tip">
+                    The change of <b>{{adaTip | number: '1.0-6'}}&nbsp;₳</b> will be sent to the [EURO]-Pool pledge. <b>Thank you!</b><br>
                 </p>
 
                 <mat-accordion class="example-headers-align">
@@ -53,13 +49,19 @@
                         </mat-expansion-panel-header>
                         <pre>{{mintTransaction.outputs}}</pre>
                     </mat-expansion-panel>
+
+                    
                 </mat-accordion>
 
             </div>
         </mat-card-content>
     </mat-card>
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-        <button mat-raised-button color="primary" matStepperNext (click)="mint()">
+        <button mat-raised-button color="primary" matStepperPrevious>
+            <mat-icon>fast_rewind</mat-icon>
+            Back
+        </button>
+        <button mat-raised-button color="accent" matStepperNext (click)="mint()">
             <mat-icon>savings</mat-icon>
             Mint
         </button>

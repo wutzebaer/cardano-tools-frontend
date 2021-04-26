@@ -34,9 +34,12 @@ label {
   }
   audio {
     width: 100%;
+    object-fit: scale-down;
   }
   video {
     width: 100%;
+    height: 100%;
+    object-fit: scale-down;
   }
   .big-icon {
     font-size: 100px;

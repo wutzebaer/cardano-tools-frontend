@@ -2,6 +2,8 @@
     <mat-card>
         <mat-card-content>
 
+            <h2>Fund Account</h2>
+
             <p>
                 <mat-checkbox name="tip" [(ngModel)]="mintOrderSubmission.tip" (change)="emitUpdateMintTransaction()">Give a tip to the [EURO]-Pool pledge</mat-checkbox>
             </p>
@@ -14,7 +16,7 @@
             <!-- current balance -->
             <p>
                 <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span>Curent account balance </span>
+                    <span>Curent address balance </span>
                     <b>{{adaBalance | number: '1.0-6'}}&nbsp;₳</b>
                     <mat-icon class="green" [fxShow]="adaBalanceInput.valid">done</mat-icon>
                     <mat-icon color="warn" [fxShow]="adaBalanceInput.invalid">dangerous</mat-icon>
@@ -22,20 +24,15 @@
             </p>
 
             <!-- tip -->
-            <p *ngIf="mintTransaction.mintOrderSubmission.tip">
+            <p *ngIf="mintTransaction.mintOrderSubmission.tip && adaTip > 1">
                 <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span>Tip </span>
-                    <b>{{adaTip | number: '1.0-6'}}&nbsp;₳</b>
+                    <span>Tip for the [EURO]-Pool pledge</span>
+                    <b>{{adaTip | number: '1.0-6'}}&nbsp;₳ Thank You!</b>
                 </span>
             </p>
 
-            <!-- security hint -->
-            <p>
-                <b>For security reasons don't fund more than 10&nbsp;₳!</b>
-            </p>
-
             <!-- receiver address-->
-            <mat-form-field appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="account.fundingAddresses.length > 0">
+            <mat-form-field *ngIf="false" appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="account.fundingAddresses.length > 0">
                 <mat-label>Send tokens to</mat-label>
                 <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" name="item" (selectionChange)="emitUpdateMintTransaction()">
                     <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
@@ -51,6 +48,10 @@
         </mat-card-content>
     </mat-card>
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+        <button mat-raised-button color="primary" matStepperPrevious>
+            <mat-icon>fast_rewind</mat-icon>
+            Back
+        </button>
         <button mat-raised-button color="accent" (click)="emitUpdateAccount()">
             <mat-icon>refresh</mat-icon>
             Refresh

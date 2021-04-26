@@ -62,11 +62,13 @@ export class MintComponent implements OnInit, AfterViewInit {
     else { accountObservable = this.api.getAccount(accountKey); }
     accountObservable.subscribe(account => {
       this.localStorageService.storeAccountKey(account.key)
+      let balanceChanged = account.balance != this.account.balance
       this.account = account
-      if (account.balance != this.account.balance) {
+      this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+
+      if (balanceChanged || this.mintTransaction.fee == 0) {
         this.updateMintTransaction();
       }
-      this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
     })
   }
 
