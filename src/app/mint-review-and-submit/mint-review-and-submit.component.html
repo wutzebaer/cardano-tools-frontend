@@ -2,36 +2,23 @@
     <mat-card>
         <mat-card-content>
             <div>
-                <p>Mint <b>{{mintOrderSubmission.tokens.length}}</b> tokens</p>
+                <p><b>{{mintTransaction.mintOrderSubmission.tokens.length}}</b> token will be mint</p>
 
                 <p>
-                    Send tokens to <b class="address">{{mintOrderSubmission.targetAddress}}</b>
+                    The tokens will be sent to <b class="address">{{mintTransaction.mintOrderSubmission.targetAddress}}</b>
                 </p>
 
-                <p *ngIf="mintOrderSubmission.changeAction == 'RETURN'">
-                    Also return the change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> to this address
+                <p *ngIf="mintTransaction.mintOrderSubmission.changeAction == 'RETURN'">
+                    The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will also be sent to this address
                 </p>
-                <p *ngIf="mintOrderSubmission.changeAction == 'KEEP'">
-                    Keep the change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> in account address <b class="address">{{account.address}}</b>
+                <p *ngIf="mintTransaction.mintOrderSubmission.changeAction == 'KEEP'">
+                    The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will be kept in account address <b class="address">{{account.address}}</b> to use it later
                 </p>
-                <p *ngIf="mintOrderSubmission.changeAction == 'TIP'">
+                <p *ngIf="mintTransaction.mintOrderSubmission.changeAction == 'TIP'">
                     The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will be sent to the [EURO]-Pool pledge. <b>Thank you!</b><br>
                 </p>
 
                 <mat-accordion class="example-headers-align">
-
-                    <!-- policyId -->
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                PolicyId
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                desc
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <pre>{{mintTransaction.policyId}}</pre>
-                    </mat-expansion-panel>
 
                     <!-- Policy -->
                     <mat-expansion-panel>
@@ -40,9 +27,10 @@
                                 Policy
                             </mat-panel-title>
                             <mat-panel-description>
-                                desc
+                                {{mintTransaction.policyId}}
                             </mat-panel-description>
                         </mat-expansion-panel-header>
+                        <pre>{{mintTransaction.policyId}}</pre>
                         <pre>{{mintTransaction.policy}}</pre>
                     </mat-expansion-panel>
 
@@ -52,11 +40,18 @@
                             <mat-panel-title>
                                 Metadata
                             </mat-panel-title>
-                            <mat-panel-description>
-                                desc
-                            </mat-panel-description>
                         </mat-expansion-panel-header>
                         <pre>{{mintTransaction.metaDataJson}}</pre>
+                    </mat-expansion-panel>
+
+                    <!-- Outputs -->
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Tx Outputs
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <pre>{{mintTransaction.outputs}}</pre>
                     </mat-expansion-panel>
                 </mat-accordion>
 

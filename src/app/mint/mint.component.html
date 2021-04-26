@@ -55,9 +55,8 @@
         <ng-template matStepLabel>Review and submit</ng-template>
         <form #reviewForm="ngForm" class="step-content" fxLayoutAlign="center">
             <app-mint-review-and-submit fxFlex="100%" fxFlex.gt-md="991px"
-            [account]="account" (updateAccount)="updateAccount()" 
+            [account]="account" 
             [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()"
-            [mintOrderSubmission]="mintOrderSubmission"
             ></app-mint-review-and-submit>
         </form>
     </mat-step>

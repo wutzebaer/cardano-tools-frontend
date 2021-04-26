@@ -38,22 +38,25 @@
 
         <div fxLayout="row" fxLayoutGap="10px">
             <!-- Asset Name -->
-            <mat-form-field fxFlex>
-                <input matInput placeholder="Asset Name" [(ngModel)]="token.assetName" name="assetName{{counter}}"
+            <mat-form-field fxFlex appearance="outline">
+                <mat-label>Asset Name</mat-label>
+                <input matInput [(ngModel)]="token.assetName" name="assetName{{counter}}"
                     required pattern="[a-zA-Z0-9-]{1,32}" maxlength="32">
             </mat-form-field>
             <!-- Amount -->
-            <mat-form-field fxFlex=25>
-                <input matInput type="number" placeholder="Amount" [(ngModel)]="token.amount" name="amount{{counter}}"
+            <mat-form-field fxFlex=25 appearance="outline">
+                <mat-label>Amount</mat-label>
+                <input matInput type="number" [(ngModel)]="token.amount" name="amount{{counter}}"
                     min=1 required>
             </mat-form-field>
         </div>
 
-        <div fxLayout="column" fxLayoutGap="10px">
+        <div fxLayout="column">
             <div *ngFor="let entry of token.metaData | keyvalue" fxLayout="column">
                 <!-- Simple Metafield-->
-                <mat-form-field *ngIf="!isListField(entry.key)">
-                    <input matInput placeholder="{{entry.key}}" name="{{entry.key}}{{counter}}" maxlength="64"
+                <mat-form-field *ngIf="!isListField(entry.key)" appearance="outline">
+                    <mat-label>{{entry.key}}</mat-label>
+                    <input matInput name="{{entry.key}}{{counter}}" maxlength="64"
                         [(ngModel)]="entry.value.value">
                 </mat-form-field>
                 <!-- List Metafied -->

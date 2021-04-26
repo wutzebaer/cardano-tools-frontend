@@ -58,7 +58,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   updateAccount() {
     let accountKey = this.localStorageService.retrieveAccountKey();
     let accountObservable;
-    if (accountKey == null) { accountObservable = this.api.createAccount(); }
+    if (!accountKey) { accountObservable = this.api.createAccount(); }
     else { accountObservable = this.api.getAccount(accountKey); }
     accountObservable.subscribe(account => {
       this.localStorageService.storeAccountKey(account.key)

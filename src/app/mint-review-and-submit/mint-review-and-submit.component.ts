@@ -14,12 +14,8 @@ import { RestInterfaceService } from 'src/cardano-tools-client';
 export class MintReviewAndSubmitComponent implements OnInit {
 
   @Input() account!: TransferAccount;
-  @Output() updateAccount = new EventEmitter<void>();
-
   @Input() mintTransaction!: MintTransaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
-
-  @Input() mintOrderSubmission!: MintOrderSubmission;
 
   selectedAddress: string = "";
 
@@ -45,7 +41,14 @@ export class MintReviewAndSubmitComponent implements OnInit {
   }
 
   mint() {
-    this.api.submitMintTransaction(this.mintTransaction, this.account.key).subscribe();
+    this.api.submitMintTransaction(this.mintTransaction, this.account.key).subscribe({
+      error: error => {
+        this.updateMintTransaction.emit();
+      },
+      complete: () => {
+        alert("success");
+      }
+    });
   }
 
 }

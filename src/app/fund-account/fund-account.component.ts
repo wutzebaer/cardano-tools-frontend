@@ -25,6 +25,8 @@ export class FundAccountComponent implements OnInit {
 
   constructor(private api: RestInterfaceService) { }
 
+  minOutput = 2000000
+
   ngOnInit(): void {
     interval(10000).subscribe(() => {
       if (this.adaBalance < this.minAdaBalance)
@@ -40,15 +42,21 @@ export class FundAccountComponent implements OnInit {
     this.updateMintTransaction.emit();
   }
 
+
   get adaChange() {
-    return (Math.max((this.account.balance || 0) - (this.mintTransaction.fee || 0) - 1000000, 0)) / 1000000;
+    let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0) - this.minOutput
+    return (Math.max(change, 0)) / 1000000;
   }
 
   get minAdaBalance() {
-    if (this.mintOrderSubmission.changeAction == 'RETURN')
-      return ((this.mintTransaction.fee || 0)) / 1000000 + 1;
-    else
-      return ((this.mintTransaction.fee || 0)) / 1000000 + 2;
+    let minBalance = 0;
+    minBalance += (this.mintTransaction.fee || 0)
+    minBalance += this.minOutput
+
+    if (this.mintTransaction.mintOrderSubmission.changeAction != 'RETURN')
+      minBalance += 1000000
+
+    return minBalance / 1000000;
   }
 
   get adaBalance() {

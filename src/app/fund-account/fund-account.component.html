@@ -50,15 +50,13 @@
             </p>
 
             <!-- receiver address-->
-            <mat-form-field fxHide appearance="outline" style="width: 50%">
+            <mat-form-field appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="adaBalanceInput.valid">
                 <mat-label>Send tokens to</mat-label>
-                <b>
-                    <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" name="item">
-                        <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
-                            {{address}}
-                        </mat-option>
-                    </mat-select>
-                </b>
+                <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" name="item" (selectionChange)="emitUpdateMintTransaction()">
+                    <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
+                        {{address}}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
 
 
