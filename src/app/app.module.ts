@@ -38,7 +38,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MintReviewAndSubmitComponent } from './mint-review-and-submit/mint-review-and-submit.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -73,7 +73,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatStepperModule,
     MatTableModule,
     MatTooltipModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatCheckboxModule
   ],
   providers: [
     AjaxInterceptor,

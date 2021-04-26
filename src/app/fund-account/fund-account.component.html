@@ -2,23 +2,8 @@
     <mat-card>
         <mat-card-content>
 
-            <!-- change -->
-            <p fxLayout="column" fxLayoutGap="10px">
-                <span><b>What to to with the change?</b></span>
-                <span>
-                    <mat-radio-group aria-label="Select an option" fxLayout="column" fxLayoutGap="10px" name="changeAction" #adaChangeInput="ngModel" [(ngModel)]="mintOrderSubmission.changeAction" (change)="emitUpdateMintTransaction()">
-                        <!-- RETURN -->
-                        <mat-radio-button value="RETURN">also send back with the tokens</mat-radio-button>
-                        <!-- KEEP -->
-                        <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                            <mat-radio-button value="KEEP">keep on the account address to use it later</mat-radio-button>
-                        </span>
-                        <!-- TIP -->
-                        <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                            <mat-radio-button value="TIP">tip it to the [EURO]-Pool </mat-radio-button>
-                        </span>
-                    </mat-radio-group>
-                </span>
+            <p>
+                <mat-checkbox name="tip" [(ngModel)]="mintOrderSubmission.tip" (change)="emitUpdateMintTransaction()">Give a tip to the [EURO]-Pool pledge</mat-checkbox>
             </p>
 
             <!-- fund instruction-->
@@ -36,11 +21,11 @@
                 </span>
             </p>
 
-            <!-- change -->
-            <p>
+            <!-- tip -->
+            <p *ngIf="mintTransaction.mintOrderSubmission.tip">
                 <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span>Change </span>
-                    <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b>
+                    <span>Tip </span>
+                    <b>{{adaTip | number: '1.0-6'}}&nbsp;₳</b>
                 </span>
             </p>
 
@@ -50,7 +35,7 @@
             </p>
 
             <!-- receiver address-->
-            <mat-form-field appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="adaBalanceInput.valid">
+            <mat-form-field appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="account.fundingAddresses.length > 0">
                 <mat-label>Send tokens to</mat-label>
                 <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" name="item" (selectionChange)="emitUpdateMintTransaction()">
                     <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
@@ -59,7 +44,7 @@
                 </mat-select>
             </mat-form-field>
 
-
+            <!-- hidden validator -->
             <mat-form-field fxHide>
                 <input #adaBalanceInput="ngModel" matInput type="number" [ngModel]="adaBalance" name="adaBalance" [appMinValidator]="minAdaBalance">
             </mat-form-field>

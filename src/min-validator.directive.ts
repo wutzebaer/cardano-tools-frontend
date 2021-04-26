@@ -11,6 +11,7 @@ export class MinValidatorDirective implements Validator {
   appMinValidator!: number;
 
   validate(control: AbstractControl): ValidationErrors | null {
+    console.log("minvalidator", control.value, this.appMinValidator)
     return (control.value as number < this.appMinValidator) ? { appMinValidator: true } : null;
   }
 

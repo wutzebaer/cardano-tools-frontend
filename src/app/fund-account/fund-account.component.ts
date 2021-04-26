@@ -1,7 +1,7 @@
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
-import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { ControlContainer, NgForm } from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, AfterContentChecked } from '@angular/core';
+import { ControlContainer, NgForm, NgModel } from '@angular/forms';
 import { interval } from 'rxjs';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
 
@@ -13,7 +13,7 @@ import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client'
   styleUrls: ['./fund-account.component.scss'],
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
-export class FundAccountComponent implements OnInit {
+export class FundAccountComponent implements OnInit, AfterContentChecked {
 
   @Input() account!: TransferAccount;
   @Output() updateAccount = new EventEmitter<void>();
@@ -22,6 +22,8 @@ export class FundAccountComponent implements OnInit {
   @Output() updateMintTransaction = new EventEmitter<void>();
 
   @Input() mintOrderSubmission!: MintOrderSubmission;
+
+  @ViewChild('adaBalanceInput') adaBalanceInput!: NgModel
 
   constructor(private api: RestInterfaceService) { }
 
@@ -34,6 +36,10 @@ export class FundAccountComponent implements OnInit {
     });
   }
 
+  ngAfterContentChecked(): void {
+    this.adaBalanceInput?.control.updateValueAndValidity()
+  }
+
   emitUpdateAccount() {
     this.updateAccount.emit();
   }
@@ -43,7 +49,7 @@ export class FundAccountComponent implements OnInit {
   }
 
 
-  get adaChange() {
+  get adaTip() {
     let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0) - this.minOutput
     return (Math.max(change, 0)) / 1000000;
   }
@@ -53,7 +59,7 @@ export class FundAccountComponent implements OnInit {
     minBalance += (this.mintTransaction.fee || 0)
     minBalance += this.minOutput
 
-    if (this.mintTransaction.mintOrderSubmission.changeAction != 'RETURN')
+    if (this.mintTransaction.mintOrderSubmission.tip)
       minBalance += 1000000
 
     return minBalance / 1000000;

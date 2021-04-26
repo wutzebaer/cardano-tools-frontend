@@ -12,7 +12,6 @@
 import { MintOrderSubmission } from './mintOrderSubmission';
 
 export interface MintTransaction { 
-    mintOrderSubmission: MintOrderSubmission;
     rawData: string;
     txId: string;
     fee: number;
@@ -21,4 +20,5 @@ export interface MintTransaction {
     inputs: string;
     metaDataJson: string;
     policy: string;
+    mintOrderSubmission: MintOrderSubmission;
 }

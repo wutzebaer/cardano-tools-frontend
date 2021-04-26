@@ -17,7 +17,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   accountUpdate = new EventEmitter<void>();
 
   account: TransferAccount = { key: "", address: "", balance: 0, fundingAddresses: [] };
-  mintOrderSubmission: MintOrderSubmission = { tokens: [], targetAddress: "", changeAction: 'RETURN' };
+  mintOrderSubmission: MintOrderSubmission = { tokens: [], targetAddress: "", tip: true };
   mintTransaction: MintTransaction = {
     rawData: "",
     txId: "",

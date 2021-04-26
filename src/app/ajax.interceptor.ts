@@ -26,7 +26,7 @@ export class AjaxInterceptor implements HttpInterceptor {
         next: event => {
         },
         error: errorResponse => {
-          alert(errorResponse.error.message || errorResponse.message);
+          alert(errorResponse.error?.message || errorResponse.message);
           this.counter--
           this.ajaxStatusChanged$.emit(this.counter > 0);
         },

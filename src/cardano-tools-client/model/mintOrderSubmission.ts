@@ -14,13 +14,5 @@ import { TokenSubmission } from './tokenSubmission';
 export interface MintOrderSubmission { 
     tokens: Array<TokenSubmission>;
     targetAddress: string;
-    changeAction: MintOrderSubmission.ChangeActionEnum;
-}
-export namespace MintOrderSubmission {
-    export type ChangeActionEnum = 'RETURN' | 'KEEP' | 'TIP';
-    export const ChangeActionEnum = {
-        RETURN: 'RETURN' as ChangeActionEnum,
-        KEEP: 'KEEP' as ChangeActionEnum,
-        TIP: 'TIP' as ChangeActionEnum
-    };
+    tip: boolean;
 }
