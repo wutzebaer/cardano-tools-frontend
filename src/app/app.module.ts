@@ -38,6 +38,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MintReviewAndSubmitComponent } from './mint-review-and-submit/mint-review-and-submit.component';
 import { MintChangeComponent } from './mint-change/mint-change.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 @NgModule({
@@ -72,7 +73,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     OverlayModule,
     MatStepperModule,
     MatTableModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatExpansionModule
   ],
   providers: [
     AjaxInterceptor,
