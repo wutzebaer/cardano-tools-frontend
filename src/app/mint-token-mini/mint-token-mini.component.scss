@@ -1,0 +1,23 @@
+.preview {
+    width: 100%;
+    height: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: scale-down;
+    }
+    audio {
+      width: 100%;
+      object-fit: scale-down;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: scale-down;
+    }
+    .big-icon {
+      font-size: 100px;
+      width: auto;
+      height: auto;
+    }
+  }

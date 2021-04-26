@@ -18,17 +18,17 @@
                         </svg>
                         Upload Image, Audio or Video file
                     </div>
-                    <div [fxHide]="file == null" class="preview" xLayout="row" fxLayoutAlign="center center">
-                        <img [fxShow]="file?.type?.startsWith('image')" [src]="url">
-                        <audio [fxShow]="file?.type?.startsWith('audio')" controls [src]="url"></audio>
-                        <video [fxShow]="file?.type?.startsWith('video')" controls [src]="url"></video>
+                    <div [fxHide]="file == null" class="preview" fxLayout="row" fxLayoutAlign="center center">
+                        <img *ngIf="file?.type?.startsWith('image')" [src]="url">
+                        <audio *ngIf="file?.type?.startsWith('audio')" controls [src]="url"></audio>
+                        <video *ngIf="file?.type?.startsWith('video')" controls [src]="url"></video>
                         <div>
-                            <mat-icon class="big-icon" color="primary" [fxShow]="!isFileTypeKnown()" fontSet="material-icons-outlined">description
+                            <mat-icon class="big-icon" color="primary" *ngIf="!isFileTypeKnown()" fontSet="material-icons-outlined">description
                             </mat-icon>
                         </div>
                     </div>
                 </label>
-                <mat-progress-bar [fxShow]="uploadProgress!=0" mode="determinate" strokeWidth="20"
+                <mat-progress-bar *ngIf="uploadProgress!=0" mode="determinate" strokeWidth="20"
                     [value]="uploadProgress"></mat-progress-bar>
 
 

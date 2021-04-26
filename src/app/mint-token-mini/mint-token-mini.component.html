@@ -1,0 +1,15 @@
+<mat-card>
+    <mat-card-content>
+        <h2>{{token.assetName}}</h2>
+
+        <div class="preview" fxLayout="row" fxLayoutAlign="center center">
+            <img *ngIf="token.metaData['Image']" [src]="toIpfsUrl(token.metaData['Image'].value)" alt="Loading...">
+            <audio controls *ngIf="token.metaData['Audio']" [src]="toIpfsUrl(token.metaData['Audio'].value)"></audio>
+            <video controls *ngIf="token.metaData['Video']" [src]="toIpfsUrl(token.metaData['Video'].value)"></video>
+            <div>
+                <mat-icon class="big-icon" color="primary" *ngIf="token.metaData['Binary']" fontSet="material-icons-outlined">description
+                </mat-icon>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

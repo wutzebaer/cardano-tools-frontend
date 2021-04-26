@@ -39,10 +39,11 @@ import { MintReviewAndSubmitComponent } from './mint-review-and-submit/mint-revi
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MintTokenMiniComponent } from './mint-token-mini/mint-token-mini.component';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent
   ],
   imports: [
     BrowserModule,

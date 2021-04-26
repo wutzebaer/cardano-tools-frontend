@@ -50,7 +50,16 @@
                         <pre>{{mintTransaction.outputs}}</pre>
                     </mat-expansion-panel>
 
-                    
+                    <!-- Tokens -->
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Tokens
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <app-mint-token-mini *ngFor="let token of mintTransaction.mintOrderSubmission.tokens" [token]="token"></app-mint-token-mini>
+                    </mat-expansion-panel>
+
                 </mat-accordion>
 
             </div>
