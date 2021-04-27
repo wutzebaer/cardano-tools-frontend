@@ -10,13 +10,11 @@
                 <!-- Token Cards-->
                 <div>
                     <div fxLayout="row wrap" fxLayoutGap="10px grid">
-                        <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%"
-                            fxFlex.gt-lg="25%" *ngFor="let token of mintOrderSubmission.tokens; let i = index">
+                        <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%" *ngFor="let token of mintOrderSubmission.tokens; let i = index">
                             <!-- Mint Card -->
                             <app-mint-form [token]=token></app-mint-form>
                             <!-- delete button -->
-                            <button [fxHide]="mintOrderSubmission.tokens.length==1" (click)="removeToken(i)"
-                                class="delete" mat-mini-fab>
+                            <button [fxHide]="mintOrderSubmission.tokens.length==1" (click)="removeToken(i)" class="delete" mat-mini-fab>
                                 <mat-icon>clear</mat-icon>
                             </button>
                         </div>
@@ -39,30 +37,19 @@
             </div>
         </form>
 
-        <div style="width: 300px; height: 560px">
-            <app-mint-token-mini *ngFor="let token of mintOrderSubmission.tokens" [token]="token"></app-mint-token-mini>
-        </div>
-
     </mat-step>
 
     <mat-step [stepControl]="fundForm.control">
         <ng-template matStepLabel>Fund Account</ng-template>
         <form #fundForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-fund-account fxFlex="100%" fxFlex.gt-md="991px" 
-            [account]="account" (updateAccount)="updateAccount()" 
-            [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()"
-            [mintOrderSubmission]="mintOrderSubmission"
-            ></app-fund-account>
+            <app-fund-account fxFlex="100%" fxFlex.gt-md="991px" [account]="account" (updateAccount)="updateAccount()" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()" [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
         </form>
     </mat-step>
 
     <mat-step [stepControl]="reviewForm.control">
         <ng-template matStepLabel>Review and submit</ng-template>
         <form #reviewForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-mint-review-and-submit fxFlex="100%" fxFlex.gt-md="991px"
-            [account]="account" 
-            [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()"
-            ></app-mint-review-and-submit>
+            <app-mint-review-and-submit fxFlex="100%" fxFlex.gt-md="991px" [account]="account" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()"></app-mint-review-and-submit>
         </form>
     </mat-step>
 

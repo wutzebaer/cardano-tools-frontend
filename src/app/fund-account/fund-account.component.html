@@ -11,7 +11,14 @@
             <!-- fund instruction-->
             <p>Please send at least <b>{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b> to this address</p>
 
-            <p style="text-align: center;"><b class="address">{{account.address}}</b></p>
+            <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <b class="address">{{account.address}}</b>
+                <button mat-icon-button (click)="copyAddressToClipboard()">
+                    <mat-icon>content_copy</mat-icon>
+                </button>
+            </p>
+
+
 
             <!-- current balance -->
             <p>

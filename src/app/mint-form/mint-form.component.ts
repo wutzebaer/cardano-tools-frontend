@@ -16,7 +16,7 @@ export class MintFormComponent implements OnInit {
   static globalCounter = 0;
 
   counter!: number;
-  availableMetaFields: string[] = ['Image', 'Audio', 'Video', 'Binary', 'Filename', 'MimeType', 'Name', 'Type', 'Traits', 'Artist', 'Publisher', 'Copyright', 'Homepage', 'Url'];
+  availableMetaFields: string[] = ['Image', 'Audio', 'Video', 'Binary', 'MimeType', 'Name', 'Type', 'Traits', 'Artist', 'Publisher', 'Copyright', 'Homepage', 'Url'];
   listFields: string[] = ['Traits'];
   knownMimeTypes = ['image', 'video', 'audio'];
   uploadProgress: number = 0;
@@ -116,7 +116,6 @@ export class MintFormComponent implements OnInit {
           } else {
             this.token.metaData["Binary"] = { value: "ipfs://" + event.body as string, listValue: [] };
           }
-          this.token.metaData["Filename"] = { value: file?.name as string, listValue: [] };
           this.token.metaData["MimeType"] = { value: file?.type as string, listValue: [] };
           this.token.assetName = (file?.name as string).split(".")[0].replace(/[^a-zA-Z0-9-]/g, "").substring(0,32);
           this.uploadProgress = 0;

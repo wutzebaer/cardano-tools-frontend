@@ -4,6 +4,7 @@ import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChange
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
 import { interval } from 'rxjs';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 
 
@@ -25,7 +26,7 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
 
   @ViewChild('adaBalanceInput') adaBalanceInput!: NgModel
 
-  constructor(private api: RestInterfaceService) { }
+  constructor(private api: RestInterfaceService, private clipboard: Clipboard) { }
 
   minOutput = 2000000
 
@@ -48,6 +49,9 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
     this.updateMintTransaction.emit();
   }
 
+  copyAddressToClipboard() {
+    this.clipboard.copy(this.account.address);
+  }
 
   get adaTip() {
     let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0) - this.minOutput

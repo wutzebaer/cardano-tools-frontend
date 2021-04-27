@@ -3,13 +3,35 @@
         <h2>{{token.assetName}}</h2>
 
         <div class="preview" fxLayout="row" fxLayoutAlign="center center">
-            <img *ngIf="token.metaData['Image']" [src]="toIpfsUrl(token.metaData['Image'].value)" alt="Loading...">
-            <audio controls *ngIf="token.metaData['Audio']" [src]="toIpfsUrl(token.metaData['Audio'].value)"></audio>
-            <video controls *ngIf="token.metaData['Video']" [src]="toIpfsUrl(token.metaData['Video'].value)"></video>
+            <img *ngIf="token.metaData['Image']?.value" [src]="toIpfsUrl(token.metaData['Image'].value)" alt="Loading...">
+            <audio controls *ngIf="token.metaData['Audio']?.value" [src]="toIpfsUrl(token.metaData['Audio'].value)"></audio>
+            <video controls *ngIf="token.metaData['Video']?.value" [src]="toIpfsUrl(token.metaData['Video'].value)"></video>
             <div>
-                <mat-icon class="big-icon" color="primary" *ngIf="token.metaData['Binary']" fontSet="material-icons-outlined">description
-                </mat-icon>
+                <mat-icon class="big-icon" color="primary" *ngIf="token.metaData['Binary']?.value" fontSet="material-icons-outlined">description</mat-icon>
             </div>
         </div>
+
+        <table mat-table [dataSource]="tableData" class="mat-elevation-z8">
+
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="value">
+                <th mat-header-cell *matHeaderCellDef> Value </th>
+                <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" fxHide></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+
     </mat-card-content>
 </mat-card>
