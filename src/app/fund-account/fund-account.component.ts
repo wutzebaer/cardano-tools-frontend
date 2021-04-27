@@ -26,14 +26,16 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
 
   @ViewChild('adaBalanceInput') adaBalanceInput!: NgModel
 
+  @Input() activeStep!: boolean;
+
   constructor(private api: RestInterfaceService, private clipboard: Clipboard) { }
 
   minOutput = 2000000
 
   ngOnInit(): void {
     interval(10000).subscribe(() => {
-      if (this.adaBalance < this.minAdaBalance) {
-       // this.emitUpdateAccount();
+      if (this.activeStep && this.adaBalance < this.minAdaBalance) {
+        this.emitUpdateAccount();
       }
     });
   }
@@ -74,6 +76,8 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
     return ((this.account.balance || 0)) / 1000000;
   }
 
-
+  get adaFee() {
+    return ((this.mintTransaction.fee || 0)) / 1000000;
+  }
 
 }

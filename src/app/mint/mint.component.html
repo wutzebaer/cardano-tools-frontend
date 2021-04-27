@@ -57,7 +57,7 @@
     <mat-step [stepControl]="fundForm.control">
         <ng-template matStepLabel>Fund Account</ng-template>
         <form #fundForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-fund-account fxFlex="100%" fxFlex.gt-md="991px" [account]="account" (updateAccount)="updateAccount()" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()" [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
+            <app-fund-account [activeStep]="stepper.selectedIndex == 1" fxFlex="100%" fxFlex.gt-md="991px" [account]="account" (updateAccount)="updateAccount()" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()" [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
         </form>
     </mat-step>
 

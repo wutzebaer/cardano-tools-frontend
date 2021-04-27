@@ -21,7 +21,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   mintTransaction: MintTransaction = {
     rawData: "",
     txId: "",
-    fee: 0,
+    fee: 1000000,
     policyId: "",
     outputs: "",
     inputs: "",

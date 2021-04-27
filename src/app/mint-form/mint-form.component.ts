@@ -120,6 +120,7 @@ export class MintFormComponent implements OnInit {
             this.token.metaData["Binary"] = { value: "ipfs://" + event.body as string, listValue: [] };
           }
           this.token.metaData["MimeType"] = { value: file?.type as string, listValue: [] };
+          this.token.metaData["Name"] = { value: (file?.name as string).split(".")[0].substring(0, 60) as string, listValue: [] };
           this.token.assetName = (file?.name as string).split(".")[0].replace(/[^a-zA-Z0-9]/g, "").substring(0, 32);
           this.uploadProgress = 0;
 
