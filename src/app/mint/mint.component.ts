@@ -49,11 +49,22 @@ export class MintComponent implements OnInit, AfterViewInit {
   addToken() {
     let token = { assetName: "", amount: 1, metaData: {} };
     this.mintOrderSubmission.tokens.push(token);
+    return token
   }
 
   removeToken(index: number) {
     this.mintOrderSubmission.tokens.splice(index, 1);
   }
+
+  addFiles(event: any) {
+    for (let index in Object.values(event.target.files)) {
+      let token = this.addToken()
+      let hack = token as any
+      hack.file = event.target.files.item(index)
+    }
+    event.target.value = '';
+  }
+
 
   updateAccount() {
     let accountKey = this.localStorageService.retrieveAccountKey();
@@ -67,7 +78,7 @@ export class MintComponent implements OnInit, AfterViewInit {
       this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
 
       if (balanceChanged || this.mintTransaction.fee == 0) {
-        this.updateMintTransaction();
+        //this.updateMintTransaction();
       }
     })
   }

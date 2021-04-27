@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, Output } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, Output, ChangeDetectorRef } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RestInterfaceService, TokenSubmission } from 'src/cardano-tools-client';
@@ -25,10 +25,18 @@ export class MintFormComponent implements OnInit {
   file!: File | null;
   url!: SafeUrl | null;;
 
-  constructor(private sanitizer: DomSanitizer, private api: RestInterfaceService) {
+  constructor(private sanitizer: DomSanitizer, private api: RestInterfaceService, private cdRef: ChangeDetectorRef) {
     MintFormComponent.globalCounter++;
     this.counter = MintFormComponent.globalCounter;
-    console.log("Construct", this.counter)
+  }
+
+  ngOnInit(): void {
+    this.token.assetName = "Token" + this.counter;
+    let hack = this.token as any
+    if (hack.file) {
+      this.appendFile(hack.file)
+      delete hack.file
+    }
   }
 
   getFileType() {
@@ -41,10 +49,6 @@ export class MintFormComponent implements OnInit {
 
   isFileTypeKnown() {
     return this.knownMimeTypes.indexOf(this.getFileType()) != -1;
-  }
-
-  ngOnInit(): void {
-    this.token.assetName = "Token" + this.counter;
   }
 
   isListField(key: any) {
@@ -61,17 +65,16 @@ export class MintFormComponent implements OnInit {
 
   dropFile(event: any) {
     event.preventDefault();
-    this.appendFilelist(event.dataTransfer.files);
+    this.appendFile(event.dataTransfer.files.item(0));
   }
 
   addFile(event: any) {
     console.log("addfile", this.counter, event)
-    this.appendFilelist(event.target.files);
+    this.appendFile(event.target.files.item(0));
     event.target.value = '';
   }
 
-  appendFilelist(fileList: FileList) {
-    let file = fileList.item(0);
+  appendFile(file: File) {
 
     if (file?.size as number > 52428800) {
       alert("Max 50mb");
@@ -117,7 +120,7 @@ export class MintFormComponent implements OnInit {
             this.token.metaData["Binary"] = { value: "ipfs://" + event.body as string, listValue: [] };
           }
           this.token.metaData["MimeType"] = { value: file?.type as string, listValue: [] };
-          this.token.assetName = (file?.name as string).split(".")[0].replace(/[^a-zA-Z0-9-]/g, "").substring(0,32);
+          this.token.assetName = (file?.name as string).split(".")[0].replace(/[^a-zA-Z0-9]/g, "").substring(0, 32);
           this.uploadProgress = 0;
 
         }

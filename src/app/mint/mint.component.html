@@ -1,7 +1,7 @@
 <h1 class="mat-h1">Mint Cardano NFTs</h1>
 
 
-<mat-horizontal-stepper linear="false" #stepper>
+<mat-horizontal-stepper linear="true" #stepper>
 
     <mat-step [stepControl]="nftForm.control">
         <ng-template matStepLabel>Configure NFTs</ng-template>
@@ -14,12 +14,17 @@
                             <!-- Mint Card -->
                             <app-mint-form [token]=token></app-mint-form>
                             <!-- delete button -->
-                            <button [fxHide]="mintOrderSubmission.tokens.length==1" (click)="removeToken(i)" class="delete" mat-mini-fab>
+                            <button (click)="removeToken(i)" class="delete" mat-mini-fab>
                                 <mat-icon>clear</mat-icon>
                             </button>
                         </div>
                     </div>
                 </div>
+
+                <!-- hidden validator -->
+                <mat-form-field fxHide>
+                    <input #tokenCount="ngModel" matInput type="number" [ngModel]="mintOrderSubmission.tokens.length" name="tokenCount" [appMinValidator]="1">
+                </mat-form-field>
 
                 <!-- Buttons -->
                 <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
@@ -28,8 +33,18 @@
                         <mat-icon>generating_tokens</mat-icon>
                         Add
                     </button>
+
+                    <!-- multi add files as tokens -->
+                    <input id="multiadd" fxHide type="file" (change)="addFiles($event)" name="multiadd" multiple />
+                    <label for="multiadd">
+                        <a mat-raised-button color="accent" type="button">
+                            <mat-icon>generating_tokens</mat-icon>
+                            MultiAdd
+                        </a>
+                    </label>
+
                     <!-- next step -->
-                    <button mat-raised-button color="primary" matStepperNext>
+                    <button mat-raised-button color="primary" matStepperNext [disabled]="tokenCount.invalid">
                         <mat-icon>fast_forward</mat-icon>
                         Proceed
                     </button>

@@ -32,8 +32,9 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
 
   ngOnInit(): void {
     interval(10000).subscribe(() => {
-      if (this.adaBalance < this.minAdaBalance)
-        this.emitUpdateAccount();
+      if (this.adaBalance < this.minAdaBalance) {
+       // this.emitUpdateAccount();
+      }
     });
   }
 
