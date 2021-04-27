@@ -58,9 +58,13 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   addFiles(event: any) {
     for (let index in Object.values(event.target.files)) {
-      let token = this.addToken()
-      let hack = token as any
-      hack.file = event.target.files.item(index)
+      let file = event.target.files.item(index);
+      setTimeout(() => {
+        let token = { assetName: "", amount: 1, metaData: {} };
+        let hack = token as any
+        hack.file = file
+        this.mintOrderSubmission.tokens.push(token);
+      });
     }
     event.target.value = '';
   }
