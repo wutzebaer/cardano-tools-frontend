@@ -15,6 +15,7 @@ export interface MintTransaction {
     rawData: string;
     txId: string;
     fee: number;
+    minOutput: number;
     policyId: string;
     outputs: string;
     inputs: string;

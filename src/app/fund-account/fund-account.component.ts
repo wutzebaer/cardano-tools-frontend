@@ -30,8 +30,6 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
 
   constructor(private api: RestInterfaceService, private clipboard: Clipboard) { }
 
-  minOutput = 2000000
-
   ngOnInit(): void {
     interval(10000).subscribe(() => {
       if (this.activeStep && this.adaBalance < this.minAdaBalance) {
@@ -57,14 +55,14 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
   }
 
   get adaTip() {
-    let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0) - this.minOutput
+    let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0) - this.mintTransaction.minOutput
     return (Math.max(change, 0)) / 1000000;
   }
 
   get minAdaBalance() {
     let minBalance = 0;
     minBalance += (this.mintTransaction.fee || 0)
-    minBalance += this.minOutput
+    minBalance += this.mintTransaction.minOutput
 
     if (this.mintTransaction.mintOrderSubmission.tip)
       minBalance += 1000000

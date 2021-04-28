@@ -21,13 +21,14 @@ export class MintComponent implements OnInit, AfterViewInit {
   mintTransaction: MintTransaction = {
     rawData: "",
     txId: "",
-    fee: 1000000,
+    fee: 0,
     policyId: "",
     outputs: "",
     inputs: "",
     metaDataJson: "",
     policy: "",
-    mintOrderSubmission: this.mintOrderSubmission
+    mintOrderSubmission: this.mintOrderSubmission,
+    minOutput: 1000000
   }
 
   constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService) {

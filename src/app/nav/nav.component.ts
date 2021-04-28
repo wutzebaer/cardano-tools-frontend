@@ -19,7 +19,7 @@ export class NavComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver) {
-    this.menuItems = ['mint', 'burn', 'wallet', 'explore', 'exchange', 'timelock'];
+    this.menuItems = ['mint', 'burn', 'wallet', 'explore', 'exchange', 'timelock', 'oracle'];
   }
 
 }

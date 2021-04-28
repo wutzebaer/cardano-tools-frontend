@@ -21,13 +21,11 @@ export class MintReviewAndSubmitComponent implements OnInit {
 
   constructor(private api: RestInterfaceService) { }
 
-  minOutput = 2000000
-
   ngOnInit(): void {
   }
 
   get adaTip() {
-    let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0) - this.minOutput
+    let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0) - this.mintTransaction.minOutput
     return (Math.max(change, 0)) / 1000000;
   }
 
