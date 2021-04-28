@@ -29,6 +29,11 @@ export class MintReviewAndSubmitComponent implements OnInit {
     return (Math.max(change, 0)) / 1000000;
   }
 
+  get adaChange() {
+    let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0)
+    return (Math.max(change, 0)) / 1000000;
+  }
+
   mint() {
     this.api.submitMintTransaction(this.mintTransaction, this.account.key).subscribe({
       error: error => {

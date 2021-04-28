@@ -54,6 +54,10 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
     this.clipboard.copy(this.account.address);
   }
 
+  copyFunds() {
+    this.clipboard.copy(this.minAdaBalance + "");
+  }
+
   get adaTip() {
     let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0) - this.mintTransaction.minOutput
     return (Math.max(change, 0)) / 1000000;

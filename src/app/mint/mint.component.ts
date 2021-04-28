@@ -83,7 +83,7 @@ export class MintComponent implements OnInit, AfterViewInit {
       this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
 
       if (balanceChanged || this.mintTransaction.fee == 0) {
-        //this.updateMintTransaction();
+        this.updateMintTransaction();
       }
     })
   }
