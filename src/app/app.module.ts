@@ -42,10 +42,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MintTokenMiniComponent } from './mint-token-mini/mint-token-mini.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MintSuccessComponent } from './mint-success/mint-success.component';
+import { FooterComponent } from './footer/footer.component';
+import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ContactComponent } from './contact/contact.component';
+import { ImprintComponent } from './imprint/imprint.component';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent
   ],
   imports: [
     BrowserModule,
@@ -78,7 +83,8 @@ import { MintSuccessComponent } from './mint-success/mint-success.component';
     MatTooltipModule,
     MatExpansionModule,
     MatCheckboxModule,
-    ClipboardModule
+    ClipboardModule,
+    MatDialogModule
   ],
   providers: [
     AjaxInterceptor,

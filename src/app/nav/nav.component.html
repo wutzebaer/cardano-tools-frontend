@@ -12,7 +12,7 @@
       <a mat-list-item [routerLink]="'/mint'" matTooltip="Comming soon"> Timelock </a>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content>
+  <mat-sidenav-content fxLayout="column">
     <mat-toolbar color="primary" class="mat-elevation-z8">
       <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
         *ngIf="true || (isHandset$ | async)">
@@ -23,5 +23,6 @@
     <div class="main-content">
       <router-outlet></router-outlet>
     </div>
+    <app-footer fxFlexOffset="auto"></app-footer>
   </mat-sidenav-content>
 </mat-sidenav-container>
