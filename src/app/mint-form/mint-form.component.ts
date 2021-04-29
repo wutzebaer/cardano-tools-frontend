@@ -82,6 +82,7 @@ export class MintFormComponent implements OnInit {
     }
 
     this.api.postFileForm(file as Blob, 'events', true).subscribe({
+      error: (error) => { this.uploadProgress = 0; },
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress) {
           if (event.total) {

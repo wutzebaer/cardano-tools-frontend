@@ -59,8 +59,11 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
   }
 
   get adaTip() {
+    if (!this.mintTransaction.mintOrderSubmission.tip) {
+      return 0;
+    }
     let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0) - this.mintTransaction.minOutput
-    return (Math.max(change, 0)) / 1000000;
+    return (Math.max(change, 1000000)) / 1000000;
   }
 
   get minAdaBalance() {
@@ -80,6 +83,10 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
 
   get adaFee() {
     return ((this.mintTransaction.fee || 0)) / 1000000;
+  }
+
+  get adaMinOutput() {
+    return ((this.mintTransaction.minOutput || 0)) / 1000000;
   }
 
 }
