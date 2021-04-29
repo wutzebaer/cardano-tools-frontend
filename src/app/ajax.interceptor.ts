@@ -17,7 +17,6 @@ export class AjaxInterceptor implements HttpInterceptor {
   counter = 0;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log("Start Http");
     this.counter++
     this.ajaxStatusChanged$.emit(true);
     const response = next.handle(request);

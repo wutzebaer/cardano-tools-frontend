@@ -1,8 +1,8 @@
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
-import { ControlContainer, NgForm } from '@angular/forms';
+import { ControlContainer, NgForm, NgModel } from '@angular/forms';
 import { TransferAccount } from './../../cardano-tools-client/model/transferAccount';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ApplicationRef } from '@angular/core';
 import { RestInterfaceService } from 'src/cardano-tools-client';
 
 @Component({
@@ -16,10 +16,13 @@ export class MintReviewAndSubmitComponent implements OnInit {
   @Input() account!: TransferAccount;
   @Input() mintTransaction!: MintTransaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
+  @Output() mintSuccess = new EventEmitter<void>();
 
-  selectedAddress: string = "";
+  @ViewChild('submittedInput') submittedInput!: NgModel
 
-  constructor(private api: RestInterfaceService) { }
+  submitted = false
+
+  constructor(private api: RestInterfaceService, private applicationRef: ApplicationRef) { }
 
   ngOnInit(): void {
   }
@@ -40,7 +43,8 @@ export class MintReviewAndSubmitComponent implements OnInit {
         this.updateMintTransaction.emit();
       },
       complete: () => {
-        alert("success");
+        this.submitted = true
+        setTimeout(() => { this.mintSuccess.emit() });
       }
     });
   }

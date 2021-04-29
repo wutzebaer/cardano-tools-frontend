@@ -9,6 +9,10 @@ export class LocalStorageService {
 
   constructor() { }
 
+  clearAccountKey() {
+    localStorage.removeItem("accountKey")
+  }
+
   storeAccountKey(accountKey: string) {
     localStorage.setItem("accountKey", accountKey);
   }

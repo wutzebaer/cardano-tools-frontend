@@ -51,7 +51,6 @@
                 </div>
             </div>
         </form>
-
     </mat-step>
 
     <mat-step [stepControl]="fundForm.control">
@@ -64,7 +63,15 @@
     <mat-step [stepControl]="reviewForm.control">
         <ng-template matStepLabel>Review and submit</ng-template>
         <form #reviewForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-mint-review-and-submit fxFlex="100%" fxFlex.gt-md="991px" [account]="account" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()"></app-mint-review-and-submit>
+            <app-mint-review-and-submit fxFlex="100%" fxFlex.gt-md="991px" [account]="account" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()" (mintSuccess)="mintSuccess()"></app-mint-review-and-submit>
+        </form>
+    </mat-step>
+
+
+    <mat-step [stepControl]="successForm.control">
+        <ng-template matStepLabel>Confirmation</ng-template>
+        <form #successForm="ngForm" class="step-content" fxLayoutAlign="center">
+            <app-mint-success fxFlex="100%" fxFlex.gt-md="991px" [account]="account" [mintTransaction]="mintTransaction" (restart)="restart()"></app-mint-success>
         </form>
     </mat-step>
 
