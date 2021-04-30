@@ -97,9 +97,9 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   updateMintTransaction() {
-    this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
-      this.mintTransaction = mintTransaction;
-    })
+      this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
+        this.mintTransaction = mintTransaction;
+      })
   }
 
   mintSuccess() {

@@ -32,7 +32,7 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
 
   ngOnInit(): void {
     interval(10000).subscribe(() => {
-      if (this.activeStep && this.adaBalance < this.minAdaBalance) {
+      if (this.activeStep && (this.adaBalance < this.minAdaBalance || this.account.fundingAddresses.length == 0)) {
         this.emitUpdateAccount();
       }
     });

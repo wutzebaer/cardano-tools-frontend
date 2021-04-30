@@ -31,6 +31,13 @@
                 </span>
             </p>
 
+            <p *ngIf="adaBalanceInput.valid && account.fundingAddresses.length == 0">
+                <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span>waiting for target address... </span>
+                    <mat-icon color="warn">dangerous</mat-icon>
+                </span>
+            </p>
+
             <!-- tip -->
             <p *ngIf="mintTransaction.mintOrderSubmission.tip && adaTip > 1">
                 <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
@@ -40,9 +47,9 @@
             </p>
 
             <!-- receiver address-->
-            <mat-form-field *ngIf="false" appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="account.fundingAddresses.length > 0">
+            <mat-form-field appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="false && account.fundingAddresses.length > 0">
                 <mat-label>Send tokens to</mat-label>
-                <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" name="item" (selectionChange)="emitUpdateMintTransaction()">
+                <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" #targetAddressInput="ngModel" name="targetAddress" (selectionChange)="emitUpdateMintTransaction()" required>
                     <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
                         {{address}}
                     </mat-option>
@@ -64,7 +71,7 @@
             <mat-icon>refresh</mat-icon>
             Refresh
         </button>
-        <button [disabled]="adaBalanceInput.invalid" mat-raised-button color="primary" matStepperNext>
+        <button [disabled]="adaBalanceInput.invalid || targetAddressInput.invalid" mat-raised-button color="primary" matStepperNext>
             <mat-icon>fast_forward</mat-icon>
             Proceed
         </button>
