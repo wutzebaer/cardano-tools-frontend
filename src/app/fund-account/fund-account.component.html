@@ -3,13 +3,17 @@
         <mat-card-content>
 
             <h2>Fund Account</h2>
-
             <p>
-                <mat-checkbox name="tip" [(ngModel)]="mintOrderSubmission.tip" (change)="emitUpdateMintTransaction()">Give a tip to the [EURO]-Pool pledge</mat-checkbox>
+                <mat-radio-group name="tip2" [(ngModel)]="mintOrderSubmission.tip" (change)="emitUpdateMintTransaction()" fxLayout="column" fxLayoutGap="5px">
+                    <mat-radio-button [value]="true">I give a tip to the [EURO]-Pool pledge</mat-radio-button>
+                    <mat-radio-button [value]="false">I consider staking to the [EURO]-Pool</mat-radio-button>
+                </mat-radio-group>
             </p>
 
             <!-- fund instruction-->
-            <p>Please send at least <b matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b><button class="inline-button" mat-icon-button (click)="copyFunds()"><mat-icon>content_copy</mat-icon></button> to this address</p>
+            <p>Please send at least <b matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b><button class="inline-button" mat-icon-button (click)="copyFunds()">
+                    <mat-icon>content_copy</mat-icon>
+                </button> to this address</p>
 
 
             <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
@@ -60,6 +64,7 @@
             <mat-form-field fxHide>
                 <input #adaBalanceInput="ngModel" matInput type="number" [ngModel]="adaBalance" name="adaBalance" [appMinValidator]="minAdaBalance">
             </mat-form-field>
+            
         </mat-card-content>
     </mat-card>
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
