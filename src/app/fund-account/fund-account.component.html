@@ -64,6 +64,7 @@
             <mat-form-field fxHide>
                 <input #adaBalanceInput="ngModel" matInput type="number" [ngModel]="adaBalance" name="adaBalance" [appMinValidator]="minAdaBalance">
             </mat-form-field>
+            <mat-checkbox fxHide [(ngModel)]="!loading" name="loadingInput" #loadingInput="ngModel" required></mat-checkbox>
             
         </mat-card-content>
     </mat-card>
@@ -76,7 +77,7 @@
             <mat-icon>refresh</mat-icon>
             Refresh
         </button>
-        <button [disabled]="adaBalanceInput.invalid || targetAddressInput.invalid" mat-raised-button color="primary" matStepperNext>
+        <button [disabled]="adaBalanceInput.invalid || targetAddressInput.invalid || loadingInput.invalid" mat-raised-button color="primary" matStepperNext>
             <mat-icon>fast_forward</mat-icon>
             Proceed
         </button>

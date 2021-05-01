@@ -23,7 +23,7 @@
 
                 <!-- hidden validator -->
                 <mat-form-field fxHide>
-                    <input #tokenCount="ngModel" matInput type="number" [ngModel]="mintOrderSubmission.tokens.length" name="tokenCount" [appMinValidator]="1">
+                    <input #tokenCountInput="ngModel" matInput type="number" [ngModel]="mintOrderSubmission.tokens.length" name="tokenCountInput" [appMinValidator]="1">
                 </mat-form-field>
                 <mat-checkbox fxHide [(ngModel)]="!loading" name="loadingInput" #loadingInput="ngModel" required></mat-checkbox>
 
@@ -45,7 +45,7 @@
                     </label>
 
                     <!-- next step -->
-                    <button mat-raised-button color="primary" matStepperNext [disabled]="tokenCount.invalid || loadingInput.invalid">
+                    <button mat-raised-button color="primary" matStepperNext [disabled]="tokenCountInput.invalid || loadingInput.invalid">
                         <mat-icon>fast_forward</mat-icon>
                         Proceed
                     </button>
@@ -57,7 +57,7 @@
     <mat-step [stepControl]="fundForm.control">
         <ng-template matStepLabel>Fund Account</ng-template>
         <form #fundForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-fund-account [activeStep]="stepper.selectedIndex == 1" fxFlex="100%" fxFlex.gt-md="991px" [account]="account" (updateAccount)="updateAccount()" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()" [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
+            <app-fund-account [activeStep]="stepper.selectedIndex == 1" fxFlex="100%" fxFlex.gt-md="991px" [loading]="loading" [account]="account" (updateAccount)="updateAccount()" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()" [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
         </form>
     </mat-step>
 

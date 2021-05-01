@@ -28,6 +28,8 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
 
   @Input() activeStep!: boolean;
 
+  @Input() loading!: boolean;
+
   constructor(private api: RestInterfaceService, private clipboard: Clipboard) { }
 
   ngOnInit(): void {

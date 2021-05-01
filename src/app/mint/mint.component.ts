@@ -1,3 +1,4 @@
+import { NgModel } from '@angular/forms';
 import { AjaxInterceptor } from './../ajax.interceptor';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
@@ -16,7 +17,7 @@ import { F } from '@angular/cdk/keycodes';
 export class MintComponent implements OnInit, AfterViewInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
-  accountUpdate = new EventEmitter<void>();
+  @ViewChild('tokenCountInput') tokenCountInput!: NgModel;
 
   account!: TransferAccount;
   mintOrderSubmission!: MintOrderSubmission;
@@ -52,7 +53,7 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.stepper.selectionChange.subscribe((event: StepperSelectionEvent) => {
-      if (event.previouslySelectedIndex == 0) {
+      if (event.previouslySelectedIndex == 0 && this.account.key) {
         this.updateMintTransaction()
       }
     });
@@ -89,7 +90,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     else { accountObservable = this.api.getAccount(accountKey); }
     accountObservable.subscribe(account => {
       this.localStorageService.storeAccountKey(account.key)
-      
+
       let balanceChanged = account.balance != this.account.balance || account.key != this.account.key
       let targetAddressChanged = this.mintOrderSubmission.targetAddress != account.fundingAddresses[0];
 
@@ -103,9 +104,9 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   updateMintTransaction() {
-      this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
-        this.mintTransaction = mintTransaction;
-      })
+    this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
+      this.mintTransaction = mintTransaction;
+    })
   }
 
   mintSuccess() {
@@ -114,12 +115,14 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   restart() {
+    this.stepper.steps.forEach(s => s.editable = true)
+    this.stepper.steps.forEach(s => s.completed = false)
+    this.stepper.selectedIndex = 0
+
     this.localStorageService.clearAccountKey()
     this.initializeValues()
     this.updateAccount();
     this.addToken()
-    this.stepper.steps.forEach(s => s.editable = true)
-    this.stepper.reset()
   }
 
 }
