@@ -69,17 +69,17 @@
         </mat-card-content>
     </mat-card>
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-        <button mat-raised-button color="primary" matStepperPrevious>
+        <button mat-raised-button color="primary" matStepperPrevious fxFlex.lt-sm>
             <mat-icon>fast_rewind</mat-icon>
-            Back
+            <span fxHide.lt-sm> Back</span>
         </button>
-        <button mat-raised-button color="accent" (click)="emitUpdateAccount()">
+        <button mat-raised-button color="accent" (click)="emitUpdateAccount()" fxFlex.lt-sm>
             <mat-icon>refresh</mat-icon>
-            Refresh
+            <span fxHide.lt-sm> Refresh</span>
         </button>
-        <button [disabled]="adaBalanceInput.invalid || targetAddressInput.invalid || loadingInput.invalid" mat-raised-button color="primary" matStepperNext>
+        <button [disabled]="adaBalanceInput.invalid || targetAddressInput.invalid || loadingInput.invalid" mat-raised-button color="primary" matStepperNext fxFlex.lt-sm>
             <mat-icon>fast_forward</mat-icon>
-            Proceed
+            <span fxHide.lt-sm> Proceed</span>
         </button>
     </div>
 </div>

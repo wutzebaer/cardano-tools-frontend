@@ -28,26 +28,26 @@
                 <mat-checkbox fxHide [(ngModel)]="!loading" name="loadingInput" #loadingInput="ngModel" required></mat-checkbox>
 
                 <!-- Buttons -->
-                <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+                <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center" >
                     <!-- add token -->
-                    <button mat-raised-button color="accent" type="button" (click)="addToken()">
+                    <button mat-raised-button color="accent" type="button" (click)="addToken()" fxFlex.lt-sm>
                         <mat-icon>generating_tokens</mat-icon>
-                        Add
+                        <span fxHide.lt-sm> Add</span>
                     </button>
 
                     <!-- multi add files as tokens -->
                     <input id="multiadd" fxHide type="file" (change)="addFiles($event)" name="multiadd" multiple />
-                    <label for="multiadd">
-                        <a mat-raised-button color="accent" type="button">
+                    <label for="multiadd" fxFlex.lt-sm>
+                        <a mat-raised-button color="accent" type="button" fxFlex.lt-sm>
                             <mat-icon>generating_tokens</mat-icon>
-                            MultiAdd
+                            <span> MultiAdd</span>
                         </a>
                     </label>
 
                     <!-- next step -->
-                    <button mat-raised-button color="primary" matStepperNext [disabled]="tokenCountInput.invalid || loadingInput.invalid">
+                    <button mat-raised-button color="primary" matStepperNext [disabled]="tokenCountInput.invalid || loadingInput.invalid" fxFlex.lt-sm>
                         <mat-icon>fast_forward</mat-icon>
-                        Proceed
+                        <span fxHide.lt-sm> Proceed</span>
                     </button>
                 </div>
             </div>
