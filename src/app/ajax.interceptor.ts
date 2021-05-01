@@ -12,7 +12,7 @@ import { tap } from 'rxjs/operators';
 @Injectable()
 export class AjaxInterceptor implements HttpInterceptor {
 
-  public ajaxStatusChanged$: EventEmitter<Boolean> = new EventEmitter();
+  public ajaxStatusChanged$: EventEmitter<boolean> = new EventEmitter();
   constructor() { }
   counter = 0;
 

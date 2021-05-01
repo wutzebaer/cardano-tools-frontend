@@ -1,3 +1,4 @@
+import { AjaxInterceptor } from './../ajax.interceptor';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -20,6 +21,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   account!: TransferAccount;
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: MintTransaction;
+  loading = false;
 
   initializeValues() {
     this.account = { key: "", address: "", balance: 0, fundingAddresses: [] };
@@ -38,9 +40,10 @@ export class MintComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService) {
+  constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService, private ajaxInterceptor: AjaxInterceptor) {
     this.initializeValues()
     this.updateAccount();
+    ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.loading = ajaxStatus)
   }
 
   ngOnInit(): void {

@@ -25,6 +25,7 @@
                 <mat-form-field fxHide>
                     <input #tokenCount="ngModel" matInput type="number" [ngModel]="mintOrderSubmission.tokens.length" name="tokenCount" [appMinValidator]="1">
                 </mat-form-field>
+                <mat-checkbox fxHide [(ngModel)]="!loading" name="loadingInput" #loadingInput="ngModel" required></mat-checkbox>
 
                 <!-- Buttons -->
                 <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
@@ -44,7 +45,7 @@
                     </label>
 
                     <!-- next step -->
-                    <button mat-raised-button color="primary" matStepperNext [disabled]="tokenCount.invalid">
+                    <button mat-raised-button color="primary" matStepperNext [disabled]="tokenCount.invalid || loadingInput.invalid">
                         <mat-icon>fast_forward</mat-icon>
                         Proceed
                     </button>

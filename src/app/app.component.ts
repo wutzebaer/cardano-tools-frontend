@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
 
   title = 'cardano-tools-frontend';
-  ajaxStatus: Boolean = false;
+  ajaxStatus: boolean = false;
 
   constructor(private ajaxInterceptor: AjaxInterceptor) {
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.ajaxStatus = ajaxStatus);
