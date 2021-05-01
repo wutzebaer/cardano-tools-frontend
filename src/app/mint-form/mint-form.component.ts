@@ -96,11 +96,7 @@ export class MintFormComponent implements OnInit {
 
           // create preview url
           if (this.isFileTypeKnown()) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file as Blob);
-            reader.onload = _event => {
-              this.url = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
-            };
+            this.url = "https://ipfs.cardano-tools.io/ipfs/" + event.body
           } else {
             this.url = null;
           }
