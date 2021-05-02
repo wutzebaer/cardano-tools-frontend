@@ -1,6 +1,9 @@
+import { AccountKeyComponent } from './../account-key/account-key.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { TransferAccount } from 'src/cardano-tools-client';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-mint-success',
@@ -14,10 +17,21 @@ export class MintSuccessComponent implements OnInit {
   @Output() updateMintTransaction = new EventEmitter<void>();
   @Output() restart = new EventEmitter<void>();
 
-  constructor() { }
+  constructor(public dialog: MatDialog, private clipboard: Clipboard) { }
 
   ngOnInit(): void {
     console.log(this.mintTransaction)
+  }
+
+
+  accountKeyPopup() {
+    this.dialog.open(AccountKeyComponent, {
+      data: { account: this.account },
+    });
+  }
+
+  copyAccountKey() {
+    this.clipboard.copy(this.account.key);
   }
 
   get adaTip() {

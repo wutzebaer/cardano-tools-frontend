@@ -15,8 +15,19 @@
                 <p *ngIf="!mintTransaction.mintOrderSubmission.tip">
                     The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> has also be sent to your address
                 </p>
+
                 <p *ngIf="mintTransaction.mintOrderSubmission.tip">
                     The tip of <b>{{adaTip | number: '1.0-6'}}&nbsp;₳</b> has be sent to the [EURO]-Pool pledge. <b>Thank you!</b><br>
+                </p>
+
+                <!-- key -->
+                <p>
+                    Please copy your account key
+                    <b>{{account.key}}</b>
+                    <button class="inline-button" mat-icon-button (click)="copyAccountKey()">
+                        <mat-icon>content_copy</mat-icon>
+                    </button>
+                    and keep it secretly, you will need it for support questions or if you like to register your tokens in the official <a href="https://github.com/cardano-foundation/cardano-token-registry">Cardano Token Registry</a> when it gets available.
                 </p>
 
                 <div fxLayout="row wrap" fxLayoutGap="10px grid">

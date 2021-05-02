@@ -1,3 +1,4 @@
+import { AccountKeyComponent } from './../account-key/account-key.component';
 import { NgModel } from '@angular/forms';
 import { AjaxInterceptor } from './../ajax.interceptor';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
@@ -8,6 +9,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
 import { LocalStorageService } from '../local-storage.service';
 import { F } from '@angular/cdk/keycodes';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-mint',

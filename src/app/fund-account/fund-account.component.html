@@ -11,9 +11,14 @@
             </p>
 
             <!-- fund instruction-->
-            <p>Please send at least <b matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b><button class="inline-button" mat-icon-button (click)="copyFunds()">
+            <p>
+                Please send at least
+                <b matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
+                <button class="inline-button" mat-icon-button (click)="copyFunds()">
                     <mat-icon>content_copy</mat-icon>
-                </button> to this address</p>
+                </button>
+                to this address
+            </p>
 
 
             <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
@@ -65,7 +70,7 @@
                 <input #adaBalanceInput="ngModel" matInput type="number" [ngModel]="adaBalance" name="adaBalance" [appMinValidator]="minAdaBalance">
             </mat-form-field>
             <mat-checkbox fxHide [(ngModel)]="!loading" name="loadingInput" #loadingInput="ngModel" required></mat-checkbox>
-            
+
         </mat-card-content>
     </mat-card>
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">

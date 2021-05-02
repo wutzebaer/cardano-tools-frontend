@@ -47,10 +47,11 @@ import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.com
 import { MatDialogModule } from '@angular/material/dialog';
 import { ContactComponent } from './contact/contact.component';
 import { ImprintComponent } from './imprint/imprint.component';
+import { AccountKeyComponent } from './account-key/account-key.component';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent
   ],
   imports: [
     BrowserModule,
