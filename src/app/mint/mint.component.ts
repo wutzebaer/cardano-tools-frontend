@@ -10,6 +10,7 @@ import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client'
 import { LocalStorageService } from '../local-storage.service';
 import { F } from '@angular/cdk/keycodes';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-mint',
@@ -43,7 +44,16 @@ export class MintComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService, private ajaxInterceptor: AjaxInterceptor) {
+  constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService, private ajaxInterceptor: AjaxInterceptor, private activatedRoute: ActivatedRoute) {
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      let accountKey = params['accountKey'];
+      if (accountKey) {
+        localStorageService.storeAccountKey(accountKey)
+        this.updateAccount()
+      }
+    });
+
     this.initializeValues()
     this.updateAccount();
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.loading = ajaxStatus)
