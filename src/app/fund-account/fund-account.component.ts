@@ -14,7 +14,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
   styleUrls: ['./fund-account.component.scss'],
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
-export class FundAccountComponent implements OnInit, AfterContentChecked {
+export class FundAccountComponent implements OnInit {
 
   @Input() account!: TransferAccount;
   @Output() updateAccount = new EventEmitter<void>();
@@ -38,10 +38,6 @@ export class FundAccountComponent implements OnInit, AfterContentChecked {
         this.emitUpdateAccount();
       }
     });
-  }
-
-  ngAfterContentChecked(): void {
-    this.adaBalanceInput?.control.updateValueAndValidity()
   }
 
   emitUpdateAccount() {

@@ -89,8 +89,6 @@ export class MintFormComponent implements OnInit {
             this.uploadProgress = event.loaded * 100 / event.total;
           }
         } else if (event.type === HttpEventType.Response) {
-          console.log(event);
-
           // store file
           this.file = file;
 

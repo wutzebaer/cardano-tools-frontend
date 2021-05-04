@@ -20,7 +20,6 @@ export class MintSuccessComponent implements OnInit {
   constructor(public dialog: MatDialog, private clipboard: Clipboard) { }
 
   ngOnInit(): void {
-    console.log(this.mintTransaction)
   }
 
 

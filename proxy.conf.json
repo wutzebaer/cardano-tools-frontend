@@ -1,6 +1,6 @@
 {
     "/api": {
-        "target": "https://cardano-tools.io",
+        "target": "http://localhost:8080",
         "secure": false
     }
 }

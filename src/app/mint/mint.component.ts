@@ -40,7 +40,8 @@ export class MintComponent implements OnInit, AfterViewInit {
       metaDataJson: "",
       policy: "",
       mintOrderSubmission: this.mintOrderSubmission,
-      minOutput: 1000000
+      minOutput: 1000000,
+      txSize: 0
     }
   }
 

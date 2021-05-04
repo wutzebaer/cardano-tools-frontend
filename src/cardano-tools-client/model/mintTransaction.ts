@@ -16,6 +16,7 @@ export interface MintTransaction {
     txId: string;
     fee: number;
     minOutput: number;
+    txSize: number;
     policyId: string;
     outputs: string;
     inputs: string;
