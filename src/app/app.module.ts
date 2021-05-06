@@ -48,10 +48,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ContactComponent } from './contact/contact.component';
 import { ImprintComponent } from './imprint/imprint.component';
 import { AccountKeyComponent } from './account-key/account-key.component';
+import { RegisterTokenComponent } from './register-token/register-token.component';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent
   ],
   imports: [
     BrowserModule,

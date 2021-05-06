@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface Body { 
-    registrationMetadataString: string;
-    file?: Blob;
+export interface TokenRegistration { 
+    filename: string;
+    content: string;
 }

@@ -10,7 +10,6 @@ import { map, shareReplay } from 'rxjs/operators';
 })
 export class NavComponent {
 
-  menuItems: string[];
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -19,7 +18,6 @@ export class NavComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver) {
-    this.menuItems = ['mint', 'burn', 'wallet', 'explore', 'exchange', 'timelock', 'oracle'];
   }
 
 }

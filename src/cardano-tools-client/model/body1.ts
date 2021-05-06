@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface Body { 
-    registrationMetadataString: string;
-    file?: Blob;
+export interface Body1 { 
+    file: Blob;
 }

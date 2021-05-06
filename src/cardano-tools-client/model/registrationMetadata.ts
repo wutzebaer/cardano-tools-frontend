@@ -10,7 +10,13 @@
  * Do not edit the class manually.
  */
 
-export interface Body { 
-    registrationMetadataString: string;
-    file?: Blob;
+export interface RegistrationMetadata { 
+    assetName: string;
+    policyId: string;
+    policy: string;
+    policySkey: string;
+    name: string;
+    description: string;
+    ticker?: string;
+    url?: string;
 }
