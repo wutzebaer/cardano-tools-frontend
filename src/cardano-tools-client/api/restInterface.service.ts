@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 import { MintOrderSubmission } from '../model/mintOrderSubmission';
 import { MintTransaction } from '../model/mintTransaction';
 import { RegistrationMetadata } from '../model/registrationMetadata';
+import { TokenData } from '../model/tokenData';
 import { TokenRegistration } from '../model/tokenRegistration';
 import { TransferAccount } from '../model/transferAccount';
 
@@ -139,6 +140,53 @@ export class RestInterfaceService {
 
         return this.httpClient.request<TransferAccount>('post',`${this.basePath}/api/createAccount`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param string 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public findTokens(string: string, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
+    public findTokens(string: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
+    public findTokens(string: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
+    public findTokens(string: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (string === null || string === undefined) {
+            throw new Error('Required parameter string was null or undefined when calling findTokens.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (string !== undefined && string !== null) {
+            queryParameters = queryParameters.set('string', <any>string);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<TokenData>>('get',`${this.basePath}/api/findTokens`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -319,6 +367,42 @@ export class RestInterfaceService {
         ];
 
         return this.httpClient.request<number>('get',`${this.basePath}/api/tip`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public latestTokens(observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
+    public latestTokens(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
+    public latestTokens(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
+    public latestTokens(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<TokenData>>('get',`${this.basePath}/api/latestTokens`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -4,13 +4,16 @@
     (click)="drawer.mode === 'side' || drawer.close()">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
+      <a mat-list-item [routerLink]="'/latest'"> Latest Tokens </a>
       <a mat-list-item [routerLink]="'/mint'"> Mint </a>
       <a mat-list-item [routerLink]="'/register'"> Register token </a>
+      <!--
       <a mat-list-item [routerLink]="'/mint'" matTooltip="Comming soon"> Burn </a>
       <a mat-list-item [routerLink]="'/mint'" matTooltip="Comming soon"> Wallet </a>
       <a mat-list-item [routerLink]="'/mint'" matTooltip="Comming soon"> Explore </a>
       <a mat-list-item [routerLink]="'/mint'" matTooltip="Comming soon"> Exchange </a>
       <a mat-list-item [routerLink]="'/mint'" matTooltip="Comming soon"> Timelock </a>
+      -->
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content fxLayout="column">
