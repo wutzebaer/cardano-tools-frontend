@@ -1,36 +1,40 @@
 <mat-card>
     <mat-card-content>
-        <h2>{{token.name}}</h2>
+        <div class="title">
+            {{token.name}}
+        </div>
 
-        <div class="preview" fxLayout="row" fxLayoutAlign="center center">
-            <div *ngIf="loading && token.metaData['image']" style="width: 100%; height: auto;" fxLayout="row"
-                fxLayoutAlign="center center">
-                <mat-spinner></mat-spinner>
+
+        <div class="preview">
+            <div class="loading" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
+                <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
+                    image
+                </mat-icon>
             </div>
-            <img [hidden]="loading" *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])"
-                (load)="onLoad()">
+            <img *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])" (load)="onLoad()"
+                loading="lazy">
             <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])"
                 (load)="onLoad()"></audio>
             <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])"
                 (load)="onLoad()"></video>
             <div>
-                <mat-icon class="big-icon" color="primary" *ngIf="token.metaData['Binary']?.value"
-                    fontSet="material-icons-outlined">description</mat-icon>
+                <mat-icon class="big-icon" color="primary"
+                    *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']"
+                    fontSet="material-icons-outlined" style="width: 100%; height: 100%;">description</mat-icon>
             </div>
         </div>
 
-        <table mat-table [dataSource]="tableData" class="mat-elevation-z8">
+        <div *ngIf="token.quantity > 1" class="title">
+            {{token.quantity}}x
+        </div>
 
-            <!--- Note that these columns can be defined in any order.
-                  The actual rendered columns are set as a property on the row definition" -->
+        <table *ngIf="false" mat-table [dataSource]="tableData" class="mat-elevation-z8">
 
-            <!-- Position Column -->
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef> Name </th>
                 <td mat-cell *matCellDef="let element"> {{element.name}} </td>
             </ng-container>
 
-            <!-- Name Column -->
             <ng-container matColumnDef="value">
                 <th mat-header-cell *matHeaderCellDef> Value </th>
                 <td mat-cell *matCellDef="let element" title="{{element.value}}"> {{element.value}} </td>

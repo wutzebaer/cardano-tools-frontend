@@ -1,41 +1,69 @@
 .preview {
-    position: relative;
+  position: relative;
+  min-height: 150px;
+  width: 100%;
+  height: 100%;
+  img {
     width: 100%;
     height: 100%;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: scale-down;
-    }
-    audio {
-      width: 100%;
-      object-fit: scale-down;
-    }
-    video {
-      width: 100%;
-      height: 100%;
-      object-fit: scale-down;
-    }
-    .big-icon {
-      font-size: 100px;
-      width: auto;
-      height: auto;
-    }
+    object-fit: scale-down;
   }
-  
-  table {
+  audio {
     width: 100%;
-    table-layout: fixed;
+    object-fit: scale-down;
   }
-  td {
-    overflow: hidden;
-    text-overflow: ellipsis;
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
   }
-  
-  .mat-column-name {
-    width: 60px;
+  .big-icon {
+    font-size: 100px;
+    line-height: auto;
+    width: auto;
+    height: auto;
+  }
+
+  @keyframes flickerAnimation {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .loading-wrapper {
+    position: relative;
+    width: 100%
+  }
+
+  .loading {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+    animation: flickerAnimation 2s infinite;
+  }
 }
 
-mat-spinner {
-  margin-bottom: 16px;
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mat-column-name {
+  width: 60px;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

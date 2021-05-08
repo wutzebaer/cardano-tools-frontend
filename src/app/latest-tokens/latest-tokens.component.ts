@@ -49,17 +49,20 @@ export class LatestTokensComponent implements OnInit {
   }
 
   updateTokens(latestTokens: TokenData[], append: boolean) {
-    console.log(latestTokens)
     if (!append)
       this.latestTokens = []
 
     latestTokens.forEach(element => {
       let tokenDataWithMetadata = element as TokenDataWithMetadata;
 
-      let metaData = JSON.parse(element.json)
-      metaData = metaData[tokenDataWithMetadata.policyId] || {}
-      metaData = metaData[tokenDataWithMetadata.name] || {}
-      tokenDataWithMetadata.metaData = metaData;
+      if (element.json) {
+        let metaData = JSON.parse(element.json)
+        metaData = metaData[tokenDataWithMetadata.policyId] || {}
+        metaData = metaData[tokenDataWithMetadata.name] || {}
+        tokenDataWithMetadata.metaData = metaData;
+      } else {
+        tokenDataWithMetadata.metaData = {};
+      }
 
       this.latestTokens.push(tokenDataWithMetadata)
     });

@@ -24,9 +24,7 @@ export class LatestTokensMiniComponent implements OnInit {
     // https://ipfs.blockfrost.dev/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
     // https://cloudflare-ipfs.com/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
     // https://ipfs.eternum.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    return ipfs
-      .replace("ipfs://ipfs/", "https://ipfs.cardano-tools.io/ipfs/")
-      .replace("ipfs://", "https://ipfs.cardano-tools.io/ipfs/");
+    return "https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "");
   }
 
   get tableData(): TableRow[] {

@@ -1,13 +1,21 @@
 <h1 class="mat-h1">Latest Cardano NFTs</h1>
 
-<p fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center center">
-    <mat-form-field appearance="outline" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="20%" >
+<p fxLayout="row" fxLayoutAlign="center" class="search-box">
+    <mat-form-field appearance="outline" fxFlex="90%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="20%">
         <input matInput placeholder="Search token name or policy id" [(ngModel)]="searchInput" (keyup)="search($event)">
     </mat-form-field>
 </p>
 
-<div fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center top" infiniteScroll (scrolled)="onScroll()" infiniteScrollContainer=".my-sidenav-content" [fromRoot]="true">
-    <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="20%" *ngFor="let token of latestTokens">
-        <app-latest-tokens-mini [token]="token"></app-latest-tokens-mini>
+<div fxLayout="row" fxLayoutAlign="center">
+    <div fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center top" infiniteScroll (scrolled)="onScroll()"
+        infiniteScrollContainer=".my-sidenav-content" [fromRoot]="true" fxFlex="0 1 1200px" fxFlex.lt-md="100%">
+        <ng-container *ngFor="let token of latestTokens; let i = index">
+            <div class="policyId" fxFlex="100%" *ngIf="i == 0 || (token.policyId != latestTokens[i-1].policyId)">
+                PolicyId {{token.policyId}}
+            </div>
+            <div fxFlex="100%" fxFlex.gt-xs="200px">
+                <app-latest-tokens-mini [token]="token"></app-latest-tokens-mini>
+            </div>
+        </ng-container>
     </div>
 </div>
