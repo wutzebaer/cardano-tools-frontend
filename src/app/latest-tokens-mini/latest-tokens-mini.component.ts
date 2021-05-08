@@ -24,20 +24,18 @@ export class LatestTokensMiniComponent implements OnInit {
     // https://ipfs.blockfrost.dev/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
     // https://cloudflare-ipfs.com/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
     // https://ipfs.eternum.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    return ipfs.replace("ipfs://", "https://ipfs.cardano-tools.io/ipfs/");
+    return ipfs
+      .replace("ipfs://ipfs/", "https://ipfs.cardano-tools.io/ipfs/")
+      .replace("ipfs://", "https://ipfs.cardano-tools.io/ipfs/");
   }
 
   get tableData(): TableRow[] {
     let data: TableRow[] = [
       { name: 'Amount', value: this.token.quantity },
+      { name: 'PolicyId', value: this.token.policyId },
     ];
     for (let key in this.token.metaData) {
-      if (Array.isArray(this.token.metaData[key])) {
-        data.push({ name: key, value: this.token.metaData[key].map((el: any) => JSON.stringify(el)) })
-      }
-      else {
-        data.push({ name: key, value: this.token.metaData[key] })
-      }
+      data.push({ name: key, value: JSON.stringify(this.token.metaData[key]) })
     }
     return data;
   }

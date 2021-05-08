@@ -1,9 +1,13 @@
 <h1 class="mat-h1">Latest Cardano NFTs</h1>
 
-<div>
-    <div fxLayout="row wrap" fxLayoutGap="10px grid">
-        <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="20%" *ngFor="let token of latestTokens">
-            <app-latest-tokens-mini [token]="token"></app-latest-tokens-mini>
-        </div>
+<p fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center center">
+    <mat-form-field appearance="outline" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="20%" >
+        <input matInput placeholder="Search token name or policy id" [(ngModel)]="searchInput" (keyup)="search($event)">
+    </mat-form-field>
+</p>
+
+<div fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center top">
+    <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="20%" *ngFor="let token of latestTokens">
+        <app-latest-tokens-mini [token]="token"></app-latest-tokens-mini>
     </div>
 </div>
