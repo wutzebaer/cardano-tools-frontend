@@ -152,21 +152,26 @@ export class RestInterfaceService {
      * 
      * 
      * @param string 
+     * @param fromTid 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findTokens(string: string, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
-    public findTokens(string: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
-    public findTokens(string: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
-    public findTokens(string: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findTokens(string: string, fromTid?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
+    public findTokens(string: string, fromTid?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
+    public findTokens(string: string, fromTid?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
+    public findTokens(string: string, fromTid?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (string === null || string === undefined) {
             throw new Error('Required parameter string was null or undefined when calling findTokens.');
         }
 
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (string !== undefined && string !== null) {
             queryParameters = queryParameters.set('string', <any>string);
+        }
+        if (fromTid !== undefined && fromTid !== null) {
+            queryParameters = queryParameters.set('fromTid', <any>fromTid);
         }
 
         let headers = this.defaultHeaders;

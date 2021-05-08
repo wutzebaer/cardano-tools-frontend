@@ -7,22 +7,21 @@
 
 
         <div class="preview">
-            <div class="loading" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
+
+            <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
                 <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
                     image
                 </mat-icon>
             </div>
-            <img *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])" (load)="onLoad()"
-                loading="lazy">
-            <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])"
-                (load)="onLoad()"></audio>
-            <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])"
-                (load)="onLoad()"></video>
-            <div>
-                <mat-icon class="big-icon" color="primary"
-                    *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']"
-                    fontSet="material-icons-outlined" style="width: 100%; height: 100%;">description</mat-icon>
+
+            <img *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])" (load)="onLoad()" loading="lazy">
+            <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])" (load)="onLoad()"></audio>
+            <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])" (load)="onLoad()"></video>
+
+            <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']">
+                <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">description</mat-icon>
             </div>
+
         </div>
 
         <div *ngIf="token.quantity > 1" class="title">

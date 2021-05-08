@@ -24,6 +24,13 @@
     height: auto;
   }
 
+  .centered-icon-wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+  }
+
   @keyframes flickerAnimation {
     0% {
       opacity: 1;
@@ -35,17 +42,7 @@
       opacity: 1;
     }
   }
-
-  .loading-wrapper {
-    position: relative;
-    width: 100%
-  }
-
-  .loading {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 100%;
+  .blink {
     animation: flickerAnimation 2s infinite;
   }
 }

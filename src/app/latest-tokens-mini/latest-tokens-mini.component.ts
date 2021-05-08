@@ -29,7 +29,6 @@ export class LatestTokensMiniComponent implements OnInit {
 
   get tableData(): TableRow[] {
     let data: TableRow[] = [
-      { name: 'Amount', value: this.token.quantity },
       { name: 'PolicyId', value: this.token.policyId },
     ];
     for (let key in this.token.metaData) {

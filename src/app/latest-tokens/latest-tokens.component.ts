@@ -70,14 +70,22 @@ export class LatestTokensComponent implements OnInit {
   }
 
   onScroll() {
+    let tid = this.latestTokens[this.latestTokens.length - 1].tid
+
     if (this.searchText == '') {
-      let tid = this.latestTokens[this.latestTokens.length - 1].tid
       this.api.latestTokens(tid).subscribe(
         latestTokens => {
           this.updateTokens(latestTokens, true)
         }
       );
+    } else {
+      this.api.findTokens(this.searchText, tid).subscribe(
+        latestTokens => {
+          this.updateTokens(latestTokens, true)
+        }
+      );
     }
+
   }
 
 }
