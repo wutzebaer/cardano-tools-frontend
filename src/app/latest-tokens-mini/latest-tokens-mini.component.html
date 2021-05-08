@@ -19,7 +19,7 @@
             <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])" (load)="onLoad()"></video>
 
             <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']">
-                <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">description</mat-icon>
+                <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
             </div>
 
         </div>
@@ -27,23 +27,6 @@
         <div *ngIf="token.quantity > 1" class="title">
             {{token.quantity}}x
         </div>
-
-        <table *ngIf="false" mat-table [dataSource]="tableData" class="mat-elevation-z8">
-
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Name </th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="value">
-                <th mat-header-cell *matHeaderCellDef> Value </th>
-                <td mat-cell *matCellDef="let element" title="{{element.value}}"> {{element.value}} </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns" fxHide></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-
 
     </mat-card-content>
 </mat-card>

@@ -52,10 +52,11 @@ import { RegisterTokenComponent } from './register-token/register-token.componen
 import { LatestTokensComponent } from './latest-tokens/latest-tokens.component';
 import { LatestTokensMiniComponent } from './latest-tokens-mini/latest-tokens-mini.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { LatestTokensDetailComponent } from './latest-tokens-detail/latest-tokens-detail.component';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent
   ],
   imports: [
     BrowserModule,

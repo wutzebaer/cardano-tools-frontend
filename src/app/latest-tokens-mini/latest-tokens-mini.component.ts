@@ -27,20 +27,6 @@ export class LatestTokensMiniComponent implements OnInit {
     return "https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "");
   }
 
-  get tableData(): TableRow[] {
-    let data: TableRow[] = [
-      { name: 'PolicyId', value: this.token.policyId },
-    ];
-    for (let key in this.token.metaData) {
-      let value = this.token.metaData[key]
-      if (!value.toFixed && !value.substring) {
-        data.push({ name: key, value: JSON.stringify(value) })
-      } else {
-        data.push({ name: key, value: value })
-      }
-    }
-    return data;
-  }
 
 
   onLoad() {

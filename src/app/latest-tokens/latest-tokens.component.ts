@@ -1,7 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { merge, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 import { RestInterfaceService, TokenData } from 'src/cardano-tools-client';
+import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
 
 export interface TokenDataWithMetadata extends TokenData {
   metaData: any
@@ -17,16 +20,9 @@ export class LatestTokensComponent implements OnInit {
   searchInput: string = "";
   searchText: string = "";
   searchText$ = new Subject<string>();
-
   latestTokens: TokenDataWithMetadata[] = []
 
-  constructor(private api: RestInterfaceService) {
-    this.api.latestTokens().subscribe(
-      latestTokens => this.updateTokens(latestTokens, false)
-    );
-  }
-
-  ngOnInit(): void {
+  constructor(private api: RestInterfaceService, private activatedRoute: ActivatedRoute, public dialog: MatDialog) {
     this.searchText$.pipe(
       debounceTime(500),
       distinctUntilChanged(),
@@ -38,9 +34,36 @@ export class LatestTokensComponent implements OnInit {
         }
       })
     ).subscribe(foundTokens => this.updateTokens(foundTokens, false))
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      let q = params['q'];
+      let policy = params['policy'];
+      let name = params['name'];
+
+      if (q)
+        this.searchString(q)
+      else
+        this.searchString("")
+    });
   }
 
+  ngOnInit(): void {
 
+  }
+
+  details(token: TokenDataWithMetadata) {
+    this.dialog.open(LatestTokensDetailComponent, {
+      width: '600px',
+      data: { token: token },
+    });
+  }
+
+  searchString(policyId: string) {
+    let searchText = policyId
+    this.searchInput = policyId
+    this.searchText = searchText;
+    this.searchText$.next(searchText);
+  }
 
   search(event: any) {
     let searchText = event.target.value
@@ -49,8 +72,10 @@ export class LatestTokensComponent implements OnInit {
   }
 
   updateTokens(latestTokens: TokenData[], append: boolean) {
-    if (!append)
+    if (!append) {
       this.latestTokens = []
+      document.getElementsByClassName("my-sidenav-content")[0].scrollTop = 0
+    }
 
     latestTokens.forEach(element => {
       let tokenDataWithMetadata = element as TokenDataWithMetadata;
