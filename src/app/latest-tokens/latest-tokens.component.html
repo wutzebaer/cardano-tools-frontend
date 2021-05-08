@@ -6,7 +6,7 @@
     </mat-form-field>
 </p>
 
-<div fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center top">
+<div fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center top" infiniteScroll (scrolled)="onScroll()" infiniteScrollContainer=".my-sidenav-content" [fromRoot]="true">
     <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="20%" *ngFor="let token of latestTokens">
         <app-latest-tokens-mini [token]="token"></app-latest-tokens-mini>
     </div>

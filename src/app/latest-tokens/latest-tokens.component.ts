@@ -22,7 +22,7 @@ export class LatestTokensComponent implements OnInit {
 
   constructor(private api: RestInterfaceService) {
     this.api.latestTokens().subscribe(
-      latestTokens => this.updateTokens(latestTokens)
+      latestTokens => this.updateTokens(latestTokens, false)
     );
   }
 
@@ -30,8 +30,14 @@ export class LatestTokensComponent implements OnInit {
     this.searchText$.pipe(
       debounceTime(500),
       distinctUntilChanged(),
-      switchMap(searchText => this.api.findTokens(searchText))
-    ).subscribe(foundTokens => this.updateTokens(foundTokens))
+      switchMap(searchText => {
+        if (searchText != '') {
+          return this.api.findTokens(searchText)
+        } else {
+          return this.api.latestTokens()
+        }
+      })
+    ).subscribe(foundTokens => this.updateTokens(foundTokens, false))
   }
 
 
@@ -42,9 +48,10 @@ export class LatestTokensComponent implements OnInit {
     this.searchText$.next(searchText);
   }
 
-  updateTokens(latestTokens: TokenData[]) {
+  updateTokens(latestTokens: TokenData[], append: boolean) {
     console.log(latestTokens)
-    this.latestTokens = []
+    if (!append)
+      this.latestTokens = []
 
     latestTokens.forEach(element => {
       let tokenDataWithMetadata = element as TokenDataWithMetadata;
@@ -57,7 +64,17 @@ export class LatestTokensComponent implements OnInit {
       this.latestTokens.push(tokenDataWithMetadata)
     });
 
-    console.log(this.latestTokens)
+  }
+
+  onScroll() {
+    if (this.searchText == '') {
+      let tid = this.latestTokens[this.latestTokens.length - 1].tid
+      this.api.latestTokens(tid).subscribe(
+        latestTokens => {
+          this.updateTokens(latestTokens, true)
+        }
+      );
+    }
   }
 
 }

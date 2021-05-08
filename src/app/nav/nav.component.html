@@ -16,7 +16,7 @@
       -->
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content fxLayout="column">
+  <mat-sidenav-content fxLayout="column" class="my-sidenav-content">
     <mat-toolbar color="primary" class="mat-elevation-z8">
       <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
         *ngIf="true || (isHandset$ | async)">

@@ -51,6 +51,7 @@ import { AccountKeyComponent } from './account-key/account-key.component';
 import { RegisterTokenComponent } from './register-token/register-token.component';
 import { LatestTokensComponent } from './latest-tokens/latest-tokens.component';
 import { LatestTokensMiniComponent } from './latest-tokens-mini/latest-tokens-mini.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { LatestTokensMiniComponent } from './latest-tokens-mini/latest-tokens-mi
     MatExpansionModule,
     MatCheckboxModule,
     ClipboardModule,
-    MatDialogModule
+    MatDialogModule,
+    InfiniteScrollModule
   ],
   providers: [
     AjaxInterceptor,
