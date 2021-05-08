@@ -1,7 +1,8 @@
 <mat-card>
     <mat-card-content>
         <div class="title">
-            {{token.name}}
+            <span *ngIf="token.metaData['name']">{{token.metaData['name']}}</span>
+            <span *ngIf="!token.metaData['name']">{{token.name}}</span>
         </div>
 
 
