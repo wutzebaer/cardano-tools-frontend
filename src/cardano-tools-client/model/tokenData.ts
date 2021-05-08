@@ -21,4 +21,5 @@ export interface TokenData {
     blockNo: number;
     epochNo: number;
     epochSlotNo: number;
+    tid: number;
 }

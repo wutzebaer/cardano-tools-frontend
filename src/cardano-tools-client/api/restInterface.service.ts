@@ -379,13 +379,20 @@ export class RestInterfaceService {
     /**
      * 
      * 
+     * @param fromTid 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public latestTokens(observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
-    public latestTokens(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
-    public latestTokens(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
-    public latestTokens(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public latestTokens(fromTid?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
+    public latestTokens(fromTid?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
+    public latestTokens(fromTid?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
+    public latestTokens(fromTid?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (fromTid !== undefined && fromTid !== null) {
+            queryParameters = queryParameters.set('fromTid', <any>fromTid);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -404,6 +411,7 @@ export class RestInterfaceService {
 
         return this.httpClient.request<Array<TokenData>>('get',`${this.basePath}/api/latestTokens`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

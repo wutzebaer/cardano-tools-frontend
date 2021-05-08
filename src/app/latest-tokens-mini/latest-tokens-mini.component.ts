@@ -35,7 +35,12 @@ export class LatestTokensMiniComponent implements OnInit {
       { name: 'PolicyId', value: this.token.policyId },
     ];
     for (let key in this.token.metaData) {
-      data.push({ name: key, value: JSON.stringify(this.token.metaData[key]) })
+      let value = this.token.metaData[key]
+      if (!value.toFixed && !value.substring) {
+        data.push({ name: key, value: JSON.stringify(value) })
+      } else {
+        data.push({ name: key, value: value })
+      }
     }
     return data;
   }
