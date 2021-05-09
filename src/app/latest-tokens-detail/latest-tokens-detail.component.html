@@ -29,8 +29,7 @@
                 {{token.quantity}}x
             </div>
 
-            <table *ngIf="true" mat-table [dataSource]="tableData" class="mat-elevation-z8">
-
+            <table *ngIf="true" mat-table [dataSource]="tableData" class="mat-elevation-z8" fxHide.lt-md>
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef> Name </th>
                     <td mat-cell *matCellDef="let element"> {{element.name}} </td>
@@ -50,6 +49,24 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns" fxHide></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+
+            <div fxHide.gt-sm>
+                <mat-accordion class="example-headers-align">
+                    <mat-expansion-panel *ngFor="let element of tableData">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{element.name}}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(element.value)">
+                                    <mat-icon>content_copy</mat-icon>
+                                </button>
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        {{element.value}}
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
 
 
         </mat-card-content>

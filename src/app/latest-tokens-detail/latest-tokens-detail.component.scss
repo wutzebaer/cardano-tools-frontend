@@ -83,3 +83,12 @@ td {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+.example-headers-align {
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.example-headers-align .mat-expansion-panel-header-title {
+  width: 100px;
+}
