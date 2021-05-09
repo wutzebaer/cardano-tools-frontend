@@ -42,7 +42,7 @@
                             <mat-icon>content_copy</mat-icon>
                         </button>
                         <a *ngIf="element.name == 'PolicyId'" [routerLink]="['/latest']" [queryParams]="{q:element.value}" (click)="close()">{{element.value}}</a>
-                        {{element.value}}
+                        <span *ngIf="element.name != 'PolicyId'">{{element.value}}</span>
                     </td>
                 </ng-container>
 
@@ -63,7 +63,8 @@
                                 </button>
                             </mat-panel-description>
                         </mat-expansion-panel-header>
-                        {{element.value}}
+                        <a *ngIf="element.name == 'PolicyId'" [routerLink]="['/latest']" [queryParams]="{q:element.value}" (click)="close()">{{element.value}}</a>
+                        <span *ngIf="element.name != 'PolicyId'">{{element.value}}</span>
                     </mat-expansion-panel>
                 </mat-accordion>
             </div>
