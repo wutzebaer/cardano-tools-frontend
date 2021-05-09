@@ -1,8 +1,8 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { merge, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, retry, switchMap } from 'rxjs/operators';
 import { RestInterfaceService, TokenData } from 'src/cardano-tools-client';
 import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
 
@@ -32,7 +32,8 @@ export class LatestTokensComponent implements OnInit {
         } else {
           return this.api.latestTokens()
         }
-      })
+      }),
+      retry()
     ).subscribe(foundTokens => this.updateTokens(foundTokens, false))
 
     this.activatedRoute.queryParams.subscribe(params => {
