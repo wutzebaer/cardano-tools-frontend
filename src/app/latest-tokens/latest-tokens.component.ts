@@ -56,6 +56,7 @@ export class LatestTokensComponent implements OnInit {
       width: '600px',
       maxWidth: '90vw',
       data: { token: token },
+      closeOnNavigation: true
     });
   }
 
