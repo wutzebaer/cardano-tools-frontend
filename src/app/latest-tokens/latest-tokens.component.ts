@@ -99,7 +99,7 @@ export class LatestTokensComponent implements OnInit {
         metaData = metaData[tokenDataWithMetadata.policyId] || metaData
         metaData = metaData[tokenDataWithMetadata.name] || metaData
 
-        if (!metaData.image) {
+        if (!metaData.image && !metaData.video && !metaData.audio) {
           let foundImage = this.findAnyIpfsUrl(metaData)
           if (foundImage)
             metaData.image = foundImage

@@ -1,32 +1,34 @@
 <mat-card>
-    <mat-card-content>
-        <div class="title">
-            <span *ngIf="token.metaData['name']">{{token.metaData['name']}}</span>
-            <span *ngIf="!token.metaData['name']">{{token.name}}</span>
-        </div>
+  <mat-card-content>
+    <div class="title">
+      <span *ngIf="token.metaData['name']">{{token.metaData['name']}}</span>
+      <span *ngIf="!token.metaData['name']">{{token.name}}</span>
+    </div>
 
 
-        <div class="preview">
+    <div [className]="loading && token.metaData['image'] || !token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video'] ? 'preview min-height' : 'preview'">
 
-            <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
-                <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
-                    image
-                </mat-icon>
-            </div>
 
-            <img *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])" (load)="onLoad()" loading="lazy">
-            <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])" (load)="onLoad()"></audio>
-            <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])" (load)="onLoad()"></video>
 
-            <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']">
-                <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
-            </div>
+      <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
+        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
+          image
+        </mat-icon>
+      </div>
 
-        </div>
+      <img *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])" (load)="onLoad()" loading="lazy">
+      <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])" (load)="onLoad()"></audio>
+      <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])" (load)="onLoad()"></video>
 
-        <div *ngIf="token.quantity > 1" class="title">
-            {{token.quantity}}x
-        </div>
+      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']">
+        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
+      </div>
 
-    </mat-card-content>
+    </div>
+
+    <div *ngIf="token.quantity > 1" class="title">
+      {{token.quantity}}x
+    </div>
+
+  </mat-card-content>
 </mat-card>
