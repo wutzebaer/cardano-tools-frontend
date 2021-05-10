@@ -50,7 +50,7 @@
             <div *ngFor="let entry of token.metaData | keyvalue" fxLayout="column">
                 <!-- Simple Metafield-->
                 <mat-form-field *ngIf="!isListField(entry.key)" appearance="outline">
-                    <mat-label>{{entry.key}}</mat-label>
+                    <mat-label>{{entry.key | titlecase}}</mat-label>
                     <input matInput name="{{entry.key}}{{counter}}" maxlength="64" [(ngModel)]="entry.value.value">
                 </mat-form-field>
                 <!-- List Metafied -->
@@ -64,7 +64,7 @@
         <div fxLayout="row">
             <mat-chip-list #chipList multiple>
                 <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)" [selected]="!!token.metaData[metaField]">
-                    {{metaField}}
+                    {{metaField | titlecase}}
                 </mat-chip>
             </mat-chip-list>
         </div>

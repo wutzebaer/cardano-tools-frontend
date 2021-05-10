@@ -18,13 +18,11 @@ export class LatestTokensDetailComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: { token: TokenDataWithMetadata }, private clipboard: Clipboard, private dialogRef: MatDialog) {
     this.token = data.token
 
-    this.tableData = [
-      { name: 'PolicyId', value: this.token.policyId },
-    ];
+    this.tableData = [];
     for (let key in this.token.metaData) {
       let value = this.token.metaData[key]
       if (!value.toFixed && !value.substring) {
-        this.tableData.push({ name: key, value: JSON.stringify(value) })
+        this.tableData.push({ name: key, value: JSON.stringify(value, null, 2) })
       } else {
         this.tableData.push({ name: key, value: value })
       }
@@ -44,11 +42,18 @@ export class LatestTokensDetailComponent implements OnInit {
     return "https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "");
   }
 
+  calculateTime(epochNo: number, epochSlotNo: number) {
+    let timestamp = Date.parse('2017-09-23T21:44:51Z');
+    timestamp += epochNo * 432000 * 1000
+    timestamp += epochSlotNo * 1000
+    return timestamp;
+  }
+
   onLoad() {
     this.loading = false;
   }
 
-  close() { 
+  close() {
     this.dialogRef.closeAll()
   }
 

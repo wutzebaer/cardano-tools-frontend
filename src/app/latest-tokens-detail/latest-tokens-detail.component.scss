@@ -47,20 +47,6 @@
   }
 }
 
-table {
-  width: 100%;
-  table-layout: fixed;
-}
-td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.mat-column-name {
-  width: 100px;
-}
-
 .title {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -84,11 +70,19 @@ td {
   -webkit-overflow-scrolling: touch;
 }
 
-.example-headers-align {
-  word-wrap: break-word;
+mat-panel-title,
+mat-panel-description {
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
+  text-align: left;
+  display: inline;
 }
-.example-headers-align .mat-expansion-panel-header-title {
-  width: 100px;
+
+.expansion-content {
+  overflow-x: auto;
+}
+
+pre {
+  margin: 0;
 }

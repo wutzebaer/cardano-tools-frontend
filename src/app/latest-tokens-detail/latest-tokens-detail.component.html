@@ -1,75 +1,117 @@
 <mat-dialog-content>
-    <mat-card>
-        <mat-card-content>
-            <div class="title">
-                <span *ngIf="token.metaData['name']">{{token.metaData['name']}} ({{token.name}})</span>
-                <span *ngIf="!token.metaData['name']">{{token.name}}</span>
-            </div>
+  <mat-card>
+    <mat-card-content>
+      <div class="title">
+        <span *ngIf="token.metaData['name']">{{token.metaData['name']}} ({{token.name}})</span>
+        <span *ngIf="!token.metaData['name']">{{token.name}}</span>
+      </div>
 
 
-            <div class="preview" fxLayout="row" fxLayoutAlign="center center">
+      <div class="preview" fxLayout="row" fxLayoutAlign="center center">
 
-                <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
-                    <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
-                        image
-                    </mat-icon>
-                </div>
+        <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
+          <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
+            image
+          </mat-icon>
+        </div>
 
-                <img *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])" (load)="onLoad()" loading="lazy">
-                <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])" (load)="onLoad()"></audio>
-                <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])" (load)="onLoad()"></video>
+        <img *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])" (load)="onLoad()" loading="lazy">
+        <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])" (load)="onLoad()"></audio>
+        <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])" (load)="onLoad()"></video>
 
-                <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']">
-                    <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
-                </div>
+        <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']">
+          <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
+        </div>
 
-            </div>
+      </div>
 
-            <div *ngIf="token.quantity > 1" class="title">
-                {{token.quantity}}x
-            </div>
-
-            <table *ngIf="true" mat-table [dataSource]="tableData" class="mat-elevation-z8" fxHide.lt-md>
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef> Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="value">
-                    <th mat-header-cell *matHeaderCellDef> Value </th>
-                    <td mat-cell *matCellDef="let element" title="{{element.value}}">
-                        <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(element.value)">
-                            <mat-icon>content_copy</mat-icon>
-                        </button>
-                        <a *ngIf="element.name == 'PolicyId'" [routerLink]="['/latest']" [queryParams]="{q:element.value}" (click)="close()">{{element.value}}</a>
-                        <span *ngIf="element.name != 'PolicyId'">{{element.value}}</span>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns" fxHide></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-
-            <div fxHide.gt-sm>
-                <mat-accordion class="example-headers-align">
-                    <mat-expansion-panel *ngFor="let element of tableData">
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                {{element.name}}
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(element.value)">
-                                    <mat-icon>content_copy</mat-icon>
-                                </button>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <a *ngIf="element.name == 'PolicyId'" [routerLink]="['/latest']" [queryParams]="{q:element.value}" (click)="close()">{{element.value}}</a>
-                        <span *ngIf="element.name != 'PolicyId'">{{element.value}}</span>
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </div>
+      <div *ngIf="token.quantity > 1" class="title">
+        {{token.quantity}}x
+      </div>
 
 
-        </mat-card-content>
-    </mat-card>
+
+      <mat-accordion>
+
+        <!-- PolicyId -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="75px">
+              Policy ID
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.policyId)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              {{token.policyId}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            <a [routerLink]="['/latest']" [queryParams]="{q:token.policyId}" (click)="close()">{{token.policyId}}</a>
+          </div>
+        </mat-expansion-panel>
+
+        <!-- TxId -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="75px">
+              TX ID
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.txId)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              {{token.txId}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            <a href="https://explorer.cardano.org/en/transaction?id={{token.txId}}" target="_blank">{{token.txId}}</a>
+          </div>
+        </mat-expansion-panel>
+
+
+        <!-- Timestamp -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="75px">
+              Timestamp
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.txId)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              {{calculateTime(token.epochNo, token.epochSlotNo) | date : 'medium'}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            {{calculateTime(token.epochNo, token.epochSlotNo) | date : 'medium'}}
+          </div>
+        </mat-expansion-panel>
+
+
+        <mat-expansion-panel *ngFor="let element of tableData">
+          <mat-expansion-panel-header fxLayout="row">
+            <mat-panel-title fxFlex="75px">
+              {{element.name | titlecase }}
+            </mat-panel-title>
+            <mat-panel-description>
+              <span>
+                <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(element.value)">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+                {{element.value}}
+              </span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            <span *ngIf="element.name != 'PolicyId' && element.name != 'TxId'">
+              <pre>{{element.value}}</pre>
+            </span>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+
+    </mat-card-content>
+  </mat-card>
 </mat-dialog-content>
