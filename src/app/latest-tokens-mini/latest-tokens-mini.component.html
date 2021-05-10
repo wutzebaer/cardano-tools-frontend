@@ -6,11 +6,11 @@
     </div>
 
 
-    <div [className]="loading && token.metaData['image'] || !token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video'] ? 'preview min-height' : 'preview'">
+    <div [className]="isLoadingImage() || !hasMedia() ? 'preview min-height' : 'preview'">
 
 
 
-      <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
+      <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="isLoadingImage()">
         <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
           image
         </mat-icon>
@@ -20,7 +20,7 @@
       <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])" (load)="onLoad()"></audio>
       <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])" (load)="onLoad()"></video>
 
-      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']">
+      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!hasMedia()">
         <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
       </div>
 

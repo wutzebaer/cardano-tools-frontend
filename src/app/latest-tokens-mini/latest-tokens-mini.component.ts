@@ -27,7 +27,13 @@ export class LatestTokensMiniComponent implements OnInit {
     return "https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "");
   }
 
+  hasMedia() {
+    return this.token.metaData['image'] || this.token.metaData['audio'] || this.token.metaData['video']
+  }
 
+  isLoadingImage() {
+    return this.loading && this.token.metaData['image']
+  }
 
   onLoad() {
     this.loading = false;
