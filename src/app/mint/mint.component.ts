@@ -29,7 +29,7 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   initializeValues() {
     this.account = { key: "", address: "", balance: 0, fundingAddresses: [] };
-    this.mintOrderSubmission = { tokens: [], targetAddress: "", tip: true };
+    this.mintOrderSubmission = { tokens: [], targetAddress: "", tip: false };
     this.mintTransaction = {
       rawData: "",
       txId: "",

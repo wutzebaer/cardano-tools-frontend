@@ -4,10 +4,7 @@
 
             <h2>Fund Account</h2>
             <p>
-                <mat-radio-group name="tip2" [(ngModel)]="mintOrderSubmission.tip" (change)="emitUpdateMintTransaction()" fxLayout="column" fxLayoutGap="5px">
-                    <mat-radio-button [value]="true">I give a tip to the [EURO]-Pool pledge</mat-radio-button>
-                    <mat-radio-button [value]="false">I consider staking to the [EURO]-Pool</mat-radio-button>
-                </mat-radio-group>
+                <mat-checkbox name="tip" [(ngModel)]="mintOrderSubmission.tip" (change)="emitUpdateMintTransaction()">I give a tip to the [EURO]-Pool pledge</mat-checkbox>
             </p>
 
             <!-- fund instruction-->
