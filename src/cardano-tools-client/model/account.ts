@@ -10,9 +10,13 @@
  * Do not edit the class manually.
  */
 
-export interface TransferAccount { 
+export interface Account { 
     key: string;
+    createdAt: Date;
     address: string;
-    balance: number;
+    skey: string;
+    vkey: string;
     fundingAddresses: Array<string>;
+    balance: number;
+    lastUpdate: number;
 }

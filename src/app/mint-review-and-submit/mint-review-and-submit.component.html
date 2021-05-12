@@ -1,83 +1,103 @@
 <div fxLayout="column" fxLayoutGap="15px">
-    <mat-card>
-        <mat-card-content>
+  <mat-card>
+    <mat-card-content>
 
-            <h2>Review and Submit</h2>
+      <h2>Review and Submit</h2>
 
-            <div>
-                <p>The tokens will be sent back to your address</p>
+      <div>
+        <p>The tokens will be sent back to your address</p>
 
-                <p *ngIf="!mintTransaction.mintOrderSubmission.tip">
-                    The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will also be sent to your address
-                </p>
-                <p *ngIf="mintTransaction.mintOrderSubmission.tip">
-                    The tip of <b>{{adaTip | number: '1.0-6'}}&nbsp;₳</b> will be sent to the [EURO]-Pool pledge. <b>Thank you!</b><br>
-                </p>
+        <p *ngIf="!mintTransaction.mintOrderSubmission.tip">
+          The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will also be sent to your address
+        </p>
+        <p *ngIf="mintTransaction.mintOrderSubmission.tip">
+          The tip of <b>{{adaTip | number: '1.0-6'}}&nbsp;₳</b> will be sent to the [EURO]-Pool pledge. <b>Thank you!</b><br>
+        </p>
 
-                <mat-accordion class="example-headers-align">
+        <mat-accordion class="example-headers-align">
 
-                    <!-- Policy -->
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Policy
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                {{mintTransaction.policyId}}
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <pre>{{mintTransaction.policyId}}</pre>
-                        <pre>{{mintTransaction.policy}}</pre>
-                    </mat-expansion-panel>
+          <!-- Policy Id -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Policy id
+              </mat-panel-title>
+              <mat-panel-description>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <pre>{{mintTransaction.policyId}}</pre>
+          </mat-expansion-panel>
 
-                    <!-- Metadata -->
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Metadata
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <pre>{{mintTransaction.metaDataJson}}</pre>
-                    </mat-expansion-panel>
+          <!-- Policy -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Policy script
+              </mat-panel-title>
+              <mat-panel-description>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <pre>{{mintTransaction.policy}}</pre>
+          </mat-expansion-panel>
 
-                    <!-- Outputs -->
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Tx Outputs
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <pre>{{mintTransaction.outputs}}</pre>
-                    </mat-expansion-panel>
+          <!-- Key -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Singing key
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <pre>{{account.skey}}</pre>
+          </mat-expansion-panel>
 
-                    <!-- Tokens -->
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Tokens
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <div fxLayout="row wrap" fxLayoutGap="10px grid">
-                            <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="50%" fxFlex.gt-lg="33%" *ngFor="let token of mintTransaction.mintOrderSubmission.tokens">
-                                <app-mint-token-mini [token]="token"></app-mint-token-mini>
-                            </div>
-                        </div>
-                    </mat-expansion-panel>
-                </mat-accordion>
+          <!-- Metadata -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Metadata
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <pre>{{mintTransaction.metaDataJson}}</pre>
+          </mat-expansion-panel>
 
-                <mat-checkbox fxHide  #submittedInput="ngModel" name="submitted" [(ngModel)]="submitted" required></mat-checkbox>
+          <!-- Outputs -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Tx Outputs
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <pre>{{mintTransaction.outputs}}</pre>
+          </mat-expansion-panel>
 
+          <!-- Tokens -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Tokens
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div fxLayout="row wrap" fxLayoutGap="10px grid">
+              <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="50%" fxFlex.gt-lg="33%" *ngFor="let token of mintTransaction.mintOrderSubmission.tokens">
+                <app-mint-token-mini [token]="token"></app-mint-token-mini>
+              </div>
             </div>
-        </mat-card-content>
-    </mat-card>
-    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-        <button mat-raised-button color="primary" matStepperPrevious>
-            <mat-icon>fast_rewind</mat-icon>
-            Back
-        </button>
-        <button mat-raised-button color="accent" (click)="mint()">
-            <mat-icon>savings</mat-icon>
-            Mint
-        </button>
-    </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <mat-checkbox fxHide #submittedInput="ngModel" name="submitted" [(ngModel)]="submitted" required></mat-checkbox>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+    <button mat-raised-button color="primary" matStepperPrevious>
+      <mat-icon>fast_rewind</mat-icon>
+      Back
+    </button>
+    <button mat-raised-button color="accent" (click)="mint()">
+      <mat-icon>savings</mat-icon>
+      Mint
+    </button>
+  </div>
 </div>

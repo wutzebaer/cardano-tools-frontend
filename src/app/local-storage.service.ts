@@ -1,4 +1,3 @@
-import { TransferAccount } from './../cardano-tools-client/model/transferAccount';
 import { Injectable } from '@angular/core';
 
 

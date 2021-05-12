@@ -6,7 +6,7 @@ import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSub
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterViewInit, Component, OnInit, ViewChild, EventEmitter, Optional } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
-import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
+import { RestInterfaceService, Account } from 'src/cardano-tools-client';
 import { LocalStorageService } from '../local-storage.service';
 import { F } from '@angular/cdk/keycodes';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,13 +22,22 @@ export class MintComponent implements OnInit, AfterViewInit {
   @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild('tokenCountInput') tokenCountInput!: NgModel;
 
-  account!: TransferAccount;
+  account!: Account;
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: MintTransaction;
   loading = false;
 
   initializeValues() {
-    this.account = { key: "", address: "", balance: 0, fundingAddresses: [] };
+    this.account = {
+      key: "",
+      address: "",
+      balance: 0,
+      fundingAddresses: [],
+      createdAt: new Date(),
+      skey: "",
+      vkey: "",
+      lastUpdate: 0
+    };
     this.mintOrderSubmission = { tokens: [], targetAddress: "", tip: false };
     this.mintTransaction = {
       rawData: "",

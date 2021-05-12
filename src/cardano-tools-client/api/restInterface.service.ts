@@ -17,12 +17,12 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { Account } from '../model/account';
 import { MintOrderSubmission } from '../model/mintOrderSubmission';
 import { MintTransaction } from '../model/mintTransaction';
 import { RegistrationMetadata } from '../model/registrationMetadata';
 import { TokenData } from '../model/tokenData';
 import { TokenRegistration } from '../model/tokenRegistration';
-import { TransferAccount } from '../model/transferAccount';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -118,9 +118,9 @@ export class RestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createAccount(observe?: 'body', reportProgress?: boolean): Observable<TransferAccount>;
-    public createAccount(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TransferAccount>>;
-    public createAccount(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TransferAccount>>;
+    public createAccount(observe?: 'body', reportProgress?: boolean): Observable<Account>;
+    public createAccount(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Account>>;
+    public createAccount(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Account>>;
     public createAccount(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -138,7 +138,7 @@ export class RestInterfaceService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<TransferAccount>('post',`${this.basePath}/api/createAccount`,
+        return this.httpClient.request<Account>('post',`${this.basePath}/api/Account`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -270,9 +270,9 @@ export class RestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAccount(key: string, observe?: 'body', reportProgress?: boolean): Observable<TransferAccount>;
-    public getAccount(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TransferAccount>>;
-    public getAccount(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TransferAccount>>;
+    public getAccount(key: string, observe?: 'body', reportProgress?: boolean): Observable<Account>;
+    public getAccount(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Account>>;
+    public getAccount(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Account>>;
     public getAccount(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (key === null || key === undefined) {
@@ -294,7 +294,7 @@ export class RestInterfaceService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<TransferAccount>('get',`${this.basePath}/api/account/${encodeURIComponent(String(key))}`,
+        return this.httpClient.request<Account>('get',`${this.basePath}/api/account/${encodeURIComponent(String(key))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

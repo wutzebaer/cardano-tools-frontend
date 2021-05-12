@@ -3,7 +3,7 @@ import { MintTransaction } from './../../cardano-tools-client/model/mintTransact
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, AfterContentChecked } from '@angular/core';
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
 import { interval } from 'rxjs';
-import { RestInterfaceService, TransferAccount } from 'src/cardano-tools-client';
+import { RestInterfaceService, Account } from 'src/cardano-tools-client';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 
@@ -16,7 +16,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 })
 export class FundAccountComponent implements OnInit {
 
-  @Input() account!: TransferAccount;
+  @Input() account!: Account;
   @Output() updateAccount = new EventEmitter<void>();
 
   @Input() mintTransaction!: MintTransaction;

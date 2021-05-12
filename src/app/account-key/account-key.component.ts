@@ -1,7 +1,7 @@
-import { TransferAccount } from './../../cardano-tools-client/model/transferAccount';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Account } from 'src/cardano-tools-client';
 
 @Component({
   selector: 'app-account-key',
@@ -10,9 +10,9 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class AccountKeyComponent implements OnInit {
 
-  account!: TransferAccount;
+  account!: Account;
 
-  constructor(private clipboard: Clipboard, @Inject(MAT_DIALOG_DATA) public data: { account: TransferAccount }) {
+  constructor(private clipboard: Clipboard, @Inject(MAT_DIALOG_DATA) public data: { account: Account }) {
     this.account = data.account;
   }
 

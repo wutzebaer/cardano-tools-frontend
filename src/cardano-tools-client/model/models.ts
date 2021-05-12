@@ -1,3 +1,4 @@
+export * from './account';
 export * from './body';
 export * from './body1';
 export * from './metaValue';
@@ -7,4 +8,3 @@ export * from './registrationMetadata';
 export * from './tokenData';
 export * from './tokenRegistration';
 export * from './tokenSubmission';
-export * from './transferAccount';
