@@ -1,0 +1,33 @@
+<mat-dialog-content fxFlex="50vw">
+  <mat-card>
+    <mat-card-content>
+
+      <div class="title">
+        Advanced settings
+      </div>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Policy timeframe</mat-label>
+
+        <mat-select placeholder="Default" [(ngModel)]="mintOrderSubmission.policyTimeframe" name="policyTimeframe">
+          <mat-option>
+            Default
+          </mat-option>
+          <mat-option [value]="10*60*1000">
+            10 minutes
+          </mat-option>
+          <mat-option [value]="60*60*1000">
+            1 hour
+          </mat-option>
+          <mat-option [value]="24*60*60*1000">
+            24 hour
+          </mat-option>
+          <mat-option [value]="7*24*60*60*1000">
+            1 week
+          </mat-option>
+        </mat-select>
+
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>

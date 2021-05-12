@@ -1,93 +1,97 @@
 <div fxLayout="column" fxLayoutGap="15px">
-    <mat-card>
-        <mat-card-content>
+  <mat-card>
+    <mat-card-content>
 
-            <h2>Fund Account</h2>
-            <p>
-                <mat-checkbox name="tip" [(ngModel)]="mintOrderSubmission.tip" (change)="emitUpdateMintTransaction()">I give a tip to the [EURO]-Pool pledge</mat-checkbox>
-            </p>
+      <h2>Fund Account</h2>
+      <p>
+        <mat-checkbox name="tip" [(ngModel)]="mintOrderSubmission.tip" (change)="emitUpdateMintTransaction()">I give a tip to the [EURO]-Pool pledge</mat-checkbox>
+      </p>
 
-            <!-- fund instruction-->
-            <p>
-                Please send at least
-                <b matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
-                <button class="inline-button" mat-icon-button (click)="copyFunds()">
-                    <mat-icon>content_copy</mat-icon>
-                </button>
-                to this address
-            </p>
-
-
-            <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-                <b class="address">{{account.address}}</b>
-                <button mat-icon-button (click)="copyAddressToClipboard()">
-                    <mat-icon>content_copy</mat-icon>
-                </button>
-            </p>
-
-
-
-            <!-- current balance -->
-            <p>
-                <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <mat-icon class="green" [fxShow]="adaBalanceInput.valid">done</mat-icon>
-                    <mat-icon color="warn" [fxShow]="adaBalanceInput.invalid">dangerous</mat-icon>
-                    <span>Curent address balance </span>
-                    <b>{{adaBalance | number: '1.0-6'}}&nbsp;₳</b>
-                </span>
-            </p>
-
-            <p *ngIf="adaBalanceInput.valid && account.fundingAddresses.length == 0">
-                <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <mat-icon color="warn">dangerous</mat-icon>
-                    <span>Waiting for target address... </span>
-                </span>
-            </p>
-
-            <p *ngIf="mintTransaction.txSize > 16384">
-                <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <mat-icon color="warn">dangerous</mat-icon>
-                    <span>Your transaction exceeds the maximum size, please remove tokens or metadata, the threshold is currently at {{mintTransaction.txSize / 16384 | percent}}</span>
-                </span>
-            </p>
-
-            <!-- tip -->
-            <p *ngIf="mintTransaction.mintOrderSubmission.tip && adaTip > 1">
-                <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span>Tip for the [EURO]-Pool pledge</span>
-                    <b>{{adaTip | number: '1.0-6'}}&nbsp;₳ Thank You!</b>
-                </span>
-            </p>
-
-            <!-- receiver address-->
-            <mat-form-field appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="false && account.fundingAddresses.length > 0">
-                <mat-label>Send tokens to</mat-label>
-                <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" #targetAddressInput="ngModel" name="targetAddress" (selectionChange)="emitUpdateMintTransaction()" required>
-                    <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
-                        {{address}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <!-- hidden validator -->
-            <mat-checkbox fxHide [ngModel]="adaBalance >= minAdaBalance" name="adaBalanceInput" #adaBalanceInput="ngModel" required></mat-checkbox>
-            <mat-checkbox fxHide [ngModel]="!loading" name="loadingInput" #loadingInput="ngModel" required></mat-checkbox>
-            <mat-checkbox fxHide [ngModel]="mintTransaction.txSize <= 16384" name="txSizeInput" #txSizeInput="ngModel" required></mat-checkbox>
-
-        </mat-card-content>
-    </mat-card>
-    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-        <button mat-raised-button color="primary" matStepperPrevious fxFlex.lt-sm>
-            <mat-icon>fast_rewind</mat-icon>
-            <span fxHide.lt-sm> Back</span>
+      <!-- fund instruction-->
+      <p>
+        Please send at least
+        <b matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
+        <button class="inline-button" mat-icon-button (click)="copyFunds()">
+          <mat-icon>content_copy</mat-icon>
         </button>
-        <button mat-raised-button color="accent" (click)="emitUpdateAccount()" fxFlex.lt-sm>
-            <mat-icon>refresh</mat-icon>
-            <span fxHide.lt-sm> Refresh</span>
+        to this address
+      </p>
+
+
+      <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+        <b class="address">{{account.address}}</b>
+        <button mat-icon-button (click)="copyAddressToClipboard()">
+          <mat-icon>content_copy</mat-icon>
         </button>
-        <button [disabled]="adaBalanceInput.invalid || targetAddressInput.invalid || loadingInput.invalid || txSizeInput.invalid" mat-raised-button color="primary" matStepperNext fxFlex.lt-sm>
-            <mat-icon>fast_forward</mat-icon>
-            <span fxHide.lt-sm> Proceed</span>
-        </button>
-    </div>
+      </p>
+
+
+
+      <!-- current balance -->
+      <p>
+        <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+          <mat-icon class="green" [fxShow]="adaBalanceInput.valid">done</mat-icon>
+          <mat-icon color="warn" [fxShow]="adaBalanceInput.invalid">dangerous</mat-icon>
+          <span>Curent address balance </span>
+          <b>{{adaBalance | number: '1.0-6'}}&nbsp;₳</b>
+        </span>
+      </p>
+
+      <p *ngIf="adaBalanceInput.valid && account.fundingAddresses.length == 0">
+        <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+          <mat-icon color="warn">dangerous</mat-icon>
+          <span>Waiting for target address... </span>
+        </span>
+      </p>
+
+      <p *ngIf="mintTransaction.txSize > 16384">
+        <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+          <mat-icon color="warn">dangerous</mat-icon>
+          <span>Your transaction exceeds the maximum size, please remove tokens or metadata, the threshold is currently at {{mintTransaction.txSize / 16384 | percent}}</span>
+        </span>
+      </p>
+
+      <!-- tip -->
+      <p *ngIf="mintTransaction.mintOrderSubmission.tip && adaTip > 1">
+        <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+          <span>Tip for the [EURO]-Pool pledge</span>
+          <b>{{adaTip | number: '1.0-6'}}&nbsp;₳ Thank You!</b>
+        </span>
+      </p>
+
+      <!-- receiver address-->
+      <mat-form-field appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="false && account.fundingAddresses.length > 0">
+        <mat-label>Send tokens to</mat-label>
+        <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" #targetAddressInput="ngModel" name="targetAddress" (selectionChange)="emitUpdateMintTransaction()" required>
+          <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
+            {{address}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- hidden validator -->
+      <mat-checkbox fxHide [ngModel]="adaBalance >= minAdaBalance" name="adaBalanceInput" #adaBalanceInput="ngModel" required></mat-checkbox>
+      <mat-checkbox fxHide [ngModel]="!loading" name="loadingInput" #loadingInput="ngModel" required></mat-checkbox>
+      <mat-checkbox fxHide [ngModel]="mintTransaction.txSize <= 16384" name="txSizeInput" #txSizeInput="ngModel" required></mat-checkbox>
+
+    </mat-card-content>
+  </mat-card>
+  <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+    <button mat-raised-button color="primary" matStepperPrevious fxFlex.lt-sm>
+      <mat-icon>fast_rewind</mat-icon>
+      <span fxHide.lt-sm> Back</span>
+    </button>
+    <button mat-raised-button color="accent" (click)="emitUpdateAccount()" fxFlex.lt-sm>
+      <mat-icon>refresh</mat-icon>
+      <span fxHide.lt-sm> Refresh</span>
+    </button>
+    <button [disabled]="adaBalanceInput.invalid || targetAddressInput.invalid || loadingInput.invalid || txSizeInput.invalid" mat-raised-button color="primary" matStepperNext fxFlex.lt-sm>
+      <mat-icon>fast_forward</mat-icon>
+      <span fxHide.lt-sm> Proceed</span>
+    </button>
+    <button mat-raised-button (click)="advanced()">
+      <mat-icon>settings</mat-icon>
+      <span fxHide.lt-sm> Advanced</span>
+    </button>
+  </div>
 </div>

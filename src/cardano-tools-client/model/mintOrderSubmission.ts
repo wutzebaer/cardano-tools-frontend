@@ -15,4 +15,5 @@ export interface MintOrderSubmission {
     tokens: Array<TokenSubmission>;
     targetAddress: string;
     tip: boolean;
+    policyTimeframe?: number;
 }

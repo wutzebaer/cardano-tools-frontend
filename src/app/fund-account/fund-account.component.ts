@@ -1,10 +1,11 @@
-import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
+import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, AfterContentChecked } from '@angular/core';
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
 import { interval } from 'rxjs';
-import { RestInterfaceService, Account } from 'src/cardano-tools-client';
+import { RestInterfaceService, Account, MintOrderSubmission } from 'src/cardano-tools-client';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { MatDialog } from '@angular/material/dialog';
 
 
 
@@ -30,7 +31,7 @@ export class FundAccountComponent implements OnInit {
 
   @Input() loading!: boolean;
 
-  constructor(private api: RestInterfaceService, private clipboard: Clipboard) { }
+  constructor(private api: RestInterfaceService, private clipboard: Clipboard, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     interval(10000).subscribe(() => {
@@ -42,6 +43,12 @@ export class FundAccountComponent implements OnInit {
 
   emitUpdateAccount() {
     this.updateAccount.emit();
+  }
+
+  advanced() {
+    this.dialog.open(MintFormAdvancedComponent, {
+      data: { mintOrderSubmission: this.mintOrderSubmission },
+    });
   }
 
   emitUpdateMintTransaction() {

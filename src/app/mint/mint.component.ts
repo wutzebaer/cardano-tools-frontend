@@ -1,8 +1,8 @@
+import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { AccountKeyComponent } from './../account-key/account-key.component';
 import { NgModel } from '@angular/forms';
 import { AjaxInterceptor } from './../ajax.interceptor';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
-import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterViewInit, Component, OnInit, ViewChild, EventEmitter, Optional } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
