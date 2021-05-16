@@ -150,7 +150,13 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   advanced() {
     this.dialog.open(MintFormAdvancedComponent, {
-      data: { mintOrderSubmission: this.mintOrderSubmission },
+      data: {
+        mintOrderSubmission: this.mintOrderSubmission,
+        mintTransaction: this.mintTransaction,
+      },
+      width: '700px',
+      maxWidth: '90vw',
+      closeOnNavigation: true
     });
   }
 

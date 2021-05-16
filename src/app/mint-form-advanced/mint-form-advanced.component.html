@@ -1,33 +1,67 @@
-<mat-dialog-content fxFlex="50vw">
-  <mat-card>
-    <mat-card-content>
+<mat-dialog-content>
 
-      <div class="title">
-        Advanced settings
-      </div>
+  <h2>
+    Advanced settings
+  </h2>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Policy timeframe</mat-label>
 
-        <mat-select placeholder="Default" [(ngModel)]="mintOrderSubmission.policyTimeframe" name="policyTimeframe">
-          <mat-option>
-            Default
-          </mat-option>
-          <mat-option [value]="10*60*1000">
-            10 minutes
-          </mat-option>
-          <mat-option [value]="60*60*1000">
-            1 hour
-          </mat-option>
-          <mat-option [value]="24*60*60*1000">
-            24 hour
-          </mat-option>
-          <mat-option [value]="7*24*60*60*1000">
-            1 week
-          </mat-option>
-        </mat-select>
-
+  <div>
+    <div fxLayout="row" fxFlex="100%" fxLayoutGap="10px">
+      <mat-form-field fxFlex appearance="outline">
+        <mat-label>Account key</mat-label>
+        <input matInput [(ngModel)]="accountKey" name="accountKey">
       </mat-form-field>
-    </mat-card-content>
-  </mat-card>
+      <span>
+        <button mat-raised-button color="accent" style="margin-top: 4px; height: 51px;" type="button" (click)="loadTransaction()">
+          <mat-icon>fast_forward</mat-icon>
+        </button>
+      </span>
+    </div>
+  </div>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Policy timeframe</mat-label>
+    <mat-select placeholder="Default" [(ngModel)]="mintOrderSubmission.policyTimeframe" name="policyTimeframe">
+      <mat-option>
+        Default
+      </mat-option>
+      <mat-option [value]="10*60*1000">
+        10 minutes
+      </mat-option>
+      <mat-option [value]="60*60*1000">
+        1 hour
+      </mat-option>
+      <mat-option [value]="24*60*60*1000">
+        24 hour
+      </mat-option>
+      <mat-option [value]="7*24*60*60*1000">
+        1 week
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Policy Id -->
+  <div>
+    <mat-form-field fxFlex appearance="outline" fxFlex="100%" fxFlex.gt-xs="527px">
+      <mat-label>Policy Id</mat-label>
+      <input matInput [(ngModel)]="mintTransaction.policyId" name="policyId" disabled>
+    </mat-form-field>
+  </div>
+
+  <!-- Policy script -->
+  <div>
+    <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+      <mat-label>Policy script</mat-label>
+      <textarea matInput name="policy" disabled [mat-autosize]="true" [matAutosizeMinRows]="13" [ngModel]="mintTransaction.policy"></textarea>
+    </mat-form-field>
+  </div>
+
+    <!-- Metadata -->
+    <div>
+      <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+        <mat-label>Metadata</mat-label>
+        <textarea matInput name="metadata" disabled [mat-autosize]="true" [matAutosizeMinRows]="13" [ngModel]="mintTransaction.metaDataJson"></textarea>
+      </mat-form-field>
+    </div>
+
 </mat-dialog-content>
