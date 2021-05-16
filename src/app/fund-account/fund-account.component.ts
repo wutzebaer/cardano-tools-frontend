@@ -31,7 +31,7 @@ export class FundAccountComponent implements OnInit {
 
   @Input() loading!: boolean;
 
-  constructor(private api: RestInterfaceService, private clipboard: Clipboard, private dialog: MatDialog) { }
+  constructor(private api: RestInterfaceService, private clipboard: Clipboard) { }
 
   ngOnInit(): void {
     interval(10000).subscribe(() => {
@@ -43,12 +43,6 @@ export class FundAccountComponent implements OnInit {
 
   emitUpdateAccount() {
     this.updateAccount.emit();
-  }
-
-  advanced() {
-    this.dialog.open(MintFormAdvancedComponent, {
-      data: { mintOrderSubmission: this.mintOrderSubmission },
-    });
   }
 
   emitUpdateMintTransaction() {

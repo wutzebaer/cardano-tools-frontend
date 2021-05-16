@@ -1,3 +1,4 @@
+import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { AccountKeyComponent } from './../account-key/account-key.component';
 import { NgModel } from '@angular/forms';
@@ -54,7 +55,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService, private ajaxInterceptor: AjaxInterceptor, private activatedRoute: ActivatedRoute) {
+  constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService, private ajaxInterceptor: AjaxInterceptor, private activatedRoute: ActivatedRoute, private dialog: MatDialog) {
 
     this.activatedRoute.queryParams.subscribe(params => {
       let accountKey = params['accountKey'];
@@ -145,6 +146,12 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.initializeValues()
     this.updateAccount();
     this.addToken()
+  }
+
+  advanced() {
+    this.dialog.open(MintFormAdvancedComponent, {
+      data: { mintOrderSubmission: this.mintOrderSubmission },
+    });
   }
 
 }

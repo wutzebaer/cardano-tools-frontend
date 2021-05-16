@@ -39,9 +39,15 @@
           <label for="multiadd" fxFlex.lt-sm>
             <a mat-raised-button color="accent" type="button" fxFlex.lt-sm>
               <mat-icon>generating_tokens</mat-icon>
-              <span> MultiAdd</span>
+              <span> Multi</span>
             </a>
           </label>
+
+          <!-- advanced -->
+          <button mat-raised-button (click)="advanced()">
+            <mat-icon>settings</mat-icon>
+            <span fxHide.lt-sm> Advanced</span>
+          </button>
 
           <!-- next step -->
           <button mat-raised-button color="primary" matStepperNext [disabled]="tokenCountInput.invalid || loadingInput.invalid" fxFlex.lt-sm>
@@ -53,6 +59,7 @@
     </form>
   </mat-step>
 
+  <!-- fund step -->
   <mat-step [stepControl]="fundForm.control">
     <ng-template matStepLabel>Fund Account</ng-template>
     <form #fundForm="ngForm" class="step-content" fxLayoutAlign="center">
@@ -60,6 +67,7 @@
     </form>
   </mat-step>
 
+  <!-- review step -->
   <mat-step [stepControl]="reviewForm.control">
     <ng-template matStepLabel>Review and submit</ng-template>
     <form #reviewForm="ngForm" class="step-content" fxLayoutAlign="center">
@@ -67,7 +75,7 @@
     </form>
   </mat-step>
 
-
+  <!-- receipt step -->
   <mat-step [stepControl]="successForm.control">
     <ng-template matStepLabel>Confirmation</ng-template>
     <form #successForm="ngForm" class="step-content" fxLayoutAlign="center">
