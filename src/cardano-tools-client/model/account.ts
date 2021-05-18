@@ -19,4 +19,7 @@ export interface Account {
     fundingAddresses: Array<string>;
     balance: number;
     lastUpdate: number;
+    policy: string;
+    policyId: string;
+    policyDueDate: Date;
 }

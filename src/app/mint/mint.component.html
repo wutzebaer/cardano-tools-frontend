@@ -1,6 +1,10 @@
 <h1 class="mat-h1">Mint Cardano NFTs</h1>
 
-<mat-horizontal-stepper linear="false" #stepper>
+<p style="text-align: center;">
+  Your PolicyId <a [routerLink]="['/latest']" [queryParams]="{q:account.policyId}" target="_blank">{{account.policyId}}</a> will be locked at {{account.policyDueDate | date : 'medium'}}
+</p>
+
+<mat-horizontal-stepper linear="true" #stepper>
 
   <mat-step [stepControl]="nftForm.control">
     <ng-template matStepLabel>Configure NFTs</ng-template>
