@@ -36,7 +36,10 @@ export class MintComponent implements OnInit, AfterViewInit {
       createdAt: new Date(),
       skey: "",
       vkey: "",
-      lastUpdate: 0
+      lastUpdate: 0,
+      policyId: "",
+      policy: "{\"scripts\":[{\"slot\":0}]}",
+      policyDueDate: new Date()
     };
     this.mintOrderSubmission = { tokens: [], targetAddress: "", tip: false };
     this.mintTransaction = {
@@ -50,7 +53,8 @@ export class MintComponent implements OnInit, AfterViewInit {
       policy: "",
       mintOrderSubmission: this.mintOrderSubmission,
       minOutput: 1000000,
-      txSize: 0
+      txSize: 0,
+      signedData: ""
     }
   }
 
@@ -141,7 +145,6 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.stepper.steps.forEach(s => s.completed = false)
     this.stepper.selectedIndex = 0
 
-    this.localStorageService.clearAccountKey()
     this.initializeValues()
     this.updateAccount();
     this.addToken()

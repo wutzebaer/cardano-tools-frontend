@@ -1,79 +1,82 @@
 <h1 class="mat-h1">Mint Cardano NFTs</h1>
 
+<p style="text-align: center;">
+  Your PolicyId <a [routerLink]="['/latest']" [queryParams]="{q:account.policyId}" target="_blank">{{account.policyId}}</a> will be locked at {{account.policyDueDate | date : 'medium'}}
+</p>
 
-<mat-horizontal-stepper linear="false" #stepper>
+<mat-horizontal-stepper linear="true" #stepper>
 
-    <mat-step [stepControl]="nftForm.control">
-        <ng-template matStepLabel>Configure NFTs</ng-template>
-        <form #nftForm="ngForm" class="step-content">
-            <div fxLayout="column" fxLayoutGap="15px">
-                <!-- Token Cards-->
-                <div>
-                    <div fxLayout="row wrap" fxLayoutGap="10px grid">
-                        <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%" *ngFor="let token of mintOrderSubmission.tokens; let i = index">
-                            <!-- Mint Card -->
-                            <app-mint-form [token]=token></app-mint-form>
-                            <!-- delete button -->
-                            <button (click)="removeToken(i)" class="delete" mat-mini-fab>
-                                <mat-icon>clear</mat-icon>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- hidden validator -->
-                <mat-form-field fxHide>
-                    <input #tokenCountInput="ngModel" matInput type="number" [ngModel]="mintOrderSubmission.tokens.length" name="tokenCountInput" [appMinValidator]="1">
-                </mat-form-field>
-                <mat-checkbox fxHide [(ngModel)]="!loading" name="loadingInput" #loadingInput="ngModel" required></mat-checkbox>
-
-                <!-- Buttons -->
-                <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center" >
-                    <!-- add token -->
-                    <button mat-raised-button color="accent" type="button" (click)="addToken()" fxFlex.lt-sm>
-                        <mat-icon>generating_tokens</mat-icon>
-                        <span fxHide.lt-sm> Add</span>
-                    </button>
-
-                    <!-- multi add files as tokens -->
-                    <input id="multiadd" fxHide type="file" (change)="addFiles($event)" name="multiadd" multiple />
-                    <label for="multiadd" fxFlex.lt-sm>
-                        <a mat-raised-button color="accent" type="button" fxFlex.lt-sm>
-                            <mat-icon>generating_tokens</mat-icon>
-                            <span> MultiAdd</span>
-                        </a>
-                    </label>
-
-                    <!-- next step -->
-                    <button mat-raised-button color="primary" matStepperNext [disabled]="tokenCountInput.invalid || loadingInput.invalid" fxFlex.lt-sm>
-                        <mat-icon>fast_forward</mat-icon>
-                        <span fxHide.lt-sm> Proceed</span>
-                    </button>
-                </div>
+  <mat-step [stepControl]="nftForm.control">
+    <ng-template matStepLabel>Configure NFTs</ng-template>
+    <form #nftForm="ngForm" class="step-content">
+      <div fxLayout="column" fxLayoutGap="15px">
+        <!-- Token Cards-->
+        <div>
+          <div fxLayout="row wrap" fxLayoutGap="10px grid">
+            <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%" *ngFor="let token of mintOrderSubmission.tokens; let i = index">
+              <!-- Mint Card -->
+              <app-mint-form [token]=token></app-mint-form>
+              <!-- delete button -->
+              <button (click)="removeToken(i)" class="delete" mat-mini-fab>
+                <mat-icon>clear</mat-icon>
+              </button>
             </div>
-        </form>
-    </mat-step>
+          </div>
+        </div>
 
-    <mat-step [stepControl]="fundForm.control">
-        <ng-template matStepLabel>Fund Account</ng-template>
-        <form #fundForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-fund-account [activeStep]="stepper.selectedIndex == 1" fxFlex="100%" fxFlex.gt-md="991px" [loading]="loading" [account]="account" (updateAccount)="updateAccount()" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()" [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
-        </form>
-    </mat-step>
+        <!-- hidden validator -->
+        <mat-form-field fxHide>
+          <input #tokenCountInput="ngModel" matInput type="number" [ngModel]="mintOrderSubmission.tokens.length" name="tokenCountInput" [appMinValidator]="1">
+        </mat-form-field>
+        <mat-checkbox fxHide [(ngModel)]="!loading" name="loadingInput" #loadingInput="ngModel" required></mat-checkbox>
 
-    <mat-step [stepControl]="reviewForm.control">
-        <ng-template matStepLabel>Review and submit</ng-template>
-        <form #reviewForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-mint-review-and-submit fxFlex="100%" fxFlex.gt-md="991px" [account]="account" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()" (mintSuccess)="mintSuccess()"></app-mint-review-and-submit>
-        </form>
-    </mat-step>
+        <!-- Buttons -->
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+          <!-- add token -->
+          <button mat-raised-button color="accent" type="button" (click)="addToken()" fxFlex.lt-sm>
+            <mat-icon>generating_tokens</mat-icon>
+            <span fxHide.lt-sm> Add</span>
+          </button>
+
+          <!-- multi add files as tokens -->
+          <input id="multiadd" fxHide type="file" (change)="addFiles($event)" name="multiadd" multiple />
+          <label for="multiadd" fxFlex.lt-sm>
+            <a mat-raised-button color="accent" type="button" fxFlex.lt-sm>
+              <mat-icon>generating_tokens</mat-icon>
+              <span> MultiAdd</span>
+            </a>
+          </label>
+
+          <!-- next step -->
+          <button mat-raised-button color="primary" matStepperNext [disabled]="tokenCountInput.invalid || loadingInput.invalid" fxFlex.lt-sm>
+            <mat-icon>fast_forward</mat-icon>
+            <span fxHide.lt-sm> Proceed</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="fundForm.control">
+    <ng-template matStepLabel>Fund Account</ng-template>
+    <form #fundForm="ngForm" class="step-content" fxLayoutAlign="center">
+      <app-fund-account [activeStep]="stepper.selectedIndex == 1" fxFlex="100%" fxFlex.gt-md="991px" [loading]="loading" [account]="account" (updateAccount)="updateAccount()" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()" [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="reviewForm.control">
+    <ng-template matStepLabel>Review and submit</ng-template>
+    <form #reviewForm="ngForm" class="step-content" fxLayoutAlign="center">
+      <app-mint-review-and-submit fxFlex="100%" fxFlex.gt-md="991px" [account]="account" [mintTransaction]="mintTransaction" (updateMintTransaction)="updateMintTransaction()" (mintSuccess)="mintSuccess()"></app-mint-review-and-submit>
+    </form>
+  </mat-step>
 
 
-    <mat-step [stepControl]="successForm.control">
-        <ng-template matStepLabel>Confirmation</ng-template>
-        <form #successForm="ngForm" class="step-content" fxLayoutAlign="center">
-            <app-mint-success fxFlex="100%" fxFlex.gt-md="991px" [account]="account" [mintTransaction]="mintTransaction" (restart)="restart()"></app-mint-success>
-        </form>
-    </mat-step>
+  <mat-step [stepControl]="successForm.control">
+    <ng-template matStepLabel>Confirmation</ng-template>
+    <form #successForm="ngForm" class="step-content" fxLayoutAlign="center">
+      <app-mint-success fxFlex="100%" fxFlex.gt-md="991px" [account]="account" [mintTransaction]="mintTransaction" (restart)="restart()"></app-mint-success>
+    </form>
+  </mat-step>
 
 </mat-horizontal-stepper>

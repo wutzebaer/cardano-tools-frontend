@@ -12,6 +12,7 @@
 import { MintOrderSubmission } from './mintOrderSubmission';
 
 export interface MintTransaction { 
+    signedData: string;
     rawData: string;
     txId: string;
     fee: number;
