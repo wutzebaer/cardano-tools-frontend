@@ -49,12 +49,12 @@
         <div fxLayout="column">
             <div *ngFor="let entry of token.metaData | keyvalue" fxLayout="column">
                 <!-- Simple Metafield-->
-                <mat-form-field *ngIf="!isListField(entry.key)" appearance="outline">
+                <mat-form-field *ngIf="entry.value.value || !isListField(entry.key) && entry.value.listValue.length == 0" appearance="outline">
                     <mat-label>{{entry.key | titlecase}}</mat-label>
                     <input matInput name="{{entry.key}}{{counter}}" maxlength="64" [(ngModel)]="entry.value.value">
                 </mat-form-field>
                 <!-- List Metafied -->
-                <app-chiplist *ngIf="isListField(entry.key)" label="{{entry.key}}" placeholder="add {{entry.key}}..." [(items)]="entry.value.listValue">
+                <app-chiplist *ngIf="entry.value.listValue.length > 0 || isListField(entry.key)" label="{{entry.key}}" placeholder="add {{entry.key}}..." [(items)]="entry.value.listValue">
                 </app-chiplist>
             </div>
         </div>

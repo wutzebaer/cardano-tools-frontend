@@ -106,16 +106,16 @@ export class MintFormComponent implements OnInit {
 
           // create metadata
           if (this.getFileType() == 'image') {
-            this.token.metaData["Image"] = { value: "ipfs://" + event.body as string, listValue: [] };
+            this.token.metaData["image"] = { value: "ipfs://" + event.body as string, listValue: [] };
           } else if (this.getFileType() == 'video') {
-            this.token.metaData["Video"] = { value: "ipfs://" + event.body as string, listValue: [] };
+            this.token.metaData["video"] = { value: "ipfs://" + event.body as string, listValue: [] };
           } else if (this.getFileType() == 'audio') {
-            this.token.metaData["Audio"] = { value: "ipfs://" + event.body as string, listValue: [] };
+            this.token.metaData["audio"] = { value: "ipfs://" + event.body as string, listValue: [] };
           } else {
-            this.token.metaData["Binary"] = { value: "ipfs://" + event.body as string, listValue: [] };
+            this.token.metaData["binary"] = { value: "ipfs://" + event.body as string, listValue: [] };
           }
-          this.token.metaData["MimeType"] = { value: file?.type as string, listValue: [] };
-          this.token.metaData["Name"] = { value: (file?.name as string).split(".")[0].substring(0, 60) as string, listValue: [] };
+          this.token.metaData["mimetype"] = { value: file?.type as string, listValue: [] };
+          this.token.metaData["name"] = { value: (file?.name as string).split(".")[0].substring(0, 60) as string, listValue: [] };
           this.token.assetName = (file?.name as string).split(".")[0].replace(/[^a-zA-Z0-9]/g, "").substring(0, 32);
           this.uploadProgress = 0;
 

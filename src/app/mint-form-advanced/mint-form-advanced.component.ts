@@ -1,6 +1,6 @@
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MintOrderSubmission, RestInterfaceService } from 'src/cardano-tools-client';
 
 @Component({
@@ -10,24 +10,30 @@ import { MintOrderSubmission, RestInterfaceService } from 'src/cardano-tools-cli
 })
 export class MintFormAdvancedComponent implements OnInit {
 
-  mintTransaction: MintTransaction;
-  mintOrderSubmission: MintOrderSubmission
-  accountKey = ""
+  metaDataJson: string;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { mintOrderSubmission: MintOrderSubmission, mintTransaction: MintTransaction }, private api: RestInterfaceService) {
-    this.mintOrderSubmission = data.mintOrderSubmission;
-    this.mintTransaction = data.mintTransaction;
+  constructor(private dialogRef: MatDialogRef<MintFormAdvancedComponent>, @Inject(MAT_DIALOG_DATA) public data: { metaDataJson: string }) {
+    this.metaDataJson = data.metaDataJson
   }
 
   ngOnInit(): void {
   }
 
-  loadTransaction() {
-    this.api.getRegistrationMetadata(this.accountKey).subscribe(registrationMetadata => {
-      console.log(registrationMetadata);
-      this.mintOrderSubmission.policyId = registrationMetadata.policyId
-      this.mintOrderSubmission.policy = registrationMetadata.policy
-    })
+  apply() {
+    try {
+      JSON.parse(this.metaDataJson)
+      this.dialogRef.close(this.metaDataJson)
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  format() {
+    try {
+      this.metaDataJson = JSON.stringify(JSON.parse(this.metaDataJson), null, 3)
+    } catch (error) {
+      alert(error)
+    }
   }
 
 }

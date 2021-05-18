@@ -1,67 +1,20 @@
+<h2 mat-dialog-title>
+  Advanced settings
+</h2>
+
 <mat-dialog-content>
-
-  <h2>
-    Advanced settings
-  </h2>
-
-
-  <div>
-    <div fxLayout="row" fxFlex="100%" fxLayoutGap="10px">
-      <mat-form-field fxFlex appearance="outline">
-        <mat-label>Account key</mat-label>
-        <input matInput [(ngModel)]="accountKey" name="accountKey">
-      </mat-form-field>
-      <span>
-        <button mat-raised-button color="accent" style="margin-top: 4px; height: 51px;" type="button" (click)="loadTransaction()">
-          <mat-icon>fast_forward</mat-icon>
-        </button>
-      </span>
-    </div>
-  </div>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Policy timeframe</mat-label>
-    <mat-select placeholder="Default" [(ngModel)]="mintOrderSubmission.policyTimeframe" name="policyTimeframe">
-      <mat-option>
-        Default
-      </mat-option>
-      <mat-option [value]="10*60*1000">
-        10 minutes
-      </mat-option>
-      <mat-option [value]="60*60*1000">
-        1 hour
-      </mat-option>
-      <mat-option [value]="24*60*60*1000">
-        24 hour
-      </mat-option>
-      <mat-option [value]="7*24*60*60*1000">
-        1 week
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <!-- Policy Id -->
-  <div>
-    <mat-form-field fxFlex appearance="outline" fxFlex="100%" fxFlex.gt-xs="527px">
-      <mat-label>Policy Id</mat-label>
-      <input matInput [(ngModel)]="mintTransaction.policyId" name="policyId" disabled>
-    </mat-form-field>
-  </div>
-
-  <!-- Policy script -->
+  <!-- Metadata -->
   <div>
     <mat-form-field fxFlex appearance="outline" fxFlex="100%">
-      <mat-label>Policy script</mat-label>
-      <textarea matInput name="policy" disabled [mat-autosize]="true" [matAutosizeMinRows]="13" [ngModel]="mintTransaction.policy"></textarea>
+      <mat-label>Metadata</mat-label>
+      <textarea matInput name="metadata" [mat-autosize]="true" [matAutosizeMinRows]="13" [(ngModel)]="metaDataJson"></textarea>
     </mat-form-field>
   </div>
 
-    <!-- Metadata -->
-    <div>
-      <mat-form-field fxFlex appearance="outline" fxFlex="100%">
-        <mat-label>Metadata</mat-label>
-        <textarea matInput name="metadata" disabled [mat-autosize]="true" [matAutosizeMinRows]="13" [ngModel]="mintTransaction.metaDataJson"></textarea>
-      </mat-form-field>
-    </div>
-
 </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="format()">Format</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="apply()" cdkFocusInitial>Apply</button>
+</mat-dialog-actions>

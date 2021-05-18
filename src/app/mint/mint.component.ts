@@ -152,15 +152,50 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   advanced() {
-    this.dialog.open(MintFormAdvancedComponent, {
-      data: {
-        mintOrderSubmission: this.mintOrderSubmission,
-        mintTransaction: this.mintTransaction,
-      },
-      width: '700px',
-      maxWidth: '90vw',
-      closeOnNavigation: true
-    });
+
+    this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
+      this.mintTransaction = mintTransaction;
+
+      let parsed = JSON.parse(this.mintTransaction.metaDataJson)
+      let policyData = parsed["721"][this.account.policyId]
+      Object.keys(policyData).map(function (key, index) {
+        delete policyData[key]['policy']
+        delete policyData[key]['tool']
+      });
+      let cleanMetaDataJson = JSON.stringify(parsed, null, 3)
+
+      const dialogRef = this.dialog.open(MintFormAdvancedComponent, {
+        data: {
+          metaDataJson: cleanMetaDataJson,
+        },
+        width: '700px',
+        maxWidth: '90vw',
+        closeOnNavigation: true
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+
+        let newMetadata = JSON.parse(result)
+        this.mintOrderSubmission.tokens.forEach(token => {
+          let newTokenMetadata = newMetadata["721"][this.account.policyId][token.assetName]
+          Object.keys(newTokenMetadata).map(function (key, index) {
+            console.log(key, typeof newTokenMetadata[key])
+            if (typeof newTokenMetadata[key] === "string" || typeof newTokenMetadata[key] === "number") {
+              newTokenMetadata[key] = { value: newTokenMetadata[key], listValue: [] };
+            } else if (Array.isArray(newTokenMetadata[key])) {
+              newTokenMetadata[key] = { value: "", listValue: newTokenMetadata[key] };
+            }
+            else {
+              //newTokenMetadata[key] = { value: JSON.stringify(newTokenMetadata[key]), listValue: [] };
+              delete newTokenMetadata[key]
+            }
+          });
+          token.metaData = newMetadata["721"][this.account.policyId][token.assetName]
+        })
+
+      });
+
+    })
   }
 
 }
