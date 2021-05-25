@@ -1,8 +1,10 @@
+import { RegisterTokenSuccessComponent } from './../register-token-success/register-token-success.component';
 import { RegistrationMetadata } from './../../cardano-tools-client/model/registrationMetadata';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { RestInterfaceService } from 'src/cardano-tools-client';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-register-token',
@@ -30,7 +32,7 @@ export class RegisterTokenComponent implements OnInit {
   file!: File | null;
   url!: SafeUrl | null;
 
-  constructor(private api: RestInterfaceService, private sanitizer: DomSanitizer) { }
+  constructor(private api: RestInterfaceService, private sanitizer: DomSanitizer, public dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
@@ -73,30 +75,16 @@ export class RegisterTokenComponent implements OnInit {
     console.log(this.file);
     this.api.generateTokenRegistrationForm(JSON.stringify(this.registrationMetadata), this.file as Blob).subscribe(tokenRegistration => {
 
-      var myblob = new Blob([tokenRegistration.content], {
-        type: 'text/plain'
+      this.dialog.open(RegisterTokenSuccessComponent, {
+        width: '600px',
+        maxWidth: '90vw',
+        data: { tokenRegistration: tokenRegistration },
+        closeOnNavigation: true
       });
 
-      this.openDialogForBlob(tokenRegistration.filename, myblob)
 
     })
   }
 
-  openDialogForBlob(fileName: string, blob: Blob) {
-    if (navigator.msSaveBlob) {
-      navigator.msSaveBlob(blob, fileName);
-    } else {
-      const a = document.createElement('a');
-      document.body.appendChild(a);
-      const url = window.URL.createObjectURL(blob);
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      setTimeout(() => {
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-      }, 0);
-    }
-  }
 
 }

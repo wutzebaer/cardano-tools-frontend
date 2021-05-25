@@ -1,6 +1,6 @@
 <form #registerForm="ngForm" class="step-content" fxLayoutAlign="center" (ngSubmit)="generateRegistration()">
 
-    <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="1238px">
+    <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="600px">
         <mat-card>
             <mat-card-content>
 
@@ -9,7 +9,7 @@
                 <div fxLayout="column">
 
                     <div>
-                        <div fxLayout="row" fxFlex="100%" fxFlex.gt-xs="527px" fxLayoutGap="10px">
+                        <div fxLayout="row" fxFlex="100%" fxLayoutGap="10px">
                             <mat-form-field fxFlex appearance="outline">
                                 <mat-label>Account key</mat-label>
                                 <input matInput [(ngModel)]="accountKey" name="accountKey">
@@ -25,7 +25,7 @@
 
                     <!-- logo -->
                     <div>
-                        <div fxLayout="row" fxLayoutAlign="center center" fxFlex="100%" fxFlex.gt-xs="527px">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxFlex="100%">
                             <div class="upload-wrapper">
                                 <input id="logo" fxHide type="file" (change)="addFile($event)" name="logo" />
                                 <label for="logo" (drop)="dropFile($event)" (dragover)="$event.preventDefault();">
@@ -48,7 +48,7 @@
 
                     <!-- Asset Name -->
                     <div>
-                        <mat-form-field fxFlex appearance="outline" fxFlex="100%" fxFlex.gt-xs="527px">
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Asset Name</mat-label>
                             <input matInput [(ngModel)]="registrationMetadata.assetName" name="assetName" required pattern="[a-zA-Z0-9]{1,32}" maxlength="32">
                         </mat-form-field>
@@ -56,7 +56,7 @@
 
                     <!-- Name -->
                     <div>
-                        <mat-form-field fxFlex appearance="outline" fxFlex="100%" fxFlex.gt-xs="527px">
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Name</mat-label>
                             <input matInput [(ngModel)]="registrationMetadata.name" name="name" required>
                         </mat-form-field>
@@ -64,7 +64,7 @@
 
                     <!-- Description -->
                     <div>
-                        <mat-form-field fxFlex appearance="outline" fxFlex="100%" fxFlex.gt-xs="527px">
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Description</mat-label>
                             <textarea matInput [(ngModel)]="registrationMetadata.description" name="description" required matAutosize [mat-autosize]="true" [matAutosizeMinRows]="3"></textarea>
                         </mat-form-field>
@@ -72,7 +72,7 @@
 
                     <!-- Ticker -->
                     <div>
-                        <mat-form-field fxFlex appearance="outline" fxFlex="100%" fxFlex.gt-xs="527px">
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Ticker</mat-label>
                             <input matInput [(ngModel)]="registrationMetadata.ticker" name="ticker">
                         </mat-form-field>
@@ -80,7 +80,7 @@
 
                     <!-- Url -->
                     <div>
-                        <mat-form-field fxFlex appearance="outline" fxFlex="100%" fxFlex.gt-xs="527px">
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Url</mat-label>
                             <input matInput [(ngModel)]="registrationMetadata.url" name="url">
                         </mat-form-field>
@@ -88,7 +88,7 @@
 
                     <!-- Policy Id -->
                     <div>
-                        <mat-form-field fxFlex appearance="outline" fxFlex="100%" fxFlex.gt-xs="527px">
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Policy Id</mat-label>
                             <input matInput [(ngModel)]="registrationMetadata.policyId" name="policyId" required pattern="[0-9a-fA-F]{56}" maxlength="56">
                         </mat-form-field>
@@ -96,7 +96,7 @@
 
                     <!-- Policy script -->
                     <div>
-                        <mat-form-field fxFlex appearance="outline" fxFlex="100%" fxFlex.gt-xs="527px">
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Policy script</mat-label>
                             <textarea matInput [(ngModel)]="registrationMetadata.policy" name="policy" required [mat-autosize]="true" [matAutosizeMinRows]="13"></textarea>
                         </mat-form-field>
@@ -104,7 +104,7 @@
 
                     <!-- Policy skey -->
                     <div>
-                        <mat-form-field fxFlex appearance="outline" fxFlex="100%" fxFlex.gt-xs="527px">
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Policy signing key</mat-label>
                             <textarea matInput [(ngModel)]="registrationMetadata.policySkey" name="policySkey" required [mat-autosize]="true" [matAutosizeMinRows]="6"></textarea>
                         </mat-form-field>

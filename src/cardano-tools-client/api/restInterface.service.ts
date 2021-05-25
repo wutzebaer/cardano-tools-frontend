@@ -22,7 +22,6 @@ import { MintOrderSubmission } from '../model/mintOrderSubmission';
 import { MintTransaction } from '../model/mintTransaction';
 import { RegistrationMetadata } from '../model/registrationMetadata';
 import { TokenData } from '../model/tokenData';
-import { TokenRegistration } from '../model/tokenRegistration';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -208,9 +207,9 @@ export class RestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public generateTokenRegistrationForm(registrationMetadataString?: string, file?: Blob, observe?: 'body', reportProgress?: boolean): Observable<TokenRegistration>;
-    public generateTokenRegistrationForm(registrationMetadataString?: string, file?: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TokenRegistration>>;
-    public generateTokenRegistrationForm(registrationMetadataString?: string, file?: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TokenRegistration>>;
+    public generateTokenRegistrationForm(registrationMetadataString?: string, file?: Blob, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public generateTokenRegistrationForm(registrationMetadataString?: string, file?: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public generateTokenRegistrationForm(registrationMetadataString?: string, file?: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
     public generateTokenRegistrationForm(registrationMetadataString?: string, file?: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -252,7 +251,7 @@ export class RestInterfaceService {
             formParams = formParams.append('file', <any>file) as any || formParams;
         }
 
-        return this.httpClient.request<TokenRegistration>('post',`${this.basePath}/api/generateTokenRegistration`,
+        return this.httpClient.request<string>('post',`${this.basePath}/api/generateTokenRegistration`,
             {
                 body: convertFormParamsToString ? formParams.toString() : formParams,
                 withCredentials: this.configuration.withCredentials,

@@ -6,5 +6,4 @@ export * from './mintOrderSubmission';
 export * from './mintTransaction';
 export * from './registrationMetadata';
 export * from './tokenData';
-export * from './tokenRegistration';
 export * from './tokenSubmission';
