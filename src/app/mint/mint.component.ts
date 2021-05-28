@@ -12,6 +12,7 @@ import { LocalStorageService } from '../local-storage.service';
 import { F } from '@angular/cdk/keycodes';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { JsonpClientBackend } from '@angular/common/http';
 
 @Component({
   selector: 'app-mint',
@@ -149,6 +150,12 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.initializeValues()
     this.updateAccount();
     this.addToken()
+  }
+
+  getLockDate(){
+    let policy = JSON.parse(this.account.policy);
+    console.log(policy.scripts[0].slot);
+    return new Date((1596491091 + 29786450) * 1000)
   }
 
   advanced() {

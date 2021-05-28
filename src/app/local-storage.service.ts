@@ -19,4 +19,12 @@ export class LocalStorageService {
   retrieveAccountKey(): string | null {
     return localStorage.getItem("accountKey_1");
   }
+
+  storeMyAddress(address: string) {
+    localStorage.setItem("myaddress", address);
+  }
+
+  retrieveMyAddress(): string | null {
+    return localStorage.getItem("myaddress");
+  }
 }

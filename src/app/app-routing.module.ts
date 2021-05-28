@@ -1,3 +1,4 @@
+import { MyTokensComponent } from './my-tokens/my-tokens.component';
 import { RegisterTokenComponent } from './register-token/register-token.component';
 import { MintComponent } from './mint/mint.component';
 import { NgModule } from '@angular/core';
@@ -9,6 +10,7 @@ const routes: Routes = [
   { path: 'mint', component: MintComponent },
   { path: 'register', component: RegisterTokenComponent },
   { path: 'latest', component: LatestTokensComponent },
+  { path: 'my', component: MyTokensComponent },
 ];
 
 @NgModule({

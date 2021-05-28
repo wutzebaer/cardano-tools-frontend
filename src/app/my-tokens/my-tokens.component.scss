@@ -1,0 +1,20 @@
+.policyId {
+  text-align: center;
+  font-size: larger;
+  margin-top: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-box {
+  position: fixed;
+  width: 100%;
+  top: 65px;
+  left: 0px;
+  z-index: 1000;
+
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    background-color: white;
+    border-radius: 5px;
+  }
+}

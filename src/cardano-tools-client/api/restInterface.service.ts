@@ -533,4 +533,51 @@ export class RestInterfaceService {
         );
     }
 
+    /**
+     * 
+     * 
+     * @param address 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public walletTokens(address: string, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
+    public walletTokens(address: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
+    public walletTokens(address: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
+    public walletTokens(address: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (address === null || address === undefined) {
+            throw new Error('Required parameter address was null or undefined when calling walletTokens.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (address !== undefined && address !== null) {
+            queryParameters = queryParameters.set('address', <any>address);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<TokenData>>('get',`${this.basePath}/api/walletTokens`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
 }

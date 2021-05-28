@@ -92,7 +92,7 @@ export class LatestTokensComponent implements OnInit {
     latestTokens.forEach(element => {
       let tokenDataWithMetadata = element as TokenDataWithMetadata;
 
-      if (element.json) {
+      if (element.json && element.json !== 'null') {
 
         let metaData = JSON.parse(element.json)
 
