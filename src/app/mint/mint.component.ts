@@ -154,8 +154,9 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   getLockDate(){
     let policy = JSON.parse(this.account.policy);
-    console.log(policy.scripts[0].slot);
-    return new Date((1596491091 + 29786450) * 1000)
+    let slot = policy.scripts[0].slot
+    console.log(slot);
+    return new Date((1596491091 + (slot - 4924800)) * 1000)
   }
 
   advanced() {
