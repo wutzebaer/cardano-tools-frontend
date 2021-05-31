@@ -21,6 +21,7 @@ export class LatestTokensComponent implements OnInit {
   searchText: string = "";
   searchText$ = new Subject<string>();
   latestTokens: TokenDataWithMetadata[] = []
+  lastOffset = 0
 
   constructor(private api: RestInterfaceService, private activatedRoute: ActivatedRoute, public dialog: MatDialog, private router: Router) {
     this.searchText$.pipe(
@@ -87,14 +88,7 @@ export class LatestTokensComponent implements OnInit {
     if (!append) {
       this.latestTokens = []
       document.getElementsByClassName("my-sidenav-content")[0].scrollTop = 0
-    }
-
-    if (this.latestTokens.length > 0) {
-      let lastMintid = this.latestTokens[this.latestTokens.length - 1].mintid
-      let newLastMintid = latestTokens[latestTokens.length - 1].mintid
-      if (lastMintid == newLastMintid) {
-        return;
-      }
+      this.lastOffset = 0
     }
 
     latestTokens.forEach(element => {
@@ -142,6 +136,12 @@ export class LatestTokensComponent implements OnInit {
 
   onScroll() {
     let mintid = this.latestTokens[this.latestTokens.length - 1].mintid
+
+    if (mintid == this.lastOffset) {
+      return
+    } else {
+      this.lastOffset = mintid
+    }
 
     if (this.searchText == '') {
       this.api.latestTokens(mintid).subscribe(
