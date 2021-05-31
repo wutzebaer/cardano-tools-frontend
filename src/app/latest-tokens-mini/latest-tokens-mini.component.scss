@@ -2,6 +2,17 @@
   min-height: 150px;
 }
 
+.verified-icon {
+  font-size: 50px;
+  line-height: auto;
+  width: auto;
+  height: auto;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: #ffd700;
+}
+
 .preview {
   position: relative;
   width: 100%;
@@ -26,7 +37,6 @@
     width: auto;
     height: auto;
   }
-
   .centered-icon-wrapper {
     position: absolute;
     left: 0;

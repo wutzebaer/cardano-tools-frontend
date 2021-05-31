@@ -8,6 +8,7 @@ import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-toke
 
 export interface TokenDataWithMetadata extends TokenData {
   metaData: any
+  tokenRegistryMetadataParsed: any
 }
 
 @Component({
@@ -93,6 +94,10 @@ export class LatestTokensComponent implements OnInit {
 
     latestTokens.forEach(element => {
       let tokenDataWithMetadata = element as TokenDataWithMetadata;
+
+      if (element.tokenRegistryMetadata) {
+        tokenDataWithMetadata.tokenRegistryMetadataParsed = JSON.parse(element.tokenRegistryMetadata)
+      }
 
       if (element.json && element.json !== 'null') {
 

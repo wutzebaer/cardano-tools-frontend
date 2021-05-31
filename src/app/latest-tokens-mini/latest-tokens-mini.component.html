@@ -24,11 +24,19 @@
         <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
       </div>
 
+
+      <div *ngIf="token.tokenRegistryMetadataParsed" class="title">
+        <mat-icon class="verified-icon" fontSet="material-icons-outlined">verified</mat-icon>
+      </div>
+
     </div>
 
     <div *ngIf="token.quantity > 1" class="title">
       {{token.quantity}}x
     </div>
+
+
+
 
   </mat-card-content>
 </mat-card>

@@ -3,6 +3,18 @@
   text-overflow: ellipsis;
 }
 
+.verified-icon {
+  font-size: 100px;
+  line-height: auto;
+  width: auto;
+  height: auto;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: #ffd700;
+}
+
+
 .preview {
   position: relative;
   min-height: 150px;

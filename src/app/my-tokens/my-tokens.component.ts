@@ -7,6 +7,7 @@ import { RestInterfaceService, TokenData } from 'src/cardano-tools-client';
 
 export interface TokenDataWithMetadata extends TokenData {
   metaData: any
+  tokenRegistryMetadataParsed: any
 }
 
 @Component({
@@ -56,6 +57,10 @@ export class MyTokensComponent implements OnInit {
 
     latestTokens.forEach(element => {
       let tokenDataWithMetadata = element as TokenDataWithMetadata;
+
+      if (element.tokenRegistryMetadata) {
+        tokenDataWithMetadata.tokenRegistryMetadataParsed = JSON.parse(element.tokenRegistryMetadata)
+      }
 
       if (element.json && element.json !== 'null') {
 

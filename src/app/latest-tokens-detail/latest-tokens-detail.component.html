@@ -23,6 +23,10 @@
         <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
       </div>
 
+      <div *ngIf="token.tokenRegistryMetadataParsed" class="title">
+        <mat-icon class="verified-icon" fontSet="material-icons-outlined">verified</mat-icon>
+      </div>
+
     </div>
 
     <div>
@@ -100,6 +104,39 @@
           </div>
         </mat-expansion-panel>
 
+        <!-- Registered Data -->
+        <mat-expansion-panel *ngIf="tokenRegistryMetadataFormatted">
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="75px">
+              Reg. Data
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenRegistryMetadataFormatted)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              {{tokenRegistryMetadataFormatted}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <span>
+            <pre>{{tokenRegistryMetadataFormatted}}</pre>
+          </span>
+        </mat-expansion-panel>
+
+        <!-- Registered Data Logo -->
+        <mat-expansion-panel *ngIf="tokenRegistryMetadataFormatted">
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="75px">
+              Reg. Logo
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <img width="20" height="20" src="data:image/gif;base64,{{token.tokenRegistryMetadataParsed.logo.value}}">
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <span>
+            <img src="data:image/gif;base64,{{token.tokenRegistryMetadataParsed.logo.value}}">
+          </span>
+        </mat-expansion-panel>
+
 
         <!-- Timestamp -->
         <mat-expansion-panel>
@@ -135,7 +172,7 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div class="expansion-content">
-            <span *ngIf="element.name != 'PolicyId' && element.name != 'TxId'">
+            <span>
               <pre>{{element.value}}</pre>
             </span>
           </div>

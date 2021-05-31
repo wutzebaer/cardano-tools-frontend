@@ -23,5 +23,7 @@ export interface TokenData {
     epochSlotNo: number;
     tid: number;
     mintid: number;
+    tokenRegistryMetadata?: string;
     fingerprint: string;
+    subject: string;
 }
