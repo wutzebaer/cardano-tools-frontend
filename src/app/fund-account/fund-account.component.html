@@ -60,7 +60,7 @@
       </p>
 
       <!-- receiver address-->
-      <mat-form-field appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="false && account.fundingAddresses.length > 0">
+      <mat-form-field appearance="outline" style="width: 100%; max-width: 900px;" [fxShow]="account.fundingAddresses.length > 1">
         <mat-label>Send tokens to</mat-label>
         <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" #targetAddressInput="ngModel" name="targetAddress" (selectionChange)="emitUpdateMintTransaction()" required>
           <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">

@@ -123,7 +123,9 @@ export class MintComponent implements OnInit, AfterViewInit {
       let targetAddressChanged = this.mintOrderSubmission.targetAddress != account.fundingAddresses[0];
 
       this.account = account
-      this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+      if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
+        this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+      }
 
       if (balanceChanged || this.mintTransaction.fee == 0 || targetAddressChanged) {
         this.updateMintTransaction();
@@ -152,7 +154,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.addToken()
   }
 
-  getLockDate(){
+  getLockDate() {
     let policy = JSON.parse(this.account.policy);
     let slot = policy.scripts[0].slot
     console.log(slot);
