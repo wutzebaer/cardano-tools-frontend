@@ -383,19 +383,19 @@ export class RestInterfaceService {
     /**
      * 
      * 
-     * @param fromTid 
+     * @param fromMintid 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public latestTokens(fromTid?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
-    public latestTokens(fromTid?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
-    public latestTokens(fromTid?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
-    public latestTokens(fromTid?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public latestTokens(fromMintid?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
+    public latestTokens(fromMintid?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
+    public latestTokens(fromMintid?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
+    public latestTokens(fromMintid?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (fromTid !== undefined && fromTid !== null) {
-            queryParameters = queryParameters.set('fromTid', <any>fromTid);
+        if (fromMintid !== undefined && fromMintid !== null) {
+            queryParameters = queryParameters.set('fromMintid', <any>fromMintid);
         }
 
         let headers = this.defaultHeaders;

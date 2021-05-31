@@ -89,6 +89,14 @@ export class LatestTokensComponent implements OnInit {
       document.getElementsByClassName("my-sidenav-content")[0].scrollTop = 0
     }
 
+    if (this.latestTokens.length > 0) {
+      let lastMintid = this.latestTokens[this.latestTokens.length - 1].mintid
+      let newLastMintid = latestTokens[latestTokens.length - 1].mintid
+      if (lastMintid == newLastMintid) {
+        return;
+      }
+    }
+
     latestTokens.forEach(element => {
       let tokenDataWithMetadata = element as TokenDataWithMetadata;
 
@@ -133,16 +141,16 @@ export class LatestTokensComponent implements OnInit {
   }
 
   onScroll() {
-    let tid = this.latestTokens[this.latestTokens.length - 1].tid
+    let mintid = this.latestTokens[this.latestTokens.length - 1].mintid
 
     if (this.searchText == '') {
-      this.api.latestTokens(tid).subscribe(
+      this.api.latestTokens(mintid).subscribe(
         latestTokens => {
           this.updateTokens(latestTokens, true)
         }
       );
     } else {
-      this.api.findTokens(this.searchText, tid).subscribe(
+      this.api.findTokens(this.searchText, mintid).subscribe(
         latestTokens => {
           this.updateTokens(latestTokens, true)
         }
