@@ -120,15 +120,13 @@ export class MintComponent implements OnInit, AfterViewInit {
       this.localStorageService.storeAccountKey(account.key)
 
       let balanceChanged = account.balance != this.account.balance || account.key != this.account.key
-      let targetAddressChanged = false;
 
       this.account = account
       if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
         this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
-        targetAddressChanged = true;
       }
 
-      if (balanceChanged || this.mintTransaction.fee == 0 || targetAddressChanged) {
+      if (balanceChanged || this.mintTransaction.fee == 0) {
         this.updateMintTransaction();
       }
     })
