@@ -1,37 +1,68 @@
 <mat-dialog-content>
-  <mat-card>
-    <mat-card-content>
-      <div class="title">
-        <span *ngIf="token.metaData['name']">{{token.metaData['name']}} ({{token.name}})</span>
-        <span *ngIf="!token.metaData['name']">{{token.name}}</span>
+  <div fxLayout="column" fxLayoutGap="10px" style="padding: 1px;">
+
+    <h2 class="title">
+      <span *ngIf="token.metaData['name']">{{token.metaData['name']}} ({{token.name}})</span>
+      <span *ngIf="!token.metaData['name']">{{token.name}}</span>
+    </h2>
+
+
+    <div class="preview" fxLayout="row" fxLayoutAlign="center center">
+
+      <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
+        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
+          image
+        </mat-icon>
       </div>
 
+      <img *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])" (load)="onLoad()" loading="lazy">
+      <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])" (load)="onLoad()"></audio>
+      <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])" (load)="onLoad()"></video>
 
-      <div class="preview" fxLayout="row" fxLayoutAlign="center center">
-
-        <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
-          <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
-            image
-          </mat-icon>
-        </div>
-
-        <img *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])" (load)="onLoad()" loading="lazy">
-        <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])" (load)="onLoad()"></audio>
-        <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])" (load)="onLoad()"></video>
-
-        <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']">
-          <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
-        </div>
-
+      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']">
+        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
       </div>
 
-      <div *ngIf="token.quantity > 1" class="title">
-        {{token.quantity}}x
-      </div>
+    </div>
 
-
-
+    <div>
       <mat-accordion>
+
+        <!-- Amount -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="75px">
+              Amount
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard('' + token.quantity)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              {{token.quantity}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            <span>{{token.quantity}}</span>
+          </div>
+        </mat-expansion-panel>
+
+        <!-- Fingerprint -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="75px">
+              Fingerprint
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.fingerprint)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              {{token.fingerprint}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            <span>{{token.fingerprint}}</span>
+          </div>
+        </mat-expansion-panel>
 
         <!-- PolicyId -->
         <mat-expansion-panel>
@@ -110,8 +141,7 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
+    </div>
 
-
-    </mat-card-content>
-  </mat-card>
+  </div>
 </mat-dialog-content>

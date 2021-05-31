@@ -63,7 +63,7 @@ export class LatestTokensComponent implements OnInit {
 
   details(token: TokenDataWithMetadata) {
     this.dialog.open(LatestTokensDetailComponent, {
-      width: '600px',
+      width: '750px',
       maxWidth: '90vw',
       data: { token: token },
       closeOnNavigation: true

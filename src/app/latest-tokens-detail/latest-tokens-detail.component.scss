@@ -1,3 +1,8 @@
+.title {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
 .preview {
   position: relative;
   min-height: 150px;
@@ -45,11 +50,6 @@
   .blink {
     animation: flickerAnimation 2s infinite;
   }
-}
-
-.title {
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .inline-button {
