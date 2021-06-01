@@ -31,13 +31,8 @@ export class LatestTokensDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.token.tokenRegistryMetadataParsed) {
-      let formatted: any = {}
-      for (let key in this.token.tokenRegistryMetadataParsed) {
-        formatted[key] = this.token.tokenRegistryMetadataParsed[key].value
-      }
-      this.tokenRegistryMetadataFormatted = JSON.stringify(formatted, null, 2)
-
+    if (this.token.tokenRegistryMetadata) {
+      this.tokenRegistryMetadataFormatted = JSON.stringify(this.token.tokenRegistryMetadata, null, 2)
     }
   }
 

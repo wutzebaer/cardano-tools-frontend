@@ -31,7 +31,7 @@ export class FundAccountComponent implements OnInit {
 
   @Input() loading!: boolean;
 
-  constructor(private api: RestInterfaceService, private clipboard: Clipboard) { }
+  constructor(private clipboard: Clipboard) { }
 
   ngOnInit(): void {
     interval(10000).subscribe(() => {

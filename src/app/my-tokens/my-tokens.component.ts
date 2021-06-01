@@ -1,3 +1,4 @@
+import { TokenRegistryMetadata } from './../../cardano-tools-client/model/tokenRegistryMetadata';
 import { LocalStorageService } from './../local-storage.service';
 import { LatestTokensDetailComponent } from './../latest-tokens-detail/latest-tokens-detail.component';
 import { Component, OnInit } from '@angular/core';
@@ -7,7 +8,7 @@ import { RestInterfaceService, TokenData } from 'src/cardano-tools-client';
 
 export interface TokenDataWithMetadata extends TokenData {
   metaData: any
-  tokenRegistryMetadataParsed: any
+  tokenRegistryMetadata: TokenRegistryMetadata
 }
 
 @Component({
@@ -57,10 +58,6 @@ export class MyTokensComponent implements OnInit {
 
     latestTokens.forEach(element => {
       let tokenDataWithMetadata = element as TokenDataWithMetadata;
-
-      if (element.tokenRegistryMetadata) {
-        tokenDataWithMetadata.tokenRegistryMetadataParsed = JSON.parse(element.tokenRegistryMetadata)
-      }
 
       if (element.json && element.json !== 'null') {
 

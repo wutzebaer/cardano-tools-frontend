@@ -10,19 +10,10 @@
  * Do not edit the class manually.
  */
 
-export interface TokenData { 
-    policyId: string;
+export interface TokenRegistryMetadata { 
     name: string;
-    quantity: number;
-    txId: string;
-    json: string;
-    invalidBefore?: number;
-    invalidHereafter?: number;
-    blockNo: number;
-    epochNo: number;
-    epochSlotNo: number;
-    tid: number;
-    mintid: number;
-    fingerprint: string;
-    subject: string;
+    description: string;
+    ticker?: string;
+    url?: string;
+    logo?: string;
 }

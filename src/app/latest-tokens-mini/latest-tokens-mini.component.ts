@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { RestInterfaceService } from 'src/cardano-tools-client';
 import { TokenDataWithMetadata } from '../latest-tokens/latest-tokens.component';
 import { TableRow } from '../mint-token-mini/mint-token-mini.component';
 
@@ -12,9 +13,12 @@ export class LatestTokensMiniComponent implements OnInit {
   @Input() token!: TokenDataWithMetadata;
   loading: boolean = true
 
-  constructor() { }
+  constructor(private api: RestInterfaceService) { }
 
   ngOnInit(): void {
+    this.api.getTokenRegistryMetadata(this.token.policyId, this.token.name).subscribe(metadata => {
+      this.token.tokenRegistryMetadata = metadata
+    });
   }
 
   displayedColumns = ['name', 'value']

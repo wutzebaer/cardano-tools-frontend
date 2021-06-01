@@ -3,12 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, retry, switchMap } from 'rxjs/operators';
-import { RestInterfaceService, TokenData } from 'src/cardano-tools-client';
+import { RestInterfaceService, TokenData, TokenRegistryMetadata } from 'src/cardano-tools-client';
 import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
 
 export interface TokenDataWithMetadata extends TokenData {
   metaData: any
-  tokenRegistryMetadataParsed: any
+  tokenRegistryMetadata: TokenRegistryMetadata
 }
 
 @Component({
@@ -94,10 +94,6 @@ export class LatestTokensComponent implements OnInit {
 
     latestTokens.forEach(element => {
       let tokenDataWithMetadata = element as TokenDataWithMetadata;
-
-      if (element.tokenRegistryMetadata) {
-        tokenDataWithMetadata.tokenRegistryMetadataParsed = JSON.parse(element.tokenRegistryMetadata)
-      }
 
       if (element.json && element.json !== 'null') {
 

@@ -23,7 +23,7 @@
         <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
       </div>
 
-      <div *ngIf="token.tokenRegistryMetadataParsed" class="title">
+      <div *ngIf="token.tokenRegistryMetadata" class="title">
         <mat-icon class="verified-icon" fontSet="material-icons-outlined">verified</mat-icon>
       </div>
 
@@ -123,17 +123,17 @@
         </mat-expansion-panel>
 
         <!-- Registered Data Logo -->
-        <mat-expansion-panel *ngIf="tokenRegistryMetadataFormatted">
+        <mat-expansion-panel *ngIf="token.tokenRegistryMetadata">
           <mat-expansion-panel-header>
             <mat-panel-title fxFlex="75px">
               Reg. Logo
             </mat-panel-title>
             <mat-panel-description fxFlex>
-              <img width="20" height="20" src="data:image/gif;base64,{{token.tokenRegistryMetadataParsed.logo.value}}">
+              <img width="20" height="20" src="data:image/gif;base64,{{token.tokenRegistryMetadata.logo}}">
             </mat-panel-description>
           </mat-expansion-panel-header>
           <span>
-            <img src="data:image/gif;base64,{{token.tokenRegistryMetadataParsed.logo.value}}">
+            <img src="data:image/gif;base64,{{token.tokenRegistryMetadata.logo}}">
           </span>
         </mat-expansion-panel>
 
