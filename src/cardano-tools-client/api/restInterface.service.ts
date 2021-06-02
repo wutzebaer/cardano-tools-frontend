@@ -22,7 +22,6 @@ import { MintOrderSubmission } from '../model/mintOrderSubmission';
 import { MintTransaction } from '../model/mintTransaction';
 import { RegistrationMetadata } from '../model/registrationMetadata';
 import { TokenData } from '../model/tokenData';
-import { TokenRegistryMetadata } from '../model/tokenRegistryMetadata';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -372,52 +371,6 @@ export class RestInterfaceService {
         ];
 
         return this.httpClient.request<number>('get',`${this.basePath}/api/tip`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param policyId 
-     * @param tokenName 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getTokenRegistryMetadata(policyId: string, tokenName: string, observe?: 'body', reportProgress?: boolean): Observable<TokenRegistryMetadata>;
-    public getTokenRegistryMetadata(policyId: string, tokenName: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TokenRegistryMetadata>>;
-    public getTokenRegistryMetadata(policyId: string, tokenName: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TokenRegistryMetadata>>;
-    public getTokenRegistryMetadata(policyId: string, tokenName: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (policyId === null || policyId === undefined) {
-            throw new Error('Required parameter policyId was null or undefined when calling getTokenRegistryMetadata.');
-        }
-
-        if (tokenName === null || tokenName === undefined) {
-            throw new Error('Required parameter tokenName was null or undefined when calling getTokenRegistryMetadata.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<TokenRegistryMetadata>('get',`${this.basePath}/api/tokenRegistryMetadata/${encodeURIComponent(String(policyId))}/${encodeURIComponent(String(tokenName))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { TokenRegistryMetadata } from './tokenRegistryMetadata';
 
 export interface TokenData { 
     policyId: string;
@@ -23,6 +24,6 @@ export interface TokenData {
     epochSlotNo: number;
     tid: number;
     mintid: number;
+    tokenRegistryMetadata?: TokenRegistryMetadata;
     fingerprint: string;
-    subject: string;
 }

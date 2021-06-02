@@ -1,14 +1,13 @@
-import { TokenRegistryMetadata } from './../../cardano-tools-client/model/tokenRegistryMetadata';
-import { LocalStorageService } from './../local-storage.service';
-import { LatestTokensDetailComponent } from './../latest-tokens-detail/latest-tokens-detail.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { RestInterfaceService, TokenData } from 'src/cardano-tools-client';
+import { LatestTokensDetailComponent } from './../latest-tokens-detail/latest-tokens-detail.component';
+import { LocalStorageService } from './../local-storage.service';
+
 
 export interface TokenDataWithMetadata extends TokenData {
   metaData: any
-  tokenRegistryMetadata: TokenRegistryMetadata
 }
 
 @Component({

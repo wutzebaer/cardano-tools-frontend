@@ -16,9 +16,6 @@ export class LatestTokensMiniComponent implements OnInit {
   constructor(private api: RestInterfaceService) { }
 
   ngOnInit(): void {
-    this.api.getTokenRegistryMetadata(this.token.policyId, this.token.name).subscribe(metadata => {
-      this.token.tokenRegistryMetadata = metadata
-    });
   }
 
   displayedColumns = ['name', 'value']
