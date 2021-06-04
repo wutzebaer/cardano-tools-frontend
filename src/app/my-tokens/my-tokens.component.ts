@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { RestInterfaceService, TokenData } from 'src/cardano-tools-client';
-import { TokenDataWithMetadata } from '../latest-tokens/latest-tokens.component';
+import { TokenDataWithMetadata } from '../token-enhancer.service';
 import { LatestTokensDetailComponent } from './../latest-tokens-detail/latest-tokens-detail.component';
 import { LocalStorageService } from './../local-storage.service';
 

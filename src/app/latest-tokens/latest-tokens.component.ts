@@ -1,3 +1,4 @@
+import { TokenEnhancerService } from './../token-enhancer.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -5,11 +6,9 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, retry, switchMap } from 'rxjs/operators';
 import { RestInterfaceService, TokenData, TokenRegistryMetadata } from 'src/cardano-tools-client';
 import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
+import { TokenDataWithMetadata } from '../token-enhancer.service';
 
-export interface TokenDataWithMetadata extends TokenData {
-  metaData: any
-  tokenRegistryMetadata: TokenRegistryMetadata
-}
+
 
 @Component({
   selector: 'app-latest-tokens',
@@ -24,7 +23,7 @@ export class LatestTokensComponent implements OnInit {
   latestTokens: TokenDataWithMetadata[] = []
   lastOffset = 0
 
-  constructor(private api: RestInterfaceService, private activatedRoute: ActivatedRoute, public dialog: MatDialog, private router: Router) {
+  constructor(private api: RestInterfaceService, private activatedRoute: ActivatedRoute, public dialog: MatDialog, private router: Router, private tokenEnhancerService: TokenEnhancerService) {
     this.searchText$.pipe(
       debounceTime(500),
       distinctUntilChanged(),
@@ -86,54 +85,19 @@ export class LatestTokensComponent implements OnInit {
   }
 
   updateTokens(latestTokens: TokenData[], append: boolean) {
+
+    let enhancedLatestTokens = this.tokenEnhancerService.enhanceTokens(latestTokens);
+
     if (!append) {
       this.latestTokens = []
       document.getElementsByClassName("my-sidenav-content")[0].scrollTop = 0
       this.lastOffset = 0
     }
 
-    latestTokens.forEach(element => {
-      let tokenDataWithMetadata = element as TokenDataWithMetadata;
-
-      if (element.json && element.json !== 'null') {
-
-        let metaData = JSON.parse(element.json)
-
-        metaData = metaData[tokenDataWithMetadata.policyId] || metaData
-        metaData = metaData[tokenDataWithMetadata.name] || metaData
-
-        if (!metaData.image && !metaData.video && !metaData.audio) {
-          let foundImage = this.findAnyIpfsUrl(metaData)
-          if (foundImage)
-            metaData.image = foundImage
-        }
-
-        tokenDataWithMetadata.metaData = metaData;
-
-      } else {
-        tokenDataWithMetadata.metaData = {};
-      }
-
-      this.latestTokens.push(tokenDataWithMetadata)
-    });
-
+    this.latestTokens = this.latestTokens.concat(enhancedLatestTokens)
   }
 
-  findAnyIpfsUrl(object: any): any {
-    for (let key in object) {
-      let value = object[key];
-      if (value !== null && typeof (value) == "object") {
-        let result = this.findAnyIpfsUrl(value);
-        if (result) {
-          return result
-        }
-      } else {
-        if (value.substring && (value.startsWith("ipfs") || value.startsWith("Qm"))) {
-          return value;
-        }
-      }
-    }
-  }
+
 
   onScroll() {
     let mintid = this.latestTokens[this.latestTokens.length - 1].mintid

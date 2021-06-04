@@ -1,8 +1,8 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TokenDataWithMetadata } from '../latest-tokens/latest-tokens.component';
 import { TableRow } from '../mint-token-mini/mint-token-mini.component';
+import { TokenDataWithMetadata } from '../token-enhancer.service';
 
 @Component({
   selector: 'app-latest-tokens-detail',
@@ -38,18 +38,6 @@ export class LatestTokensDetailComponent implements OnInit {
 
   displayedColumns = ['name', 'value']
 
-  toIpfsUrl(ipfs: any) {
-    // https://ipfs.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://ipfs.blockfrost.dev/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://cloudflare-ipfs.com/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://ipfs.eternum.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-
-    if (Array.isArray(ipfs)) {
-      ipfs = ipfs.join("")
-    }
-
-    return "https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "");
-  }
 
   calculateTime(epochNo: number, epochSlotNo: number) {
     let timestamp = Date.parse('2017-09-23T21:44:51Z');

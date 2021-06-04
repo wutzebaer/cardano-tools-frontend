@@ -15,11 +15,12 @@
         </mat-icon>
       </div>
 
-      <img *ngIf="token.metaData['image']" [src]="toIpfsUrl(token.metaData['image'])" (load)="onLoad()" loading="lazy">
-      <audio controls *ngIf="token.metaData['audio']" [src]="toIpfsUrl(token.metaData['audio'])" (load)="onLoad()"></audio>
-      <video controls *ngIf="token.metaData['video']" [src]="toIpfsUrl(token.metaData['video'])" (load)="onLoad()"></video>
+      <img *ngIf="token.mediaTypes[0] == 'image'" [src]="token.mediaUrls[0]" (load)="onLoad()" loading="lazy">
+      <audio controls *ngIf="token.mediaTypes[0] == 'audio'" [src]="token.mediaUrls[0]" (load)="onLoad()"></audio>
+      <video controls *ngIf="token.mediaTypes[0] == 'video'" [src]="token.mediaUrls[0]" (load)="onLoad()"></video>
+      <iframe *ngIf="token.mediaTypes[0] == 'html'" [src]="token.mediaUrls[0]" (load)="onLoad()"></iframe>
 
-      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!token.metaData['image'] && !token.metaData['audio'] && !token.metaData['video']">
+      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="token.mediaTypes.length == 0">
         <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
       </div>
 
