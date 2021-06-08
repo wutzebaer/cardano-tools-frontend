@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { RestInterfaceService, TokenData } from 'src/cardano-tools-client';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
 import { LatestTokensDetailComponent } from './../latest-tokens-detail/latest-tokens-detail.component';
 import { LocalStorageService } from './../local-storage.service';
+import { TokenEnhancerService } from './../token-enhancer.service';
 
 
 @Component({
@@ -17,7 +17,7 @@ export class MyTokensComponent implements OnInit {
   myTokens: TokenDataWithMetadata[] = []
   myaddress: string | null;
 
-  constructor(private api: RestInterfaceService, public dialog: MatDialog, private router: Router, private localStorageService: LocalStorageService) {
+  constructor(private api: RestInterfaceService, public dialog: MatDialog, private localStorageService: LocalStorageService, private tokenEnhancerService: TokenEnhancerService) {
     this.myaddress = localStorageService.retrieveMyAddress();
     this.update()
 
@@ -50,33 +50,7 @@ export class MyTokensComponent implements OnInit {
   }
 
   updateTokens(latestTokens: TokenData[]) {
-    this.myTokens = []
-
-    latestTokens.forEach(element => {
-      let tokenDataWithMetadata = element as TokenDataWithMetadata;
-
-      if (element.json && element.json !== 'null') {
-
-        let metaData = JSON.parse(element.json)
-
-        metaData = metaData[tokenDataWithMetadata.policyId] || metaData
-        metaData = metaData[tokenDataWithMetadata.name] || metaData
-
-        if (!metaData.image && !metaData.video && !metaData.audio) {
-          let foundImage = this.findAnyIpfsUrl(metaData)
-          if (foundImage)
-            metaData.image = foundImage
-        }
-
-        tokenDataWithMetadata.metaData = metaData;
-
-      } else {
-        tokenDataWithMetadata.metaData = {};
-      }
-
-      this.myTokens.push(tokenDataWithMetadata)
-    });
-
+    this.myTokens = this.tokenEnhancerService.enhanceTokens(latestTokens);
   }
 
   findAnyIpfsUrl(object: any): any {
