@@ -3,11 +3,11 @@
         <h2>{{token.assetName}}</h2>
 
         <div class="preview" fxLayout="row" fxLayoutAlign="center center">
-            <img *ngIf="token.metaData['image']?.value" [src]="toIpfsUrl(token.metaData['image'].value)" alt="Loading...">
-            <audio controls *ngIf="token.metaData['audio']?.value" [src]="toIpfsUrl(token.metaData['audio'].value)"></audio>
-            <video controls *ngIf="token.metaData['video']?.value" [src]="toIpfsUrl(token.metaData['video'].value)"></video>
+            <img *ngIf="metaData['image']?.value" [src]="toIpfsUrl(metaData['image'].value)" alt="Loading...">
+            <audio controls *ngIf="metaData['audio']?.value" [src]="toIpfsUrl(metaData['audio'].value)"></audio>
+            <video controls *ngIf="metaData['video']?.value" [src]="toIpfsUrl(metaData['video'].value)"></video>
             <div>
-                <mat-icon class="big-icon" color="primary" *ngIf="token.metaData['binary']?.value" fontSet="material-icons-outlined">description</mat-icon>
+                <mat-icon class="big-icon" color="primary" *ngIf="metaData['binary']?.value" fontSet="material-icons-outlined">description</mat-icon>
             </div>
         </div>
 

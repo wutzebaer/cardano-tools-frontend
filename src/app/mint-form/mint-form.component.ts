@@ -3,6 +3,7 @@ import { ControlContainer, NgForm } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RestInterfaceService, TokenSubmission } from 'src/cardano-tools-client';
 import { HttpEventType } from '@angular/common/http';
+import { ArrayDataSource } from '@angular/cdk/collections';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class MintFormComponent implements OnInit {
   listFields: string[] = ['traits'];
   knownMimeTypes = ['image', 'video', 'audio'];
   uploadProgress: number = 0;
+  metaData: any;
 
   @Input() token!: TokenSubmission;
   file!: File | null;
@@ -37,6 +39,15 @@ export class MintFormComponent implements OnInit {
       this.appendFile(hack.file)
       delete hack.file
     }
+    this.reloadMetadata()
+  }
+
+  reloadMetadata() {
+    this.metaData = JSON.parse(this.token.metaData)
+  }
+
+  serializeMetadata() {
+    this.token.metaData = JSON.stringify(this.metaData, null, 3)
   }
 
   getFileType() {
@@ -51,15 +62,19 @@ export class MintFormComponent implements OnInit {
     return this.knownMimeTypes.indexOf(this.getFileType()) != -1;
   }
 
-  isListField(key: any) {
-    return this.listFields.indexOf(key) != -1;
+  isSimpleValue(value: any) {
+    return typeof value !== 'object';
+  }
+
+  isSimpleList(value: any) {
+    return Array.isArray(value) && typeof value[0] !== 'object';
   }
 
   addMetaField(metaField: string) {
-    if (this.token.metaData[metaField]) {
-      delete this.token.metaData[metaField];
+    if (this.metaData[metaField]) {
+      delete this.metaData[metaField];
     } else {
-      this.token.metaData[metaField] = { value: "", listValue: [] };
+      this.metaData[metaField] = { value: "", listValue: [] };
     }
   }
 
@@ -99,23 +114,23 @@ export class MintFormComponent implements OnInit {
             this.url = null;
           }
 
-          delete this.token.metaData["Image"];
-          delete this.token.metaData["Video"];
-          delete this.token.metaData["Audio"];
-          delete this.token.metaData["Binary"];
+          delete this.metaData["Image"];
+          delete this.metaData["Video"];
+          delete this.metaData["Audio"];
+          delete this.metaData["Binary"];
 
           // create metadata
           if (this.getFileType() == 'image') {
-            this.token.metaData["image"] = { value: "ipfs://" + event.body as string, listValue: [] };
+            this.metaData["image"] = { value: "ipfs://" + event.body as string, listValue: [] };
           } else if (this.getFileType() == 'video') {
-            this.token.metaData["video"] = { value: "ipfs://" + event.body as string, listValue: [] };
+            this.metaData["video"] = { value: "ipfs://" + event.body as string, listValue: [] };
           } else if (this.getFileType() == 'audio') {
-            this.token.metaData["audio"] = { value: "ipfs://" + event.body as string, listValue: [] };
+            this.metaData["audio"] = { value: "ipfs://" + event.body as string, listValue: [] };
           } else {
-            this.token.metaData["binary"] = { value: "ipfs://" + event.body as string, listValue: [] };
+            this.metaData["binary"] = { value: "ipfs://" + event.body as string, listValue: [] };
           }
-          this.token.metaData["mimetype"] = { value: file?.type as string, listValue: [] };
-          this.token.metaData["name"] = { value: (file?.name as string).split(".")[0].substring(0, 60) as string, listValue: [] };
+          this.metaData["mimetype"] = { value: file?.type as string, listValue: [] };
+          this.metaData["name"] = { value: (file?.name as string).split(".")[0].substring(0, 60) as string, listValue: [] };
           this.token.assetName = (file?.name as string).split(".")[0].replace(/[^a-zA-Z0-9]/g, "").substring(0, 32);
           this.uploadProgress = 0;
 
@@ -123,6 +138,14 @@ export class MintFormComponent implements OnInit {
       }
     });
 
+  }
+
+  toArray(value: any[]): any[] {
+    return value;
+  }
+
+  toString(value: any): string {
+    return value;
   }
 
 }

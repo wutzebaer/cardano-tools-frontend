@@ -11,11 +11,9 @@ export class ChiplistComponent implements OnInit {
 
   @Input() label!: string;
   @Input() placeholder!: string;
+  @Input() items!: any;
 
-  @Input() items!: string[];
-  @Output() itemsChange = new EventEmitter<string[]>();
-
-  @Input() selected!: string[];
+  @Output() itemsChange = new EventEmitter<any[]>();
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 

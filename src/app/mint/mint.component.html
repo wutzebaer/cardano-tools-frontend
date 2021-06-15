@@ -15,7 +15,7 @@
           <div fxLayout="row wrap" fxLayoutGap="10px grid">
             <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%" *ngFor="let token of mintOrderSubmission.tokens; let i = index">
               <!-- Mint Card -->
-              <app-mint-form [token]=token></app-mint-form>
+              <app-mint-form #mintForm [token]=token></app-mint-form>
               <!-- delete button -->
               <button (click)="removeToken(i)" class="delete" mat-mini-fab>
                 <mat-icon>clear</mat-icon>

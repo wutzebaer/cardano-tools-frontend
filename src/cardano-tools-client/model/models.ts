@@ -1,7 +1,6 @@
 export * from './account';
 export * from './body';
 export * from './body1';
-export * from './metaValue';
 export * from './mintOrderSubmission';
 export * from './mintTransaction';
 export * from './registrationMetadata';

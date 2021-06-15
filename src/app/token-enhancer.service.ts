@@ -31,27 +31,11 @@ export class TokenEnhancerService {
       if (element.json && element.json !== 'null') {
 
         // find metadata of token in transaction metadata
-        let metaData = JSON.parse(element.json)
-        metaData = metaData[tokenDataWithMetadata.policyId] || metaData
-        metaData = metaData[tokenDataWithMetadata.name] || metaData
+        let metaData = JSON.parse(element.json)[tokenDataWithMetadata.policyId]?.[tokenDataWithMetadata.name] ?? {}
 
         if (Array.isArray(metaData['files'])) {
           metaData['files'].forEach(file => {
-            if (file.mediatype?.startsWith("image")) {
-              tokenDataWithMetadata.mediaTypes.push('image')
-            }
-            else if (file.mediatype?.startsWith("text/html")) {
-              tokenDataWithMetadata.mediaTypes.push('html')
-            }
-            if (file.mediaType?.startsWith("image")) {
-              tokenDataWithMetadata.mediaTypes.push('image')
-            }
-            else if (file.mediaType?.startsWith("text/html")) {
-              tokenDataWithMetadata.mediaTypes.push('html')
-            }
-            else {
-              return;
-            }
+            tokenDataWithMetadata.mediaTypes.push(file.mediatype)
             tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(file.src))
           });
         }

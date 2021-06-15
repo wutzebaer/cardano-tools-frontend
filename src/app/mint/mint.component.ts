@@ -1,3 +1,4 @@
+import { MintFormComponent } from './../mint-form/mint-form.component';
 import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { AccountKeyComponent } from './../account-key/account-key.component';
@@ -5,7 +6,7 @@ import { NgModel } from '@angular/forms';
 import { AjaxInterceptor } from './../ajax.interceptor';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterViewInit, Component, OnInit, ViewChild, EventEmitter, Optional } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, EventEmitter, Optional, ViewChildren, QueryList } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 import { RestInterfaceService, Account } from 'src/cardano-tools-client';
 import { LocalStorageService } from '../local-storage.service';
@@ -23,6 +24,8 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild('tokenCountInput') tokenCountInput!: NgModel;
+  @ViewChildren('mintForm') components!: QueryList<MintFormComponent>;
+
 
   account!: Account;
   mintOrderSubmission!: MintOrderSubmission;
@@ -88,7 +91,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   addToken() {
-    let token = { assetName: "", amount: 1, metaData: {} };
+    let token = { assetName: "", amount: 1, metaData: "{}" };
     this.mintOrderSubmission.tokens.push(token);
     return token
   }
@@ -101,7 +104,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     for (let index in Object.values(event.target.files)) {
       let file = event.target.files.item(index);
       setTimeout(() => {
-        let token = { assetName: "", amount: 1, metaData: {} };
+        let token = { assetName: "", amount: 1, metaData: "{}" };
         let hack = token as any
         hack.file = file
         this.mintOrderSubmission.tokens.push(token);
@@ -133,6 +136,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   updateMintTransaction() {
+    this.components.forEach(c => c.serializeMetadata())
     this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
     })
@@ -169,7 +173,6 @@ export class MintComponent implements OnInit, AfterViewInit {
       let policyData = parsed["721"][this.account.policyId]
       Object.keys(policyData).map(function (key, index) {
         delete policyData[key]['policy']
-        delete policyData[key]['tool']
       });
       let cleanMetaDataJson = JSON.stringify(parsed, null, 3)
 
@@ -181,27 +184,14 @@ export class MintComponent implements OnInit, AfterViewInit {
         maxWidth: '90vw',
         closeOnNavigation: true
       });
+
       dialogRef.afterClosed().subscribe(result => {
         console.log(`Dialog result: ${result}`);
-
         let newMetadata = JSON.parse(result)
         this.mintOrderSubmission.tokens.forEach(token => {
-          let newTokenMetadata = newMetadata["721"][this.account.policyId][token.assetName]
-          Object.keys(newTokenMetadata).map(function (key, index) {
-            console.log(key, typeof newTokenMetadata[key])
-            if (typeof newTokenMetadata[key] === "string" || typeof newTokenMetadata[key] === "number") {
-              newTokenMetadata[key] = { value: newTokenMetadata[key], listValue: [] };
-            } else if (Array.isArray(newTokenMetadata[key])) {
-              newTokenMetadata[key] = { value: "", listValue: newTokenMetadata[key] };
-            }
-            else {
-              //newTokenMetadata[key] = { value: JSON.stringify(newTokenMetadata[key]), listValue: [] };
-              delete newTokenMetadata[key]
-            }
-          });
-          token.metaData = newMetadata["721"][this.account.policyId][token.assetName]
+          token.metaData = JSON.stringify(newMetadata["721"]?.[this.account.policyId]?.[token.assetName] ?? {}, null, 3);
         })
-
+        this.components.forEach(c => c.reloadMetadata())
       });
 
     })

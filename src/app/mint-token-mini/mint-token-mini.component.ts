@@ -1,5 +1,5 @@
-import { TokenSubmission } from './../../cardano-tools-client/model/tokenSubmission';
 import { Component, Input, OnInit } from '@angular/core';
+import { TokenSubmission } from 'src/cardano-tools-client';
 
 export interface TableRow {
   name: string;
@@ -15,9 +15,12 @@ export class MintTokenMiniComponent implements OnInit {
 
   @Input() token!: TokenSubmission;
 
+  metaData: any;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.metaData = JSON.parse(this.token.metaData)
   }
 
   displayedColumns = ['name', 'value']
@@ -34,8 +37,8 @@ export class MintTokenMiniComponent implements OnInit {
     let data: TableRow[] = [
       { name: 'Amount', value: this.token.amount },
     ];
-    for (let key in this.token.metaData) {
-      data.push({ name: key, value: this.token.metaData[key].value || this.token.metaData[key].listValue })
+    for (let key in this.metaData) {
+      data.push({ name: key, value: this.metaData[key] })
     }
     return data;
   }
