@@ -48,18 +48,32 @@
 
     <div fxLayout="column">
       <div *ngFor="let key of Object.keys(metaData)" fxLayout="column">
+
         <!-- Simple Metafield-->
         <mat-form-field *ngIf="isSimpleValue(metaData[key])" appearance="outline">
           <mat-label>{{toString(key) | titlecase}}</mat-label>
           <input matInput name="{{key}}{{counter}}" maxlength="64" [(ngModel)]="metaData[key]">
+          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])">
+            <mat-icon>auto_fix_high</mat-icon>
+          </button>
         </mat-form-field>
+
         <!-- List Metafied -->
         <app-chiplist *ngIf="isSimpleList(metaData[key])" placeholder="add {{key}}..." [(items)]="metaData[key]">
+          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])">
+            <mat-icon>auto_fix_high</mat-icon>
+          </button>
         </app-chiplist>
+
+        <!-- objects -->
         <mat-form-field *ngIf="!isSimpleValue(metaData[key]) && !isSimpleList(metaData[key])" appearance="outline">
           <mat-label>{{toString(key) | titlecase}}</mat-label>
           <input matInput [value]="toJson(metaData[key])" disabled>
+          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])">
+            <mat-icon>auto_fix_high</mat-icon>
+          </button>
         </mat-form-field>
+
       </div>
     </div>
 

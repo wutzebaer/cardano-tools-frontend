@@ -1,7 +1,8 @@
 <h1 class="mat-h1">Mint Cardano NFTs</h1>
 
 <p style="text-align: center;">
-  Your PolicyId <a [routerLink]="['/latest']" [queryParams]="{q:account.policyId}" target="_blank">{{account.policyId}}</a> will be locked at {{account.policyDueDate | date : 'medium'}}<!--{{getLockDate()  | date : 'medium'}}-->
+  Your PolicyId <a [routerLink]="['/latest']" [queryParams]="{q:account.policyId}" target="_blank">{{account.policyId}}</a> will be locked at {{account.policyDueDate | date : 'medium'}}
+  <!--{{getLockDate()  | date : 'medium'}}-->
 </p>
 
 <mat-horizontal-stepper linear="true" #stepper>
@@ -15,7 +16,7 @@
           <div fxLayout="row wrap" fxLayoutGap="10px grid">
             <div class="token-wrapper" fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="25%" *ngFor="let token of mintOrderSubmission.tokens; let i = index">
               <!-- Mint Card -->
-              <app-mint-form #mintForm [token]=token></app-mint-form>
+              <app-mint-form #mintForm [token]=token (spreadMetaValue)="spreadMetaValue($event)"></app-mint-form>
               <!-- delete button -->
               <button (click)="removeToken(i)" class="delete" mat-mini-fab>
                 <mat-icon>clear</mat-icon>

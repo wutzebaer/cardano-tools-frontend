@@ -1,4 +1,4 @@
-import { MintFormComponent } from './../mint-form/mint-form.component';
+import { MintFormComponent, MetaValue } from './../mint-form/mint-form.component';
 import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { AccountKeyComponent } from './../account-key/account-key.component';
@@ -88,6 +88,10 @@ export class MintComponent implements OnInit, AfterViewInit {
         this.updateMintTransaction()
       }
     });
+  }
+
+  spreadMetaValue($event: MetaValue) {
+    this.components.forEach(c => c.metaData[$event.key] = $event.value)
   }
 
   addToken() {

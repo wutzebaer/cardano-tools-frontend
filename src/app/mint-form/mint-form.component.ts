@@ -1,5 +1,5 @@
 import { TokenEnhancerService } from './../token-enhancer.service';
-import { Component, Input, OnChanges, OnInit, SimpleChanges, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, Output, ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RestInterfaceService, TokenSubmission } from 'src/cardano-tools-client';
@@ -33,6 +33,7 @@ export class MintFormComponent implements OnInit {
   previewType = ""
 
   @Input() token!: TokenSubmission;
+  @Output() spreadMetaValue = new EventEmitter<MetaValue>();
 
   constructor(private sanitizer: DomSanitizer, private api: RestInterfaceService, private cdRef: ChangeDetectorRef, private tokenEnhancerService: TokenEnhancerService) {
     MintFormComponent.globalCounter++;
@@ -64,6 +65,10 @@ export class MintFormComponent implements OnInit {
 
   isSimpleList(value: any) {
     return Array.isArray(value) && typeof value[0] !== 'object';
+  }
+
+  spreadMetaValueClicked(key: string, value: any) {
+    this.spreadMetaValue.emit({ key: key, value: value });
   }
 
   addMetaField(metaField: string) {
