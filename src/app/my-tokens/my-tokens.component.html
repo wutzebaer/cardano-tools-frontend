@@ -17,7 +17,7 @@
       <div class="policyId" fxFlex="100%" *ngIf="i == 0 || (token.policyId != myTokens[i-1].policyId)">
         <a [routerLink]="['/latest']" [queryParams]="{q:token.policyId}"> {{calculateTime(token.epochNo, token.epochSlotNo) | date : 'medium'}} </a>
       </div>
-      <div fxFlex="100%" fxFlex.gt-xs="200px">
+      <div fxFlex="100%" fxFlex.gt-xs="300px">
 
         <a href="javascript:void(0)" (click)="details(token)">
           <app-latest-tokens-mini [token]="token"></app-latest-tokens-mini>
