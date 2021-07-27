@@ -41,12 +41,12 @@ export class MintFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.token.assetName = "Token" + this.counter;
+    this.reloadMetadata()
     let hack = this.token as any
     if (hack.file) {
       this.appendFile(hack.file)
       delete hack.file
     }
-    this.reloadMetadata()
   }
 
   reloadMetadata() {
@@ -55,7 +55,6 @@ export class MintFormComponent implements OnInit {
   }
 
   serializeMetadata() {
-    console.log(this.metaData)
     this.token.metaData = JSON.stringify(this.metaData, null, 3)
   }
 
@@ -112,7 +111,7 @@ export class MintFormComponent implements OnInit {
     this.metaData["name"] = file.name.split(".")[0].substring(0, 60);
     this.token.assetName = file.name.split(".")[0].replace(/[^a-zA-Z0-9]/g, "").substring(0, 32);
 
-    if (file?.size as number < 16384 && confirm('Store file onchain?')) {
+    if (file?.size as number < 16384 && confirm('Store file ' + file.name + ' onchain?')) {
 
       const reader = new FileReader();
       reader.readAsDataURL(file as Blob);
