@@ -91,7 +91,10 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   spreadMetaValue($event: MetaValue) {
-    this.components.forEach(c => c.metaData[$event.key] = $event.value)
+    this.components.forEach(c => {
+      c.metaData[$event.key] = $event.value
+      c.updatePreview()
+    })
   }
 
   addToken() {
