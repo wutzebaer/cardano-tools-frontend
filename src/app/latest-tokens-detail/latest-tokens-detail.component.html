@@ -15,10 +15,10 @@
         </mat-icon>
       </div>
 
-      <img *ngIf="token.mediaTypes[0] == 'image'" [src]="token.mediaUrls[0]" (load)="onLoad()" loading="lazy">
-      <audio controls *ngIf="token.mediaTypes[0] == 'audio'" [src]="token.mediaUrls[0]" (load)="onLoad()"></audio>
-      <video controls *ngIf="token.mediaTypes[0] == 'video'" [src]="token.mediaUrls[0]" (load)="onLoad()"></video>
-      <iframe *ngIf="token.mediaTypes[0] == 'html'" [src]="token.mediaUrls[0]" (load)="onLoad()"></iframe>
+      <img *ngIf="previewType.startsWith('image')" [src]="previewUrl" (load)="onLoad()" loading="lazy">
+      <audio controls *ngIf="previewType.startsWith('audio')" [src]="previewUrl" (load)="onLoad()"></audio>
+      <video controls *ngIf="previewType.startsWith('video')" [src]="previewUrl" (load)="onLoad()"></video>
+      <iframe loading="lazy" *ngIf="previewType.startsWith('text')" [src]="previewUrl" (load)="onLoad()"></iframe>
 
       <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="token.mediaTypes.length == 0">
         <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>

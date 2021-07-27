@@ -1,10 +1,16 @@
+import { TokenEnhancerService } from './../token-enhancer.service';
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Output, ChangeDetectorRef } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RestInterfaceService, TokenSubmission } from 'src/cardano-tools-client';
 import { HttpEventType } from '@angular/common/http';
 import { ArrayDataSource } from '@angular/cdk/collections';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 
+export interface MetaValue {
+  key: string;
+  value: any;
+}
 
 @Component({
   selector: 'app-mint-form',
@@ -14,20 +20,21 @@ import { ArrayDataSource } from '@angular/cdk/collections';
 })
 export class MintFormComponent implements OnInit {
 
+  Object = Object;
+
   static globalCounter = 0;
 
   counter!: number;
-  availableMetaFields: string[] = ['image', 'audio', 'video', 'binary', 'mimetype', 'name', 'type', 'traits', 'artist', 'publisher', 'copyright', 'homepage', 'url'];
+  availableMetaFields: string[] = ['image', 'name', 'type', 'traits', 'artist', 'publisher', 'copyright', 'homepage', 'url'];
   listFields: string[] = ['traits'];
-  knownMimeTypes = ['image', 'video', 'audio'];
   uploadProgress: number = 0;
   metaData: any;
+  previewUrl = ""
+  previewType = ""
 
   @Input() token!: TokenSubmission;
-  file!: File | null;
-  url!: SafeUrl | null;;
 
-  constructor(private sanitizer: DomSanitizer, private api: RestInterfaceService, private cdRef: ChangeDetectorRef) {
+  constructor(private sanitizer: DomSanitizer, private api: RestInterfaceService, private cdRef: ChangeDetectorRef, private tokenEnhancerService: TokenEnhancerService) {
     MintFormComponent.globalCounter++;
     this.counter = MintFormComponent.globalCounter;
   }
@@ -44,22 +51,12 @@ export class MintFormComponent implements OnInit {
 
   reloadMetadata() {
     this.metaData = JSON.parse(this.token.metaData)
+    this.updatePreview()
   }
 
   serializeMetadata() {
+    console.log(this.metaData)
     this.token.metaData = JSON.stringify(this.metaData, null, 3)
-  }
-
-  getFileType() {
-    if (!this.file) {
-      return "";
-    } else {
-      return this.file.type.split("/")[0];
-    }
-  }
-
-  isFileTypeKnown() {
-    return this.knownMimeTypes.indexOf(this.getFileType()) != -1;
   }
 
   isSimpleValue(value: any) {
@@ -71,11 +68,27 @@ export class MintFormComponent implements OnInit {
   }
 
   addMetaField(metaField: string) {
-    if (this.metaData[metaField]) {
+    if (typeof this.metaData[metaField] !== 'undefined') {
       delete this.metaData[metaField];
     } else {
-      this.metaData[metaField] = { value: "", listValue: [] };
+      if (this.listFields.indexOf(metaField) !== -1) {
+        this.metaData[metaField] = [];
+      } else {
+        this.metaData[metaField] = "";
+      }
+
     }
+  }
+
+  updatePreview() {
+    if (this.metaData.files?.length) {
+      this.previewType = this.metaData.files[0].mediaType
+      this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.files[0].src)
+    } else {
+      this.previewType = ""
+      this.previewUrl = ""
+    }
+    console.log(this.previewUrl)
   }
 
   dropFile(event: any) {
@@ -96,49 +109,53 @@ export class MintFormComponent implements OnInit {
       return;
     }
 
-    this.api.postFileForm(file as Blob, 'events', true).subscribe({
-      error: (error) => { this.uploadProgress = 0; },
-      next: (event) => {
-        if (event.type === HttpEventType.UploadProgress) {
-          if (event.total) {
-            this.uploadProgress = event.loaded * 100 / event.total;
+    this.metaData["name"] = file.name.split(".")[0].substring(0, 60);
+    this.token.assetName = file.name.split(".")[0].replace(/[^a-zA-Z0-9]/g, "").substring(0, 32);
+
+    if (file?.size as number < 16384 && confirm('Store file onchain?')) {
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file as Blob);
+      reader.onload = _event => {
+        this.metaData["files"] = [{
+          src: (reader.result as string).match(/.{1,64}/g),
+          name: file.name,
+          mediaType: file.type
+        }]
+        this.updatePreview()
+      };
+
+    } else {
+      this.api.postFileForm(file as Blob, 'events', true).subscribe({
+        error: (error) => { this.uploadProgress = 0; },
+        next: (event) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            if (event.total) {
+              this.uploadProgress = event.loaded * 100 / event.total;
+            }
+          } else if (event.type === HttpEventType.Response) {
+
+            // create metadata
+            delete this.metaData["image"];
+            if (file.type.startsWith('image')) {
+              this.metaData["image"] = "ipfs://" + event.body;
+            }
+
+            this.metaData["files"] = [{
+              src: "ipfs://" + event.body,
+              name: file.name,
+              mediaType: file.type
+            }]
+            this.updatePreview()
+
+            this.uploadProgress = 0;
           }
-        } else if (event.type === HttpEventType.Response) {
-          // store file
-          this.file = file;
-
-          // create preview url
-          if (this.isFileTypeKnown()) {
-            this.url = "https://ipfs.cardano-tools.io/ipfs/" + event.body
-          } else {
-            this.url = null;
-          }
-
-          delete this.metaData["Image"];
-          delete this.metaData["Video"];
-          delete this.metaData["Audio"];
-          delete this.metaData["Binary"];
-
-          // create metadata
-          if (this.getFileType() == 'image') {
-            this.metaData["image"] = { value: "ipfs://" + event.body as string, listValue: [] };
-          } else if (this.getFileType() == 'video') {
-            this.metaData["video"] = { value: "ipfs://" + event.body as string, listValue: [] };
-          } else if (this.getFileType() == 'audio') {
-            this.metaData["audio"] = { value: "ipfs://" + event.body as string, listValue: [] };
-          } else {
-            this.metaData["binary"] = { value: "ipfs://" + event.body as string, listValue: [] };
-          }
-          this.metaData["mimetype"] = { value: file?.type as string, listValue: [] };
-          this.metaData["name"] = { value: (file?.name as string).split(".")[0].substring(0, 60) as string, listValue: [] };
-          this.token.assetName = (file?.name as string).split(".")[0].replace(/[^a-zA-Z0-9]/g, "").substring(0, 32);
-          this.uploadProgress = 0;
-
         }
-      }
-    });
+      });
+    }
 
   }
+
 
   toArray(value: any[]): any[] {
     return value;
@@ -148,4 +165,7 @@ export class MintFormComponent implements OnInit {
     return value;
   }
 
+  toJson(value: any): string {
+    return JSON.stringify(value);
+  }
 }

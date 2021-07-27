@@ -16,6 +16,9 @@ export class LatestTokensDetailComponent implements OnInit {
   tableData: TableRow[]
   tokenRegistryMetadataFormatted: string | undefined
 
+  previewUrl = ""
+  previewType = ""
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: { token: TokenDataWithMetadata }, private clipboard: Clipboard, private dialogRef: MatDialog) {
     this.token = data.token
 
@@ -33,6 +36,13 @@ export class LatestTokensDetailComponent implements OnInit {
   ngOnInit(): void {
     if (this.token.tokenRegistryMetadata) {
       this.tokenRegistryMetadataFormatted = JSON.stringify(this.token.tokenRegistryMetadata, null, 2)
+    }
+    if (this.token.mediaTypes.length) {
+      this.previewType = this.token.mediaTypes[0]
+      this.previewUrl = this.token.mediaUrls[0]
+    } else {
+      this.previewType = ""
+      this.previewUrl = ""
     }
   }
 

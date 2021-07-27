@@ -1,3 +1,4 @@
+import { TokenEnhancerService } from './../token-enhancer.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { TokenSubmission } from 'src/cardano-tools-client';
 
@@ -16,22 +17,23 @@ export class MintTokenMiniComponent implements OnInit {
   @Input() token!: TokenSubmission;
 
   metaData: any;
+  previewUrl = ""
+  previewType = ""
 
-  constructor() { }
+  constructor(private tokenEnhancerService: TokenEnhancerService) { }
 
   ngOnInit(): void {
     this.metaData = JSON.parse(this.token.metaData)
+    if (this.metaData.files?.length) {
+      this.previewType = this.metaData.files[0].mediaType
+      this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.files[0].src)
+    } else {
+      this.previewType = ""
+      this.previewUrl = ""
+    }
   }
 
   displayedColumns = ['name', 'value']
-
-  toIpfsUrl(ipfs: any) {
-    // https://ipfs.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://ipfs.blockfrost.dev/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://cloudflare-ipfs.com/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://ipfs.eternum.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    return ipfs.replace("ipfs://", "https://ipfs.cardano-tools.io/ipfs/");
-  }
 
   get tableData(): TableRow[] {
     let data: TableRow[] = [

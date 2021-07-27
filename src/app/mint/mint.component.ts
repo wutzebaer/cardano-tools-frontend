@@ -160,12 +160,11 @@ export class MintComponent implements OnInit, AfterViewInit {
   getLockDate() {
     let policy = JSON.parse(this.account.policy);
     let slot = policy.scripts[0].slot
-    console.log(slot);
     return new Date((1596491091 + (slot - 4924800)) * 1000)
   }
 
   advanced() {
-
+    this.components.forEach(c => c.serializeMetadata())
     this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
 
@@ -180,13 +179,15 @@ export class MintComponent implements OnInit, AfterViewInit {
         data: {
           metaDataJson: cleanMetaDataJson,
         },
-        width: '700px',
+        width: '800px',
         maxWidth: '90vw',
         closeOnNavigation: true
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
+        if (!result) {
+          return;
+        }
         let newMetadata = JSON.parse(result)
         this.mintOrderSubmission.tokens.forEach(token => {
           token.metaData = JSON.stringify(newMetadata["721"]?.[this.account.policyId]?.[token.assetName] ?? {}, null, 3);

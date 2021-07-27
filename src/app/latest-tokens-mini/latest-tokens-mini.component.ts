@@ -1,3 +1,4 @@
+import { TokenEnhancerService } from './../token-enhancer.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RestInterfaceService } from 'src/cardano-tools-client';
@@ -12,10 +13,22 @@ export class LatestTokensMiniComponent implements OnInit {
 
   @Input() token!: TokenDataWithMetadata;
   loading: boolean = true
-  constructor(private api: RestInterfaceService, private sanitizer: DomSanitizer) { }
+  constructor(private tokenEnhancerService: TokenEnhancerService) { }
 
+  previewUrl = ""
+  previewType = ""
 
   ngOnInit(): void {
+    if (this.token.metaData.image) {
+      this.previewType = 'image'
+      this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.token.metaData.image)
+    } else if (this.token.mediaTypes.length) {
+      this.previewType = this.token.mediaTypes[0]
+      this.previewUrl = this.token.mediaUrls[0]
+    } else {
+      this.previewType = ""
+      this.previewUrl = ""
+    }
   }
 
   displayedColumns = ['name', 'value']

@@ -35,8 +35,10 @@ export class TokenEnhancerService {
 
         if (Array.isArray(metaData['files'])) {
           metaData['files'].forEach(file => {
-            tokenDataWithMetadata.mediaTypes.push(file.mediatype)
-            tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(file.src))
+            if (file.src && (file.mediatype || file.mediaType)) {
+              tokenDataWithMetadata.mediaTypes.push(file.mediatype || file.mediaType)
+              tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(file.src))
+            }
           });
         }
         if (metaData['image']) {
@@ -85,7 +87,7 @@ export class TokenEnhancerService {
       return this.sanitizer.bypassSecurityTrustResourceUrl(ipfs) as string;
     }
 
-    return "https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "");
+    return this.sanitizer.bypassSecurityTrustResourceUrl("https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "")) as string;
   }
 
   findAnyIpfsUrl(object: any): any {
