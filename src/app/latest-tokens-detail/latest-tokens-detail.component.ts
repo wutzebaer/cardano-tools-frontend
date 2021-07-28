@@ -49,13 +49,6 @@ export class LatestTokensDetailComponent implements OnInit {
   displayedColumns = ['name', 'value']
 
 
-  calculateTime(epochNo: number, epochSlotNo: number) {
-    let timestamp = Date.parse('2017-09-23T21:44:51Z');
-    timestamp += epochNo * 432000 * 1000
-    timestamp += epochSlotNo * 1000
-    return timestamp;
-  }
-
   onLoad() {
     this.loading = false;
   }

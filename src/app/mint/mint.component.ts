@@ -31,6 +31,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: MintTransaction;
   loading = false;
+  lockDate?: Date;
 
   initializeValues() {
     this.account = {
@@ -139,6 +140,10 @@ export class MintComponent implements OnInit, AfterViewInit {
       if (balanceChanged || this.mintTransaction.fee == 0) {
         this.updateMintTransaction();
       }
+
+      let policy = JSON.parse(this.account.policy);
+      let slot = policy.scripts[0].slot
+      this.lockDate = new Date((1596491091 + (slot - 4924800)) * 1000)
     })
   }
 
@@ -162,12 +167,6 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.initializeValues()
     this.updateAccount();
     this.addToken()
-  }
-
-  getLockDate() {
-    let policy = JSON.parse(this.account.policy);
-    let slot = policy.scripts[0].slot
-    return new Date((1596491091 + (slot - 4924800)) * 1000)
   }
 
   advanced() {

@@ -1,7 +1,7 @@
 <h1 class="mat-h1">Mint Cardano NFTs</h1>
 
 <p style="text-align: center;">
-  Your PolicyId <a [routerLink]="['/latest']" [queryParams]="{q:account.policyId}" target="_blank">{{account.policyId}}</a> will be locked at {{account.policyDueDate | date : 'medium'}}
+  Your PolicyId <a [routerLink]="['/latest']" [queryParams]="{q:account.policyId}" target="_blank">{{account.policyId}}</a> will be locked at {{lockDate | date : 'medium'}}
   <!--{{getLockDate()  | date : 'medium'}}-->
 </p>
 

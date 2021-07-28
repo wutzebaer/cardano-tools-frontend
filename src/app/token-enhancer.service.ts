@@ -8,6 +8,8 @@ export interface TokenDataWithMetadata extends TokenData {
   tokenRegistryMetadata: TokenRegistryMetadata
   mediaTypes: string[]
   mediaUrls: any[]
+  lockDate?: Date
+  timestamp: Date
 }
 
 @Injectable({
@@ -26,6 +28,30 @@ export class TokenEnhancerService {
       tokenDataWithMetadata.mediaTypes = []
       tokenDataWithMetadata.mediaUrls = []
       tokenDataWithMetadata.metaData = {}
+
+      // timestamp
+      tokenDataWithMetadata.timestamp = new Date((1596491091 + (tokenDataWithMetadata.slotNo - 4924800)) * 1000)
+
+      // find lockdate
+      if (tokenDataWithMetadata.policy) {
+        let policy = JSON.parse(tokenDataWithMetadata.policy);
+        if (policy.type === 'all') {
+          let minLockDate: Date | undefined = undefined;
+          policy.scripts?.forEach((script: any) => {
+            if (script.type === 'before') {
+              let slot = script.slot
+              let lockDate = new Date((1596491091 + (slot - 4924800)) * 1000)
+              if (!minLockDate || lockDate < minLockDate) {
+                minLockDate = lockDate
+              }
+            }
+          });
+          tokenDataWithMetadata.lockDate = minLockDate
+        }
+        // let policy = JSON.parse(this.account.policy);
+        // let slot = policy.scripts[0].slot
+        // return new Date((1596491091 + (slot - 4924800)) * 1000)
+      }
 
       // check if transaction metadata present
       if (element.json && element.json !== 'null') {

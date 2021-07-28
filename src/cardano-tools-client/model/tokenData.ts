@@ -19,11 +19,13 @@ export interface TokenData {
     json: string;
     invalidBefore?: number;
     invalidHereafter?: number;
+    slotNo: number;
     blockNo: number;
     epochNo: number;
     epochSlotNo: number;
     tid: number;
     mintid: number;
     tokenRegistryMetadata?: TokenRegistryMetadata;
+    policy?: string;
     fingerprint: string;
 }
