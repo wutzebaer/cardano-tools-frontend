@@ -39,7 +39,6 @@ export class RegisterTokenComponent implements OnInit {
 
   loadTransaction() {
     this.api.getRegistrationMetadata(this.accountKey).subscribe(registrationMetadata => {
-      console.log(registrationMetadata);
       this.registrationMetadata = registrationMetadata
     })
   }
@@ -71,8 +70,6 @@ export class RegisterTokenComponent implements OnInit {
   }
 
   generateRegistration() {
-    console.log(this.registrationMetadata);
-    console.log(this.file);
     this.api.generateTokenRegistrationForm(JSON.stringify(this.registrationMetadata), this.file as Blob).subscribe(tokenRegistration => {
 
       this.dialog.open(RegisterTokenSuccessComponent, {

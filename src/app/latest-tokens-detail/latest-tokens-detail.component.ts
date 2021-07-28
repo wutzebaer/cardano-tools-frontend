@@ -65,7 +65,6 @@ export class LatestTokensDetailComponent implements OnInit {
   }
 
   copyToClipboard(value: string) {
-    console.log(value)
     this.clipboard.copy(value);
   }
 

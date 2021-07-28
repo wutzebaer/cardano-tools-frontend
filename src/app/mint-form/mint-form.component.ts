@@ -92,7 +92,6 @@ export class MintFormComponent implements OnInit {
       this.previewType = ""
       this.previewUrl = ""
     }
-    console.log(this.previewUrl)
   }
 
   dropFile(event: any) {
@@ -101,7 +100,6 @@ export class MintFormComponent implements OnInit {
   }
 
   addFile(event: any) {
-    console.log("addfile", this.counter, event)
     this.appendFile(event.target.files.item(0));
     event.target.value = '';
   }

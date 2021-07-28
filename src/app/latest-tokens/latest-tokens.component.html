@@ -1,9 +1,14 @@
 <h1 class="mat-h1">Latest Cardano NFTs</h1>
 
-<p fxLayout="row" fxLayoutAlign="center" class="search-box">
-  <mat-form-field appearance="outline" fxFlex="90%" fxFlex.gt-sm="50%" fxFlex.gt-md="33%" fxFlex.gt-lg="20%">
-    <input matInput placeholder="Search token name or policy id" [(ngModel)]="searchInput" (keyup)="search($event)">
-  </mat-form-field>
+<p>
+  <span fxLayout="row" fxLayoutAlign="center">
+    <mat-form-field appearance="outline" fxFlex="500px" fxFlex.lt-md="100%">
+      <input matInput placeholder="Search token name or policy id" [(ngModel)]="searchInput" (keyup)="search($event)">
+      <button mat-button *ngIf="searchInput" matSuffix mat-icon-button aria-label="Clear" (click)="searchInput=''; search($event);">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </span>
 </p>
 
 <div fxLayout="row" fxLayoutAlign="center">
