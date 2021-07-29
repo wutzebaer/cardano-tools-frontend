@@ -11,6 +11,7 @@ export interface TokenDataWithMetadata extends TokenData {
   lockDate?: Date
   timestamp: Date
   locked: boolean
+  nft: boolean
 }
 
 @Injectable({
@@ -34,6 +35,8 @@ export class TokenEnhancerService {
       tokenDataWithMetadata.timestamp = new Date((1596491091 + (tokenDataWithMetadata.slotNo - 4924800)) * 1000)
 
       // find lockdate
+      tokenDataWithMetadata.locked = false;
+      tokenDataWithMetadata.nft = false;
       if (tokenDataWithMetadata.policy) {
         let policy = JSON.parse(tokenDataWithMetadata.policy);
         if (policy.type === 'all') {
@@ -51,6 +54,7 @@ export class TokenEnhancerService {
           if (minLockDate && minLockDate < new Date()) {
             tokenDataWithMetadata.locked = true;
           }
+          tokenDataWithMetadata.nft = tokenDataWithMetadata.locked && tokenDataWithMetadata.totalSupply === 1;
         }
         // let policy = JSON.parse(this.account.policy);
         // let slot = policy.scripts[0].slot

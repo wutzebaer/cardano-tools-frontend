@@ -29,16 +29,14 @@
         <mat-icon class="verified-icon" fontSet="material-icons-outlined">how_to_reg</mat-icon>
       </div>
 
-      <div *ngIf="token.locked" class="title">
-        <mat-icon class="locked-icon" fontSet="material-icons-outlined">lock</mat-icon>
-      </div>
-
     </div>
 
-    <div *ngIf="token.quantity > 1" class="title">
-      {{token.quantity}}x
+    <div fxlayout="row" fxLayoutAlign="start center" class="icons" fxLayoutGap="5px">
+      <mat-icon *ngIf="token.locked" class="locked-icon" fontSet="material-icons-outlined">lock</mat-icon>
+      <mat-icon *ngIf="!token.locked" class="locked-open-icon" fontSet="material-icons-outlined">lock_open</mat-icon>
+      <span *ngIf="token.nft" class="nft-icon">NFT</span>
+      <span *ngIf="token.quantity > 1" class="title">{{token.quantity}}x</span>
     </div>
-
 
 
 

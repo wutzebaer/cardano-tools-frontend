@@ -18,9 +18,7 @@
         <a [routerLink]="['/latest']" [queryParams]="{q:token.policyId}"> {{token.timestamp | date : 'medium'}} </a>
       </div>
       <div fxFlex="100%" fxFlex.gt-xs="300px">
-        <a href="javascript:void(0)" (click)="details(token)">
-          <app-latest-tokens-mini [token]="token"></app-latest-tokens-mini>
-        </a>
+        <app-latest-tokens-mini [token]="token" (click)="details(token)"></app-latest-tokens-mini>
       </div>
     </ng-container>
   </div>

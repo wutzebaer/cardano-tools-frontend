@@ -24,10 +24,6 @@
         <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
       </div>
 
-      <div *ngIf="token.tokenRegistryMetadata" class="title">
-        <mat-icon class="verified-icon" fontSet="material-icons-outlined">verified</mat-icon>
-      </div>
-
     </div>
 
     <div fxLayout="column" fxLayoutGap="20px">
@@ -38,7 +34,7 @@
         <!-- Amount -->
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               Amount
             </mat-panel-title>
             <mat-panel-description fxFlex>
@@ -56,7 +52,7 @@
         <!-- Fingerprint -->
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               Fingerprint
             </mat-panel-title>
             <mat-panel-description fxFlex>
@@ -74,7 +70,7 @@
         <!-- PolicyId -->
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               Policy ID
             </mat-panel-title>
             <mat-panel-description fxFlex>
@@ -92,7 +88,7 @@
         <!-- Policy -->
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               Policy
             </mat-panel-title>
             <mat-panel-description fxFlex>
@@ -112,7 +108,7 @@
         <!-- Lock date -->
         <mat-expansion-panel *ngIf="token.lockDate">
           <mat-expansion-panel-header>
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               Lock date
             </mat-panel-title>
             <mat-panel-description fxFlex>
@@ -128,9 +124,9 @@
         </mat-expansion-panel>
 
         <!-- Locked -->
-        <mat-expansion-panel *ngIf="token.lockDate">
+        <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               Locked
             </mat-panel-title>
             <mat-panel-description fxFlex>
@@ -145,11 +141,29 @@
           </div>
         </mat-expansion-panel>
 
+        <!-- Total supply -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="100px">
+              Total supply
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.totalSupply + '')">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              {{token.totalSupply}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            {{token.totalSupply}}
+          </div>
+        </mat-expansion-panel>
+
 
         <!-- TxId -->
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               TX ID
             </mat-panel-title>
             <mat-panel-description fxFlex>
@@ -167,7 +181,7 @@
         <!-- Registered Data -->
         <mat-expansion-panel *ngIf="tokenRegistryMetadataFormatted">
           <mat-expansion-panel-header>
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               Reg. Data
             </mat-panel-title>
             <mat-panel-description fxFlex>
@@ -185,7 +199,7 @@
         <!-- Registered Data Logo -->
         <mat-expansion-panel *ngIf="token.tokenRegistryMetadata">
           <mat-expansion-panel-header>
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               Reg. Logo
             </mat-panel-title>
             <mat-panel-description fxFlex>
@@ -201,7 +215,7 @@
         <!-- Timestamp -->
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               Created at
             </mat-panel-title>
             <mat-panel-description fxFlex>
@@ -221,7 +235,7 @@
         <h3>Custom data</h3>
         <mat-expansion-panel *ngFor="let element of tableData">
           <mat-expansion-panel-header fxLayout="row">
-            <mat-panel-title fxFlex="75px">
+            <mat-panel-title fxFlex="100px">
               {{element.name | titlecase }}
             </mat-panel-title>
             <mat-panel-description>

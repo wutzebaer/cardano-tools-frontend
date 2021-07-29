@@ -27,5 +27,6 @@ export interface TokenData {
     mintid: number;
     tokenRegistryMetadata?: TokenRegistryMetadata;
     policy?: string;
+    totalSupply: number;
     fingerprint: string;
 }
