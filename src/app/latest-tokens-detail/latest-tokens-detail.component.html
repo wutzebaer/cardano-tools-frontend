@@ -231,7 +231,7 @@
         </mat-expansion-panel>
       </mat-accordion>
 
-      <mat-accordion>
+      <mat-accordion *ngIf="tableData.length">
         <h3>Custom data</h3>
         <mat-expansion-panel *ngFor="let element of tableData">
           <mat-expansion-panel-header fxLayout="row">

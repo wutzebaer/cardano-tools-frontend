@@ -65,7 +65,7 @@ export class TokenEnhancerService {
       if (element.json && element.json !== 'null') {
 
         // find metadata of token in transaction metadata
-        let metaData = JSON.parse(element.json)[tokenDataWithMetadata.policyId]?.[tokenDataWithMetadata.name] ?? {}
+        let metaData = JSON.parse(element.json)
 
         if (Array.isArray(metaData['files'])) {
           metaData['files'].forEach(file => {
