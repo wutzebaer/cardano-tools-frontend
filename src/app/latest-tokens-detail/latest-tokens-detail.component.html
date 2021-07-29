@@ -232,7 +232,7 @@
       </mat-accordion>
 
       <mat-accordion *ngIf="tableData.length">
-        <h3>Custom data</h3>
+        <h3>Custom data  <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.json)"><mat-icon>content_copy</mat-icon></button></h3>
         <mat-expansion-panel *ngFor="let element of tableData">
           <mat-expansion-panel-header fxLayout="row">
             <mat-panel-title fxFlex="100px">
