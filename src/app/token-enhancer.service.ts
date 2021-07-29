@@ -10,6 +10,7 @@ export interface TokenDataWithMetadata extends TokenData {
   mediaUrls: any[]
   lockDate?: Date
   timestamp: Date
+  locked: boolean
 }
 
 @Injectable({
@@ -47,6 +48,9 @@ export class TokenEnhancerService {
             }
           });
           tokenDataWithMetadata.lockDate = minLockDate
+          if (minLockDate && minLockDate < new Date()) {
+            tokenDataWithMetadata.locked = true;
+          }
         }
         // let policy = JSON.parse(this.account.policy);
         // let slot = policy.scripts[0].slot

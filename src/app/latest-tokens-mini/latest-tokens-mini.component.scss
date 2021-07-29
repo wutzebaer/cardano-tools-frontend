@@ -3,13 +3,24 @@
 }
 
 .verified-icon {
-  font-size: 50px;
+  font-size: 30px;
   line-height: auto;
   width: auto;
   height: auto;
   position: absolute;
   bottom: 0;
   right: 0;
+  color: #ffd700;
+}
+
+.locked-icon {
+  font-size: 30px;
+  line-height: auto;
+  width: auto;
+  height: auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
   color: #ffd700;
 }
 

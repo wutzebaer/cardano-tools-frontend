@@ -26,7 +26,11 @@
       </div>
 
       <div *ngIf="token.tokenRegistryMetadata" class="title">
-        <mat-icon class="verified-icon" fontSet="material-icons-outlined">verified</mat-icon>
+        <mat-icon class="verified-icon" fontSet="material-icons-outlined">how_to_reg</mat-icon>
+      </div>
+
+      <div *ngIf="token.locked" class="title">
+        <mat-icon class="locked-icon" fontSet="material-icons-outlined">lock</mat-icon>
       </div>
 
     </div>

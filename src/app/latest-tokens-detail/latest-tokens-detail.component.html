@@ -127,6 +127,25 @@
           </div>
         </mat-expansion-panel>
 
+        <!-- Locked -->
+        <mat-expansion-panel *ngIf="token.lockDate">
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="75px">
+              Locked
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.locked + '')">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              {{token.locked}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            {{token.locked}}
+          </div>
+        </mat-expansion-panel>
+
+
         <!-- TxId -->
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -183,7 +202,7 @@
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title fxFlex="75px">
-              Timestamp
+              Created at
             </mat-panel-title>
             <mat-panel-description fxFlex>
               <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.txId)">
