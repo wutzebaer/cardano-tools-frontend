@@ -88,6 +88,11 @@ export class LatestTokensComponent implements OnInit {
     }
 
     this.latestTokens = this.latestTokens.concat(enhancedLatestTokens)
+
+    if (!append && latestTokens.length === 1) {
+      this.details(this.latestTokens[0]);
+    }
+
   }
 
 
