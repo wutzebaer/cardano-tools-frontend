@@ -6,6 +6,7 @@ import { RestInterfaceService, TokenSubmission } from 'src/cardano-tools-client'
 import { HttpEventType } from '@angular/common/http';
 import { ArrayDataSource } from '@angular/cdk/collections';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
+import { startWith } from 'rxjs/operators';
 
 export interface MetaValue {
   key: string;
@@ -41,7 +42,9 @@ export class MintFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.token.assetName = "Token" + this.counter;
+    if (!this.token.assetName) {
+      this.token.assetName = "Token" + this.counter;
+    }
     this.reloadMetadata()
     let hack = this.token as any
     if (hack.file) {
@@ -64,7 +67,7 @@ export class MintFormComponent implements OnInit {
   }
 
   isSimpleList(value: any) {
-    return Array.isArray(value) && typeof value[0] !== 'object';
+    return Array.isArray(value) && typeof value[0] !== 'object' && !(value[0] + '').startsWith('data:');
   }
 
   spreadMetaValueClicked(key: string, value: any) {

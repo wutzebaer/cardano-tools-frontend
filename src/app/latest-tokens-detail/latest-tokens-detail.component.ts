@@ -61,4 +61,8 @@ export class LatestTokensDetailComponent implements OnInit {
     this.clipboard.copy(value);
   }
 
+  copyMetadataToClipboard() {
+    this.clipboard.copy('"' + this.token.name + '": ' + JSON.stringify(JSON.parse(this.token.json), null, 3) + ',');
+  }
+
 }

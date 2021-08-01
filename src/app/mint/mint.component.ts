@@ -195,9 +195,14 @@ export class MintComponent implements OnInit, AfterViewInit {
           return;
         }
         let newMetadata = JSON.parse(result)
-        this.mintOrderSubmission.tokens.forEach(token => {
-          token.metaData = JSON.stringify(newMetadata["721"]?.[this.account.policyId]?.[token.assetName] ?? {}, null, 3);
-        })
+
+        this.mintOrderSubmission.tokens = [];
+        const tokenDatas = newMetadata["721"]?.[this.account.policyId];
+        for (const key in tokenDatas) {
+          let token = { assetName: key, amount: 1, metaData: "{}" };
+          token.metaData = JSON.stringify(tokenDatas[key] ?? {}, null, 3);
+          this.mintOrderSubmission.tokens.push(token);
+        }
         this.components.forEach(c => c.reloadMetadata())
       });
 
