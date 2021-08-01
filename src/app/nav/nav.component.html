@@ -4,6 +4,7 @@
     (click)="drawer.mode === 'side' || drawer.close()">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
+      <a mat-list-item [routerLink]="'/europool'"> [EURO]-Pool </a>
       <a mat-list-item [routerLink]="'/latest'"> Latest Tokens </a>
       <a mat-list-item [routerLink]="'/my'"> My Tokens </a>
       <a mat-list-item [routerLink]="'/mint'"> Mint </a>
