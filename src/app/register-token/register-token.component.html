@@ -85,7 +85,7 @@
           <div>
             <mat-form-field fxFlex appearance="outline" fxFlex="100%">
               <mat-label>Ticker</mat-label>
-              <input matInput [(ngModel)]="registrationMetadata.ticker" name="ticker">
+              <input matInput [(ngModel)]="registrationMetadata.ticker" name="ticker" maxlength="5">
               <mat-hint>Ticker is not mandatory but recommended, since Daedalus shows it prominent.</mat-hint>
             </mat-form-field>
           </div>
