@@ -1,3 +1,4 @@
+import { interval } from 'rxjs';
 import { MintFormComponent, MetaValue } from './../mint-form/mint-form.component';
 import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
@@ -15,6 +16,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { JsonpClientBackend } from '@angular/common/http';
 
+export interface Countdown {
+  secondsToDday: number;
+  minutesToDday: number;
+  hoursToDday: number;
+  daysToDday: number;
+}
+
 @Component({
   selector: 'app-mint',
   templateUrl: './mint.component.html',
@@ -31,7 +39,8 @@ export class MintComponent implements OnInit, AfterViewInit {
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: MintTransaction;
   loading = false;
-  lockDate?: Date;
+  lockDate = new Date();
+  policyTimeLeft: string = "00:00:00:00";
 
   initializeValues() {
     this.account = {
@@ -81,6 +90,9 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.addToken();
+    interval(1000).subscribe(() => {
+      this.updatePolicyTimeLeft();
+    });
   }
 
   ngAfterViewInit() {
@@ -90,6 +102,8 @@ export class MintComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+
 
   spreadMetaValue($event: MetaValue) {
     this.components.forEach(c => {
@@ -147,10 +161,24 @@ export class MintComponent implements OnInit, AfterViewInit {
     })
   }
 
+  updatePolicyTimeLeft() {
+    if (this.account?.policy) {
+      var timeLeft = this.lockDate.getTime() - new Date().getTime();
+      const countdown: Countdown = {
+        secondsToDday: Math.floor(timeLeft / (1000) % 60),
+        minutesToDday: Math.floor(timeLeft / (1000 * 60) % 60),
+        hoursToDday: Math.floor(timeLeft / (1000 * 60 * 60) % 24),
+        daysToDday: Math.floor(timeLeft / (1000 * 60 * 60 * 24))
+      };
+      this.policyTimeLeft = `${countdown.daysToDday.toString().padStart(2, "0")}:${countdown.hoursToDday.toString().padStart(2, "0")}:${countdown.minutesToDday.toString().padStart(2, "0")}:${countdown.secondsToDday.toString().padStart(2, "0")}`;
+    }
+  }
+
   updateMintTransaction() {
     this.components.forEach(c => c.serializeMetadata())
     this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
+      this.updatePolicyTimeLeft();
     })
   }
 
