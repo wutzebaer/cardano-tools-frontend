@@ -162,7 +162,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   updatePolicyTimeLeft() {
-    if (this.account?.policy) {
+    if (this.account?.policyId) {
       var timeLeft = this.lockDate.getTime() - new Date().getTime();
       const countdown: Countdown = {
         secondsToDday: Math.floor(timeLeft / (1000) % 60),
