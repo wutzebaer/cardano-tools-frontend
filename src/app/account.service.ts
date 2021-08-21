@@ -48,10 +48,21 @@ export class AccountService {
   }
 
   private loadAccount(accountObservable: Observable<Account>) {
-    accountObservable.subscribe(account => {
-      this.localStorageService.storeAccountKey(account.key);
-      this.account.next(account);
-    });
+    accountObservable.subscribe(
+      {
+        error: error => {
+          if (error.status >= 400) {
+            alert("Account not found, creating a new one.");
+            this.localStorageService.clearAccountKey();
+            this.updateAccount();
+          }
+        },
+        next: account => {
+          this.localStorageService.storeAccountKey(account.key);
+          this.account.next(account);
+        }
+      }
+    );
   }
 
 }

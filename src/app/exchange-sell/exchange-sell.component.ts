@@ -1,3 +1,5 @@
+import { Account } from 'src/cardano-tools-client';
+import { AccountService } from './../account.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExchangeSellComponent implements OnInit {
 
-  constructor() { }
+  account!: Account;
+
+  constructor(private accountService: AccountService) {
+    accountService.account.subscribe(account => this.account = account);
+  }
 
   ngOnInit(): void {
+
   }
 
 }
