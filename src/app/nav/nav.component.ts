@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -18,7 +19,13 @@ export class NavComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(private breakpointObserver: BreakpointObserver, private router: Router) {
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      document.getElementsByTagName('mat-sidenav-content')[0].scrollTo(0, 0)
+    });
   }
 
 
