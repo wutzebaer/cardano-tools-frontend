@@ -24,9 +24,9 @@ export class MintTokenMiniComponent implements OnInit {
 
   ngOnInit(): void {
     this.metaData = JSON.parse(this.token.metaData)
-    if (this.metaData.files?.length) {
-      this.previewType = this.metaData.files[0].mediaType || this.metaData.files[0].mediatype
-      this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.files[0].src)
+    if (this.metaData.image) {
+      this.previewType = 'image'
+      this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.image)
     } else {
       this.previewType = ""
       this.previewUrl = ""

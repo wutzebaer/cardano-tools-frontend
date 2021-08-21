@@ -90,4 +90,9 @@
       <span fxHide.lt-sm> Proceed</span>
     </button>
   </div>
+  <div fxLayout="row wrap" fxLayoutGap="10px grid">
+    <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="50%" fxFlex.gt-lg="33%" *ngFor="let token of mintTransaction.mintOrderSubmission.tokens">
+      <app-mint-token-mini [token]="token"></app-mint-token-mini>
+    </div>
+  </div>
 </div>
