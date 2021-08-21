@@ -88,13 +88,15 @@ export class MintFormComponent implements OnInit {
   }
 
   updatePreview() {
-    if (this.metaData.image) {
-      this.previewType = 'image'
-      this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.image)
-    } else if (this.metaData.files?.length) {
+    if (this.metaData.files?.length) {
       this.previewType = this.metaData.files[0].mediaType
       this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.files[0].src)
-    } else {
+    }
+    else if (this.metaData.image) {
+      this.previewType = 'image'
+      this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.image)
+    }
+    else {
       this.previewType = ""
       this.previewUrl = ""
     }
