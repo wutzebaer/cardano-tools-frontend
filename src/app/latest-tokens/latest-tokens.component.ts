@@ -2,13 +2,16 @@ import { TokenEnhancerService } from './../token-enhancer.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, interval } from 'rxjs';
 import { debounceTime, distinctUntilChanged, retry, switchMap } from 'rxjs/operators';
 import { RestInterfaceService, TokenData, TokenRegistryMetadata } from 'src/cardano-tools-client';
 import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
 
 
+export enum FetchMode {
+  replace, append, prepend
+}
 
 @Component({
   selector: 'app-latest-tokens',
@@ -37,7 +40,7 @@ export class LatestTokensComponent implements OnInit {
         }
       }),
       retry()
-    ).subscribe(foundTokens => this.updateTokens(foundTokens, false))
+    ).subscribe(foundTokens => this.updateTokens(foundTokens, FetchMode.replace))
 
     this.activatedRoute.queryParams.subscribe(params => {
       let q = params['q'];
@@ -52,7 +55,16 @@ export class LatestTokensComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    interval(1000).subscribe(() => {
+      if (this.searchText == '') {
+        let mintid = this.latestTokens[0].mintid
+        this.api.latestTokens(-mintid).subscribe(
+          latestTokens => {
+            this.updateTokens(latestTokens, FetchMode.prepend);
+          }
+        );
+      }
+    });
   }
 
   details(token: TokenDataWithMetadata) {
@@ -77,19 +89,28 @@ export class LatestTokensComponent implements OnInit {
     this.searchText$.next(searchText);
   }
 
-  updateTokens(latestTokens: TokenData[], append: boolean) {
+  updateTokens(latestTokens: TokenData[], fetchMode: FetchMode) {
+
+    if (!latestTokens.length && fetchMode !== FetchMode.replace) {
+      return;
+    }
 
     let enhancedLatestTokens = this.tokenEnhancerService.enhanceTokens(latestTokens);
 
-    if (!append) {
+    if (fetchMode == FetchMode.replace) {
       this.latestTokens = []
       document.getElementsByClassName("my-sidenav-content")[0].scrollTop = 0
       this.lastOffset = 0
     }
 
-    this.latestTokens = this.latestTokens.concat(enhancedLatestTokens)
+    if (fetchMode == FetchMode.prepend) {
+      this.latestTokens = enhancedLatestTokens.concat(this.latestTokens)
+    } else {
+      this.latestTokens = this.latestTokens.concat(enhancedLatestTokens)
+    }
 
-    if (!append && latestTokens.length === 1) {
+
+    if (fetchMode == FetchMode.replace && latestTokens.length === 1) {
       this.details(this.latestTokens[0]);
     }
 
@@ -109,13 +130,13 @@ export class LatestTokensComponent implements OnInit {
     if (this.searchText == '') {
       this.api.latestTokens(mintid).subscribe(
         latestTokens => {
-          this.updateTokens(latestTokens, true)
+          this.updateTokens(latestTokens, FetchMode.append)
         }
       );
     } else {
       this.api.findTokens(this.searchText, mintid).subscribe(
         latestTokens => {
-          this.updateTokens(latestTokens, true)
+          this.updateTokens(latestTokens, FetchMode.append)
         }
       );
     }

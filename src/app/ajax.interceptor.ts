@@ -17,8 +17,13 @@ export class AjaxInterceptor implements HttpInterceptor {
   counter = 0;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    this.counter++
-    this.ajaxStatusChanged$.emit(true);
+
+    const hideLoader = (request.params.get('fromMintid') || 0) < 0;
+
+    if (!hideLoader) {
+      this.counter++
+      this.ajaxStatusChanged$.emit(true);
+    }
     const response = next.handle(request);
     return response.pipe(
       tap({
@@ -26,12 +31,16 @@ export class AjaxInterceptor implements HttpInterceptor {
         },
         error: errorResponse => {
           alert(errorResponse.error?.message || errorResponse.message);
-          this.counter--
-          this.ajaxStatusChanged$.emit(this.counter > 0);
+          if (!hideLoader) {
+            this.counter--
+            this.ajaxStatusChanged$.emit(this.counter > 0);
+          }
         },
         complete: () => {
-          this.counter--
-          this.ajaxStatusChanged$.emit(this.counter > 0);
+          if (!hideLoader) {
+            this.counter--
+            this.ajaxStatusChanged$.emit(this.counter > 0);
+          }
         }
       })
     );
