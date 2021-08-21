@@ -1,3 +1,4 @@
+import { BurnComponent } from './burn/burn.component';
 import { EuroPoolComponent } from './euro-pool/euro-pool.component';
 import { MyTokensComponent } from './my-tokens/my-tokens.component';
 import { RegisterTokenComponent } from './register-token/register-token.component';
@@ -10,6 +11,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/latest', pathMatch: 'full' },
   { path: 'europool', component: EuroPoolComponent },
   { path: 'mint', component: MintComponent },
+  { path: 'burn', component: BurnComponent },
   { path: 'register', component: RegisterTokenComponent },
   { path: 'latest', component: LatestTokensComponent },
   { path: 'my', component: MyTokensComponent },

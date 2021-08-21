@@ -83,8 +83,8 @@ export class MintFormComponent implements OnInit {
       } else {
         this.metaData[metaField] = "";
       }
-
     }
+    this.updatePreview();
   }
 
   updatePreview() {

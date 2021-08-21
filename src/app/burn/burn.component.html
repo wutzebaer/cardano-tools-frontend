@@ -1,0 +1,54 @@
+<div fxLayoutAlign="center">
+  <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="1000px">
+    <mat-card>
+      <mat-card-content>
+
+        <h2>Burn tokens</h2>
+
+        <p>
+          Burning is only possible if your policy is not locked and you have the private keys of the policy or you minted your tokens at cardano-tools.io and saved the yccount key you received on the end of the minting process.
+        </p>
+        <p>
+          Until cardano-tools.io has implemented a real burning of tokens you can use the following address, you can also use the address when your policy is already locked.
+        </p>
+
+        <p>
+          Burn address: <b>addr1wxa7ec20249sqg87yu2aqkqp735qa02q6yd93u28gzul93ghspjnt</b>
+        </p>
+
+        <h2>Verify the address</h2>
+        <p>
+          To verify that this address is really locked forever save this to a file named <code>locked_script.json</code>
+        </p>
+
+        <pre>
+&#123;
+  "type": "all",
+  "scripts":
+  [
+    &#123;
+      "type": "before",
+      "slot": 0
+    &#125;
+  ]
+&#125;</pre>
+
+        <p>
+          Then generate the address from it
+        </p>
+
+
+        <pre>
+cardano-cli address build --payment-script-file locked_script.json --mainnet --out-file locked.addr
+cat locked.addr</pre>
+
+        <p>It results in <b>addr1wxa7ec20249sqg87yu2aqkqp735qa02q6yd93u28gzul93ghspjnt</b></p>
+
+        <p>
+          Since the script validates only when the current slot is before 0 it will never be able to succeed.
+        </p>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
