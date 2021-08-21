@@ -82,9 +82,7 @@ export class MintComponent implements OnInit, AfterViewInit {
         this.updateMintTransaction();
       }
 
-      let policy = JSON.parse(this.account.policy);
-      let slot = policy.scripts[0].slot;
-      this.lockDate = new Date((1596491091 + (slot - 4924800)) * 1000);
+      this.lockDate = new Date(account.policyDueDate);
       this.updatePolicyTimeLeft();
     });
 

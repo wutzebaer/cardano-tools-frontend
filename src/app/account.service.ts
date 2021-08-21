@@ -51,7 +51,7 @@ export class AccountService {
     accountObservable.subscribe(
       {
         error: error => {
-          if (error.status >= 400) {
+          if (error.status >= 400 && error.status < 500) {
             alert("Account not found, creating a new one.");
             this.localStorageService.clearAccountKey();
             this.updateAccount();
