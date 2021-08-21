@@ -100,6 +100,11 @@ export class TokenEnhancerService {
         tokenDataWithMetadata.metaData = metaData;
       }
 
+      if (element.tokenRegistryMetadata?.logo) {
+        tokenDataWithMetadata.mediaTypes.push('image')
+        tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl("data:image/gif;base64," + element.tokenRegistryMetadata.logo))
+      }
+
       // return enhanced
       return tokenDataWithMetadata;
     });
