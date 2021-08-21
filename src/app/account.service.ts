@@ -14,13 +14,14 @@ export class AccountService {
     address: "",
     balance: 0,
     fundingAddresses: [],
-    createdAt: new Date(),
+    fundingAddressesHistory: [],
+    createdAt: new Date(0),
     skey: "",
     vkey: "",
-    lastUpdate: 0,
+    lastUpdate: new Date(0),
     policyId: "",
     policy: "{\"scripts\":[{\"slot\":0}]}",
-    policyDueDate: new Date()
+    policyDueDate: new Date(0)
   });
 
   constructor(private localStorageService: LocalStorageService, private api: RestInterfaceService) {

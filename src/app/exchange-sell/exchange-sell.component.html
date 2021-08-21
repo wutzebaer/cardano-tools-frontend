@@ -1,3 +1,14 @@
-<p>exchange-sell works!</p>
+History: {{account.fundingAddressesHistory.length}}
+Normal: {{account.fundingAddresses.length}}
+<div *ngIf="!account.fundingAddresses.length">
+</div>
+Please register your wallet with your Account {{account.address}}
 
-{{account.key}}
+<div fxLayout="row" fxLayoutAlign="center">
+  <div fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center top" fxFlex="0 1 100%" fxFlex.lt-md="100%">
+    <div fxFlex="100%" fxFlex.gt-xs="300px" *ngFor="let token of myTokens; let i = index">
+      <app-latest-tokens-mini [token]="token" (click)="details(token)"></app-latest-tokens-mini>
+    </div>
+  </div>
+</div>
+<div style="clear: both;">HUHU</div>

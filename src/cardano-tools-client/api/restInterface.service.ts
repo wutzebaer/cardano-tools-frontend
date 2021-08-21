@@ -427,6 +427,47 @@ export class RestInterfaceService {
     /**
      * 
      * 
+     * @param key 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public offerToken(key: string, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
+    public offerToken(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
+    public offerToken(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
+    public offerToken(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling offerToken.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<TokenData>>('get',`${this.basePath}/api/offerToken/${encodeURIComponent(String(key))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param policyId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

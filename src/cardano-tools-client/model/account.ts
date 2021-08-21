@@ -17,8 +17,9 @@ export interface Account {
     skey: string;
     vkey: string;
     fundingAddresses: Array<string>;
+    fundingAddressesHistory: Array<string>;
     balance: number;
-    lastUpdate: number;
+    lastUpdate: Date;
     policy: string;
     policyId: string;
     policyDueDate: Date;
