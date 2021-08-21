@@ -1,20 +1,22 @@
+import { LocalStorageService } from './local-storage.service';
+import { AccountService } from './account.service';
 import { AjaxInterceptor } from './ajax.interceptor';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location, PopStateEvent } from '@angular/common';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   title = 'cardano-tools-frontend';
   ajaxStatus: boolean = false;
 
-  constructor(private ajaxInterceptor: AjaxInterceptor, private location: Location, private dialogRef: MatDialog, private router: Router) {
+  constructor(private ajaxInterceptor: AjaxInterceptor, private location: Location, private dialogRef: MatDialog, private router: Router, private activatedRoute: ActivatedRoute, private accountService: AccountService, private localStorageService: LocalStorageService) {
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.ajaxStatus = ajaxStatus);
 
     // push history state when a dialog is opened
@@ -30,6 +32,13 @@ export class AppComponent {
         }
       });
 
+      this.activatedRoute.queryParams.subscribe(params => {
+        let accountKey = params['accountKey'];
+        if (accountKey) {
+          localStorageService.storeAccountKey(accountKey);
+        }
+      });
+
     });
 
     location.subscribe((event: PopStateEvent) => {
@@ -40,6 +49,9 @@ export class AppComponent {
         frontDialog.close();
       }
     });
+  }
+  ngOnInit(): void {
+    this.accountService.updateAccount();
   }
 
 }

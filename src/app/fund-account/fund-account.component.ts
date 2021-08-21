@@ -1,3 +1,4 @@
+import { AccountService } from './../account.service';
 import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, AfterContentChecked } from '@angular/core';
@@ -17,8 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class FundAccountComponent implements OnInit {
 
-  @Input() account!: Account;
-  @Output() updateAccount = new EventEmitter<void>();
+  account!: Account;
 
   @Input() mintTransaction!: MintTransaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
@@ -31,18 +31,20 @@ export class FundAccountComponent implements OnInit {
 
   @Input() loading!: boolean;
 
-  constructor(private clipboard: Clipboard) { }
+  constructor(private clipboard: Clipboard, private accountService: AccountService) {
+    accountService.account.subscribe(account => this.account = account);
+  }
 
   ngOnInit(): void {
     interval(10000).subscribe(() => {
       if (this.activeStep && (this.adaBalance < this.minAdaBalance || this.account.fundingAddresses.length == 0)) {
-        this.emitUpdateAccount();
+        this.updateAccount();
       }
     });
   }
 
-  emitUpdateAccount() {
-    this.updateAccount.emit();
+  updateAccount() {
+    this.accountService.updateAccount();
   }
 
   emitUpdateMintTransaction() {

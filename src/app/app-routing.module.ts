@@ -1,3 +1,4 @@
+import { ExchangeComponent } from './exchange/exchange.component';
 import { BurnComponent } from './burn/burn.component';
 import { EuroPoolComponent } from './euro-pool/euro-pool.component';
 import { MyTokensComponent } from './my-tokens/my-tokens.component';
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterTokenComponent },
   { path: 'latest', component: LatestTokensComponent },
   { path: 'my', component: MyTokensComponent },
+  { path: 'exchange', component: ExchangeComponent },
 ];
 
 @NgModule({

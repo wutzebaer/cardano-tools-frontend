@@ -1,3 +1,4 @@
+import { AccountService } from './../account.service';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
@@ -12,16 +13,18 @@ import { Account, RestInterfaceService } from 'src/cardano-tools-client';
 })
 export class MintReviewAndSubmitComponent implements OnInit {
 
-  @Input() account!: Account;
+  account!: Account;
   @Input() mintTransaction!: MintTransaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
   @Output() mintSuccess = new EventEmitter<void>();
 
   @ViewChild('submittedInput') submittedInput!: NgModel
 
-  submitted = false
+  submitted = false;
 
-  constructor(private api: RestInterfaceService, private applicationRef: ApplicationRef) { }
+  constructor(private api: RestInterfaceService, accountService: AccountService) {
+    accountService.account.subscribe(account => this.account = account);
+  }
 
   ngOnInit(): void {
   }

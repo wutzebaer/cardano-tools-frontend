@@ -1,3 +1,4 @@
+import { AccountService } from './../account.service';
 import { interval, Observable } from 'rxjs';
 import { MintFormComponent, MetaValue } from './../mint-form/mint-form.component';
 import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
@@ -43,19 +44,6 @@ export class MintComponent implements OnInit, AfterViewInit {
   policyTimeLeft: string = "00:00:00:00";
 
   initializeValues() {
-    this.account = {
-      key: "",
-      address: "",
-      balance: 0,
-      fundingAddresses: [],
-      createdAt: new Date(),
-      skey: "",
-      vkey: "",
-      lastUpdate: 0,
-      policyId: "",
-      policy: "{\"scripts\":[{\"slot\":0}]}",
-      policyDueDate: new Date()
-    };
     this.mintOrderSubmission = { tokens: [], targetAddress: "", tip: false };
     this.mintTransaction = {
       rawData: "",
@@ -73,17 +61,34 @@ export class MintComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private api: RestInterfaceService, private localStorageService: LocalStorageService, private ajaxInterceptor: AjaxInterceptor, private activatedRoute: ActivatedRoute, private dialog: MatDialog) {
-
-    this.activatedRoute.queryParams.subscribe(params => {
-      let accountKey = params['accountKey'];
-      if (accountKey) {
-        localStorageService.storeAccountKey(accountKey)
-        this.updateAccount()
-      }
-    });
+  constructor(private api: RestInterfaceService, ajaxInterceptor: AjaxInterceptor, private dialog: MatDialog, private accountService: AccountService) {
 
     this.initializeValues()
+
+    accountService.account.subscribe(account => {
+      if (!this.account) {
+        this.account = account;
+        return;
+      }
+
+      let balanceChanged = account.balance != this.account.balance || account.key != this.account.key;
+
+      this.account = account;
+      if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
+        this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+      }
+
+      if (balanceChanged || this.mintTransaction.fee == 0) {
+        this.updateMintTransaction();
+      }
+
+      let policy = JSON.parse(this.account.policy);
+      let slot = policy.scripts[0].slot;
+      this.lockDate = new Date((1596491091 + (slot - 4924800)) * 1000);
+      this.updatePolicyTimeLeft();
+    });
+
+
     this.updateAccount();
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.loading = ajaxStatus)
   }
@@ -102,8 +107,6 @@ export class MintComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
-
 
   spreadMetaValue($event: MetaValue) {
     this.components.forEach(c => {
@@ -137,45 +140,13 @@ export class MintComponent implements OnInit, AfterViewInit {
 
 
   updateAccount() {
-    let accountKey = this.localStorageService.retrieveAccountKey();
-    let accountObservable;
-
-    if (!accountKey) {
-      accountObservable = this.api.createAccount();
-    }
-    else {
-      accountObservable = this.api.getAccount(accountKey);
-    }
-    this.loadAccount(accountObservable);
+    this.accountService.updateAccount();
   }
 
   discardPolicy() {
-    let accountKey = this.localStorageService.retrieveAccountKey();
-    if (accountKey && confirm('Discard policy and start with a new one? You will not be able to mint more tokens for the old one!')) {
-      this.loadAccount(this.api.refreshPolicy(accountKey));
-    }
+    this.accountService.discardPolicy();
   }
 
-  private loadAccount(accountObservable: Observable<Account>) {
-    accountObservable.subscribe(account => {
-      this.localStorageService.storeAccountKey(account.key);
-
-      let balanceChanged = account.balance != this.account.balance || account.key != this.account.key;
-
-      this.account = account;
-      if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
-        this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
-      }
-
-      if (balanceChanged || this.mintTransaction.fee == 0) {
-        this.updateMintTransaction();
-      }
-
-      let policy = JSON.parse(this.account.policy);
-      let slot = policy.scripts[0].slot;
-      this.lockDate = new Date((1596491091 + (slot - 4924800)) * 1000);
-    });
-  }
 
   updatePolicyTimeLeft() {
     if (this.account?.policyId) {
@@ -194,7 +165,6 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.components.forEach(c => c.serializeMetadata())
     this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
-      this.updatePolicyTimeLeft();
     })
   }
 

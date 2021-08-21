@@ -1,3 +1,4 @@
+import { AccountService } from './../account.service';
 import { AccountKeyComponent } from './../account-key/account-key.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,12 +13,14 @@ import { Clipboard } from '@angular/cdk/clipboard';
 })
 export class MintSuccessComponent implements OnInit {
 
-  @Input() account!: Account;
+  account!: Account;
   @Input() mintTransaction!: MintTransaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
   @Output() restart = new EventEmitter<void>();
 
-  constructor(public dialog: MatDialog, private clipboard: Clipboard) { }
+  constructor(public dialog: MatDialog, private clipboard: Clipboard, accountService: AccountService) {
+    accountService.account.subscribe(account => this.account = account);
+  }
 
   ngOnInit(): void {
   }
