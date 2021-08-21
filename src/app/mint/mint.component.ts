@@ -1,4 +1,4 @@
-import { interval } from 'rxjs';
+import { interval, Observable } from 'rxjs';
 import { MintFormComponent, MetaValue } from './../mint-form/mint-form.component';
 import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
@@ -139,14 +139,30 @@ export class MintComponent implements OnInit, AfterViewInit {
   updateAccount() {
     let accountKey = this.localStorageService.retrieveAccountKey();
     let accountObservable;
-    if (!accountKey) { accountObservable = this.api.createAccount(); }
-    else { accountObservable = this.api.getAccount(accountKey); }
+
+    if (!accountKey) {
+      accountObservable = this.api.createAccount();
+    }
+    else {
+      accountObservable = this.api.getAccount(accountKey);
+    }
+    this.loadAccount(accountObservable);
+  }
+
+  discardPolicy() {
+    let accountKey = this.localStorageService.retrieveAccountKey();
+    if (accountKey && confirm('Discard policy and start with a new one? You will not be able to mint more tokens for the old one!')) {
+      this.loadAccount(this.api.refreshPolicy(accountKey));
+    }
+  }
+
+  private loadAccount(accountObservable: Observable<Account>) {
     accountObservable.subscribe(account => {
-      this.localStorageService.storeAccountKey(account.key)
+      this.localStorageService.storeAccountKey(account.key);
 
-      let balanceChanged = account.balance != this.account.balance || account.key != this.account.key
+      let balanceChanged = account.balance != this.account.balance || account.key != this.account.key;
 
-      this.account = account
+      this.account = account;
       if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
         this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
       }
@@ -156,9 +172,9 @@ export class MintComponent implements OnInit, AfterViewInit {
       }
 
       let policy = JSON.parse(this.account.policy);
-      let slot = policy.scripts[0].slot
-      this.lockDate = new Date((1596491091 + (slot - 4924800)) * 1000)
-    })
+      let slot = policy.scripts[0].slot;
+      this.lockDate = new Date((1596491091 + (slot - 4924800)) * 1000);
+    });
   }
 
   updatePolicyTimeLeft() {

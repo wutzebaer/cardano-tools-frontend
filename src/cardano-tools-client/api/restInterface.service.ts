@@ -427,6 +427,53 @@ export class RestInterfaceService {
     /**
      * 
      * 
+     * @param policyId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public policy(policyId: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public policy(policyId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public policy(policyId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public policy(policyId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (policyId === null || policyId === undefined) {
+            throw new Error('Required parameter policyId was null or undefined when calling policy.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (policyId !== undefined && policyId !== null) {
+            queryParameters = queryParameters.set('policyId', <any>policyId);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<string>('get',`${this.basePath}/api/policy`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param file 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -474,6 +521,47 @@ export class RestInterfaceService {
         return this.httpClient.request<string>('post',`${this.basePath}/api/file`,
             {
                 body: convertFormParamsToString ? formParams.toString() : formParams,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param key 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public refreshPolicy(key: string, observe?: 'body', reportProgress?: boolean): Observable<Account>;
+    public refreshPolicy(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Account>>;
+    public refreshPolicy(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Account>>;
+    public refreshPolicy(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling refreshPolicy.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Account>('post',`${this.basePath}/api/account/${encodeURIComponent(String(key))}/refreshPolicy`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
