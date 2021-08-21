@@ -126,7 +126,7 @@ export class TokenEnhancerService {
       return this.sanitizer.bypassSecurityTrustResourceUrl(ipfs) as string;
     }
 
-    return this.sanitizer.bypassSecurityTrustResourceUrl("https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "")) as string;
+    return this.sanitizer.bypassSecurityTrustResourceUrl("https://ipfs.blockfrost.dev/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "")) as string;
   }
 
   findAnyIpfsUrl(object: any): any {
