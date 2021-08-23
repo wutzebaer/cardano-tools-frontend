@@ -1,9 +1,9 @@
 import { AccountService } from './../account.service';
 import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
 import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
-import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, AfterContentChecked } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, AfterContentChecked, OnDestroy } from '@angular/core';
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
-import { interval } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { RestInterfaceService, Account, MintOrderSubmission } from 'src/cardano-tools-client';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,7 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./fund-account.component.scss'],
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
-export class FundAccountComponent implements OnInit {
+export class FundAccountComponent implements OnInit, OnDestroy {
 
   account!: Account;
 
@@ -31,16 +31,22 @@ export class FundAccountComponent implements OnInit {
 
   @Input() loading!: boolean;
 
+  timer: Subscription;
+
   constructor(private clipboard: Clipboard, private accountService: AccountService) {
     accountService.account.subscribe(account => this.account = account);
-  }
-
-  ngOnInit(): void {
-    interval(10000).subscribe(() => {
+    this.timer = interval(10000).subscribe(() => {
       if (this.activeStep && (this.adaBalance < this.minAdaBalance || this.account.fundingAddresses.length == 0)) {
         this.updateAccount();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.timer.unsubscribe();
+  }
+
+  ngOnInit(): void {
   }
 
   updateAccount() {
@@ -52,7 +58,7 @@ export class FundAccountComponent implements OnInit {
   }
 
   copyAddressToClipboard() {
-    this.clipboard.copy(this.account.address);
+    this.clipboard.copy(this.account.address.address);
   }
 
   copyFunds() {

@@ -11,13 +11,17 @@ export class AccountService {
 
   readonly account: Subject<Account> = new BehaviorSubject<Account>({
     key: "",
-    address: "",
+    address: {
+      address: "",
+      skey: "",
+      vkey: ""
+    },
     balance: 0,
+    stake: 0,
     fundingAddresses: [],
     fundingAddressesHistory: [],
     createdAt: new Date(0),
-    skey: "",
-    vkey: "",
+
     lastUpdate: new Date(0),
     policyId: "",
     policy: "{\"scripts\":[{\"slot\":0}]}",

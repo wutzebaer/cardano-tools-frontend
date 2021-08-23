@@ -1,0 +1,110 @@
+<mat-dialog-content>
+  <div fxLayout="column" fxLayoutGap="10px" style="padding: 1px;">
+
+    <h2 class="title">
+      <span *ngIf="token.metaData['name']">{{token.metaData['name']}} ({{token.name}})</span>
+      <span *ngIf="!token.metaData['name']">{{token.name}}</span>
+    </h2>
+
+    <div class="preview" fxLayout="row" fxLayoutAlign="center center">
+
+      <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
+        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
+          image
+        </mat-icon>
+      </div>
+
+      <img *ngIf="previewType.startsWith('image')" [src]="previewUrl" (load)="onLoad()" loading="lazy">
+      <audio controls *ngIf="previewType.startsWith('audio')" [src]="previewUrl" (load)="onLoad()"></audio>
+      <video controls *ngIf="previewType.startsWith('video')" [src]="previewUrl" (load)="onLoad()"></video>
+      <iframe loading="lazy" *ngIf="previewType.startsWith('text')" [src]="previewUrl" (load)="onLoad()"></iframe>
+
+      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="token.mediaTypes.length == 0">
+        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
+      </div>
+
+    </div>
+
+    <form #sellForm="ngForm" (ngSubmit)="sell()">
+      <div fxLayout="row" fxLayoutGap="20px">
+        <mat-form-field fxFlex="100%" appearance="outline">
+          <mat-label>Price</mat-label>
+          <input matInput [(ngModel)]="price" type="number" [appMinValidator]="1" [appMaxValidator]="100000" required name="price">
+          <span matPrefix>₳&nbsp;</span>
+        </mat-form-field>
+
+        <span>
+          <button mat-raised-button color="accent" style="margin-top: 4px; height: 51px;" [disabled]="sellForm.invalid">
+            Sell
+          </button>
+        </span>
+      </div>
+    </form>
+
+    <div fxLayout="column" fxLayoutGap="20px">
+
+      <mat-accordion>
+
+        <!-- Fingerprint -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="100px">
+              Fingerprint
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.fingerprint)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              {{token.fingerprint}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            <span>{{token.fingerprint}}</span>
+          </div>
+        </mat-expansion-panel>
+
+        <!-- PolicyId -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title fxFlex="100px">
+              Policy ID
+            </mat-panel-title>
+            <mat-panel-description fxFlex>
+              <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.policyId)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              {{token.policyId}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            <a [routerLink]="['/latest']" [queryParams]="{q:token.policyId}" (click)="close()">{{token.policyId}}</a>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <mat-accordion *ngIf="tableData.length">
+        <mat-expansion-panel *ngFor="let element of tableData">
+          <mat-expansion-panel-header fxLayout="row">
+            <mat-panel-title fxFlex="100px">
+              {{element.name | titlecase }}
+            </mat-panel-title>
+            <mat-panel-description>
+              <span>
+                <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(element.value)">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+                {{element.value}}
+              </span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="expansion-content">
+            <span>
+              <pre>{{element.value}}</pre>
+            </span>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+  </div>
+</mat-dialog-content>

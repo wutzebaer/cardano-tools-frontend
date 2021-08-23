@@ -9,18 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Address } from './address';
 
-export interface Account { 
-    key: string;
-    createdAt: Date;
-    address: Address;
-    fundingAddresses: Array<string>;
-    fundingAddressesHistory: Array<string>;
-    balance: number;
-    stake: number;
-    lastUpdate: Date;
-    policy: string;
+export interface TokenOffer { 
     policyId: string;
-    policyDueDate: Date;
+    assetName: string;
+    price: number;
 }

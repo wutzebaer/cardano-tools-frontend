@@ -62,10 +62,12 @@ import { NavComponent } from './nav/nav.component';
 import { RegisterTokenSuccessComponent } from './register-token-success/register-token-success.component';
 import { RegisterTokenComponent } from './register-token/register-token.component';
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
+import { ExchangeSellFormComponent } from './exchange-sell-form/exchange-sell-form.component';
+import { MaxValidatorDirective } from 'src/max-validator.directive';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent, ExchangeSellFormComponent
   ],
   imports: [
     BrowserModule,

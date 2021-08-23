@@ -1,8 +1,8 @@
 import { TokenEnhancerService } from './../token-enhancer.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, interval } from 'rxjs';
+import { Subject, interval, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, retry, switchMap } from 'rxjs/operators';
 import { RestInterfaceService, TokenData, TokenRegistryMetadata } from 'src/cardano-tools-client';
 import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
@@ -18,13 +18,14 @@ export enum FetchMode {
   templateUrl: './latest-tokens.component.html',
   styleUrls: ['./latest-tokens.component.scss']
 })
-export class LatestTokensComponent implements OnInit {
+export class LatestTokensComponent implements OnInit, OnDestroy {
 
   searchInput: string = "";
   searchText: string = "";
   searchText$ = new Subject<string>();
   latestTokens: TokenDataWithMetadata[] = []
   lastOffset = 0
+  timer: Subscription;
 
   constructor(private api: RestInterfaceService, private activatedRoute: ActivatedRoute, public dialog: MatDialog, private router: Router, private tokenEnhancerService: TokenEnhancerService) {
     this.searchText$.pipe(
@@ -52,10 +53,8 @@ export class LatestTokensComponent implements OnInit {
       else
         this.searchString("")
     });
-  }
 
-  ngOnInit(): void {
-    interval(1000).subscribe(() => {
+    this.timer = interval(1000).subscribe(() => {
       if (this.searchText == '') {
         let mintid = this.latestTokens[0].mintid
         this.api.latestTokens(-mintid).subscribe(
@@ -65,6 +64,12 @@ export class LatestTokensComponent implements OnInit {
         );
       }
     });
+  }
+  ngOnDestroy(): void {
+    this.timer.unsubscribe();
+  }
+
+  ngOnInit(): void {
   }
 
   details(token: TokenDataWithMetadata) {

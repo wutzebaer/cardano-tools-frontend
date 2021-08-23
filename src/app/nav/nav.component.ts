@@ -1,3 +1,5 @@
+import { Account } from 'src/cardano-tools-client';
+import { AccountService } from './../account.service';
 import { Component, HostListener } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
@@ -11,6 +13,7 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class NavComponent {
 
+  account!: Account;
   scrollPosition = 0
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -19,12 +22,15 @@ export class NavComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private router: Router) {
+  constructor(private breakpointObserver: BreakpointObserver, private router: Router, private accountService: AccountService) {
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
       document.getElementsByTagName('mat-sidenav-content')[0].scrollTo(0, 0)
+    });
+    accountService.account.subscribe(account => {
+      this.account = account;
     });
   }
 

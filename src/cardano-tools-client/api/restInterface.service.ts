@@ -22,6 +22,7 @@ import { MintOrderSubmission } from '../model/mintOrderSubmission';
 import { MintTransaction } from '../model/mintTransaction';
 import { RegistrationMetadata } from '../model/registrationMetadata';
 import { TokenData } from '../model/tokenData';
+import { TokenOffer } from '../model/tokenOffer';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -310,6 +311,88 @@ export class RestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public getOfferableTokens(key: string, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
+    public getOfferableTokens(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
+    public getOfferableTokens(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
+    public getOfferableTokens(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling getOfferableTokens.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<TokenData>>('get',`${this.basePath}/api/offerableTokens/${encodeURIComponent(String(key))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param key 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getOfferedTokens(key: string, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenOffer>>;
+    public getOfferedTokens(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenOffer>>>;
+    public getOfferedTokens(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenOffer>>>;
+    public getOfferedTokens(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling getOfferedTokens.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<TokenOffer>>('get',`${this.basePath}/api/offerToken/${encodeURIComponent(String(key))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param key 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public getRegistrationMetadata(key: string, observe?: 'body', reportProgress?: boolean): Observable<RegistrationMetadata>;
     public getRegistrationMetadata(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<RegistrationMetadata>>;
     public getRegistrationMetadata(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<RegistrationMetadata>>;
@@ -427,47 +510,6 @@ export class RestInterfaceService {
     /**
      * 
      * 
-     * @param key 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public offerToken(key: string, observe?: 'body', reportProgress?: boolean): Observable<Array<TokenData>>;
-    public offerToken(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TokenData>>>;
-    public offerToken(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TokenData>>>;
-    public offerToken(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (key === null || key === undefined) {
-            throw new Error('Required parameter key was null or undefined when calling offerToken.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<TokenData>>('get',`${this.basePath}/api/offerToken/${encodeURIComponent(String(key))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
      * @param policyId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -562,6 +604,57 @@ export class RestInterfaceService {
         return this.httpClient.request<string>('post',`${this.basePath}/api/file`,
             {
                 body: convertFormParamsToString ? formParams.toString() : formParams,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param key 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postOfferToken(body: TokenOffer, key: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public postOfferToken(body: TokenOffer, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public postOfferToken(body: TokenOffer, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public postOfferToken(body: TokenOffer, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling postOfferToken.');
+        }
+
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling postOfferToken.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<any>('post',`${this.basePath}/api/offerToken/${encodeURIComponent(String(key))}`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
