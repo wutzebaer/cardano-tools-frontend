@@ -4,20 +4,23 @@
 
     <form #sellForm="ngForm" (ngSubmit)="sell()">
       <div fxLayout="row" fxLayoutGap="20px">
-        <mat-form-field fxFlex="100%" appearance="outline">
+
+        <mat-form-field appearance="outline" fxFlex="100%">
           <mat-label>Price</mat-label>
-          <input matInput [(ngModel)]="price" type="number" [appMinValidator]="1" [appMaxValidator]="100000" required name="price" [disabled]="tokenOffer!==null">
+          <input matInput [(ngModel)]="price" type="number" [appMinValidator]="1" [appMaxValidator]="100000" required name="price">
           <span matPrefix>₳&nbsp;</span>
         </mat-form-field>
 
-        <span>
-          <button *ngIf="tokenOffer===null" mat-raised-button color="accent" style="margin-top: 4px; height: 51px;" [disabled]="sellForm.invalid">
-            Sell
-          </button>
-          <button *ngIf="tokenOffer!==null" mat-raised-button color="accent" style="margin-top: 4px; height: 51px;" [disabled]="sellForm.invalid">
-            Cancel
-          </button>
-        </span>
+        <button *ngIf="!tokenOffer" mat-raised-button color="accent" [disabled]="sellForm.invalid || loading">
+          Sell
+        </button>
+        <button *ngIf="tokenOffer" mat-raised-button color="accent" [disabled]="sellForm.invalid || loading">
+          Update
+        </button>
+        <button *ngIf="tokenOffer" mat-raised-button color="warn" type="button" (click)="cancel()" [disabled]="loading">
+          Cancel
+        </button>
+
       </div>
     </form>
 

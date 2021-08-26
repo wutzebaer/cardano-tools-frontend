@@ -1,10 +1,12 @@
 <mat-card>
   <mat-card-content>
+
+    <div *ngIf="token.projectMetadata" class="title">Project: <b>{{token.projectMetadata.project}}</b></div>
+
     <div class="title">
       <span *ngIf="token.metaData['name']">{{token.metaData['name']}}</span>
       <span *ngIf="!token.metaData['name']">{{token.name}}</span>
     </div>
-
 
     <div [className]="isLoadingImage() || !hasMedia() ? 'preview min-height' : 'preview'">
 
@@ -35,6 +37,7 @@
       <span *ngIf="token.nft" class="nft-icon">NFT</span>
       <span *ngIf="token.quantity > 1" class="title">{{token.quantity}}x</span>
     </div>
+
 
   </mat-card-content>
 </mat-card>

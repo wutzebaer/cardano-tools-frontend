@@ -76,7 +76,7 @@
     <div fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center top" fxFlex="0 1 1200px" fxFlex.lt-md="100%">
       <div fxFlex="100%" fxFlex.gt-xs="300px" *ngFor="let token of myTokens; let i = index">
         <app-latest-tokens-mini [token]="token" (click)="details(token)">
-          <b style="float: right" *ngIf="getAdaPrice(token)">{{getAdaPrice(token) | number: '1.0-6'}}&nbsp;₳</b>
+          <b style="float: right" *ngIf="offeredTokens[token.policyId + token.name]">{{offeredTokens[token.policyId + token.name].price/1000000 | number: '1.0-6'}}&nbsp;₳</b>
         </app-latest-tokens-mini>
       </div>
     </div>

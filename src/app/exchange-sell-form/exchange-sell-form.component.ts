@@ -1,3 +1,4 @@
+import { AjaxInterceptor } from './../ajax.interceptor';
 import { TokenOffer } from './../../cardano-tools-client/model/tokenOffer';
 import { RestInterfaceService, Account } from 'src/cardano-tools-client';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -19,29 +20,37 @@ export class ExchangeSellFormComponent implements OnInit {
   token: TokenDataWithMetadata
   tokenOffer: TokenOffer;
   account: Account;
-  price: number = 1
+  price: number = 1;
+  loading = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { token: TokenDataWithMetadata, account: Account, tokenOffer: TokenOffer }, private clipboard: Clipboard, private dialogRef: MatDialogRef<ExchangeSellFormComponent>, private api: RestInterfaceService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { token: TokenDataWithMetadata, account: Account, tokenOffer: TokenOffer }, private clipboard: Clipboard, private dialogRef: MatDialogRef<ExchangeSellFormComponent>, ajaxInterceptor: AjaxInterceptor, private api: RestInterfaceService) {
     this.token = data.token
     this.account = data.account
     this.tokenOffer = data.tokenOffer;
     if (this.tokenOffer) {
       this.price = this.tokenOffer.price / 1000000;
     }
+    ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.loading = ajaxStatus)
   }
 
   ngOnInit(): void {
   }
 
+  cancel() {
+    this.submit(true);
+  }
   sell() {
+    this.submit(false);
+  }
+
+
+  private submit(canceled: boolean) {
+    this.loading = true;
     this.api.postOfferToken({
       policyId: this.token.policyId,
       assetName: this.token.name,
-      price: this.price * 1000000
-    }, this.account.key).subscribe(() => {
-      this.dialogRef.close(true);
-    });
-
+      price: this.price * 1000000,
+      canceled: canceled
+    }, this.account.key).subscribe(() => this.dialogRef.close(true));
   }
-
 }

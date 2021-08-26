@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface TokenOffer { 
+export interface TokenOfferPost { 
     policyId: string;
     assetName: string;
     price: number;

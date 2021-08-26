@@ -10,9 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface TokenOffer { 
-    policyId: string;
-    assetName: string;
-    price: number;
-    canceled: boolean;
+export interface ProjectMetadata { 
+    project?: string;
+    tags?: Array<string>;
+    policies?: Array<string>;
 }

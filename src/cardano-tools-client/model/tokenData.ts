@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ProjectMetadata } from './projectMetadata';
 import { TokenRegistryMetadata } from './tokenRegistryMetadata';
 
 export interface TokenData { 
@@ -16,6 +17,7 @@ export interface TokenData {
     name: string;
     quantity: number;
     txId: string;
+    projectMetadata?: ProjectMetadata;
     json: string;
     invalidBefore?: number;
     invalidHereafter?: number;

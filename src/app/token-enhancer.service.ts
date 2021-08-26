@@ -1,6 +1,6 @@
+import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TokenData, TokenRegistryMetadata } from 'src/cardano-tools-client';
-import { Injectable } from '@angular/core';
 
 
 export interface TokenDataWithMetadata extends TokenData {

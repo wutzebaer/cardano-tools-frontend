@@ -23,7 +23,7 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
   timer: Subscription
   accountSubscription: Subscription
   readonly minStake = 95000000
-  offeredTokens: Map<String, TokenOffer> = new Map();
+  offeredTokens: any = {};
 
 
   constructor(private accountService: AccountService, private api: RestInterfaceService, private tokenEnhancerService: TokenEnhancerService, public dialog: MatDialog, private clipboard: Clipboard) {
@@ -32,6 +32,7 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
       if (account.key) {
         this.api.getOfferableTokens(this.account.key).subscribe(foundTokens => {
           this.myTokens = this.tokenEnhancerService.enhanceTokens(foundTokens);
+          this.sortTokens();
         });
         this.reloadMyOfferedTokens();
       }
@@ -53,15 +54,15 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
   }
 
   getAdaPrice(token: TokenDataWithMetadata) {
-    const price = this.offeredTokens.get(token.policyId + token.name)?.price;
+    const price = this.offeredTokens[token.policyId + token.name]?.price;
     return (price || 0) / 1000000
   }
 
   details(token: TokenDataWithMetadata) {
     this.dialog.open(ExchangeSellFormComponent, {
-      width: '600px',
+      width: '750px',
       maxWidth: '90vw',
-      data: { token: token, account: this.account, tokenOffer: this.offeredTokens.get(token.policyId + token.name) },
+      data: { token: token, account: this.account, tokenOffer: this.offeredTokens[token.policyId + token.name] },
       closeOnNavigation: true
     }).afterClosed().subscribe(result => {
       if (result) {
@@ -76,11 +77,20 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
 
   reloadMyOfferedTokens() {
     this.api.getOfferedTokens(this.account.key).subscribe(offers => {
-      this.offeredTokens.clear();
+      this.offeredTokens = {};
       offers.forEach(offer => {
-        this.offeredTokens.set(offer.policyId + offer.assetName, offer);
+        this.offeredTokens[offer.policyId + offer.assetName] = offer;
       });
+      this.sortTokens();
     });
   }
 
+
+  private sortTokens() {
+    this.myTokens.sort(((t1, t2) => {
+      let t1order = this.offeredTokens[t1.policyId + t1.name] ? 0 : 1;
+      let t2order = this.offeredTokens[t2.policyId + t2.name] ? 0 : 1;
+      return t1order - t2order;
+    }));
+  }
 }
