@@ -376,7 +376,7 @@ export class RestInterfaceService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<TokenOffer>>('get',`${this.basePath}/api/offerToken/${encodeURIComponent(String(key))}`,
+        return this.httpClient.request<Array<TokenOffer>>('get',`${this.basePath}/api/offeredTokens/${encodeURIComponent(String(key))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

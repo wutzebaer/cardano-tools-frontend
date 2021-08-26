@@ -1,3 +1,5 @@
+import { TokenOffer } from './../../cardano-tools-client/model/tokenOffer';
+import { RestInterfaceService, Account } from 'src/cardano-tools-client';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
@@ -15,63 +17,31 @@ export class ExchangeSellFormComponent implements OnInit {
   @ViewChild('sellForm') sellForm!: FormGroupDirective;
 
   token: TokenDataWithMetadata
-  loading: boolean = true
-  tableData: TableRow[]
-  tokenRegistryMetadataFormatted: string | undefined
+  tokenOffer: TokenOffer;
+  account: Account;
   price: number = 1
-  previewUrl = ""
-  previewType = ""
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { token: TokenDataWithMetadata }, private clipboard: Clipboard, private dialogRef: MatDialogRef<ExchangeSellFormComponent>) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { token: TokenDataWithMetadata, account: Account, tokenOffer: TokenOffer }, private clipboard: Clipboard, private dialogRef: MatDialogRef<ExchangeSellFormComponent>, private api: RestInterfaceService) {
     this.token = data.token
-
-    this.tableData = [];
-    for (let key in this.token.metaData) {
-      let value = this.token.metaData[key]
-      if (!value.toFixed && !value.substring) {
-        this.tableData.push({ name: key, value: JSON.stringify(value, null, 2) })
-      } else {
-        this.tableData.push({ name: key, value: value })
-      }
+    this.account = data.account
+    this.tokenOffer = data.tokenOffer;
+    if (this.tokenOffer) {
+      this.price = this.tokenOffer.price / 1000000;
     }
   }
 
   ngOnInit(): void {
-    if (this.token.tokenRegistryMetadata) {
-      this.tokenRegistryMetadataFormatted = JSON.stringify(this.token.tokenRegistryMetadata, null, 2)
-    }
-    if (this.token.mediaTypes.length) {
-      this.previewType = this.token.mediaTypes[0]
-      this.previewUrl = this.token.mediaUrls[0]
-    } else {
-      this.previewType = ""
-      this.previewUrl = ""
-    }
-  }
-
-  displayedColumns = ['name', 'value']
-
-
-  onLoad() {
-    this.loading = false;
-  }
-
-  close() {
-    this.dialogRef.close();
-  }
-
-  copyToClipboard(value: string) {
-    this.clipboard.copy(value);
-  }
-
-  copyMetadataToClipboard() {
-    this.clipboard.copy('"' + this.token.name + '": ' + JSON.stringify(JSON.parse(this.token.json), null, 3) + ',');
   }
 
   sell() {
-    console.log("type", this.sellForm)
-    console.log(this.price);
-    this.dialogRef.close();
+    this.api.postOfferToken({
+      policyId: this.token.policyId,
+      assetName: this.token.name,
+      price: this.price * 1000000
+    }, this.account.key).subscribe(() => {
+      this.dialogRef.close(true);
+    });
+
   }
 
 }

@@ -1,3 +1,4 @@
+import { TokenOffer } from './../../cardano-tools-client/model/tokenOffer';
 import { ExchangeSellFormComponent } from './../exchange-sell-form/exchange-sell-form.component';
 import { interval, Observable, Subscription } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -8,6 +9,7 @@ import { AccountService } from './../account.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
 import { MatDialog } from '@angular/material/dialog';
+import { ResourceLoader } from '@angular/compiler';
 
 @Component({
   selector: 'app-exchange-sell',
@@ -21,6 +23,7 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
   timer: Subscription
   accountSubscription: Subscription
   readonly minStake = 95000000
+  offeredTokens: Map<String, TokenOffer> = new Map();
 
 
   constructor(private accountService: AccountService, private api: RestInterfaceService, private tokenEnhancerService: TokenEnhancerService, public dialog: MatDialog, private clipboard: Clipboard) {
@@ -30,6 +33,7 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
         this.api.getOfferableTokens(this.account.key).subscribe(foundTokens => {
           this.myTokens = this.tokenEnhancerService.enhanceTokens(foundTokens);
         });
+        this.reloadMyOfferedTokens();
       }
     });
 
@@ -48,17 +52,35 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
+  getAdaPrice(token: TokenDataWithMetadata) {
+    const price = this.offeredTokens.get(token.policyId + token.name)?.price;
+    return (price || 0) / 1000000
+  }
+
   details(token: TokenDataWithMetadata) {
     this.dialog.open(ExchangeSellFormComponent, {
       width: '600px',
       maxWidth: '90vw',
-      data: { token: token },
+      data: { token: token, account: this.account, tokenOffer: this.offeredTokens.get(token.policyId + token.name) },
       closeOnNavigation: true
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.reloadMyOfferedTokens();
+      }
     });
   }
 
   copyToClipboard(value: string) {
     this.clipboard.copy(value);
+  }
+
+  reloadMyOfferedTokens() {
+    this.api.getOfferedTokens(this.account.key).subscribe(offers => {
+      this.offeredTokens.clear();
+      offers.forEach(offer => {
+        this.offeredTokens.set(offer.policyId + offer.assetName, offer);
+      });
+    });
   }
 
 }
