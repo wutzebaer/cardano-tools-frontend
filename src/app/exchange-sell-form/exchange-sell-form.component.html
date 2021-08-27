@@ -2,6 +2,8 @@
 
   <app-token-details [token]="token">
 
+    <h3>Offer</h3>
+
     <form #sellForm="ngForm" (ngSubmit)="sell()">
       <div fxLayout="row" fxLayoutGap="20px">
 
@@ -12,7 +14,7 @@
         </mat-form-field>
 
         <button *ngIf="!tokenOffer" mat-raised-button color="accent" [disabled]="sellForm.invalid || loading">
-          Sell
+          Offer
         </button>
         <button *ngIf="tokenOffer" mat-raised-button color="accent" [disabled]="sellForm.invalid || loading">
           Update

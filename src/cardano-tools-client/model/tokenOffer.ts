@@ -9,10 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Address } from './address';
 
 export interface TokenOffer { 
+    id: number;
     policyId: string;
     assetName: string;
     price: number;
+    address: Address;
     canceled: boolean;
+    tokenData: string;
 }

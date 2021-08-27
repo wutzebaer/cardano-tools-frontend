@@ -12,6 +12,6 @@
 
 export interface Address { 
     address: string;
-    skey: string;
-    vkey: string;
+    balance: number;
+    tokensData: string;
 }

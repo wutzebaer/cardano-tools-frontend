@@ -28,7 +28,7 @@
       </button>
       <span>Cardano Tools</span>
       <span class="example-spacer"></span>
-      <span *ngIf="account.balance" class="slogan">Balance: {{account.balance/1000000 | number: '1.0-6'}}&nbsp;₳</span>
+      <span *ngIf="account.address.balance" class="slogan">Balance: {{account.address.balance/1000000 | number: '1.0-6'}}&nbsp;₳</span>
       <span class="example-spacer"></span>
       <span class="slogan">powered by [EURO]-Pool</span>
     </mat-toolbar>

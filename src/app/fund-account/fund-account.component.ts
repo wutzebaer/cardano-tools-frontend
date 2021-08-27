@@ -69,7 +69,7 @@ export class FundAccountComponent implements OnInit, OnDestroy {
     if (!this.mintTransaction.mintOrderSubmission.tip) {
       return 0;
     }
-    let change = (this.account.balance || 0) - (this.mintTransaction.fee || 0) - this.mintTransaction.minOutput
+    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0) - this.mintTransaction.minOutput
     return (Math.max(change, 1000000)) / 1000000;
   }
 
@@ -85,7 +85,7 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   }
 
   get adaBalance() {
-    return ((this.account.balance || 0)) / 1000000;
+    return ((this.account.address.balance || 0)) / 1000000;
   }
 
   get adaFee() {

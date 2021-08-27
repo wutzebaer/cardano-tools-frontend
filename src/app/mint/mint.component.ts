@@ -71,7 +71,7 @@ export class MintComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      let balanceChanged = account.balance != this.account.balance || account.key != this.account.key;
+      let balanceChanged = account.address.balance != this.account.address.balance || account.key != this.account.key;
 
       this.account = account;
       if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {

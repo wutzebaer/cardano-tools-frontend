@@ -17,7 +17,6 @@ export interface Account {
     address: Address;
     fundingAddresses: Array<string>;
     fundingAddressesHistory: Array<string>;
-    balance: number;
     stake: number;
     lastUpdate: Date;
     policy: string;

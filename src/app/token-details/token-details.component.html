@@ -31,6 +31,24 @@
     <mat-accordion>
       <h3>Trusted data</h3>
 
+      <!-- Project -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title fxFlex="100px">
+            Project
+          </mat-panel-title>
+          <mat-panel-description fxFlex>
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.projectMetadata?.project || 'Unknown, maybe fake')">
+              <mat-icon>content_copy</mat-icon>
+            </button>
+            {{token.projectMetadata?.project || 'Policy ID unknown, maybe fake'}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="expansion-content">
+          <span>{{token.projectMetadata?.project || 'Unknown, maybe fake'}}</span>
+        </div>
+      </mat-expansion-panel>
+
       <!-- Amount -->
       <mat-expansion-panel>
         <mat-expansion-panel-header>

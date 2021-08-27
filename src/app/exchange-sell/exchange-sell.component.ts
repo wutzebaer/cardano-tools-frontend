@@ -29,7 +29,7 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
   constructor(private accountService: AccountService, private api: RestInterfaceService, private tokenEnhancerService: TokenEnhancerService, public dialog: MatDialog, private clipboard: Clipboard) {
     this.accountSubscription = accountService.account.subscribe(account => {
       this.account = account;
-      if (account.key) {
+      if (account.key && account.stake > this.minStake) {
         this.api.getOfferableTokens(this.account.key).subscribe(foundTokens => {
           this.myTokens = this.tokenEnhancerService.enhanceTokens(foundTokens);
           this.sortTokens();

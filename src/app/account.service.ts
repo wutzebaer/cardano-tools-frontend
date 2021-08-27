@@ -13,10 +13,9 @@ export class AccountService {
     key: "",
     address: {
       address: "",
-      skey: "",
-      vkey: ""
+      balance: 0,
+      tokensData: "[]"
     },
-    balance: 0,
     stake: 0,
     fundingAddresses: [],
     fundingAddressesHistory: [],
