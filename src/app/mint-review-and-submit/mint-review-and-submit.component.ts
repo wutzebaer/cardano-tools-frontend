@@ -1,6 +1,6 @@
+import { Transaction } from './../../cardano-tools-client/model/transaction';
 import { AccountService } from './../account.service';
 import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
-import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ApplicationRef } from '@angular/core';
 import { Account, RestInterfaceService } from 'src/cardano-tools-client';
@@ -14,7 +14,7 @@ import { Account, RestInterfaceService } from 'src/cardano-tools-client';
 export class MintReviewAndSubmitComponent implements OnInit {
 
   account!: Account;
-  @Input() mintTransaction!: MintTransaction;
+  @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
   @Output() mintSuccess = new EventEmitter<void>();
 
@@ -30,7 +30,7 @@ export class MintReviewAndSubmitComponent implements OnInit {
   }
 
   get adaTip() {
-    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0) - this.mintTransaction.minOutput
+    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
     return (Math.max(change, 0)) / 1000000;
   }
 

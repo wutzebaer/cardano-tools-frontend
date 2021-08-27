@@ -37,9 +37,7 @@ export class ExchangeBuyComponent implements OnInit {
       data: { offer: offer },
       closeOnNavigation: true
     }).afterClosed().subscribe(result => {
-      if (result) {
-        this.reloadOffers();
-      }
+      this.reloadOffers();
     });
   }
 

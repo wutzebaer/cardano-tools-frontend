@@ -1,4 +1,3 @@
-import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MintOrderSubmission, RestInterfaceService } from 'src/cardano-tools-client';

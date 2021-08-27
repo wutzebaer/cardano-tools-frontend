@@ -1,3 +1,4 @@
+import { Transaction } from './../../cardano-tools-client/model/transaction';
 import { AccountService } from './../account.service';
 import { interval, Observable } from 'rxjs';
 import { MintFormComponent, MetaValue } from './../mint-form/mint-form.component';
@@ -6,7 +7,6 @@ import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSub
 import { AccountKeyComponent } from './../account-key/account-key.component';
 import { NgModel } from '@angular/forms';
 import { AjaxInterceptor } from './../ajax.interceptor';
-import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterViewInit, Component, OnInit, ViewChild, EventEmitter, Optional, ViewChildren, QueryList } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
@@ -38,7 +38,7 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   account!: Account;
   mintOrderSubmission!: MintOrderSubmission;
-  mintTransaction!: MintTransaction;
+  mintTransaction!: Transaction;
   loading = false;
   lockDate = new Date();
   policyTimeLeft: string = "00:00:00:00";
@@ -186,7 +186,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
 
-      let parsed = JSON.parse(this.mintTransaction.metaDataJson)
+      let parsed = JSON.parse(this.mintTransaction.metaDataJson as string)
       let policyData = parsed["721"][this.account.policyId]
       Object.keys(policyData).map(function (key, index) {
         delete policyData[key]['policy']

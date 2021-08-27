@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { Address } from './address';
+import { Transaction } from './transaction';
 
 export interface TokenOffer { 
     id: number;
@@ -19,4 +20,6 @@ export interface TokenOffer {
     address: Address;
     canceled: boolean;
     tokenData: string;
+    transaction?: Transaction;
+    error?: string;
 }

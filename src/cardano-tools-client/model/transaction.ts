@@ -11,17 +11,17 @@
  */
 import { MintOrderSubmission } from './mintOrderSubmission';
 
-export interface MintTransaction { 
+export interface Transaction { 
     signedData: string;
     rawData: string;
     txId: string;
     fee: number;
-    minOutput: number;
+    minOutput?: number;
     txSize: number;
-    policyId: string;
+    policyId?: string;
     outputs: string;
     inputs: string;
-    metaDataJson: string;
-    policy: string;
-    mintOrderSubmission: MintOrderSubmission;
+    metaDataJson?: string;
+    policy?: string;
+    mintOrderSubmission?: MintOrderSubmission;
 }

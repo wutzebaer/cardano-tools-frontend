@@ -19,11 +19,11 @@ import { Observable }                                        from 'rxjs';
 
 import { Account } from '../model/account';
 import { MintOrderSubmission } from '../model/mintOrderSubmission';
-import { MintTransaction } from '../model/mintTransaction';
 import { RegistrationMetadata } from '../model/registrationMetadata';
 import { TokenData } from '../model/tokenData';
 import { TokenOffer } from '../model/tokenOffer';
 import { TokenOfferPost } from '../model/tokenOfferPost';
+import { Transaction } from '../model/transaction';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -69,9 +69,9 @@ export class RestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public buildMintTransaction(body: MintOrderSubmission, key: string, observe?: 'body', reportProgress?: boolean): Observable<MintTransaction>;
-    public buildMintTransaction(body: MintOrderSubmission, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MintTransaction>>;
-    public buildMintTransaction(body: MintOrderSubmission, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MintTransaction>>;
+    public buildMintTransaction(body: MintOrderSubmission, key: string, observe?: 'body', reportProgress?: boolean): Observable<Transaction>;
+    public buildMintTransaction(body: MintOrderSubmission, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Transaction>>;
+    public buildMintTransaction(body: MintOrderSubmission, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Transaction>>;
     public buildMintTransaction(body: MintOrderSubmission, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -102,7 +102,7 @@ export class RestInterfaceService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<MintTransaction>('post',`${this.basePath}/api/buildMintTransaction/${encodeURIComponent(String(key))}`,
+        return this.httpClient.request<Transaction>('post',`${this.basePath}/api/buildMintTransaction/${encodeURIComponent(String(key))}`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -790,10 +790,10 @@ export class RestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public submitMintTransaction(body: MintTransaction, key: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public submitMintTransaction(body: MintTransaction, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public submitMintTransaction(body: MintTransaction, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public submitMintTransaction(body: MintTransaction, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public submitMintTransaction(body: Transaction, key: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public submitMintTransaction(body: Transaction, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public submitMintTransaction(body: Transaction, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public submitMintTransaction(body: Transaction, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling submitMintTransaction.');

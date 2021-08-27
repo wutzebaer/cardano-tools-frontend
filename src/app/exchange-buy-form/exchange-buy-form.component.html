@@ -3,44 +3,55 @@
   <app-token-details [token]="offer.tokenDataParsed">
 
     <h3>Offer</h3>
-    <p>
-      Please send
-      <b>{{offer.price/1000000 | number: '1.0-6'}}&nbsp;₳</b>
-      <button class="inline-button" mat-icon-button (click)="copyToClipboard(offer.price/1000000+'')">
+    <div *ngIf="!offer.transaction">
+      <p>
+        Please send
+        <b>{{offer.price/1000000 | number: '1.0-6'}}&nbsp;₳</b>
+        <button class="inline-button" mat-icon-button (click)="copyToClipboard(offer.price/1000000+'')">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+        to this address
+      </p>
+
+      <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+        <b class="address">{{offer.address.address}}</b>
+        <button mat-icon-button (click)="copyToClipboard(offer.address.address)">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </p>
+
+      <p>
+        in order to receive the token.
+      </p>
+
+      <p>
+        Waiting for ₳...
+        <span *ngIf="offer.address.balance > 0">Received {{offer.address.balance/1000000 | number: '1.0-6'}}&nbsp;₳...</span>
+        <mat-spinner *ngIf="offer.address.balance < offer.price" [diameter]="19" style="display: inline-block;"></mat-spinner>
+      </p>
+
+      <p *ngIf="offer.address.balance >= offer.price">
+        Waiting for Token...
+        <mat-spinner *ngIf="!receivedToken" [diameter]="19" style="display: inline-block;"></mat-spinner>
+        <span *ngIf="receivedToken">Received {{receivedToken.name}}</span>
+      </p>
+
+      <p *ngIf="offer.address.balance >= offer.price && receivedToken">
+        Waiting for Transaction...
+        <mat-spinner [diameter]="19" style="display: inline-block;"></mat-spinner>
+      </p>
+    </div>
+
+    <p *ngIf="offer.transaction">
+      This token has been sold: <a href="https://explorer.cardano.org/en/transaction?id={{offer.transaction.txId}}" target="_blank">{{offer.transaction.txId}}</a>
+      <button class="inline-button" mat-icon-button (click)="copyToClipboard(offer.transaction.txId)">
         <mat-icon>content_copy</mat-icon>
       </button>
-      to this address
     </p>
 
-    <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-      <b class="address">{{offer.address.address}}</b>
-      <button mat-icon-button (click)="copyToClipboard(offer.address.address)">
-        <mat-icon>content_copy</mat-icon>
-      </button>
+    <p *ngIf="offer.error">
+      <b>Something went wrong, please contact support:</b> {{offer.error}}
     </p>
-
-    <p>
-      in order to receive the token.
-    </p>
-
-    <p>
-      Waiting for ₳...
-      <mat-spinner *ngIf="offer.address.balance < offer.price" [diameter]="19" style="display: inline-block;"></mat-spinner>
-      <span *ngIf="offer.address.balance >= offer.price">Received {{offer.address.balance/1000000 | number: '1.0-6'}}&nbsp;₳</span>
-    </p>
-
-    <p *ngIf="offer.address.balance >= offer.price">
-      Waiting for Token...
-      <mat-spinner *ngIf="!receivedToken" [diameter]="19" style="display: inline-block;"></mat-spinner>
-      <span *ngIf="receivedToken">Received {{receivedToken.name}}</span>
-    </p>
-
-    <p *ngIf="offer.address.balance >= offer.price && receivedToken">
-      Waiting for Transaction...
-      <mat-spinner *ngIf="!receivedToken" [diameter]="19" style="display: inline-block;"></mat-spinner>
-      <span *ngIf="receivedToken">Received {{receivedToken.name}}</span>
-    </p>
-
 
   </app-token-details>
 

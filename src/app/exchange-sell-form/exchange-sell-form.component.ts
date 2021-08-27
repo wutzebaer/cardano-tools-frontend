@@ -20,7 +20,7 @@ export class ExchangeSellFormComponent implements OnInit {
   token: TokenDataWithMetadata
   tokenOffer: TokenOffer;
   account: Account;
-  price: number = 1;
+  price: number = 2;
   loading = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { token: TokenDataWithMetadata, account: Account, tokenOffer: TokenOffer }, private clipboard: Clipboard, private dialogRef: MatDialogRef<ExchangeSellFormComponent>, ajaxInterceptor: AjaxInterceptor, private api: RestInterfaceService) {

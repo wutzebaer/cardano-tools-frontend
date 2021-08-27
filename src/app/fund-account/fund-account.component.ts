@@ -1,6 +1,6 @@
+import { Transaction } from './../../cardano-tools-client/model/transaction';
 import { AccountService } from './../account.service';
 import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
-import { MintTransaction } from './../../cardano-tools-client/model/mintTransaction';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, AfterContentChecked, OnDestroy } from '@angular/core';
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
@@ -20,7 +20,7 @@ export class FundAccountComponent implements OnInit, OnDestroy {
 
   account!: Account;
 
-  @Input() mintTransaction!: MintTransaction;
+  @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
 
   @Input() mintOrderSubmission!: MintOrderSubmission;
@@ -66,19 +66,19 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   }
 
   get adaTip() {
-    if (!this.mintTransaction.mintOrderSubmission.tip) {
+    if (!this.mintTransaction.mintOrderSubmission?.tip) {
       return 0;
     }
-    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0) - this.mintTransaction.minOutput
+    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
     return (Math.max(change, 1000000)) / 1000000;
   }
 
   get minAdaBalance() {
     let minBalance = 0;
     minBalance += (this.mintTransaction.fee || 0)
-    minBalance += this.mintTransaction.minOutput
+    minBalance += this.mintTransaction.minOutput as number
 
-    if (this.mintTransaction.mintOrderSubmission.tip)
+    if (this.mintTransaction.mintOrderSubmission?.tip)
       minBalance += 1000000
 
     return minBalance / 1000000;
