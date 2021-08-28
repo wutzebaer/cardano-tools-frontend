@@ -22,6 +22,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -31,6 +32,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ApiModule } from 'src/cardano-tools-client';
+import { MaxValidatorDirective } from 'src/max-validator.directive';
 import { BASE_PATH } from './../cardano-tools-client/variables';
 import { MinValidatorDirective } from './../min-validator.directive';
 import { AccountKeyComponent } from './account-key/account-key.component';
@@ -41,7 +43,9 @@ import { BurnComponent } from './burn/burn.component';
 import { ChiplistComponent } from './chiplist/chiplist.component';
 import { ContactComponent } from './contact/contact.component';
 import { EuroPoolComponent } from './euro-pool/euro-pool.component';
+import { ExchangeBuyFormComponent } from './exchange-buy-form/exchange-buy-form.component';
 import { ExchangeBuyComponent } from './exchange-buy/exchange-buy.component';
+import { ExchangeSellFormComponent } from './exchange-sell-form/exchange-sell-form.component';
 import { ExchangeSellComponent } from './exchange-sell/exchange-sell.component';
 import { ExchangeComponent } from './exchange/exchange.component';
 import { FooterComponent } from './footer/footer.component';
@@ -62,10 +66,7 @@ import { NavComponent } from './nav/nav.component';
 import { RegisterTokenSuccessComponent } from './register-token-success/register-token-success.component';
 import { RegisterTokenComponent } from './register-token/register-token.component';
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
-import { ExchangeSellFormComponent } from './exchange-sell-form/exchange-sell-form.component';
-import { MaxValidatorDirective } from 'src/max-validator.directive';
 import { TokenDetailsComponent } from './token-details/token-details.component';
-import { ExchangeBuyFormComponent } from './exchange-buy-form/exchange-buy-form.component';
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import { ExchangeBuyFormComponent } from './exchange-buy-form/exchange-buy-form.
     ClipboardModule,
     MatDialogModule,
     InfiniteScrollModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSnackBarModule
   ],
   providers: [
     AjaxInterceptor,

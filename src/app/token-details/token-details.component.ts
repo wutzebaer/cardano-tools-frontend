@@ -6,6 +6,7 @@ import { FormGroupDirective } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TableRow } from '../mint-token-mini/mint-token-mini.component';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-token-details',
@@ -21,7 +22,7 @@ export class TokenDetailsComponent implements OnInit {
   previewUrl = ""
   previewType = ""
 
-  constructor(private clipboard: Clipboard) {
+  constructor(private clipboard: Clipboard, private snackBar: MatSnackBar) {
 
   }
 
@@ -58,6 +59,7 @@ export class TokenDetailsComponent implements OnInit {
 
   copyToClipboard(value: string) {
     this.clipboard.copy(value);
+    let snackBarRef = this.snackBar.open('Copied to clipboard: ' + value);
   }
 
   copyMetadataToClipboard() {

@@ -3,6 +3,9 @@
   <h2 class="title">
     <span *ngIf="token.metaData['name']">{{token.metaData['name']}} ({{token.name}})</span>
     <span *ngIf="!token.metaData['name']">{{token.name}}</span>
+    <button type="button" mat-icon-button (click)="copyToClipboard('https://cardano-tools.io/latest?q=' + token.policyId + '.' + token.name)">
+      <mat-icon>share</mat-icon>
+    </button>
   </h2>
 
   <div class="preview" fxLayout="row" fxLayoutAlign="center center">
@@ -21,7 +24,6 @@
     <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="token.mediaTypes.length == 0">
       <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
     </div>
-
   </div>
 
   <ng-content></ng-content>
