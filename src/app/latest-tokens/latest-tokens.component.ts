@@ -32,6 +32,7 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
       debounceTime(500),
       distinctUntilChanged(),
       switchMap(searchText => {
+        this.updateTokens([], FetchMode.replace)
         if (searchText != '') {
           router.navigate(['/latest'], { queryParams: { q: searchText } })
           return this.api.findTokens(searchText)
@@ -76,7 +77,7 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
     this.dialog.open(LatestTokensDetailComponent, {
       width: '750px',
       maxWidth: '90vw',
-      data: { token: token },
+      data: { tokens: this.latestTokens, tokenIndex: this.latestTokens.indexOf(token) },
       closeOnNavigation: true
     });
   }

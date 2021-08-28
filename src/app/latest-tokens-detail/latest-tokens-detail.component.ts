@@ -11,10 +11,12 @@ import { TokenDataWithMetadata } from '../token-enhancer.service';
 })
 export class LatestTokensDetailComponent implements OnInit {
 
-  token: TokenDataWithMetadata
+  tokens!: TokenDataWithMetadata[]
+  tokenIndex!: number
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { token: TokenDataWithMetadata }, private clipboard: Clipboard, private dialogRef: MatDialog) {
-    this.token = data.token
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { tokens: TokenDataWithMetadata[], tokenIndex: number }, private clipboard: Clipboard, private dialogRef: MatDialog) {
+    this.tokens = data.tokens
+    this.tokenIndex = data.tokenIndex
   }
 
   ngOnInit(): void {

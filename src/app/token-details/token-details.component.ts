@@ -1,7 +1,7 @@
 import { TokenOffer } from './../../cardano-tools-client/model/tokenOffer';
 import { RestInterfaceService, Account } from 'src/cardano-tools-client';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnInit, ViewChild, HostListener } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TableRow } from '../mint-token-mini/mint-token-mini.component';
@@ -15,6 +15,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class TokenDetailsComponent implements OnInit {
 
+  @Input() tokens!: TokenDataWithMetadata[]
+  @Input() tokenIndex!: number
   @Input() token!: TokenDataWithMetadata
   loading: boolean = true
   tableData!: TableRow[]
@@ -22,35 +24,44 @@ export class TokenDetailsComponent implements OnInit {
   previewUrl = ""
   previewType = ""
 
+  displayedColumns = ['name', 'value']
+
   constructor(private clipboard: Clipboard, private snackBar: MatSnackBar) {
 
   }
 
   ngOnInit(): void {
+    if (this.token) {
+      this.tokens = [this.token]
+      this.tokenIndex = 0
+    }
+    this.token = this.tokens[this.tokenIndex];
+    this.refreshData();
+  }
+
+  private refreshData() {
     this.tableData = [];
     for (let key in this.token.metaData) {
-      let value = this.token.metaData[key]
+      let value = this.token.metaData[key];
       if (!value.toFixed && !value.substring) {
-        this.tableData.push({ name: key, value: JSON.stringify(value, null, 2) })
+        this.tableData.push({ name: key, value: JSON.stringify(value, null, 2) });
       } else {
-        this.tableData.push({ name: key, value: value })
+        this.tableData.push({ name: key, value: value });
       }
     }
 
     if (this.token.tokenRegistryMetadata) {
-      this.tokenRegistryMetadataFormatted = JSON.stringify(this.token.tokenRegistryMetadata, null, 2)
+      this.tokenRegistryMetadataFormatted = JSON.stringify(this.token.tokenRegistryMetadata, null, 2);
     }
     if (this.token.mediaTypes.length) {
-      this.previewType = this.token.mediaTypes[0]
-      this.previewUrl = this.token.mediaUrls[0]
+      this.previewType = this.token.mediaTypes[0];
+      this.previewUrl = this.token.mediaUrls[0];
     } else {
-      this.previewType = ""
-      this.previewUrl = ""
+      this.previewType = "";
+      this.previewUrl = "";
     }
+    this.loading = true;
   }
-
-  displayedColumns = ['name', 'value']
-
 
   onLoad() {
     this.loading = false;
@@ -65,4 +76,24 @@ export class TokenDetailsComponent implements OnInit {
   copyMetadataToClipboard() {
     this.clipboard.copy('"' + this.token.name + '": ' + JSON.stringify(JSON.parse(this.token.json), null, 3) + ',');
   }
+
+  @HostListener('document:keydown.ArrowLeft')
+  prev() {
+    this.switch(-1)
+  }
+
+  @HostListener('document:keydown.ArrowRight')
+  next() {
+    this.switch(1)
+  }
+
+  switch(step: number) {
+    const newIndex = this.tokenIndex + step;
+    if (newIndex >= 0 && newIndex < this.tokens.length) {
+      this.tokenIndex = newIndex
+      this.token = this.tokens[newIndex]
+      this.refreshData();
+    }
+  }
+
 }

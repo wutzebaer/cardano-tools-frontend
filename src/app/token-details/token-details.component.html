@@ -8,22 +8,31 @@
     </button>
   </h2>
 
-  <div class="preview" fxLayout="row" fxLayoutAlign="center center">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <button type="button" mat-icon-button (click)="prev()">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
 
-    <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
-      <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
-        image
-      </mat-icon>
+    <div class="preview" fxLayout="row" fxLayoutAlign="center center">
+      <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
+        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
+          image
+        </mat-icon>
+      </div>
+
+      <img *ngIf="previewType.startsWith('image')" [src]="previewUrl" (load)="onLoad()" loading="lazy">
+      <audio controls *ngIf="previewType.startsWith('audio')" [src]="previewUrl" (load)="onLoad()"></audio>
+      <video controls *ngIf="previewType.startsWith('video')" [src]="previewUrl" (load)="onLoad()"></video>
+      <iframe loading="lazy" *ngIf="previewType.startsWith('text')" [src]="previewUrl" (load)="onLoad()"></iframe>
+
+      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="token.mediaTypes.length == 0">
+        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
+      </div>
     </div>
 
-    <img *ngIf="previewType.startsWith('image')" [src]="previewUrl" (load)="onLoad()" loading="lazy">
-    <audio controls *ngIf="previewType.startsWith('audio')" [src]="previewUrl" (load)="onLoad()"></audio>
-    <video controls *ngIf="previewType.startsWith('video')" [src]="previewUrl" (load)="onLoad()"></video>
-    <iframe loading="lazy" *ngIf="previewType.startsWith('text')" [src]="previewUrl" (load)="onLoad()"></iframe>
-
-    <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="token.mediaTypes.length == 0">
-      <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
-    </div>
+    <button type="button" mat-icon-button (click)="next()">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
   </div>
 
   <ng-content></ng-content>
