@@ -35,9 +35,9 @@ export class MyTokensComponent implements OnInit {
 
   details(token: TokenDataWithMetadata) {
     this.dialog.open(LatestTokensDetailComponent, {
-      width: '600px',
+      width: '750px',
       maxWidth: '90vw',
-      data: { token: token },
+      data: { tokens: this.myTokens, tokenIndex: this.myTokens.indexOf(token)  },
       closeOnNavigation: true
     });
   }
