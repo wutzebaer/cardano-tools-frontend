@@ -127,6 +127,12 @@ export class MintFormComponent implements OnInit {
       const reader = new FileReader();
       reader.readAsDataURL(file as Blob);
       reader.onload = _event => {
+
+        // create metadata
+        if (file.type.startsWith('image')) {
+          this.metaData["image"] = (reader.result as string).match(/.{1,64}/g);
+        }
+
         this.metaData["files"] = [{
           src: (reader.result as string).match(/.{1,64}/g),
           name: file.name,
@@ -146,7 +152,6 @@ export class MintFormComponent implements OnInit {
           } else if (event.type === HttpEventType.Response) {
 
             // create metadata
-            delete this.metaData["image"];
             if (file.type.startsWith('image')) {
               this.metaData["image"] = "ipfs://" + event.body;
             }
