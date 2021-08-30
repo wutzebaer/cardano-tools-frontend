@@ -44,10 +44,10 @@ export class AccountService {
     this.loadAccount(accountObservable);
   }
 
-  discardPolicy() {
+  discardPolicy(days: number) {
     let accountKey = this.localStorageService.retrieveAccountKey();
-    if (accountKey && confirm('Discard policy and start with a new one? You will not be able to mint more tokens for the old one!')) {
-      this.loadAccount(this.api.refreshPolicy(accountKey));
+    if (accountKey) {
+      this.loadAccount(this.api.refreshPolicy(days, accountKey));
     }
   }
 

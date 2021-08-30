@@ -744,14 +744,19 @@ export class RestInterfaceService {
     /**
      * 
      * 
+     * @param body 
      * @param key 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public refreshPolicy(key: string, observe?: 'body', reportProgress?: boolean): Observable<Account>;
-    public refreshPolicy(key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Account>>;
-    public refreshPolicy(key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Account>>;
-    public refreshPolicy(key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public refreshPolicy(body: number, key: string, observe?: 'body', reportProgress?: boolean): Observable<Account>;
+    public refreshPolicy(body: number, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Account>>;
+    public refreshPolicy(body: number, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Account>>;
+    public refreshPolicy(body: number, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling refreshPolicy.');
+        }
 
         if (key === null || key === undefined) {
             throw new Error('Required parameter key was null or undefined when calling refreshPolicy.');
@@ -770,10 +775,16 @@ export class RestInterfaceService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
+            'application/json'
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
         return this.httpClient.request<Account>('post',`${this.basePath}/api/account/${encodeURIComponent(String(key))}/refreshPolicy`,
             {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

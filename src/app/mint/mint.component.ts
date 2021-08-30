@@ -1,3 +1,4 @@
+import { MintPolicyFormComponent } from './../mint-policy-form/mint-policy-form.component';
 import { Transaction } from './../../cardano-tools-client/model/transaction';
 import { AccountService } from './../account.service';
 import { interval, Observable } from 'rxjs';
@@ -142,7 +143,20 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   discardPolicy() {
-    this.accountService.discardPolicy();
+    // this.accountService.discardPolicy();
+    const dialogRef = this.dialog.open(MintPolicyFormComponent, {
+      width: '800px',
+      maxWidth: '90vw',
+      closeOnNavigation: true
+    });
+
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.updateAccount();
+    });
   }
 
 

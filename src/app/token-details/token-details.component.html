@@ -49,14 +49,14 @@
             Project
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.projectMetadata?.project || 'Unknown, maybe fake')">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.projectMetadata?.project || 'Policy ID unknown')">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.projectMetadata?.project || 'Policy ID unknown, maybe fake'}}
+            {{token.projectMetadata?.project || 'Policy ID unknown'}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
-          <span>{{token.projectMetadata?.project || 'Unknown, maybe fake'}}</span>
+          <span>{{token.projectMetadata?.project || 'Policy ID unknown'}}</span>
         </div>
       </mat-expansion-panel>
 
