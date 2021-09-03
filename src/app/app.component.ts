@@ -42,15 +42,17 @@ export class AppComponent implements OnInit {
       }
     });
 
-    this.activatedRoute.queryParams.subscribe(params => {
-      let accountKey = params['accountKey'];
-      if (accountKey) {
-        localStorageService.storeAccountKey(accountKey);
-      }
-      this.accountService.updateAccount();
-    });
+    const urlParams = new URLSearchParams(window.location.search);
+    const accountKeyParam = urlParams.get('accountKey');
+    if (accountKeyParam) {
+      this.localStorageService.storeAccountKey(accountKeyParam);
+    }
+    this.accountService.updateAccount();
+
   }
   ngOnInit(): void {
+
   }
 
 }
+

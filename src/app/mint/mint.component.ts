@@ -87,8 +87,6 @@ export class MintComponent implements OnInit, AfterViewInit {
       this.updatePolicyTimeLeft();
     });
 
-
-    this.updateAccount();
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.loading = ajaxStatus)
   }
 
