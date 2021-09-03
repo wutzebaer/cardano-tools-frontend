@@ -7,7 +7,7 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 
 @Injectable()
 export class AjaxInterceptor implements HttpInterceptor {
@@ -32,15 +32,19 @@ export class AjaxInterceptor implements HttpInterceptor {
         error: errorResponse => {
           alert(errorResponse.error?.message || errorResponse.message);
           if (!hideLoader) {
-            this.counter--
             this.ajaxStatusChanged$.emit(this.counter > 0);
           }
         },
         complete: () => {
           if (!hideLoader) {
-            this.counter--
             this.ajaxStatusChanged$.emit(this.counter > 0);
           }
+        }
+      }),
+      finalize(() => {
+        if (!hideLoader) {
+          this.counter--
+          this.ajaxStatusChanged$.emit(this.counter > 0);
         }
       })
     );
