@@ -88,6 +88,8 @@ export class MintComponent implements OnInit, AfterViewInit {
     });
 
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.loading = ajaxStatus)
+
+    this.updateAccount();
   }
 
   ngOnInit(): void {
