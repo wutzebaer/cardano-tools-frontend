@@ -143,7 +143,6 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   discardPolicy() {
-    // this.accountService.discardPolicy();
     const dialogRef = this.dialog.open(MintPolicyFormComponent, {
       width: '800px',
       maxWidth: '90vw',

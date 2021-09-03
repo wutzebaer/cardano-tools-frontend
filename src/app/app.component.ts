@@ -31,14 +31,6 @@ export class AppComponent implements OnInit {
           history.go(-1);
         }
       });
-
-      this.activatedRoute.queryParams.subscribe(params => {
-        let accountKey = params['accountKey'];
-        if (accountKey) {
-          localStorageService.storeAccountKey(accountKey);
-        }
-      });
-
     });
 
     location.subscribe((event: PopStateEvent) => {
@@ -49,9 +41,16 @@ export class AppComponent implements OnInit {
         frontDialog.close();
       }
     });
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      let accountKey = params['accountKey'];
+      if (accountKey) {
+        localStorageService.storeAccountKey(accountKey);
+      }
+      this.accountService.updateAccount();
+    });
   }
   ngOnInit(): void {
-    this.accountService.updateAccount();
   }
 
 }
