@@ -36,7 +36,7 @@ export class MintFormComponent implements OnInit {
   @Input() token!: TokenSubmission;
   @Output() spreadMetaValue = new EventEmitter<MetaValue>();
 
-  constructor(private sanitizer: DomSanitizer, private api: RestInterfaceService, private cdRef: ChangeDetectorRef, private tokenEnhancerService: TokenEnhancerService) {
+  constructor(private sanitizer: DomSanitizer, private api: RestInterfaceService, private cdRef: ChangeDetectorRef, public tokenEnhancerService: TokenEnhancerService) {
     MintFormComponent.globalCounter++;
     this.counter = MintFormComponent.globalCounter;
   }

@@ -33,10 +33,10 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div fxLayout="row" style="padding-bottom: 1.25em;">
       <mat-chip-list #chipList multiple>
         <mat-chip *ngFor="let file of metaData.files" color="primary" (removed)="removeFile(file)">
-          {{file.name}}
+          <a [href]="tokenEnhancerService.toIpfsUrl(file.src)" target="_blank">{{file.name}}</a>
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>
@@ -94,9 +94,6 @@
       <mat-chip-list #chipList multiple>
         <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)" [selected]="!!metaData[metaField]">
           {{metaField | titlecase}}
-          <button matChipRemove>
-            <mat-icon>cancel</mat-icon>
-          </button>
         </mat-chip>
       </mat-chip-list>
     </div>
