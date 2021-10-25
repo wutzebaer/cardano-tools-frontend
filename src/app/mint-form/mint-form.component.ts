@@ -26,7 +26,7 @@ export class MintFormComponent implements OnInit {
   static globalCounter = 0;
 
   counter!: number;
-  availableMetaFields: string[] = ['image', 'name', 'type', 'traits', 'artist', 'publisher', 'copyright', 'homepage', 'url'];
+  availableMetaFields: string[] = ['image', 'name', 'description', 'type', 'traits', 'artist', 'publisher', 'copyright', 'homepage', 'url'];
   listFields: string[] = ['traits'];
   uploadProgress: number = 0;
   metaData: any;
@@ -88,11 +88,7 @@ export class MintFormComponent implements OnInit {
   }
 
   updatePreview() {
-    if (this.metaData.files?.length) {
-      this.previewType = this.metaData.files[0].mediaType
-      this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.files[0].src)
-    }
-    else if (this.metaData.image) {
+    if (this.metaData.image) {
       this.previewType = 'image'
       this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.image)
     }
@@ -131,13 +127,17 @@ export class MintFormComponent implements OnInit {
         // create metadata
         if (file.type.startsWith('image')) {
           this.metaData["image"] = (reader.result as string).match(/.{1,64}/g);
+          this.metaData["mediaType"] = file.type
         }
 
-        this.metaData["files"] = [{
+        if (!this.metaData["files"]) {
+          this.metaData["files"] = [];
+        }
+        this.metaData["files"].push({
           src: (reader.result as string).match(/.{1,64}/g),
           name: file.name,
           mediaType: file.type
-        }]
+        })
         this.updatePreview()
       };
 
@@ -154,13 +154,18 @@ export class MintFormComponent implements OnInit {
             // create metadata
             if (file.type.startsWith('image')) {
               this.metaData["image"] = "ipfs://" + event.body;
+              this.metaData["mediaType"] = file.type
             }
 
-            this.metaData["files"] = [{
+            if (!this.metaData["files"]) {
+              this.metaData["files"] = [];
+            }
+            this.metaData["files"].push({
               src: "ipfs://" + event.body,
               name: file.name,
               mediaType: file.type
-            }]
+            })
+
             this.updatePreview()
 
             this.uploadProgress = 0;
@@ -169,6 +174,19 @@ export class MintFormComponent implements OnInit {
       });
     }
 
+  }
+
+  removeFile(file: any) {
+    const index = this.metaData["files"].indexOf(file);
+    this.metaData["files"].splice(index, 1);
+    if (this.metaData["files"].length == 0) {
+      delete this.metaData["files"]
+    }
+    if (file.src === this.metaData["image"]) {
+      delete this.metaData["image"];
+      delete this.metaData["mediaType"];
+    }
+    this.updatePreview();
   }
 
 

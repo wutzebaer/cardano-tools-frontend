@@ -33,6 +33,17 @@
 
     </div>
 
+    <div fxLayout="row">
+      <mat-chip-list #chipList multiple>
+        <mat-chip *ngFor="let file of metaData.files" color="primary" (removed)="removeFile(file)">
+          {{file.name}}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+
     <div fxLayout="row" fxLayoutGap="10px">
       <!-- Asset Name -->
       <mat-form-field fxFlex appearance="outline">
@@ -83,6 +94,9 @@
       <mat-chip-list #chipList multiple>
         <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)" [selected]="!!metaData[metaField]">
           {{metaField | titlecase}}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
         </mat-chip>
       </mat-chip-list>
     </div>
