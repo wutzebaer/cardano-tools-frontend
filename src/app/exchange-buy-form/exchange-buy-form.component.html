@@ -30,7 +30,7 @@
         <mat-spinner *ngIf="offer.address.balance < offer.price" [diameter]="19" style="display: inline-block;"></mat-spinner>
       </p>
 
-      <p>
+      <p *ngIf="offer.address.balance >= offer.price">
         Waiting for Token...
         <mat-spinner *ngIf="!receivedToken" [diameter]="19" style="display: inline-block;"></mat-spinner>
         <span *ngIf="receivedToken">Received {{receivedToken.name}}</span>

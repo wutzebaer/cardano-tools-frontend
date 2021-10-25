@@ -70,7 +70,7 @@ export class TokenDetailsComponent implements OnInit {
 
   copyToClipboard(value: string) {
     this.clipboard.copy(value);
-    let snackBarRef = this.snackBar.open('Copied to clipboard: ' + value);
+    let snackBarRef = this.snackBar.open('Copied to clipboard: ' + value, undefined, { duration: 2000 });
   }
 
   copyMetadataToClipboard() {
