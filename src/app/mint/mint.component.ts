@@ -45,7 +45,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   policyTimeLeft: string = "00:00:00:00";
 
   initializeValues() {
-    this.mintOrderSubmission = { tokens: [], targetAddress: "", tip: false };
+    this.mintOrderSubmission = { tokens: [], targetAddress: "", tip: true };
     this.mintTransaction = {
       rawData: "",
       txId: "",
