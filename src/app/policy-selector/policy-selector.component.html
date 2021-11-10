@@ -1,0 +1,8 @@
+<mat-form-field>
+  <mat-label>Policy</mat-label>
+  <mat-select [(ngModel)]="selectedPolicyId" (selectionChange)="policyChanged()">
+    <mat-option *ngFor="let policy of account?.policies" [value]="policy.policyId">
+      {{policy.policyId}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

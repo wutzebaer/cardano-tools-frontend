@@ -1,22 +1,17 @@
-import { MintPolicyFormComponent } from './../mint-policy-form/mint-policy-form.component';
-import { Transaction } from './../../cardano-tools-client/model/transaction';
-import { AccountService } from './../account.service';
-import { interval, Observable } from 'rxjs';
-import { MintFormComponent, MetaValue } from './../mint-form/mint-form.component';
-import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
-import { MintOrderSubmission } from 'src/cardano-tools-client/model/mintOrderSubmission';
-import { AccountKeyComponent } from './../account-key/account-key.component';
-import { NgModel } from '@angular/forms';
-import { AjaxInterceptor } from './../ajax.interceptor';
+import { MetaValue } from 'src/app/mint-form/mint-form.component';
+import { MintFormAdvancedComponent } from 'src/app/mint-form-advanced/mint-form-advanced.component';
+import { LocalStorageService } from 'src/app/local-storage.service';
+import { AccountService } from 'src/app/account.service';
+import { AjaxInterceptor } from 'src/app/ajax.interceptor';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterViewInit, Component, OnInit, ViewChild, EventEmitter, Optional, ViewChildren, QueryList } from '@angular/core';
-import { MatStepper } from '@angular/material/stepper';
-import { RestInterfaceService, Account } from 'src/cardano-tools-client';
-import { LocalStorageService } from '../local-storage.service';
-import { F } from '@angular/cdk/keycodes';
+import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
-import { JsonpClientBackend } from '@angular/common/http';
+import { MatStepper } from '@angular/material/stepper';
+import { interval } from 'rxjs';
+import { Account, MintOrderSubmission, Policy, RestInterfaceService, Transaction } from 'src/cardano-tools-client';
+import { MintFormComponent } from 'src/app/mint-form/mint-form.component';
+import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
 
 export interface Countdown {
   secondsToDday: number;
@@ -40,21 +35,23 @@ export class MintComponent implements OnInit, AfterViewInit {
   account!: Account;
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: Transaction;
+  policyTimeLeft?: string;
   loading = false;
-  lockDate = new Date();
-  policyTimeLeft: string = "00:00:00:00";
 
   initializeValues() {
-    this.mintOrderSubmission = { tokens: [], targetAddress: "", tip: true };
+    this.mintOrderSubmission = {
+      tokens: [],
+      targetAddress: '',
+      tip: true,
+      policyId: '',
+    };
     this.mintTransaction = {
       rawData: "",
       txId: "",
       fee: 0,
-      policyId: "",
       outputs: "",
       inputs: "",
       metaDataJson: "",
-      policy: "",
       mintOrderSubmission: this.mintOrderSubmission,
       minOutput: 1000000,
       txSize: 0,
@@ -62,11 +59,12 @@ export class MintComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private api: RestInterfaceService, ajaxInterceptor: AjaxInterceptor, private dialog: MatDialog, private accountService: AccountService) {
+  constructor(private api: RestInterfaceService, ajaxInterceptor: AjaxInterceptor, private dialog: MatDialog, private accountService: AccountService, private localStorageService: LocalStorageService) {
 
-    this.initializeValues()
+    this.initializeValues();
 
     accountService.account.subscribe(account => {
+
       if (!this.account) {
         this.account = account;
         return;
@@ -75,21 +73,24 @@ export class MintComponent implements OnInit, AfterViewInit {
       let balanceChanged = account.address.balance != this.account.address.balance || account.key != this.account.key;
 
       this.account = account;
+
       if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
         this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
       }
 
-      if (balanceChanged || this.mintTransaction.fee == 0) {
+      if (!this.mintOrderSubmission.policyId) {
+        this.mintOrderSubmission.policyId = account.policies.find(p => p.policyId === localStorageService.retrievePolicyId())?.policyId || account.policies[0].policyId;
+      }
+
+      if (this.stepper.selectedIndex > 0 && balanceChanged) {
         this.updateMintTransaction();
       }
 
-      this.lockDate = new Date(account.policyDueDate);
       this.updatePolicyTimeLeft();
     });
 
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.loading = ajaxStatus)
 
-    this.updateAccount();
   }
 
   ngOnInit(): void {
@@ -101,7 +102,7 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.stepper.selectionChange.subscribe((event: StepperSelectionEvent) => {
-      if (event.previouslySelectedIndex == 0 && this.account.key) {
+      if (event.previouslySelectedIndex == 0) {
         this.updateMintTransaction()
       }
     });
@@ -154,19 +155,22 @@ export class MintComponent implements OnInit, AfterViewInit {
       if (!result) {
         return;
       }
-      this.updateAccount();
     });
   }
 
+  currentSlot() {
+    return new Date().getTime() / 1000 - 1596491091 + 4924800;
+  }
 
   updatePolicyTimeLeft() {
-    if (this.account?.policyId) {
-      var timeLeft = this.lockDate.getTime() - new Date().getTime();
+    if (this.mintOrderSubmission.policyId) {
+      const policy: Policy = this.account?.policies.find(p => p.policyId === this.mintOrderSubmission.policyId)!;
+      const timeLeft = policy.policyDueSlot - this.currentSlot();
       const countdown: Countdown = {
-        secondsToDday: Math.floor(timeLeft / (1000) % 60),
-        minutesToDday: Math.floor(timeLeft / (1000 * 60) % 60),
-        hoursToDday: Math.floor(timeLeft / (1000 * 60 * 60) % 24),
-        daysToDday: Math.floor(timeLeft / (1000 * 60 * 60 * 24))
+        secondsToDday: Math.floor(timeLeft / (1) % 60),
+        minutesToDday: Math.floor(timeLeft / (1 * 60) % 60),
+        hoursToDday: Math.floor(timeLeft / (1 * 60 * 60) % 24),
+        daysToDday: Math.floor(timeLeft / (1 * 60 * 60 * 24))
       };
       this.policyTimeLeft = `${countdown.daysToDday.toString().padStart(2, "0")}:${countdown.hoursToDday.toString().padStart(2, "0")}:${countdown.minutesToDday.toString().padStart(2, "0")}:${countdown.secondsToDday.toString().padStart(2, "0")}`;
     }
@@ -200,7 +204,7 @@ export class MintComponent implements OnInit, AfterViewInit {
       this.mintTransaction = mintTransaction;
 
       let parsed = JSON.parse(this.mintTransaction.metaDataJson as string)
-      let policyData = parsed["721"][this.account.policyId]
+      let policyData = parsed["721"][this.mintOrderSubmission.policyId]
       Object.keys(policyData).map(function (key, index) {
         delete policyData[key]['policy']
       });
@@ -222,7 +226,7 @@ export class MintComponent implements OnInit, AfterViewInit {
         let newMetadata = JSON.parse(result)
 
         this.mintOrderSubmission.tokens = [];
-        const tokenDatas = newMetadata["721"]?.[this.account.policyId];
+        const tokenDatas = newMetadata["721"]?.[this.mintOrderSubmission.policyId];
         for (const key in tokenDatas) {
           let token = { assetName: key, amount: 1, metaData: "{}" };
           token.metaData = JSON.stringify(tokenDatas[key] ?? {}, null, 3);

@@ -1,6 +1,6 @@
 import { LocalStorageService } from './local-storage.service';
 import { startWith } from 'rxjs/operators';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, ReplaySubject } from 'rxjs';
 import { Account, RestInterfaceService } from 'src/cardano-tools-client';
 import { Injectable } from '@angular/core';
 
@@ -9,25 +9,23 @@ import { Injectable } from '@angular/core';
 })
 export class AccountService {
 
-  readonly account: Subject<Account> = new BehaviorSubject<Account>({
-    key: "",
-    address: {
-      address: "",
-      balance: 0,
-      tokensData: "[]"
-    },
-    stake: 0,
-    fundingAddresses: [],
-    fundingAddressesHistory: [],
-    createdAt: new Date(0),
-
-    lastUpdate: new Date(0),
-    policyId: "",
-    policy: "{\"scripts\":[{\"slot\":0}]}",
-    policyDueDate: new Date(0)
-  });
+  readonly account: Subject<Account> = new ReplaySubject<Account>();
 
   constructor(private localStorageService: LocalStorageService, private api: RestInterfaceService) {
+    this.account.next({
+      key: "",
+      createdAt: new Date(0),
+      policies: [],
+      address: {
+        address: "",
+        balance: 0,
+        tokensData: "[]"
+      },
+      fundingAddresses: [],
+      fundingAddressesHistory: [],
+      stake: 0,
+      lastUpdate: new Date(0),
+    });
   }
 
 

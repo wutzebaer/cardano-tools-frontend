@@ -18,10 +18,8 @@ export interface Transaction {
     fee: number;
     minOutput?: number;
     txSize: number;
-    policyId?: string;
     outputs: string;
     inputs: string;
     metaDataJson?: string;
-    policy?: string;
     mintOrderSubmission?: MintOrderSubmission;
 }

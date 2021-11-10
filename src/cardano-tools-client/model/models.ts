@@ -3,6 +3,7 @@ export * from './address';
 export * from './body';
 export * from './body1';
 export * from './mintOrderSubmission';
+export * from './policy';
 export * from './projectMetadata';
 export * from './registrationMetadata';
 export * from './tokenData';

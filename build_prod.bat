@@ -1,2 +1,2 @@
-ng build --prod
+ng build --configuration production
 pause

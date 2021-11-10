@@ -27,4 +27,17 @@ export class LocalStorageService {
   retrieveMyAddress(): string | null {
     return localStorage.getItem("myaddress");
   }
+
+  clearPolicyId() {
+    localStorage.removeItem("policyId")
+  }
+
+  storePolicyId(policyId: string) {
+    localStorage.setItem("policyId", policyId);
+  }
+
+  retrievePolicyId(): string | null {
+    return localStorage.getItem("policyId");
+  }
+
 }

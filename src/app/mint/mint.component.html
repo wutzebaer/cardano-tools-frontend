@@ -1,11 +1,13 @@
 <h1 class="mat-h1">Mint Cardano NFTs</h1>
 
 <p style="text-align: center;">
-  Your PolicyId <a [routerLink]="['/latest']" [queryParams]="{q:account.policyId}" target="_blank">{{account.policyId}}</a> will lock in {{policyTimeLeft}}
+  Your PolicyId <a [routerLink]="['/latest']" [queryParams]="{q:mintOrderSubmission.policyId}" target="_blank">{{mintOrderSubmission.policyId}}</a> will lock in {{policyTimeLeft}}
   <button type="button" mat-icon-button matTooltip="Discard policy" (click)="discardPolicy()">
     <mat-icon>history</mat-icon>
   </button>
 </p>
+
+<app-policy-selector></app-policy-selector>
 
 <mat-horizontal-stepper linear="true" #stepper>
 

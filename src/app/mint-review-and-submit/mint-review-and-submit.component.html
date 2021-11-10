@@ -25,7 +25,7 @@
               <mat-panel-description>
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <pre>{{mintTransaction.policyId}}</pre>
+            <pre>{{mintTransaction.mintOrderSubmission?.policyId}}</pre>
           </mat-expansion-panel>
 
           <!-- Policy -->
@@ -37,7 +37,7 @@
               <mat-panel-description>
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <pre>{{mintTransaction.policy}}</pre>
+            <pre>{{getPolicy()}}</pre>
           </mat-expansion-panel>
 
           <!-- Metadata -->

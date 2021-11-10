@@ -13,7 +13,7 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class NavComponent {
 
-  account!: Account;
+  account?: Account;
   scrollPosition = 0
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)

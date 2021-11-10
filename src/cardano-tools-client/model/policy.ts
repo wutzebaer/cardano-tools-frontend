@@ -10,15 +10,11 @@
  * Do not edit the class manually.
  */
 import { Address } from './address';
-import { Policy } from './policy';
 
-export interface Account { 
-    key: string;
-    createdAt: Date;
-    policies: Array<Policy>;
+export interface Policy { 
+    id?: number;
+    policyId: string;
+    policy: string;
     address: Address;
-    fundingAddresses: Array<string>;
-    fundingAddressesHistory: Array<string>;
-    stake: number;
-    lastUpdate: Date;
+    policyDueSlot: number;
 }
