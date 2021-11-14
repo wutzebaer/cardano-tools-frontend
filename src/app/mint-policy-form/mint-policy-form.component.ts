@@ -18,10 +18,10 @@ export class MintPolicyFormComponent implements OnInit {
   }
 
   apply() {
-    if (confirm('Discard policy and start with a new one? You will not be able to mint more tokens for the old one!')) {
-      this.accountService.discardPolicy(this.days);
-      this.dialogRef.close(true);
-    }
+    //if (confirm('Discard policy and start with a new one? You will not be able to mint more tokens for the old one!')) {
+    this.accountService.discardPolicy(this.days);
+    this.dialogRef.close(true);
+    //}
   }
 
 }

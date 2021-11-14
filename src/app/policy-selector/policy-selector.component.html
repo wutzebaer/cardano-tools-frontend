@@ -1,7 +1,10 @@
-<mat-form-field>
+<mat-form-field style="width: 100%;" appearance="outline">
   <mat-label>Policy</mat-label>
-  <mat-select [(ngModel)]="selectedPolicyId" (selectionChange)="policyChanged()">
-    <mat-option *ngFor="let policy of account?.policies" [value]="policy.policyId">
+  <mat-select [(ngModel)]="selectedPolicyId" (selectionChange)="policyChanged($event)" [disabled]="disabled">
+    <mat-option>&lt;Create new Policy&gt;</mat-option>
+    <mat-option *ngFor="let policy of account?.policies" [value]="policy.policyId" [disabled]="getTimeLeft(policy) <= 0">
+      <span *ngIf="getTimeLeft(policy) > 0">{{getTimeLeftString(policy)}}</span>
+      <span *ngIf="getTimeLeft(policy) <= 0">[LOCKED]</span>
       {{policy.policyId}}
     </mat-option>
   </mat-select>

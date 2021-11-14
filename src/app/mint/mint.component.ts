@@ -1,3 +1,4 @@
+import { CardanoUtils } from './../cardano-utils';
 import { MetaValue } from 'src/app/mint-form/mint-form.component';
 import { MintFormAdvancedComponent } from 'src/app/mint-form-advanced/mint-form-advanced.component';
 import { LocalStorageService } from 'src/app/local-storage.service';
@@ -13,12 +14,7 @@ import { Account, MintOrderSubmission, Policy, RestInterfaceService, Transaction
 import { MintFormComponent } from 'src/app/mint-form/mint-form.component';
 import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
 
-export interface Countdown {
-  secondsToDday: number;
-  minutesToDday: number;
-  hoursToDday: number;
-  daysToDday: number;
-}
+
 
 @Component({
   selector: 'app-mint',
@@ -35,7 +31,6 @@ export class MintComponent implements OnInit, AfterViewInit {
   account!: Account;
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: Transaction;
-  policyTimeLeft?: string;
   loading = false;
 
   initializeValues() {
@@ -78,25 +73,37 @@ export class MintComponent implements OnInit, AfterViewInit {
         this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
       }
 
-      if (!this.mintOrderSubmission.policyId) {
-        this.mintOrderSubmission.policyId = account.policies.find(p => p.policyId === localStorageService.retrievePolicyId())?.policyId || account.policies[0].policyId;
-      }
-
       if (this.stepper.selectedIndex > 0 && balanceChanged) {
         this.updateMintTransaction();
       }
 
-      this.updatePolicyTimeLeft();
     });
 
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.loading = ajaxStatus)
 
   }
 
+  changePolicyId(policyId: string) {
+    this.mintOrderSubmission.policyId = policyId;
+    this.updateMintTransaction();
+  }
+
+  discardPolicy() {
+    const dialogRef = this.dialog.open(MintPolicyFormComponent, {
+      width: '800px',
+      maxWidth: '90vw',
+      closeOnNavigation: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.addToken();
     interval(1000).subscribe(() => {
-      this.updatePolicyTimeLeft();
     });
   }
 
@@ -138,42 +145,18 @@ export class MintComponent implements OnInit, AfterViewInit {
     event.target.value = '';
   }
 
+  getTimeLeft(policyId: string): number {
+    const policy: Policy = this.account?.policies.find(p => p.policyId === policyId)!;
+    return CardanoUtils.getTimeLeft(policy);
+  }
+
+  getTimeLeftString(policyId: string): string {
+    const policy: Policy = this.account?.policies.find(p => p.policyId === policyId)!;
+    return CardanoUtils.getTimeLeftString(policy);
+  }
 
   updateAccount() {
     this.accountService.updateAccount();
-  }
-
-  discardPolicy() {
-    const dialogRef = this.dialog.open(MintPolicyFormComponent, {
-      width: '800px',
-      maxWidth: '90vw',
-      closeOnNavigation: true
-    });
-
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
-        return;
-      }
-    });
-  }
-
-  currentSlot() {
-    return new Date().getTime() / 1000 - 1596491091 + 4924800;
-  }
-
-  updatePolicyTimeLeft() {
-    if (this.mintOrderSubmission.policyId) {
-      const policy: Policy = this.account?.policies.find(p => p.policyId === this.mintOrderSubmission.policyId)!;
-      const timeLeft = policy.policyDueSlot - this.currentSlot();
-      const countdown: Countdown = {
-        secondsToDday: Math.floor(timeLeft / (1) % 60),
-        minutesToDday: Math.floor(timeLeft / (1 * 60) % 60),
-        hoursToDday: Math.floor(timeLeft / (1 * 60 * 60) % 24),
-        daysToDday: Math.floor(timeLeft / (1 * 60 * 60 * 24))
-      };
-      this.policyTimeLeft = `${countdown.daysToDday.toString().padStart(2, "0")}:${countdown.hoursToDday.toString().padStart(2, "0")}:${countdown.minutesToDday.toString().padStart(2, "0")}:${countdown.secondsToDday.toString().padStart(2, "0")}`;
-    }
   }
 
   updateMintTransaction() {

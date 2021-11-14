@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>
-  Policy settings
+  Create new policy
 </h2>
 
 <mat-dialog-content>
@@ -13,6 +13,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close [disabled]="loading">Cancel</button>
-  <button mat-button (click)="apply()" cdkFocusInitial [disabled]="policyForm.invalid || loading">Apply</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="apply()" cdkFocusInitial [disabled]="policyForm.invalid ">Create</button>
 </mat-dialog-actions>
