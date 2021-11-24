@@ -182,10 +182,6 @@ export class MintFormComponent implements OnInit {
     if (this.metaData["files"].length == 0) {
       delete this.metaData["files"]
     }
-    if (file.src === this.metaData["image"]) {
-      delete this.metaData["image"];
-      delete this.metaData["mediaType"];
-    }
     this.updatePreview();
   }
 

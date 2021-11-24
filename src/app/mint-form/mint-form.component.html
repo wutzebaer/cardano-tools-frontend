@@ -63,7 +63,7 @@
         <!-- Simple Metafield-->
         <mat-form-field *ngIf="isSimpleValue(metaData[key])" appearance="outline">
           <mat-label>{{toString(key) | titlecase}}</mat-label>
-          <input matInput name="{{key}}{{counter}}" maxlength="64" [(ngModel)]="metaData[key]">
+          <input matInput name="{{key}}{{counter}}" maxlength="64" [(ngModel)]="metaData[key]" (input)="updatePreview()">
           <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])">
             <mat-icon>auto_fix_high</mat-icon>
           </button>
