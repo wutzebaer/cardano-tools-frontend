@@ -2,7 +2,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
 import { CardanoUtils } from './../cardano-utils';
 import { LocalStorageService } from './../local-storage.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit } from '@angular/core';
 import { Account, Policy } from 'src/cardano-tools-client';
 import { AccountService } from './../account.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,16 +14,18 @@ import { I } from '@angular/cdk/keycodes';
   templateUrl: './policy-selector.component.html',
   styleUrls: ['./policy-selector.component.scss']
 })
-export class PolicySelectorComponent implements OnInit {
+export class PolicySelectorComponent implements AfterViewInit {
 
   @Input() disabled = true;
   @Output() changedPolicyId = new EventEmitter<string>();
   account?: Account;
   selectedPolicyId?: string | null;
 
-  constructor(accountService: AccountService, private localStorageService: LocalStorageService, private dialog: MatDialog) {
+  constructor(private accountService: AccountService, private localStorageService: LocalStorageService, private dialog: MatDialog) {
+  }
 
-    accountService.account.subscribe(newAccount => {
+  ngAfterViewInit() {
+    this.accountService.account.subscribe(newAccount => {
 
       if (!newAccount.policies.length) {
         return;
@@ -32,7 +34,7 @@ export class PolicySelectorComponent implements OnInit {
       const oldPolicyId = this.selectedPolicyId;
 
       if (!this.selectedPolicyId) {
-        this.selectedPolicyId = localStorageService.retrievePolicyId();
+        this.selectedPolicyId = this.localStorageService.retrievePolicyId();
       }
 
       if (!newAccount.policies.find(p => p.policyId === this.selectedPolicyId)) {
@@ -56,8 +58,7 @@ export class PolicySelectorComponent implements OnInit {
     return account.policies.find(p => this.getTimeLeft(p) > 0)!;
   }
 
-  ngOnInit(): void {
-  }
+
 
   policyChanged($event?: MatSelectChange) {
     if (this.selectedPolicyId === 'CREATE_NEW') {

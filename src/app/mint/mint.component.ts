@@ -72,7 +72,7 @@ export class MintComponent implements OnInit, AfterViewInit {
         if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
           this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
         }
-        if (this.stepper.selectedIndex > 0 && balanceChanged) {
+        if (this.stepper?.selectedIndex > 0 && balanceChanged) {
           this.updateMintTransaction();
         }
 
@@ -86,6 +86,21 @@ export class MintComponent implements OnInit, AfterViewInit {
   changePolicyId(policyId: string) {
     this.mintOrderSubmission.policyId = policyId;
     this.updateMintTransaction();
+  }
+
+  ngAfterViewInit() {
+    this.stepper.selectionChange.subscribe((event: StepperSelectionEvent) => {
+      if (event.previouslySelectedIndex == 0) {
+        this.updateMintTransaction()
+      }
+    });
+  }
+
+  updateMintTransaction() {
+    this.components.forEach(c => c.serializeMetadata())
+    this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
+      this.mintTransaction = mintTransaction;
+    })
   }
 
   discardPolicy() {
@@ -107,13 +122,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    this.stepper.selectionChange.subscribe((event: StepperSelectionEvent) => {
-      if (event.previouslySelectedIndex == 0) {
-        this.updateMintTransaction()
-      }
-    });
-  }
+
 
   spreadMetaValue($event: MetaValue) {
     this.components.forEach(c => {
@@ -159,12 +168,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.accountService.updateAccount();
   }
 
-  updateMintTransaction() {
-    this.components.forEach(c => c.serializeMetadata())
-    this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
-      this.mintTransaction = mintTransaction;
-    })
-  }
+
 
   mintSuccess() {
     this.stepper.selectedIndex = 3

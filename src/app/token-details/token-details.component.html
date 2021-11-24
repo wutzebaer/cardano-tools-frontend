@@ -14,7 +14,7 @@
     </button>
 
     <div class="preview" fxLayout="row" fxLayoutAlign="center center">
-      <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && token.metaData['image']">
+      <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && previewType.startsWith('image')" style="pointer-events: none;">
         <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
           image
         </mat-icon>

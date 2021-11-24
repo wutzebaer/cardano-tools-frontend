@@ -29,8 +29,6 @@ export class ExchangeBuyFormComponent implements OnInit {
       offer => {
         this.offer = this.tokenEnhancerService.enhanceOffer(offer);
         this.receivedToken = this.offer.receivedTokensParsed.find(t => t.policyId == offer.policyId && t.name == offer.assetName);
-        console.log(this.receivedToken);
-
       }
     );
   }
