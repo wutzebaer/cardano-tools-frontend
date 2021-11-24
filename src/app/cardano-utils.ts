@@ -10,7 +10,7 @@ interface Countdown {
 export class CardanoUtils {
 
     static currentSlot() {
-        return new Date().getTime() / 1000 - 1596491091 + 4924800 - (29 * 24 * 60 * 60);
+        return new Date().getTime() / 1000 - 1596491091 + 4924800;
     }
 
     static getTimeLeft(policy: Policy): number {

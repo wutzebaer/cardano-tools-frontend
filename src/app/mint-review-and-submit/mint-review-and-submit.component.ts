@@ -26,7 +26,7 @@ export class MintReviewAndSubmitComponent implements OnInit {
   }
 
   getPolicy() {
-    return this.account.policies.find(p => p.policyId === this.mintTransaction.mintOrderSubmission?.policyId)
+    return this.account.policies.find(p => p.policyId === this.mintTransaction.mintOrderSubmission?.policyId)?.policy
   }
 
   ngOnInit(): void {

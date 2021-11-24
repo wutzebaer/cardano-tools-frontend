@@ -61,22 +61,22 @@ export class MintComponent implements OnInit, AfterViewInit {
     accountService.account.subscribe(account => {
 
       if (!this.account) {
+
         this.account = account;
         return;
+
+      } else {
+
+        let balanceChanged = account.address.balance != this.account.address.balance || account.key != this.account.key;
+        this.account = account;
+        if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
+          this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+        }
+        if (this.stepper.selectedIndex > 0 && balanceChanged) {
+          this.updateMintTransaction();
+        }
+
       }
-
-      let balanceChanged = account.address.balance != this.account.address.balance || account.key != this.account.key;
-
-      this.account = account;
-
-      if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
-        this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
-      }
-
-      if (this.stepper.selectedIndex > 0 && balanceChanged) {
-        this.updateMintTransaction();
-      }
-
     });
 
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.loading = ajaxStatus)
