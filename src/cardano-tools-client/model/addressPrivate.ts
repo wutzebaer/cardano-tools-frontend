@@ -9,12 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Address } from './address';
 
-export interface Policy { 
-    id?: number;
-    policyId: string;
-    policy: string;
-    address: Address;
-    policyDueSlot: number;
+export interface AddressPrivate { 
+    address: string;
+    skey: string;
+    vkey: string;
+    balance: number;
+    tokensData: string;
 }

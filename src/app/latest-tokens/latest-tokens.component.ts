@@ -1,12 +1,12 @@
-import { TokenEnhancerService } from './../token-enhancer.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, interval, Subscription } from 'rxjs';
+import { interval, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, retry, switchMap } from 'rxjs/operators';
-import { RestInterfaceService, TokenData, TokenRegistryMetadata } from 'src/cardano-tools-client';
+import { TokenData, TokenRestInterfaceService } from 'src/cardano-tools-client';
 import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
+import { TokenEnhancerService } from './../token-enhancer.service';
 
 
 export enum FetchMode {
@@ -27,7 +27,7 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
   lastOffset = 0
   timer: Subscription;
 
-  constructor(private api: RestInterfaceService, private activatedRoute: ActivatedRoute, public dialog: MatDialog, private router: Router, private tokenEnhancerService: TokenEnhancerService) {
+  constructor(private api: TokenRestInterfaceService, private activatedRoute: ActivatedRoute, public dialog: MatDialog, private router: Router, private tokenEnhancerService: TokenEnhancerService) {
     this.searchText$.pipe(
       debounceTime(500),
       distinctUntilChanged(),

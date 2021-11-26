@@ -3,7 +3,7 @@ import { AccountService } from './../account.service';
 import { AccountKeyComponent } from './../account-key/account-key.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Account } from 'src/cardano-tools-client';
+import { AccountPrivate } from 'src/cardano-tools-client';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
@@ -13,7 +13,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 })
 export class MintSuccessComponent implements OnInit {
 
-  account!: Account;
+  account!: AccountPrivate;
   @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
   @Output() restart = new EventEmitter<void>();

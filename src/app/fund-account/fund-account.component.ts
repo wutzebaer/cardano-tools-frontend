@@ -1,12 +1,10 @@
-import { Transaction } from './../../cardano-tools-client/model/transaction';
-import { AccountService } from './../account.service';
-import { MintFormAdvancedComponent } from './../mint-form-advanced/mint-form-advanced.component';
-import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, AfterContentChecked, OnDestroy } from '@angular/core';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
-import { RestInterfaceService, Account, MintOrderSubmission } from 'src/cardano-tools-client';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { MatDialog } from '@angular/material/dialog';
+import { AccountPrivate, MintOrderSubmission } from 'src/cardano-tools-client';
+import { Transaction } from './../../cardano-tools-client/model/transaction';
+import { AccountService } from './../account.service';
 
 
 
@@ -18,7 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class FundAccountComponent implements OnInit, OnDestroy {
 
-  account!: Account;
+  account!: AccountPrivate;
 
   @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();

@@ -10,7 +10,7 @@ import { NgModel } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { interval } from 'rxjs';
-import { Account, MintOrderSubmission, Policy, RestInterfaceService, Transaction } from 'src/cardano-tools-client';
+import { AccountPrivate, MintOrderSubmission, PolicyPrivate, MintRestInterfaceService, Transaction } from 'src/cardano-tools-client';
 import { MintFormComponent } from 'src/app/mint-form/mint-form.component';
 import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
 
@@ -28,7 +28,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   @ViewChildren('mintForm') components!: QueryList<MintFormComponent>;
 
 
-  account!: Account;
+  account!: AccountPrivate;
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: Transaction;
   loading = false;
@@ -54,7 +54,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private api: RestInterfaceService, ajaxInterceptor: AjaxInterceptor, private dialog: MatDialog, private accountService: AccountService, private localStorageService: LocalStorageService) {
+  constructor(private api: MintRestInterfaceService, ajaxInterceptor: AjaxInterceptor, private dialog: MatDialog, private accountService: AccountService, private localStorageService: LocalStorageService) {
 
     this.initializeValues();
 
@@ -155,12 +155,12 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   getTimeLeft(policyId: string): number {
-    const policy: Policy = this.account?.policies.find(p => p.policyId === policyId)!;
+    const policy: PolicyPrivate = this.account?.policies.find(p => p.policyId === policyId)!;
     return CardanoUtils.getTimeLeft(policy);
   }
 
   getTimeLeftString(policyId: string): string {
-    const policy: Policy = this.account?.policies.find(p => p.policyId === policyId)!;
+    const policy: PolicyPrivate = this.account?.policies.find(p => p.policyId === policyId)!;
     return CardanoUtils.getTimeLeftString(policy);
   }
 

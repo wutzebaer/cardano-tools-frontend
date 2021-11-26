@@ -1,15 +1,12 @@
-import { TokenOffer } from './../../cardano-tools-client/model/tokenOffer';
-import { ExchangeSellFormComponent } from './../exchange-sell-form/exchange-sell-form.component';
-import { interval, Observable, Subscription } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { LatestTokensDetailComponent } from './../latest-tokens-detail/latest-tokens-detail.component';
-import { TokenEnhancerService } from './../token-enhancer.service';
-import { Account, RestInterfaceService } from 'src/cardano-tools-client';
-import { AccountService } from './../account.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TokenDataWithMetadata } from '../token-enhancer.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ResourceLoader } from '@angular/compiler';
+import { interval, Subscription } from 'rxjs';
+import { AccountPrivate, ExchangeRestInterfaceService } from 'src/cardano-tools-client';
+import { TokenDataWithMetadata } from '../token-enhancer.service';
+import { AccountService } from './../account.service';
+import { ExchangeSellFormComponent } from './../exchange-sell-form/exchange-sell-form.component';
+import { TokenEnhancerService } from './../token-enhancer.service';
 
 @Component({
   selector: 'app-exchange-sell',
@@ -18,7 +15,7 @@ import { ResourceLoader } from '@angular/compiler';
 })
 export class ExchangeSellComponent implements OnInit, OnDestroy {
 
-  account!: Account;
+  account!: AccountPrivate;
   myTokens: TokenDataWithMetadata[] = []
   timer: Subscription
   accountSubscription: Subscription
@@ -26,7 +23,7 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
   offeredTokens: any = {};
 
 
-  constructor(private accountService: AccountService, private api: RestInterfaceService, private tokenEnhancerService: TokenEnhancerService, public dialog: MatDialog, private clipboard: Clipboard) {
+  constructor(private accountService: AccountService, private api: ExchangeRestInterfaceService, private tokenEnhancerService: TokenEnhancerService, public dialog: MatDialog, private clipboard: Clipboard) {
     this.accountSubscription = accountService.account.subscribe(account => {
       this.account = account;
       if (account.key && account.stake > this.minStake) {

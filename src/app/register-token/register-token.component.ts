@@ -1,10 +1,11 @@
-import { RegisterTokenSuccessComponent } from './../register-token-success/register-token-success.component';
-import { RegistrationMetadata } from './../../cardano-tools-client/model/registrationMetadata';
-import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
-import { HttpEventType } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { TokenDataWithMetadata, TokenEnhancerService } from './../token-enhancer.service';
 import { Component, OnInit } from '@angular/core';
-import { RestInterfaceService } from 'src/cardano-tools-client';
 import { MatDialog } from '@angular/material/dialog';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { AccountService } from 'src/app/account.service';
+import { AccountPrivate,  RegistrationRestInterfaceService, TokenData, TokenRestInterfaceService } from 'src/cardano-tools-client';
+import { RegisterTokenSuccessComponent } from './../register-token-success/register-token-success.component';
 
 @Component({
   selector: 'app-register-token',
@@ -13,35 +14,59 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class RegisterTokenComponent implements OnInit {
 
-  registrationMetadata: RegistrationMetadata = {
+  account!: AccountPrivate;
+  tokens: TokenDataWithMetadata[] = [];
+  selectedToken?: TokenDataWithMetadata;
+
+  registrationMetadata: any = {
     assetName: "",
     policyId: "",
     policy: "",
     policySkey: "",
     name: "",
     description: "",
-
     ticker: "",
     url: "",
   }
 
-  accountKey = ""
-
   uploadProgress: number = 0;
 
-  file!: File | null;
+  file!: Blob | null;
   url!: SafeUrl | null;
 
-  constructor(private api: RestInterfaceService, private sanitizer: DomSanitizer, public dialog: MatDialog) { }
+  constructor(private api: RegistrationRestInterfaceService, private sanitizer: DomSanitizer, public dialog: MatDialog, private accountService: AccountService, private tokenApi: TokenRestInterfaceService, private tokenEnhancerService: TokenEnhancerService, private httpClient: HttpClient) {
+    accountService.account.subscribe(account => {
+      this.account = account;
+    });
+  }
 
   ngOnInit(): void {
   }
 
-  loadTransaction() {
-    this.api.getRegistrationMetadata(this.accountKey).subscribe(registrationMetadata => {
-      this.registrationMetadata = registrationMetadata
-    })
+  changePolicyId(policyId: string) {
+    const policy = this.account.policies.find(p => p.policyId === policyId)
+    this.registrationMetadata.policyId = policy!.policyId;
+    this.registrationMetadata.policy = policy!.policy;
+    this.registrationMetadata.policySkey = policy!.address.skey;
+    this.tokenApi.policyTokens(policy!.policyId).subscribe({ next: tokens => this.tokens = this.tokenEnhancerService.enhanceTokens(tokens) });
+
   }
+
+  tokenChanged() {
+    this.registrationMetadata.assetName = this.selectedToken?.name!;
+    this.registrationMetadata.name = this.selectedToken?.metaData?.name;
+
+    if (this.selectedToken?.metaData?.image) {
+      const url = this.tokenEnhancerService.toSimpleIpfsUrl(this.selectedToken?.metaData?.image);
+      this.httpClient.get(url, { responseType: 'blob' }).subscribe(
+        results => {
+          console.log(results)
+          this.appendFile(results);
+        }
+      );
+    }
+  }
+
 
   dropFile(event: any) {
     event.preventDefault();
@@ -53,7 +78,7 @@ export class RegisterTokenComponent implements OnInit {
     event.target.value = '';
   }
 
-  appendFile(file: File) {
+  appendFile(file: Blob) {
 
     if (file?.size as number > 52428800) {
       alert("Max 50mb");

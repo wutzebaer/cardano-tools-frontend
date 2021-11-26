@@ -7,31 +7,25 @@
         <h2>Register token</h2>
 
         <p>
-          This will register your token at the official <a href="https://github.com/cardano-foundation/cardano-token-registry">cardano-token-registry</a>. Enter the account key you received at the end of the minting process.
-        </p>
-        <p>
-          If you lost it you could kindly askt in the <a target="_blank" href="https://t.me/joinchat/XrlIF21NDzAyODUy">cardano-tools.io telegram channel</a> for it.
-        </p>
-        <p>
-          If you did not mint you tokens here you can still use this registration, but you have to provide all fields by yourself.
+          This will register your token at the official <a href="https://github.com/cardano-foundation/cardano-token-registry">cardano-token-registry</a>.
         </p>
 
         <div fxLayout="column">
 
-          <div>
-            <div fxLayout="row" fxFlex="100%" fxLayoutGap="10px">
-              <mat-form-field fxFlex appearance="outline">
-                <mat-label>Account key</mat-label>
-                <input matInput [(ngModel)]="accountKey" name="accountKey">
-              </mat-form-field>
-              <span>
-                <button mat-raised-button color="accent" style="margin-top: 4px; height: 51px;" type="button" (click)="loadTransaction()">
-                  <mat-icon>fast_forward</mat-icon>
-                </button>
-              </span>
-            </div>
-          </div>
+          <app-policy-selector [createPolicies]="false" (changedPolicyId)="changePolicyId($event)"></app-policy-selector>
 
+
+          <!-- Select token -->
+          <div>
+            <mat-form-field fxFlex="100%" appearance="outline">
+              <mat-label>Token</mat-label>
+              <mat-select [(ngModel)]="selectedToken" (selectionChange)="tokenChanged()" name="selectedToken" [required]="true">
+                <mat-option *ngFor="let token of tokens" [value]="token">
+                  {{token.metaData.name}} ({{token.name}})
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
           <!-- logo -->
           <div>
@@ -56,12 +50,12 @@
           </div>
 
 
+
           <!-- Asset Name -->
           <div>
             <mat-form-field fxFlex appearance="outline" fxFlex="100%">
               <mat-label>Asset Name</mat-label>
-              <input matInput [(ngModel)]="registrationMetadata.assetName" name="assetName" required pattern="[a-zA-Z0-9]{1,32}" maxlength="32">
-              <mat-hint>Adjust the Asset Name to the token you want to register.</mat-hint>
+              <input matInput [(ngModel)]="registrationMetadata.assetName" name="assetName" required pattern="[a-zA-Z0-9]{1,32}" maxlength="32" [disabled]="true">
             </mat-form-field>
           </div>
 
@@ -85,8 +79,7 @@
           <div>
             <mat-form-field fxFlex appearance="outline" fxFlex="100%">
               <mat-label>Ticker</mat-label>
-              <input matInput [(ngModel)]="registrationMetadata.ticker" name="ticker" maxlength="5">
-              <mat-hint>Ticker is not mandatory but recommended, since Daedalus shows it prominent.</mat-hint>
+              <input matInput [(ngModel)]="registrationMetadata.ticker" name="ticker" maxlength="5" required>
             </mat-form-field>
           </div>
 

@@ -1,4 +1,4 @@
-import { Policy } from "src/cardano-tools-client";
+import { PolicyPrivate } from "src/cardano-tools-client";
 
 interface Countdown {
     secondsToDday: number;
@@ -13,7 +13,7 @@ export class CardanoUtils {
         return new Date().getTime() / 1000 - 1596491091 + 4924800;
     }
 
-    static getTimeLeft(policy: Policy): number {
+    static getTimeLeft(policy: PolicyPrivate): number {
         if (policy) {
             const timeLeft = policy.policyDueSlot - this.currentSlot();
             return Math.max(timeLeft, 0);
@@ -22,7 +22,7 @@ export class CardanoUtils {
         }
     }
 
-    static getTimeLeftString(policy: Policy): string {
+    static getTimeLeftString(policy: PolicyPrivate): string {
         const timeLeft = this.getTimeLeft(policy);
         const countdown: Countdown = {
             secondsToDday: Math.floor(timeLeft / (1) % 60),

@@ -1,9 +1,8 @@
-import { ExchangeBuyFormComponent } from './../exchange-buy-form/exchange-buy-form.component';
-import { TokenDataWithMetadata, TokenEnhancerService, TokenOfferWithParsedTokenData } from './../token-enhancer.service';
-import { RestInterfaceService, TokenData, TokenOffer } from 'src/cardano-tools-client';
 import { Component, OnInit } from '@angular/core';
-import { ThrowStmt } from '@angular/compiler';
 import { MatDialog } from '@angular/material/dialog';
+import { ExchangeRestInterfaceService } from 'src/cardano-tools-client';
+import { ExchangeBuyFormComponent } from './../exchange-buy-form/exchange-buy-form.component';
+import { TokenEnhancerService, TokenOfferWithParsedTokenData } from './../token-enhancer.service';
 
 
 @Component({
@@ -14,7 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class ExchangeBuyComponent implements OnInit {
   offers: TokenOfferWithParsedTokenData[] = [];
 
-  constructor(private api: RestInterfaceService, private tokenEnhancerService: TokenEnhancerService, public dialog: MatDialog) {
+  constructor(private api: ExchangeRestInterfaceService, private tokenEnhancerService: TokenEnhancerService, public dialog: MatDialog) {
     this.reloadOffers();
   }
 

@@ -9,14 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AddressPrivate } from './addressPrivate';
 
-export interface RegistrationMetadata { 
-    assetName: string;
+export interface PolicyPrivate { 
+    id?: number;
     policyId: string;
     policy: string;
-    policySkey: string;
-    name: string;
-    description: string;
-    ticker?: string;
-    url?: string;
+    address: AddressPrivate;
+    policyDueSlot: number;
 }

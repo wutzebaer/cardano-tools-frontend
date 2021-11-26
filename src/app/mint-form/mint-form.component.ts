@@ -1,12 +1,9 @@
-import { TokenEnhancerService } from './../token-enhancer.service';
-import { Component, Input, OnChanges, OnInit, SimpleChanges, Output, ChangeDetectorRef, EventEmitter } from '@angular/core';
-import { ControlContainer, NgForm } from '@angular/forms';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { RestInterfaceService, TokenSubmission } from 'src/cardano-tools-client';
 import { HttpEventType } from '@angular/common/http';
-import { ArrayDataSource } from '@angular/cdk/collections';
-import { throwToolbarMixedModesError } from '@angular/material/toolbar';
-import { startWith } from 'rxjs/operators';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ControlContainer, NgForm } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MintRestInterfaceService, TokenSubmission } from 'src/cardano-tools-client';
+import { TokenEnhancerService } from './../token-enhancer.service';
 
 export interface MetaValue {
   key: string;
@@ -36,7 +33,7 @@ export class MintFormComponent implements OnInit {
   @Input() token!: TokenSubmission;
   @Output() spreadMetaValue = new EventEmitter<MetaValue>();
 
-  constructor(private sanitizer: DomSanitizer, private api: RestInterfaceService, private cdRef: ChangeDetectorRef, public tokenEnhancerService: TokenEnhancerService) {
+  constructor(private sanitizer: DomSanitizer, private api: MintRestInterfaceService, private cdRef: ChangeDetectorRef, public tokenEnhancerService: TokenEnhancerService) {
     MintFormComponent.globalCounter++;
     this.counter = MintFormComponent.globalCounter;
   }

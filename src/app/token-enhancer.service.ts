@@ -143,6 +143,23 @@ export class TokenEnhancerService {
     return this.sanitizer.bypassSecurityTrustResourceUrl("https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "")) as string;
   }
 
+  toSimpleIpfsUrl(ipfs: any) {
+    // https://ipfs.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
+    // https://ipfs.blockfrost.dev/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
+    // https://cloudflare-ipfs.com/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
+    // https://ipfs.eternum.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
+
+    if (Array.isArray(ipfs)) {
+      ipfs = ipfs.join("")
+    }
+
+    if ((ipfs as string).startsWith('data:')) {
+      return ipfs;
+    }
+
+    return "https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "");
+  }
+
   findAnyIpfsUrl(object: any): any {
     for (let key in object) {
       let value = object[key];

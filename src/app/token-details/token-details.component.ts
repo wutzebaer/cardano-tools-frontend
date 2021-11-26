@@ -1,12 +1,8 @@
-import { TokenOffer } from './../../cardano-tools-client/model/tokenOffer';
-import { RestInterfaceService, Account } from 'src/cardano-tools-client';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Inject, Input, OnInit, ViewChild, HostListener } from '@angular/core';
-import { FormGroupDirective } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TableRow } from '../mint-token-mini/mint-token-mini.component';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-token-details',

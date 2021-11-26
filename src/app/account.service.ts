@@ -1,17 +1,16 @@
-import { LocalStorageService } from './local-storage.service';
-import { startWith } from 'rxjs/operators';
-import { BehaviorSubject, Observable, Subject, ReplaySubject } from 'rxjs';
-import { Account, RestInterfaceService } from 'src/cardano-tools-client';
 import { Injectable } from '@angular/core';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { AccountPrivate, AccountRestInterfaceService } from 'src/cardano-tools-client';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
 
-  readonly account: Subject<Account> = new ReplaySubject<Account>();
+  readonly account: Subject<AccountPrivate> = new ReplaySubject<AccountPrivate>();
 
-  constructor(private localStorageService: LocalStorageService, private api: RestInterfaceService) {
+  constructor(private localStorageService: LocalStorageService, private api: AccountRestInterfaceService) {
     this.account.next({
       key: "",
       createdAt: new Date(0),
@@ -19,7 +18,9 @@ export class AccountService {
       address: {
         address: "",
         balance: 0,
-        tokensData: "[]"
+        tokensData: "[]",
+        skey: "",
+        vkey: ""
       },
       fundingAddresses: [],
       fundingAddressesHistory: [],
@@ -30,13 +31,16 @@ export class AccountService {
 
 
   updateAccount() {
+    console.log("updateAccount")
     let accountKey = this.localStorageService.retrieveAccountKey();
     let accountObservable;
 
     if (!accountKey) {
+      console.log("no key")
       accountObservable = this.api.createAccount();
     }
     else {
+      console.log("yes key")
       accountObservable = this.api.getAccount(accountKey);
     }
     this.loadAccount(accountObservable);
@@ -49,7 +53,8 @@ export class AccountService {
     }
   }
 
-  private loadAccount(accountObservable: Observable<Account>) {
+  private loadAccount(accountObservable: Observable<AccountPrivate>) {
+    console.log("load account")
     accountObservable.subscribe(
       {
         error: error => {
@@ -60,6 +65,7 @@ export class AccountService {
           }
         },
         next: account => {
+          console.log("loaded account")
           this.localStorageService.storeAccountKey(account.key);
           this.account.next(account);
         }

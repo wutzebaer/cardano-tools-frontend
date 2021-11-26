@@ -1,8 +1,6 @@
-import { TokenEnhancerService } from './../token-enhancer.service';
 import { Component, Input, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { RestInterfaceService } from 'src/cardano-tools-client';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
+import { TokenEnhancerService } from './../token-enhancer.service';
 
 @Component({
   selector: 'app-latest-tokens-mini',

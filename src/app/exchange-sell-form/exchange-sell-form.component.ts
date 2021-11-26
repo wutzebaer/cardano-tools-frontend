@@ -1,12 +1,11 @@
-import { AjaxInterceptor } from './../ajax.interceptor';
-import { TokenOffer } from './../../cardano-tools-client/model/tokenOffer';
-import { RestInterfaceService, Account } from 'src/cardano-tools-client';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TableRow } from '../mint-token-mini/mint-token-mini.component';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AccountPrivate, ExchangeRestInterfaceService } from 'src/cardano-tools-client';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
+import { TokenOffer } from './../../cardano-tools-client/model/tokenOffer';
+import { AjaxInterceptor } from './../ajax.interceptor';
 
 @Component({
   selector: 'app-exchange-sell-form',
@@ -19,11 +18,11 @@ export class ExchangeSellFormComponent implements OnInit {
 
   token: TokenDataWithMetadata
   tokenOffer: TokenOffer;
-  account: Account;
+  account: AccountPrivate;
   price: number = 2;
   loading = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { token: TokenDataWithMetadata, account: Account, tokenOffer: TokenOffer }, private clipboard: Clipboard, private dialogRef: MatDialogRef<ExchangeSellFormComponent>, ajaxInterceptor: AjaxInterceptor, private api: RestInterfaceService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { token: TokenDataWithMetadata, account: AccountPrivate, tokenOffer: TokenOffer }, private clipboard: Clipboard, private dialogRef: MatDialogRef<ExchangeSellFormComponent>, ajaxInterceptor: AjaxInterceptor, private api: ExchangeRestInterfaceService) {
     this.token = data.token
     this.account = data.account
     this.tokenOffer = data.tokenOffer;

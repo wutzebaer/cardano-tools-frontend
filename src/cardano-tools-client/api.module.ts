@@ -3,14 +3,22 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { RestInterfaceService } from './api/restInterface.service';
+import { AccountRestInterfaceService } from './api/accountRestInterface.service';
+import { ExchangeRestInterfaceService } from './api/exchangeRestInterface.service';
+import { MintRestInterfaceService } from './api/mintRestInterface.service';
+import { RegistrationRestInterfaceService } from './api/registrationRestInterface.service';
+import { TokenRestInterfaceService } from './api/tokenRestInterface.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
   providers: [
-    RestInterfaceService ]
+    AccountRestInterfaceService,
+    ExchangeRestInterfaceService,
+    MintRestInterfaceService,
+    RegistrationRestInterfaceService,
+    TokenRestInterfaceService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

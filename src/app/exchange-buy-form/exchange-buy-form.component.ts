@@ -3,7 +3,7 @@ import { interval, Subscription } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { RestInterfaceService } from 'src/cardano-tools-client';
+import { ExchangeRestInterfaceService } from 'src/cardano-tools-client';
 
 @Component({
   selector: 'app-exchange-buy-form',
@@ -16,7 +16,7 @@ export class ExchangeBuyFormComponent implements OnInit {
   receivedToken?: TokenDataWithMetadata;
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { offer: TokenOfferWithParsedTokenData }, private clipboard: Clipboard, private api: RestInterfaceService, private tokenEnhancerService: TokenEnhancerService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { offer: TokenOfferWithParsedTokenData }, private clipboard: Clipboard, private api: ExchangeRestInterfaceService, private tokenEnhancerService: TokenEnhancerService) {
     this.offer = data.offer;
 
     this.timer = interval(10000).subscribe(() => { this.updateOffer(api); });
@@ -24,7 +24,7 @@ export class ExchangeBuyFormComponent implements OnInit {
   }
 
 
-  private updateOffer(api: RestInterfaceService) {
+  private updateOffer(api: ExchangeRestInterfaceService) {
     api.getOffer(this.offer.id).subscribe(
       offer => {
         this.offer = this.tokenEnhancerService.enhanceOffer(offer);

@@ -9,14 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Address } from './address';
-import { Policy } from './policy';
+import { AddressPrivate } from './addressPrivate';
+import { PolicyPrivate } from './policyPrivate';
 
-export interface Account { 
+export interface AccountPrivate { 
     key: string;
     createdAt: Date;
-    policies: Array<Policy>;
-    address: Address;
+    policies: Array<PolicyPrivate>;
+    address: AddressPrivate;
     fundingAddresses: Array<string>;
     fundingAddressesHistory: Array<string>;
     stake: number;

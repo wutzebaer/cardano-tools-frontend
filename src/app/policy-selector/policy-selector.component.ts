@@ -3,11 +3,11 @@ import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-fo
 import { CardanoUtils } from './../cardano-utils';
 import { LocalStorageService } from './../local-storage.service';
 import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit } from '@angular/core';
-import { Account, Policy } from 'src/cardano-tools-client';
 import { AccountService } from './../account.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { I } from '@angular/cdk/keycodes';
+import { AccountPrivate, PolicyPrivate } from 'src/cardano-tools-client';
 
 @Component({
   selector: 'app-policy-selector',
@@ -16,9 +16,10 @@ import { I } from '@angular/cdk/keycodes';
 })
 export class PolicySelectorComponent implements AfterViewInit {
 
-  @Input() disabled = true;
+  @Input() disabled = false;
+  @Input() createPolicies = true;
   @Output() changedPolicyId = new EventEmitter<string>();
-  account?: Account;
+  account?: AccountPrivate;
   selectedPolicyId?: string | null;
 
   constructor(private accountService: AccountService, private localStorageService: LocalStorageService, private dialog: MatDialog) {
@@ -54,7 +55,7 @@ export class PolicySelectorComponent implements AfterViewInit {
 
   }
 
-  findUnlockedPolicy(account: Account): Policy {
+  findUnlockedPolicy(account: AccountPrivate): PolicyPrivate {
     return account.policies.find(p => this.getTimeLeft(p) > 0)!;
   }
 
@@ -78,11 +79,11 @@ export class PolicySelectorComponent implements AfterViewInit {
     }
   }
 
-  getTimeLeft(policy: Policy): number {
+  getTimeLeft(policy: PolicyPrivate): number {
     return CardanoUtils.getTimeLeft(policy);
   }
 
-  getTimeLeftString(policy: Policy): string {
+  getTimeLeftString(policy: PolicyPrivate): string {
     return CardanoUtils.getTimeLeftString(policy);
   }
 

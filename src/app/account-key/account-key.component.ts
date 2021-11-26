@@ -1,7 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Account } from 'src/cardano-tools-client';
+import { AccountPrivate } from 'src/cardano-tools-client';
 
 @Component({
   selector: 'app-account-key',
@@ -10,9 +10,9 @@ import { Account } from 'src/cardano-tools-client';
 })
 export class AccountKeyComponent implements OnInit {
 
-  account!: Account;
+  account!: AccountPrivate;
 
-  constructor(private clipboard: Clipboard, @Inject(MAT_DIALOG_DATA) public data: { account: Account }) {
+  constructor(private clipboard: Clipboard, @Inject(MAT_DIALOG_DATA) public data: { account: AccountPrivate }) {
     this.account = data.account;
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { RestInterfaceService, TokenData } from 'src/cardano-tools-client';
+import { TokenRestInterfaceService, TokenData } from 'src/cardano-tools-client';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
 import { LatestTokensDetailComponent } from './../latest-tokens-detail/latest-tokens-detail.component';
 import { LocalStorageService } from './../local-storage.service';
@@ -17,7 +17,7 @@ export class MyTokensComponent implements OnInit {
   myTokens: TokenDataWithMetadata[] = []
   myaddress: string | null;
 
-  constructor(private api: RestInterfaceService, public dialog: MatDialog, private localStorageService: LocalStorageService, private tokenEnhancerService: TokenEnhancerService) {
+  constructor(private api: TokenRestInterfaceService, public dialog: MatDialog, private localStorageService: LocalStorageService, private tokenEnhancerService: TokenEnhancerService) {
     this.myaddress = localStorageService.retrieveMyAddress();
     this.update()
 
