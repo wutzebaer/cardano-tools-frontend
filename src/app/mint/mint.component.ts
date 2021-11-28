@@ -85,7 +85,6 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   changePolicyId(policyId: string) {
     this.mintOrderSubmission.policyId = policyId;
-    this.updateMintTransaction();
   }
 
   ngAfterViewInit() {
@@ -180,9 +179,11 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.stepper.steps.forEach(s => s.completed = false)
     this.stepper.selectedIndex = 0
 
+    const oldPolicyId = this.mintOrderSubmission.policyId;
     this.initializeValues()
-    this.updateAccount();
     this.addToken()
+    this.updateAccount();
+    this.mintOrderSubmission.policyId = oldPolicyId;
   }
 
   advanced() {

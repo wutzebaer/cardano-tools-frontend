@@ -31,16 +31,13 @@ export class AccountService {
 
 
   updateAccount() {
-    console.log("updateAccount")
     let accountKey = this.localStorageService.retrieveAccountKey();
     let accountObservable;
 
     if (!accountKey) {
-      console.log("no key")
       accountObservable = this.api.createAccount();
     }
     else {
-      console.log("yes key")
       accountObservable = this.api.getAccount(accountKey);
     }
     this.loadAccount(accountObservable);
@@ -54,7 +51,6 @@ export class AccountService {
   }
 
   private loadAccount(accountObservable: Observable<AccountPrivate>) {
-    console.log("load account")
     accountObservable.subscribe(
       {
         error: error => {
@@ -65,7 +61,6 @@ export class AccountService {
           }
         },
         next: account => {
-          console.log("loaded account")
           this.localStorageService.storeAccountKey(account.key);
           this.account.next(account);
         }
