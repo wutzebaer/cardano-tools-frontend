@@ -26,7 +26,7 @@ export class MintFormComponent implements OnInit {
   availableMetaFields: string[] = ['image', 'name', 'description', 'type', 'traits', 'artist', 'publisher', 'copyright', 'homepage', 'url'];
   listFields: string[] = ['traits'];
   uploadProgress: number = 0;
-  metaData: any;
+  metaData: any = {};
   previewUrl = ""
   previewType = ""
 
@@ -42,21 +42,22 @@ export class MintFormComponent implements OnInit {
     if (!this.token.assetName) {
       this.token.assetName = "Token" + this.counter;
     }
-    this.reloadMetadata()
+
     let hack = this.token as any
     if (hack.file) {
       this.appendFile(hack.file)
       delete hack.file
     }
+    if (hack.metaData) {
+      this.metaData = hack.metaData
+      delete hack.metaData
+    }
+
+    this.reloadMetadata()
   }
 
   reloadMetadata() {
-    this.metaData = JSON.parse(this.token.metaData)
     this.updatePreview()
-  }
-
-  serializeMetadata() {
-    this.token.metaData = JSON.stringify(this.metaData, null, 3)
   }
 
   isSimpleValue(value: any) {

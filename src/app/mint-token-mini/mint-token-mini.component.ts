@@ -1,6 +1,6 @@
 import { TokenEnhancerService } from './../token-enhancer.service';
 import { Component, Input, OnInit } from '@angular/core';
-import { TokenSubmission } from 'src/cardano-tools-client';
+import { TokenSubmission, MintOrderSubmission } from 'src/cardano-tools-client';
 
 export interface TableRow {
   name: string;
@@ -14,6 +14,7 @@ export interface TableRow {
 })
 export class MintTokenMiniComponent implements OnInit {
 
+  @Input() mintOrderSubmission!: MintOrderSubmission;
   @Input() token!: TokenSubmission;
 
   metaData: any;
@@ -23,7 +24,7 @@ export class MintTokenMiniComponent implements OnInit {
   constructor(private tokenEnhancerService: TokenEnhancerService) { }
 
   ngOnInit(): void {
-    this.metaData = JSON.parse(this.token.metaData)
+    this.metaData = JSON.parse(this.mintOrderSubmission.metaData!)?.['721']?.[this.mintOrderSubmission.policyId]?.[this.token.assetName!] || {};
     if (this.metaData.image) {
       this.previewType = 'image'
       this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.image)

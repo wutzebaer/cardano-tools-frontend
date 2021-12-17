@@ -10,11 +10,9 @@ import { NgModel } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { interval } from 'rxjs';
-import { AccountPrivate, MintOrderSubmission, PolicyPrivate, MintRestInterfaceService, Transaction } from 'src/cardano-tools-client';
+import { AccountPrivate, MintOrderSubmission, PolicyPrivate, MintRestInterfaceService, Transaction, TokenSubmission, TokenData } from 'src/cardano-tools-client';
 import { MintFormComponent } from 'src/app/mint-form/mint-form.component';
 import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
-
-
 
 @Component({
   selector: 'app-mint',
@@ -27,7 +25,6 @@ export class MintComponent implements OnInit, AfterViewInit {
   @ViewChild('tokenCountInput') tokenCountInput!: NgModel;
   @ViewChildren('mintForm') components!: QueryList<MintFormComponent>;
 
-
   account!: AccountPrivate;
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: Transaction;
@@ -39,6 +36,7 @@ export class MintComponent implements OnInit, AfterViewInit {
       targetAddress: '',
       tip: true,
       policyId: '',
+      metaData: '{}'
     };
     this.mintTransaction = {
       rawData: "",
@@ -84,6 +82,12 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   changePolicyId(policyId: string) {
+    const metaData: any = JSON.parse(this.mintOrderSubmission.metaData!);
+    if (metaData['721']) {
+      delete metaData['721'][this.mintOrderSubmission.policyId];
+      this.mintOrderSubmission.metaData = JSON.stringify(metaData);
+    }
+
     this.mintOrderSubmission.policyId = policyId;
   }
 
@@ -96,7 +100,10 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   updateMintTransaction() {
-    this.components.forEach(c => c.serializeMetadata())
+    const metaData = this.buildMetadata();
+    let metaDataString = JSON.stringify(metaData, null, 3);
+    this.mintOrderSubmission.metaData = metaDataString;
+
     this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
     })
@@ -131,7 +138,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   }
 
   addToken() {
-    let token = { assetName: "", amount: 1, metaData: "{}" };
+    let token = { assetName: "", amount: 1, metaData: {} };
     this.mintOrderSubmission.tokens.push(token);
     return token
   }
@@ -144,7 +151,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     for (let index in Object.values(event.target.files)) {
       let file = event.target.files.item(index);
       setTimeout(() => {
-        let token = { assetName: "", amount: 1, metaData: "{}" };
+        let token = { assetName: "", amount: 1, metaData: {} };
         let hack = token as any
         hack.file = file
         this.mintOrderSubmission.tokens.push(token);
@@ -186,44 +193,43 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.mintOrderSubmission.policyId = oldPolicyId;
   }
 
+  buildMetadata() {
+    const metaData: any = JSON.parse(this.mintOrderSubmission.metaData!);
+    metaData['721'] = metaData['721'] || {};
+    metaData['721'][this.mintOrderSubmission.policyId] = {}
+    this.components.forEach(c => {
+      metaData['721'][this.mintOrderSubmission.policyId][c.token.assetName!] = c.metaData;
+    });
+    return metaData;
+  }
+
   advanced() {
-    this.components.forEach(c => c.serializeMetadata())
-    this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
-      this.mintTransaction = mintTransaction;
+    const metaData = this.buildMetadata();
+    let metaDataString = JSON.stringify(metaData, null, 3);
 
-      let parsed = JSON.parse(this.mintTransaction.metaDataJson as string)
-      let policyData = parsed["721"][this.mintOrderSubmission.policyId]
-      Object.keys(policyData).map(function (key, index) {
-        delete policyData[key]['policy']
-      });
-      let cleanMetaDataJson = JSON.stringify(parsed, null, 3)
+    const dialogRef = this.dialog.open(MintFormAdvancedComponent, {
+      data: {
+        metaDataJson: metaDataString,
+      },
+      width: '800px',
+      maxWidth: '90vw',
+      closeOnNavigation: true
+    });
 
-      const dialogRef = this.dialog.open(MintFormAdvancedComponent, {
-        data: {
-          metaDataJson: cleanMetaDataJson,
-        },
-        width: '800px',
-        maxWidth: '90vw',
-        closeOnNavigation: true
-      });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      let newMetadata = JSON.parse(result)
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (!result) {
-          return;
-        }
-        let newMetadata = JSON.parse(result)
-
-        this.mintOrderSubmission.tokens = [];
-        const tokenDatas = newMetadata["721"]?.[this.mintOrderSubmission.policyId];
-        for (const key in tokenDatas) {
-          let token = { assetName: key, amount: 1, metaData: "{}" };
-          token.metaData = JSON.stringify(tokenDatas[key] ?? {}, null, 3);
-          this.mintOrderSubmission.tokens.push(token);
-        }
-        this.components.forEach(c => c.reloadMetadata())
-      });
-
-    })
+      this.mintOrderSubmission.tokens = [];
+      const tokenDatas = newMetadata["721"]?.[this.mintOrderSubmission.policyId];
+      for (const key in tokenDatas) {
+        let token = { assetName: key, amount: 1, metaData: tokenDatas[key] ?? {} };
+        this.mintOrderSubmission.tokens.push(token);
+      }
+      this.mintOrderSubmission.metaData = result;
+    });
   }
 
 }

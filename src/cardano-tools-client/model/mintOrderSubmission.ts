@@ -16,4 +16,5 @@ export interface MintOrderSubmission {
     targetAddress: string;
     tip: boolean;
     policyId: string;
+    metaData?: string;
 }

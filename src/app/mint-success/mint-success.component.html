@@ -27,12 +27,12 @@
                     <button class="inline-button" mat-icon-button (click)="copyAccountKey()">
                         <mat-icon>content_copy</mat-icon>
                     </button>
-                    and keep it secretly, you will need it for support questions or if you like to register your tokens in the official <a href="https://github.com/cardano-foundation/cardano-token-registry">Cardano Token Registry</a> when it gets available.
+                    and keep it secretly, you will need it for support questions or to recover your keys.
                 </p>
 
                 <div fxLayout="row wrap" fxLayoutGap="10px grid">
                     <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="50%" fxFlex.gt-lg="33%" *ngFor="let token of mintTransaction.mintOrderSubmission?.tokens">
-                        <app-mint-token-mini [token]="token"></app-mint-token-mini>
+                        <app-mint-token-mini [token]="token" [mintOrderSubmission]="mintTransaction.mintOrderSubmission!"></app-mint-token-mini>
                     </div>
                 </div>
 
