@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { I } from '@angular/cdk/keycodes';
 import { AccountPrivate, PolicyPrivate } from 'src/cardano-tools-client';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-policy-selector',
@@ -21,8 +22,12 @@ export class PolicySelectorComponent implements AfterViewInit {
   @Output() changedPolicyId = new EventEmitter<string>();
   account?: AccountPrivate;
   selectedPolicyId?: string | null;
+  timer: Subscription;
 
   constructor(private accountService: AccountService, private localStorageService: LocalStorageService, private dialog: MatDialog) {
+    // updates time
+    this.timer = interval(1000).subscribe(() => {
+    });
   }
 
   ngAfterViewInit() {
@@ -52,7 +57,10 @@ export class PolicySelectorComponent implements AfterViewInit {
 
       this.account = newAccount;
     });
+  }
 
+  ngOnDestroy(): void {
+    this.timer.unsubscribe();
   }
 
   findUnlockedPolicy(account: AccountPrivate): PolicyPrivate {

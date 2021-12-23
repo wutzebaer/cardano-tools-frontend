@@ -10,9 +10,10 @@ import { NgModel } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { interval } from 'rxjs';
-import { AccountPrivate, MintOrderSubmission, PolicyPrivate, MintRestInterfaceService, Transaction, TokenSubmission, TokenData } from 'src/cardano-tools-client';
+import { AccountPrivate, MintOrderSubmission, PolicyPrivate, MintRestInterfaceService, Transaction, TokenSubmission, TokenData, TokenRestInterfaceService } from 'src/cardano-tools-client';
 import { MintFormComponent } from 'src/app/mint-form/mint-form.component';
 import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
+import { TokenDataWithMetadata, TokenEnhancerService } from '../token-enhancer.service';
 
 @Component({
   selector: 'app-mint',
@@ -29,6 +30,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: Transaction;
   loading = false;
+  tokens: TokenDataWithMetadata[] = [];
 
   initializeValues() {
     this.mintOrderSubmission = {
@@ -52,7 +54,15 @@ export class MintComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private api: MintRestInterfaceService, ajaxInterceptor: AjaxInterceptor, private dialog: MatDialog, private accountService: AccountService, private localStorageService: LocalStorageService) {
+  constructor(
+    private api: MintRestInterfaceService,
+    ajaxInterceptor: AjaxInterceptor,
+    private dialog: MatDialog,
+    private accountService: AccountService,
+    private localStorageService: LocalStorageService,
+    private tokenApi: TokenRestInterfaceService,
+    private tokenEnhancerService: TokenEnhancerService,
+  ) {
 
     this.initializeValues();
 
@@ -87,7 +97,7 @@ export class MintComponent implements OnInit, AfterViewInit {
       delete metaData['721'][this.mintOrderSubmission.policyId];
       this.mintOrderSubmission.metaData = JSON.stringify(metaData);
     }
-
+    this.tokenApi.policyTokens(policyId).subscribe({ next: tokens => this.tokens = this.tokenEnhancerService.enhanceTokens(tokens) });
     this.mintOrderSubmission.policyId = policyId;
   }
 
@@ -124,8 +134,6 @@ export class MintComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.addToken();
-    interval(1000).subscribe(() => {
-    });
   }
 
 
@@ -160,21 +168,9 @@ export class MintComponent implements OnInit, AfterViewInit {
     event.target.value = '';
   }
 
-  getTimeLeft(policyId: string): number {
-    const policy: PolicyPrivate = this.account?.policies.find(p => p.policyId === policyId)!;
-    return CardanoUtils.getTimeLeft(policy);
-  }
-
-  getTimeLeftString(policyId: string): string {
-    const policy: PolicyPrivate = this.account?.policies.find(p => p.policyId === policyId)!;
-    return CardanoUtils.getTimeLeftString(policy);
-  }
-
   updateAccount() {
     this.accountService.updateAccount();
   }
-
-
 
   mintSuccess() {
     this.stepper.selectedIndex = 3

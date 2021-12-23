@@ -11,6 +11,6 @@
  */
 
 export interface TokenSubmission { 
-    assetName?: string;
+    assetName: string;
     amount: number;
 }

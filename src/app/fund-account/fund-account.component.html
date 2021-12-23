@@ -52,7 +52,7 @@
       </p>
 
       <!-- tip -->
-      <p *ngIf="mintTransaction.mintOrderSubmission?.tip && adaTip > 1">
+      <p *ngIf="mintTransaction.mintOrderSubmission?.tip && adaBalanceInput.valid">
         <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
           <span>Tip for the [EURO]-Pool pledge</span>
           <b>{{adaTip | number: '1.0-6'}}&nbsp;₳ Thank You!</b>
@@ -60,7 +60,7 @@
       </p>
 
       <!-- receiver address-->
-      <mat-form-field appearance="outline" style="width: 100%; max-width: 800px;" [fxShow]="account.fundingAddresses.length > 1">
+      <mat-form-field appearance="outline" style="width: 100%; max-width: 800px;" [fxShow]="account.fundingAddresses.length >= 1">
         <mat-label>Send tokens to</mat-label>
         <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" #targetAddressInput="ngModel" name="targetAddress" (selectionChange)="emitUpdateMintTransaction()" required>
           <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">

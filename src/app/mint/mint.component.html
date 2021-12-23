@@ -1,5 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
-  <app-policy-selector [disabled]="stepper.selectedIndex > 0" (changedPolicyId)="changePolicyId($event)" fxFlex="100%" fxFlex.gt-sm="550px"></app-policy-selector>
+  <app-policy-selector [disabled]="stepper.selectedIndex > 0" (changedPolicyId)="changePolicyId($event)" fxFlex="100%" fxFlex.gt-sm="550px">
+    <mat-hint *ngIf="tokens.length == 0">Your policy is fresh, you might want to to <a routerLink="/royaltiescip27">add royalties first?</a></mat-hint>
+  </app-policy-selector>
 </div>
 
 
@@ -100,4 +102,3 @@
 <p>
   Want to mint-on demand? Just use our <a target="_blank" href="https://github.com/wutzebaer/nft-dropper-composed">NFT-Dropper</a>!
 </p>
-

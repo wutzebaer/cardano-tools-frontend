@@ -69,10 +69,12 @@ import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.com
 import { TokenDetailsComponent } from './token-details/token-details.component';
 import { MintPolicyFormComponent } from './mint-policy-form/mint-policy-form.component';
 import { PolicySelectorComponent } from './policy-selector/policy-selector.component';
+import { RoyaltiesCip27MintComponent } from './royalties-cip27-mint/royalties-cip27-mint.component';
+import { RoyaltiesCip27MintSuccessComponent } from './royalties-cip27-mint-success/royalties-cip27-mint-success.component';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent, ExchangeSellFormComponent, TokenDetailsComponent, ExchangeBuyFormComponent, MintPolicyFormComponent, PolicySelectorComponent
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent, ExchangeSellFormComponent, TokenDetailsComponent, ExchangeBuyFormComponent, MintPolicyFormComponent, PolicySelectorComponent, RoyaltiesCip27MintComponent, RoyaltiesCip27MintSuccessComponent
   ],
   imports: [
     BrowserModule,
