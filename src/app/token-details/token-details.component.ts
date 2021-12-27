@@ -3,6 +3,7 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TableRow } from '../mint-token-mini/mint-token-mini.component';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-token-details',
@@ -22,7 +23,7 @@ export class TokenDetailsComponent implements OnInit {
 
   displayedColumns = ['name', 'value']
 
-  constructor(private clipboard: Clipboard, private snackBar: MatSnackBar) {
+  constructor(private clipboard: Clipboard, private snackBar: MatSnackBar, private location: Location) {
 
   }
 
@@ -63,6 +64,13 @@ export class TokenDetailsComponent implements OnInit {
     this.loading = false;
   }
 
+  buildShareUrl(){
+    return window.location.origin + this.location.prepareExternalUrl('latest?q=' + this.token.policyId + '.' + this.token.name);
+  }
+
+  buildPoolpmUrl(){
+    return "https://pool.pm/" + this.token.policyId + '.' + this.token.name;
+  }
 
   copyToClipboard(value: string) {
     this.clipboard.copy(value);

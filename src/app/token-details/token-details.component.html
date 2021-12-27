@@ -3,9 +3,12 @@
   <h2 class="title">
     <span *ngIf="token.metaData['name']">{{token.metaData['name']}} ({{token.name}})</span>
     <span *ngIf="!token.metaData['name']">{{token.name}}</span>
-    <button type="button" mat-icon-button (click)="copyToClipboard('https://cardano-tools.io/latest?q=' + token.policyId + '.' + token.name)">
+    <button type="button" mat-icon-button (click)="copyToClipboard(buildShareUrl())">
       <mat-icon>share</mat-icon>
     </button>
+    <a type="button" mat-icon-button [href]="buildPoolpmUrl()" target="_blank">
+      <img width="24" height="24" src="/assets/poolpm.ico">
+    </a>
   </h2>
 
   <div fxLayout="row" fxLayoutAlign="center center">

@@ -44,6 +44,7 @@ export class TokenEnhancerService {
   enhanceToken(element: TokenData): TokenDataWithMetadata {
     // cast element
     let tokenDataWithMetadata = element as TokenDataWithMetadata;
+    console.log(element.name)
     tokenDataWithMetadata.mediaTypes = []
     tokenDataWithMetadata.mediaUrls = []
     tokenDataWithMetadata.metaData = {}
