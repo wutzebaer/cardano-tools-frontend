@@ -24,10 +24,10 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   @Input() mintOrderSubmission!: MintOrderSubmission;
 
   @ViewChild('adaBalanceInput') adaBalanceInput!: NgModel
+  @ViewChild('targetAddressInput') targetAddressInput!: NgModel
+  @ViewChild('txSizeInput') txSizeInput!: NgModel
 
   @Input() activeStep!: boolean;
-
-  @Input() loading!: boolean;
 
   timer: Subscription;
 
@@ -45,6 +45,10 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+  }
+
+  get invalid(){
+    return this.adaBalanceInput?.invalid || this.targetAddressInput?.invalid || this.txSizeInput?.invalid
   }
 
   updateAccount() {

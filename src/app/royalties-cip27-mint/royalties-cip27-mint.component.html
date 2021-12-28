@@ -40,56 +40,7 @@
 
                 <!-- fund instruction-->
                 <form #fundForm="ngForm" [hidden]="instructionsForm.invalid">
-                    <p>
-                        <mat-checkbox name="tip" [(ngModel)]="mintOrderSubmission.tip" (change)="buildTransaction()">I give a tip to the [EURO]-Pool pledge</mat-checkbox>
-                    </p>
-
-                    <p>
-                        Please send at least
-                        <b>{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
-                        <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(minAdaBalance+'')">
-                            <mat-icon>content_copy</mat-icon>
-                        </button>
-                        to this address
-                    </p>
-
-                    <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-                        <b class="address">{{account.address.address}}</b>
-                        <button mat-icon-button (click)="copyToClipboard(account.address.address)">
-                            <mat-icon>content_copy</mat-icon>
-                        </button>
-                    </p>
-
-                    <!-- current balance -->
-                    <p>
-                        <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                            <mat-icon class="green" [fxShow]="adaBalanceInput.valid">done</mat-icon>
-                            <mat-icon color="warn" [fxShow]="adaBalanceInput.invalid">dangerous</mat-icon>
-                            <span>Curent address balance </span>
-                            <b>{{account.address.balance/1000000 | number: '1.0-6'}}&nbsp;₳</b>
-                        </span>
-                    </p>
-
-                    <!-- tip -->
-                    <p *ngIf="mintTransaction.mintOrderSubmission?.tip && adaBalanceInput.valid">
-                        <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                            <span>Tip for the [EURO]-Pool pledge</span>
-                            <b>{{adaTip | number: '1.0-6'}}&nbsp;₳ Thank You!</b>
-                        </span>
-                    </p>
-
-                    <!-- change address-->
-                    <mat-form-field appearance="outline" style="width: 100%; max-width: 800px;" [fxShow]="account.fundingAddresses.length > 1">
-                        <mat-label>Send change to</mat-label>
-                        <mat-select placeholder="Select target address" [(ngModel)]="this.mintOrderSubmission.targetAddress" #targetAddressInput="ngModel" name="targetAddress" required>
-                            <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
-                                {{address}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-                    <mat-checkbox fxHide [ngModel]="adaBalance >= minAdaBalance" name="adaBalanceInput" #adaBalanceInput="ngModel" required></mat-checkbox>
-                    <mat-checkbox fxHide [ngModel]="!loading" name="loadingInput" #loadingInput="ngModel" required></mat-checkbox>
+                    <app-fund-account #fundAccount [activeStep]="true" [mintTransaction]="mintTransaction" (updateMintTransaction)="buildTransaction()" [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
                 </form>
 
             </mat-card-content>
