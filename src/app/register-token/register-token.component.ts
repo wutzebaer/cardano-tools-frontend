@@ -60,7 +60,6 @@ export class RegisterTokenComponent implements OnInit {
       const url = this.tokenEnhancerService.toSimpleIpfsUrl(this.selectedToken?.metaData?.image);
       this.httpClient.get(url, { responseType: 'blob' }).subscribe(
         results => {
-          console.log(results)
           this.appendFile(results);
         }
       );

@@ -19,7 +19,7 @@ export class RoyaltiesCip27MintComponent implements OnInit {
 
   @ViewChild('instructionsForm') instructionsForm!: NgForm;
 
-  account!: AccountPrivate;
+  account?: AccountPrivate;
   policy?: PolicyPrivate;
   tokens: TokenDataWithMetadata[] = [];
   percent: number = 20
@@ -42,7 +42,7 @@ export class RoyaltiesCip27MintComponent implements OnInit {
     inputs: "",
     metaDataJson: "",
     mintOrderSubmission: this.mintOrderSubmission,
-    minOutput: 1.602519 * 1000000,
+    minOutput: 1.701683 * 1000000,
     txSize: 0,
     signedData: ""
   }
@@ -58,22 +58,17 @@ export class RoyaltiesCip27MintComponent implements OnInit {
     ajaxInterceptor: AjaxInterceptor) {
 
     accountService.account.subscribe(account => {
-      if (!this.account) {
-        this.account = account;
-        return;
-      } else {
-        let balanceChanged = account.address.balance != this.account.address.balance || account.key != this.account.key;
-        this.account = account;
-        if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
-          this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
-        }
-        if (balanceChanged) {
-          this.buildTransaction();
-        }
+      let balanceChanged = !this.account || account.address.balance != this.account.address.balance || account.key != this.account.key;
+      this.account = account;
+      if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
+        this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+      }
+      if (balanceChanged) {
+        this.buildTransaction();
       }
     });
     this.timer = interval(10000).subscribe(() => {
-      if (this.account.address.balance < 2000000) {
+      if (this.account?.address.balance || 0 < 2000000) {
         this.updateAccount();
       }
     });
@@ -91,30 +86,6 @@ export class RoyaltiesCip27MintComponent implements OnInit {
     this.transactionUpdates$.next(value);
   }
 
-  get minAdaBalance() {
-    let minBalance = 0;
-    minBalance += (this.mintTransaction.fee || 0)
-    minBalance += this.mintTransaction.minOutput as number
-
-    if (this.mintTransaction.mintOrderSubmission?.tip)
-      minBalance += 1000000
-
-    return minBalance / 1000000;
-  }
-
-  get adaBalance() {
-    return ((this.account.address.balance || 0)) / 1000000;
-  }
-
-
-  get adaTip() {
-    if (!this.mintTransaction.mintOrderSubmission?.tip) {
-      return 0;
-    }
-    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
-    return (Math.max(change, 1000000)) / 1000000;
-  }
-
   updateAccount() {
     this.accountService.updateAccount();
   }
@@ -124,14 +95,13 @@ export class RoyaltiesCip27MintComponent implements OnInit {
   }
 
   changePolicyId(policyId: string) {
-    this.policy = this.account.policies.find(p => p.policyId === policyId)
+    this.policy = this.account?.policies.find(p => p.policyId === policyId)
     this.tokenApi.policyTokens(this.policy!.policyId).subscribe({ next: tokens => this.tokens = this.tokenEnhancerService.enhanceTokens(tokens) });
     this.buildTransaction();
   }
 
   buildTransaction() {
-
-    if (!this.instructionsForm || this.instructionsForm.untouched || this.instructionsForm.invalid) {
+    if (!this.instructionsForm || this.instructionsForm.invalid) {
       return;
     }
     this.mintOrderSubmission.tokens = [{ amount: 1, assetName: '' }];
@@ -143,13 +113,13 @@ export class RoyaltiesCip27MintComponent implements OnInit {
       }
     }, null, 3);
 
-    this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
+    this.api.buildMintTransaction(this.mintOrderSubmission, this.account!.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
     })
   }
 
   generateCip27() {
-    this.api.submitMintTransaction(this.mintTransaction, this.account.key).subscribe({
+    this.api.submitMintTransaction(this.mintTransaction, this.account!.key).subscribe({
       complete: () => {
         this.instructionsForm.reset();
         this.dialog.open(RoyaltiesCip27MintSuccessComponent, {

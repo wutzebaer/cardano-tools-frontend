@@ -1,18 +1,14 @@
-import { CardanoUtils } from './../cardano-utils';
-import { MetaValue } from 'src/app/mint-form/mint-form.component';
-import { MintFormAdvancedComponent } from 'src/app/mint-form-advanced/mint-form-advanced.component';
-import { LocalStorageService } from 'src/app/local-storage.service';
-import { AccountService } from 'src/app/account.service';
-import { AjaxInterceptor } from 'src/app/ajax.interceptor';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { interval } from 'rxjs';
-import { AccountPrivate, MintOrderSubmission, PolicyPrivate, MintRestInterfaceService, Transaction, TokenSubmission, TokenData, TokenRestInterfaceService } from 'src/cardano-tools-client';
-import { MintFormComponent } from 'src/app/mint-form/mint-form.component';
+import { AccountService } from 'src/app/account.service';
+import { AjaxInterceptor } from 'src/app/ajax.interceptor';
+import { MintFormAdvancedComponent } from 'src/app/mint-form-advanced/mint-form-advanced.component';
+import { MetaValue, MintFormComponent } from 'src/app/mint-form/mint-form.component';
 import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
+import { AccountPrivate, MintOrderSubmission, MintRestInterfaceService, TokenRestInterfaceService, Transaction } from 'src/cardano-tools-client';
 import { TokenDataWithMetadata, TokenEnhancerService } from '../token-enhancer.service';
 
 @Component({
@@ -26,7 +22,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   @ViewChild('tokenCountInput') tokenCountInput!: NgModel;
   @ViewChildren('mintForm') components!: QueryList<MintFormComponent>;
 
-  account!: AccountPrivate;
+  account?: AccountPrivate;
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: Transaction;
   loading = false;
@@ -59,7 +55,6 @@ export class MintComponent implements OnInit, AfterViewInit {
     ajaxInterceptor: AjaxInterceptor,
     private dialog: MatDialog,
     private accountService: AccountService,
-    private localStorageService: LocalStorageService,
     private tokenApi: TokenRestInterfaceService,
     private tokenEnhancerService: TokenEnhancerService,
   ) {
@@ -67,23 +62,13 @@ export class MintComponent implements OnInit, AfterViewInit {
     this.initializeValues();
 
     accountService.account.subscribe(account => {
-
-      if (!this.account) {
-
-        this.account = account;
-        return;
-
-      } else {
-
-        let balanceChanged = account.address.balance != this.account.address.balance || account.key != this.account.key;
-        this.account = account;
-        if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
-          this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
-        }
-        if (this.stepper?.selectedIndex > 0 && balanceChanged) {
-          this.updateMintTransaction();
-        }
-
+      let balanceChanged = !this.account || account.address.balance != this.account.address.balance || account.key != this.account.key;
+      this.account = account;
+      if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
+        this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+      }
+      if (this.stepper?.selectedIndex > 0 && balanceChanged) {
+        this.updateMintTransaction();
       }
     });
 
@@ -114,7 +99,7 @@ export class MintComponent implements OnInit, AfterViewInit {
     let metaDataString = JSON.stringify(metaData, null, 3);
     this.mintOrderSubmission.metaData = metaDataString;
 
-    this.api.buildMintTransaction(this.mintOrderSubmission, this.account.key).subscribe(mintTransaction => {
+    this.api.buildMintTransaction(this.mintOrderSubmission, this.account!.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
     })
   }

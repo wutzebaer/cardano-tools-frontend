@@ -16,7 +16,7 @@ import { AccountService } from './../account.service';
 })
 export class FundAccountComponent implements OnInit, OnDestroy {
 
-  account!: AccountPrivate;
+  account?: AccountPrivate;
 
   @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
@@ -34,7 +34,7 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   constructor(private clipboard: Clipboard, private accountService: AccountService) {
     accountService.account.subscribe(account => this.account = account);
     this.timer = interval(10000).subscribe(() => {
-      if (this.activeStep && (this.adaBalance < this.minAdaBalance || this.account.fundingAddresses.length == 0)) {
+      if (this.activeStep && (this.adaBalance < this.minAdaBalance || this.account?.fundingAddresses.length == 0)) {
         this.updateAccount();
       }
     });
@@ -60,7 +60,7 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   }
 
   copyAddressToClipboard() {
-    this.clipboard.copy(this.account.address.address);
+    this.clipboard.copy(this.account!.address.address);
   }
 
   copyFunds() {
@@ -71,7 +71,7 @@ export class FundAccountComponent implements OnInit, OnDestroy {
     if (!this.mintTransaction.mintOrderSubmission?.tip) {
       return 0;
     }
-    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
+    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
     return (Math.max(change, 1000000)) / 1000000;
   }
 
@@ -87,7 +87,7 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   }
 
   get adaBalance() {
-    return ((this.account.address.balance || 0)) / 1000000;
+    return ((this.account?.address.balance || 0)) / 1000000;
   }
 
   get adaFee() {

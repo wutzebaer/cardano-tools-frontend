@@ -14,7 +14,7 @@
 
 
 <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-  <b class="address">{{account.address.address}}</b>
+  <b class="address">{{account?.address?.address}}</b>
   <button mat-icon-button (click)="copyAddressToClipboard()">
     <mat-icon>content_copy</mat-icon>
   </button>
@@ -32,7 +32,7 @@
   </span>
 </p>
 
-<p *ngIf="adaBalanceInput.valid && account.fundingAddresses.length == 0">
+<p *ngIf="adaBalanceInput.valid && account?.fundingAddresses?.length == 0">
   <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
     <mat-icon color="warn">dangerous</mat-icon>
     <span>Waiting for target address... </span>
@@ -55,10 +55,10 @@
 </p>
 
 <!-- receiver address-->
-<mat-form-field appearance="outline" style="width: 100%; max-width: 800px;" [fxShow]="account.fundingAddresses.length > 1">
+<mat-form-field appearance="outline" style="width: 100%; max-width: 800px;" [fxShow]="account?.fundingAddresses?.length || 0 > 1">
   <mat-label>Send tokens to</mat-label>
   <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" #targetAddressInput="ngModel" name="targetAddress" (selectionChange)="emitUpdateMintTransaction()" required>
-    <mat-option *ngFor="let address of account.fundingAddresses" [value]="address">
+    <mat-option *ngFor="let address of account?.fundingAddresses" [value]="address">
       {{address}}
     </mat-option>
   </mat-select>

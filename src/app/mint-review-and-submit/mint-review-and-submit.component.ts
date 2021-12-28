@@ -12,7 +12,7 @@ import { AccountPrivate, MintRestInterfaceService } from 'src/cardano-tools-clie
 })
 export class MintReviewAndSubmitComponent implements OnInit {
 
-  account!: AccountPrivate;
+  account?: AccountPrivate;
   @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
   @Output() mintSuccess = new EventEmitter<void>();
@@ -26,24 +26,24 @@ export class MintReviewAndSubmitComponent implements OnInit {
   }
 
   getPolicy() {
-    return this.account.policies.find(p => p.policyId === this.mintTransaction.mintOrderSubmission?.policyId)?.policy
+    return this.account?.policies.find(p => p.policyId === this.mintTransaction.mintOrderSubmission?.policyId)?.policy
   }
 
   ngOnInit(): void {
   }
 
   get adaTip() {
-    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
+    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
     return (Math.max(change, 0)) / 1000000;
   }
 
   get adaChange() {
-    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0)
+    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0)
     return (Math.max(change, 0)) / 1000000;
   }
 
   mint() {
-    this.api.submitMintTransaction(this.mintTransaction, this.account.key).subscribe({
+    this.api.submitMintTransaction(this.mintTransaction, this.account!.key).subscribe({
       error: error => {
         this.updateMintTransaction.emit();
       },

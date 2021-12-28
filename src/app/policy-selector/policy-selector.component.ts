@@ -25,6 +25,7 @@ export class PolicySelectorComponent implements AfterViewInit {
   timer: Subscription;
 
   constructor(private accountService: AccountService, private localStorageService: LocalStorageService, private dialog: MatDialog) {
+    this.selectedPolicyId = this.localStorageService.retrievePolicyId();
     // updates time
     this.timer = interval(1000).subscribe(() => {
     });
@@ -32,30 +33,25 @@ export class PolicySelectorComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.accountService.account.subscribe(newAccount => {
-
-      if (!newAccount.policies.length) {
-        return;
-      }
-
       const oldPolicyId = this.selectedPolicyId;
 
-      if (!this.selectedPolicyId) {
-        this.selectedPolicyId = this.localStorageService.retrievePolicyId();
-      }
-
+      // policyid from localStorage is invalid
       if (!newAccount.policies.find(p => p.policyId === this.selectedPolicyId)) {
         this.selectedPolicyId = this.findUnlockedPolicy(newAccount).policyId;
       }
 
+      // policyid from localStorage is closed
       if (this.getTimeLeft(newAccount.policies.find(p => p.policyId === this.selectedPolicyId)!) === 0) {
         this.selectedPolicyId = this.findUnlockedPolicy(newAccount).policyId;
       }
 
-      if (this.selectedPolicyId != oldPolicyId) {
+      // publish policy id
+      if (!this.account || this.selectedPolicyId != oldPolicyId) {
         this.policyChanged();
       }
 
       this.account = newAccount;
+
     });
   }
 

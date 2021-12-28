@@ -13,7 +13,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 })
 export class MintSuccessComponent implements OnInit {
 
-  account!: AccountPrivate;
+  account?: AccountPrivate;
   @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
   @Output() restart = new EventEmitter<void>();
@@ -33,16 +33,16 @@ export class MintSuccessComponent implements OnInit {
   }
 
   copyAccountKey() {
-    this.clipboard.copy(this.account.key);
+    this.clipboard.copy(this.account!.key);
   }
 
   get adaTip() {
-    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
+    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
     return (Math.max(change, 0)) / 1000000;
   }
 
   get adaChange() {
-    let change = (this.account.address.balance || 0) - (this.mintTransaction.fee || 0)
+    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0)
     return (Math.max(change, 0)) / 1000000;
   }
 

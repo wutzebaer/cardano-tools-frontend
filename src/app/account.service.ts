@@ -8,25 +8,9 @@ import { LocalStorageService } from './local-storage.service';
 })
 export class AccountService {
 
-  readonly account: Subject<AccountPrivate> = new ReplaySubject<AccountPrivate>();
+  readonly account: ReplaySubject<AccountPrivate> = new ReplaySubject<AccountPrivate>();
 
   constructor(private localStorageService: LocalStorageService, private api: AccountRestInterfaceService) {
-    this.account.next({
-      key: "",
-      createdAt: new Date(0),
-      policies: [],
-      address: {
-        address: "",
-        balance: 0,
-        tokensData: "[]",
-        skey: "",
-        vkey: ""
-      },
-      fundingAddresses: [],
-      fundingAddressesHistory: [],
-      stake: 0,
-      lastUpdate: new Date(0),
-    });
   }
 
 
