@@ -1,7 +1,6 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="'dialog' || (isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="true && (isHandset$ | async) === false"
-    (click)="drawer.mode === 'side' || drawer.close()">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="'dialog' || (isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="true && (isHandset$ | async) === false" (click)="drawer.mode === 'side' || drawer.close()">
+
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item [routerLink]="'/europool'"> [EURO]-Pool </a>
@@ -23,15 +22,16 @@
   </mat-sidenav>
   <mat-sidenav-content fxLayout="column" class="my-sidenav-content">
     <mat-toolbar color="primary" class="mat-elevation-z8">
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
-        *ngIf="true || (isHandset$ | async)">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span>Cardano Tools</span>
+      <img class="logo" src="/assets/logo.png">
+      <span>
+        Cardano Tools
+      </span>
       <span class="example-spacer"></span>
       <span *ngIf="account?.address?.balance" class="slogan">Balance: {{account?.address?.balance!/1000000 | number: '1.0-6'}}&nbsp;₳</span>
       <span class="example-spacer"></span>
-      <span class="slogan">powered by [EURO]-Pool</span>
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="true || (isHandset$ | async)">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
     </mat-toolbar>
     <div class="main-content" fxLayout="column" fxLayoutGap="10px">
       <mat-card class="notice">Support cardano-tools.io by voting in FUND7: <a target="_blank" href="https://cardano.ideascale.com/a/dtd/Cardano-features-for-everyone/380919-48088">Cardano features for everyone</a></mat-card>

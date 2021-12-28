@@ -16,6 +16,12 @@
   z-index: 1000;
 }
 
+.logo {
+  height: 50px;
+  position: relative;
+  top: -2px;
+}
+
 .main-content {
   margin: 20px;
 }
@@ -24,16 +30,12 @@
   flex: 1 1 auto;
 }
 
-.slogan {
-  font-size: small;
-}
-
 .notice {
   background-color:#dde7ff;
   text-align: center;
   font-size: x-large;
 }
 
-.mat-toolbar-single-row {
-  height: 40px;
+.mat-toolbar {
+  min-height: 64px;
 }
