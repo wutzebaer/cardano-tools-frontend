@@ -101,7 +101,7 @@ export class RoyaltiesCip27MintComponent implements OnInit {
   }
 
   buildTransaction() {
-    if (!this.instructionsForm || this.instructionsForm.invalid) {
+    if (!this.addr) {
       return;
     }
     this.mintOrderSubmission.tokens = [{ amount: 1, assetName: '' }];

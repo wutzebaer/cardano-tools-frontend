@@ -53,7 +53,7 @@
       <!-- Amount -->
       <mat-form-field fxFlex=25 appearance="outline">
         <mat-label>Amount</mat-label>
-        <input matInput type="number" [(ngModel)]="token.amount" name="amount{{counter}}" required>
+        <input matInput type="number" [(ngModel)]="token.amount" name="amount{{counter}}" required min="1">
       </mat-form-field>
     </div>
 

@@ -1,0 +1,67 @@
+<div fxLayoutAlign="center">
+
+    <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="800px">
+        <mat-card>
+            <mat-card-content>
+
+                <h2>Burn NFTs of your unlocked policies</h2>
+
+                <form #instructionsForm="ngForm">
+
+                    <div fxLayout="column">
+
+                        <!-- POLICY -->
+                        <app-policy-selector [createPolicies]="false" (changedPolicyId)="changePolicyId($event)">
+                        </app-policy-selector>
+
+                        <!-- fund instruction-->
+                        <p>
+                            Please send tokens of selected policy to this address
+                        </p>
+
+
+                        <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                            <b class="address">{{account?.address?.address}}</b>
+                            <button mat-icon-button (click)="copyToClipboard(account!.address.address)">
+                                <mat-icon>content_copy</mat-icon>
+                            </button>
+                        </p>
+
+                        <h2>Tokens to burn</h2>
+                        <div *ngIf="!tokens.length">Currently no tokens received</div>
+                        <div fxLayout="row" fxLayoutAlign="center">
+                            <div fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center top" infiniteScroll [infiniteScrollDistance]="3" infiniteScrollContainer=".my-sidenav-content" [fromRoot]="true" fxFlex="0 1 1200px" fxFlex.lt-md="100%">
+                                <ng-container *ngFor="let token of tokens; let i = index">
+                                    <div fxFlex="100%" fxFlex.gt-xs="300px">
+                                        <app-latest-tokens-mini [token]="token" (click)="details(token)"></app-latest-tokens-mini>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+
+
+            </mat-card-content>
+        </mat-card>
+
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+            <button mat-raised-button color="accent" (click)="updateAccount()" fxFlex.lt-sm>
+                <mat-icon>refresh</mat-icon>
+                <span fxHide.lt-sm> Refresh</span>
+            </button>
+            <button mat-raised-button color="primary" [disabled]="instructionsForm.invalid" fxFlex.lt-sm (click)="burn()" [disabled]="!tokens.length">
+                <mat-icon>local_fire_department</mat-icon>
+                <span fxHide.lt-sm> Burn</span>
+            </button>
+        </div>
+
+        <p>
+            Need help? Join our <a target="_blank" href="https://t.me/joinchat/XrlIF21NDzAyODUy">telegram channel</a>!
+        </p>
+
+    </div>
+
+</div>
