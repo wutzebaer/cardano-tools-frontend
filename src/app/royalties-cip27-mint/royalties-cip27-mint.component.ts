@@ -2,7 +2,7 @@ import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-su
 import { NgForm } from '@angular/forms';
 import { debounceTime, switchMap, tap, distinctUntilChanged } from 'rxjs/operators';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { interval, Subscription, Subject } from 'rxjs';
 import { AccountPrivate, MintOrderSubmission, MintRestInterfaceService, PolicyPrivate, TokenRestInterfaceService, Transaction } from 'src/cardano-tools-client';
@@ -15,7 +15,7 @@ import { TokenDataWithMetadata, TokenEnhancerService } from './../token-enhancer
   templateUrl: './royalties-cip27-mint.component.html',
   styleUrls: ['./royalties-cip27-mint.component.scss']
 })
-export class RoyaltiesCip27MintComponent implements OnInit {
+export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
 
   @ViewChild('instructionsForm') instructionsForm!: NgForm;
 
@@ -47,6 +47,7 @@ export class RoyaltiesCip27MintComponent implements OnInit {
     signedData: ""
   }
   private transactionUpdates$ = new Subject<any>();
+  accountSubscription: Subscription
 
   constructor(
     public dialog: MatDialog,
@@ -57,7 +58,7 @@ export class RoyaltiesCip27MintComponent implements OnInit {
     private api: MintRestInterfaceService,
     ajaxInterceptor: AjaxInterceptor) {
 
-    accountService.account.subscribe(account => {
+    this.accountSubscription = accountService.account.subscribe(account => {
       let balanceChanged = !this.account || account.address.balance != this.account.address.balance || account.key != this.account.key;
       this.account = account;
       if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
@@ -80,6 +81,11 @@ export class RoyaltiesCip27MintComponent implements OnInit {
       debounceTime(1000),
       distinctUntilChanged(),
     ).subscribe(value => this.buildTransaction());
+  }
+
+  ngOnDestroy(): void {
+    this.timer.unsubscribe();
+    this.accountSubscription.unsubscribe();
   }
 
   inputChanged(value: any) {

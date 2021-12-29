@@ -1,5 +1,6 @@
+import { Subscription } from 'rxjs';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
@@ -16,7 +17,7 @@ import { TokenDataWithMetadata, TokenEnhancerService } from '../token-enhancer.s
   templateUrl: './mint.component.html',
   styleUrls: ['./mint.component.scss']
 })
-export class MintComponent implements OnInit, AfterViewInit {
+export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild('tokenCountInput') tokenCountInput!: NgModel;
@@ -27,6 +28,7 @@ export class MintComponent implements OnInit, AfterViewInit {
   mintTransaction!: Transaction;
   loading = false;
   tokens: TokenDataWithMetadata[] = [];
+  accountSubscription: Subscription
 
   initializeValues() {
     this.mintOrderSubmission = {
@@ -61,7 +63,7 @@ export class MintComponent implements OnInit, AfterViewInit {
 
     this.initializeValues();
 
-    accountService.account.subscribe(account => {
+    this.accountSubscription = accountService.account.subscribe(account => {
       let balanceChanged = !this.account || account.address.balance != this.account.address.balance || account.key != this.account.key;
       this.account = account;
       if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
@@ -74,6 +76,10 @@ export class MintComponent implements OnInit, AfterViewInit {
 
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.loading = ajaxStatus)
 
+  }
+
+  ngOnDestroy(): void {
+    this.accountSubscription.unsubscribe();
   }
 
   changePolicyId(policyId: string) {

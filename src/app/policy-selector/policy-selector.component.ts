@@ -2,7 +2,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
 import { CardanoUtils } from './../cardano-utils';
 import { LocalStorageService } from './../local-storage.service';
-import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit, OnDestroy } from '@angular/core';
 import { AccountService } from './../account.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
@@ -15,7 +15,7 @@ import { interval, Subscription } from 'rxjs';
   templateUrl: './policy-selector.component.html',
   styleUrls: ['./policy-selector.component.scss']
 })
-export class PolicySelectorComponent implements AfterViewInit {
+export class PolicySelectorComponent implements AfterViewInit, OnDestroy {
 
   @Input() disabled = false;
   @Input() createPolicies = true;
@@ -23,6 +23,7 @@ export class PolicySelectorComponent implements AfterViewInit {
   account?: AccountPrivate;
   selectedPolicyId?: string | null;
   timer: Subscription;
+  accountSubscription!: Subscription
 
   constructor(private accountService: AccountService, private localStorageService: LocalStorageService, private dialog: MatDialog) {
     this.selectedPolicyId = this.localStorageService.retrievePolicyId();
@@ -32,7 +33,7 @@ export class PolicySelectorComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.accountService.account.subscribe(newAccount => {
+    this.accountSubscription = this.accountService.account.subscribe(newAccount => {
       const oldPolicyId = this.selectedPolicyId;
 
       // policyid from localStorage is invalid
@@ -57,6 +58,7 @@ export class PolicySelectorComponent implements AfterViewInit {
 
   ngOnDestroy(): void {
     this.timer.unsubscribe();
+    this.accountSubscription.unsubscribe();
   }
 
   findUnlockedPolicy(account: AccountPrivate): PolicyPrivate {

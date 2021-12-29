@@ -1,6 +1,7 @@
+import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { TokenDataWithMetadata, TokenEnhancerService } from './../token-enhancer.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { AccountService } from 'src/app/account.service';
@@ -12,11 +13,12 @@ import { RegisterTokenSuccessComponent } from './../register-token-success/regis
   templateUrl: './register-token.component.html',
   styleUrls: ['./register-token.component.scss']
 })
-export class RegisterTokenComponent implements OnInit {
+export class RegisterTokenComponent implements OnInit, OnDestroy {
 
   account!: AccountPrivate;
   tokens: TokenDataWithMetadata[] = [];
   selectedToken?: TokenDataWithMetadata;
+  accountSubscription: Subscription
 
   registrationMetadata: any = {
     assetName: "",
@@ -35,12 +37,16 @@ export class RegisterTokenComponent implements OnInit {
   url!: SafeUrl | null;
 
   constructor(private api: RegistrationRestInterfaceService, private sanitizer: DomSanitizer, public dialog: MatDialog, private accountService: AccountService, private tokenApi: TokenRestInterfaceService, private tokenEnhancerService: TokenEnhancerService, private httpClient: HttpClient) {
-    accountService.account.subscribe(account => {
+    this.accountSubscription = accountService.account.subscribe(account => {
       this.account = account;
     });
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.accountSubscription.unsubscribe();
   }
 
   changePolicyId(policyId: string) {

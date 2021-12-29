@@ -3,7 +3,7 @@ import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-su
 import { NgForm } from '@angular/forms';
 import { debounceTime, switchMap, tap, distinctUntilChanged } from 'rxjs/operators';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { interval, Subscription, Subject } from 'rxjs';
 import { AccountPrivate, MintOrderSubmission, MintRestInterfaceService, PolicyPrivate, TokenRestInterfaceService, Transaction } from 'src/cardano-tools-client';
@@ -16,7 +16,7 @@ import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-toke
   templateUrl: './burn-tokens.component.html',
   styleUrls: ['./burn-tokens.component.scss']
 })
-export class BurnTokensComponent implements OnInit {
+export class BurnTokensComponent implements OnInit, OnDestroy {
 
 
   @ViewChild('instructionsForm') instructionsForm!: NgForm;
@@ -28,6 +28,7 @@ export class BurnTokensComponent implements OnInit {
   addr: string = ""
   timer: Subscription;
   loading = false;
+  accountSubscription: Subscription
 
 
   constructor(
@@ -39,7 +40,7 @@ export class BurnTokensComponent implements OnInit {
     private api: MintRestInterfaceService,
     ajaxInterceptor: AjaxInterceptor) {
 
-    accountService.account.subscribe(account => {
+    this.accountSubscription = accountService.account.subscribe(account => {
       this.account = account;
       this.filterTokens()
     });
@@ -52,6 +53,11 @@ export class BurnTokensComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.timer.unsubscribe();
+    this.accountSubscription.unsubscribe();
   }
 
   filterTokens() {

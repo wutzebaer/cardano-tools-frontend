@@ -1,7 +1,8 @@
+import { Subscription } from 'rxjs';
 import { Transaction } from './../../cardano-tools-client/model/transaction';
 import { AccountService } from './../account.service';
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ApplicationRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ApplicationRef, OnDestroy } from '@angular/core';
 import { AccountPrivate, MintRestInterfaceService } from 'src/cardano-tools-client';
 
 @Component({
@@ -10,7 +11,7 @@ import { AccountPrivate, MintRestInterfaceService } from 'src/cardano-tools-clie
   styleUrls: ['./mint-review-and-submit.component.scss'],
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
-export class MintReviewAndSubmitComponent implements OnInit {
+export class MintReviewAndSubmitComponent implements OnInit, OnDestroy {
 
   account?: AccountPrivate;
   @Input() mintTransaction!: Transaction;
@@ -20,9 +21,10 @@ export class MintReviewAndSubmitComponent implements OnInit {
   @ViewChild('submittedInput') submittedInput!: NgModel
 
   submitted = false;
+  accountSubscription: Subscription
 
   constructor(private api: MintRestInterfaceService, accountService: AccountService) {
-    accountService.account.subscribe(account => this.account = account);
+    this.accountSubscription = accountService.account.subscribe(account => this.account = account);
   }
 
   getPolicy() {
@@ -30,6 +32,10 @@ export class MintReviewAndSubmitComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.accountSubscription.unsubscribe();
   }
 
   get adaTip() {

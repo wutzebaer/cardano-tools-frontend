@@ -30,9 +30,10 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   @Input() activeStep!: boolean;
 
   timer: Subscription;
+  accountSubscription: Subscription
 
   constructor(private clipboard: Clipboard, private accountService: AccountService) {
-    accountService.account.subscribe(account => this.account = account);
+    this.accountSubscription = accountService.account.subscribe(account => this.account = account);
     this.timer = interval(10000).subscribe(() => {
       if (this.activeStep && (this.adaBalance < this.minAdaBalance || this.account?.fundingAddresses.length == 0)) {
         this.updateAccount();
@@ -42,6 +43,7 @@ export class FundAccountComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.timer.unsubscribe();
+    this.accountSubscription.unsubscribe();
   }
 
   ngOnInit(): void {

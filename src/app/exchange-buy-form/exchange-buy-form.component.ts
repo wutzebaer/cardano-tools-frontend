@@ -2,7 +2,7 @@ import { TokenDataWithMetadata, TokenEnhancerService, TokenOfferWithParsedTokenD
 import { interval, Subscription } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ExchangeRestInterfaceService } from 'src/cardano-tools-client';
 
 @Component({
@@ -10,7 +10,7 @@ import { ExchangeRestInterfaceService } from 'src/cardano-tools-client';
   templateUrl: './exchange-buy-form.component.html',
   styleUrls: ['./exchange-buy-form.component.scss']
 })
-export class ExchangeBuyFormComponent implements OnInit {
+export class ExchangeBuyFormComponent implements OnInit, OnDestroy {
   offer: TokenOfferWithParsedTokenData;
   timer: Subscription;
   receivedToken?: TokenDataWithMetadata;
