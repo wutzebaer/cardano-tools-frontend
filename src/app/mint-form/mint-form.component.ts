@@ -206,4 +206,10 @@ export class MintFormComponent implements OnInit {
   toJson(value: any): string {
     return JSON.stringify(value);
   }
+
+  openPoolPmPreview() {
+    const metadata = { '721': { '00000000000000000000000000000000000000000000000000000000': { [this.token.assetName]: this.metaData } } };
+    window.open('https://pool.pm/test/metadata?metadata=' + encodeURIComponent(encodeURIComponent(JSON.stringify(metadata))));
+  }
+
 }

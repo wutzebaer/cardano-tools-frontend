@@ -34,6 +34,13 @@
     </div>
 
     <div fxLayout="row" style="padding-bottom: 1.25em;">
+      <a type="button" mat-raised-button (click)="openPoolPmPreview()" target="_blank">
+        <img width="24" height="24" src="/assets/poolpm.ico">
+        <span fxHide.lt-sm> Preview</span>
+      </a>
+    </div>
+
+    <div fxLayout="row" style="padding-bottom: 1.25em;" *ngIf="metaData.files">
       <mat-chip-list #chipList multiple>
         <mat-chip *ngFor="let file of metaData.files" color="primary" (removed)="removeFile(file)">
           <a [href]="tokenEnhancerService.toIpfsUrl(file.src)" target="_blank">{{file.name}}</a>
