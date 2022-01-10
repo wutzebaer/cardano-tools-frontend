@@ -78,7 +78,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  ngOnDestroy(): void {
+    ngOnDestroy(): void {
     this.accountSubscription.unsubscribe();
   }
 
@@ -217,6 +217,11 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.mintOrderSubmission.metaData = result;
     });
+  }
+
+  openPoolPmPreview() {
+    console.log(encodeURIComponent(encodeURIComponent(JSON.stringify(this.buildMetadata()))));
+    window.open('https://pool.pm/test/metadata?metadata=' + encodeURIComponent(encodeURIComponent(JSON.stringify(this.buildMetadata()))));
   }
 
 }
