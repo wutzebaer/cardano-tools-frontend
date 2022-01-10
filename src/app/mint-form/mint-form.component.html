@@ -63,7 +63,7 @@
         <!-- Simple Metafield-->
         <mat-form-field *ngIf="isSimpleValue(metaData[key])" appearance="outline">
           <mat-label>{{toString(key) | titlecase}}</mat-label>
-          <input matInput name="{{key}}{{counter}}" maxlength="64" [(ngModel)]="metaData[key]" (input)="updatePreview()">
+          <input matInput name="{{key}}{{counter}}" maxlength="64" [(ngModel)]="metaData[key]" (input)="updatePreview()" [required]="requiredMetaFields.includes(key)" [readonly]="lockedMetaFields.includes(key)">
           <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])">
             <mat-icon>auto_fix_high</mat-icon>
           </button>
@@ -79,7 +79,7 @@
         <!-- objects -->
         <mat-form-field *ngIf="!isSimpleValue(metaData[key]) && !isSimpleList(metaData[key])" appearance="outline">
           <mat-label>{{toString(key) | titlecase}}</mat-label>
-          <input matInput [value]="toJson(metaData[key])" disabled>
+          <input matInput [value]="toJson(metaData[key])" readonly>
           <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])">
             <mat-icon>auto_fix_high</mat-icon>
           </button>

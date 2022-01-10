@@ -23,7 +23,9 @@ export class MintFormComponent implements OnInit {
   static globalCounter = 0;
 
   counter!: number;
-  availableMetaFields: string[] = ['image', 'name', 'description', 'type', 'traits', 'artist', 'publisher', 'copyright', 'homepage', 'url'];
+  availableMetaFields: string[] = ['description', 'type', 'traits', 'artist', 'publisher', 'copyright', 'homepage', 'url'];
+  requiredMetaFields: string[] = ['image', 'name', 'mediaType'];
+  lockedMetaFields: string[] = ['mediaType', 'image'];
   listFields: string[] = ['traits'];
   uploadProgress: number = 0;
   metaData: any = {};
@@ -48,10 +50,19 @@ export class MintFormComponent implements OnInit {
       this.appendFile(hack.file)
       delete hack.file
     }
+
     if (hack.metaData) {
       this.metaData = hack.metaData
       delete hack.metaData
+    } else {
+      if (!this.metaData.name) {
+        this.metaData.name = "";
+      }
+      if (!this.metaData.image) {
+        this.metaData.image = "";
+      }
     }
+
 
     this.reloadMetadata()
   }

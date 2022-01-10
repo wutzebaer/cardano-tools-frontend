@@ -137,7 +137,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addToken() {
-    let token = { assetName: "", amount: 1, metaData: {} };
+    let token = { assetName: "", amount: 1 };
     this.mintOrderSubmission.tokens.push(token);
     return token
   }
@@ -150,7 +150,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     for (let index in Object.values(event.target.files)) {
       let file = event.target.files.item(index);
       setTimeout(() => {
-        let token = { assetName: "", amount: 1, metaData: {} };
+        let token = { assetName: "", amount: 1 };
         let hack = token as any
         hack.file = file
         this.mintOrderSubmission.tokens.push(token);
