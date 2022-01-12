@@ -51,7 +51,7 @@
           </label>
 
           <!-- advanced -->
-          <button mat-raised-button (click)="advanced()" [disabled]="tokenCountInput.invalid || loadingInput.invalid">
+          <button mat-raised-button (click)="advanced()" [disabled]="loadingInput.invalid">
             <mat-icon>settings</mat-icon>
             <span fxHide.lt-sm> Advanced</span>
           </button>
