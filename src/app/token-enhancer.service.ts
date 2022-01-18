@@ -126,12 +126,19 @@ export class TokenEnhancerService {
     return tokenDataWithMetadata;
   }
 
-  toIpfsUrl(ipfs: any) {
-    // https://ipfs.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://ipfs.blockfrost.dev/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://cloudflare-ipfs.com/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://ipfs.eternum.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
+  ipfsProviders = [
+    'https://ipfs.io/ipfs/',
+    'https://ipfs.blockfrost.dev/ipfs/',
+    'https://cloudflare-ipfs.com/ipfs/',
+    'https://ipfs.cardano-tools.io/ipfs/',
+    'https://infura-ipfs.io/ipfs/',
+  ]
 
+  pullRandomIpfsProvider() {
+    return this.ipfsProviders[Math.floor(Math.random() * this.ipfsProviders.length)]
+  }
+
+  toIpfsUrl(ipfs: any) {
     if (Array.isArray(ipfs)) {
       ipfs = ipfs.join("")
     }
@@ -140,15 +147,10 @@ export class TokenEnhancerService {
       return this.sanitizer.bypassSecurityTrustResourceUrl(ipfs) as string;
     }
 
-    return this.sanitizer.bypassSecurityTrustResourceUrl("https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "")) as string;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.pullRandomIpfsProvider() + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "")) as string;
   }
 
   toSimpleIpfsUrl(ipfs: any) {
-    // https://ipfs.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://ipfs.blockfrost.dev/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://cloudflare-ipfs.com/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-    // https://ipfs.eternum.io/ipfs/QmNSVrsLZLWUJDtTF27z2KGAStCQyxdxfadTqsTy4bcKzt
-
     if (Array.isArray(ipfs)) {
       ipfs = ipfs.join("")
     }
@@ -157,7 +159,7 @@ export class TokenEnhancerService {
       return ipfs;
     }
 
-    return "https://ipfs.cardano-tools.io/ipfs/" + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "");
+    return this.pullRandomIpfsProvider() + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "");
   }
 
   findAnyIpfsUrl(object: any): any {
