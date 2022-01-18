@@ -39,6 +39,12 @@
   </span>
 </p>
 
+<p *ngIf="mintTransaction.txSize <= 16384">
+  <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+    <mat-icon class="green">done</mat-icon>
+    <span>Your transaction size is currently at {{niceBytes(mintTransaction.txSize)}} ({{mintTransaction.txSize / 16384 | percent}})</span>
+  </span>
+</p>
 <p *ngIf="mintTransaction.txSize > 16384">
   <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
     <mat-icon color="warn">dangerous</mat-icon>
