@@ -127,10 +127,10 @@ export class TokenEnhancerService {
   }
 
   ipfsProviders = [
-    'https://ipfs.io/ipfs/',
-    'https://ipfs.blockfrost.dev/ipfs/',
+    //'https://ipfs.io/ipfs/',
+    //'https://ipfs.blockfrost.dev/ipfs/',
     'https://ipfs.cardano-tools.io/ipfs/',
-    'https://infura-ipfs.io/ipfs/',
+    //'https://infura-ipfs.io/ipfs/',
   ]
 
   pullRandomIpfsProvider() {
