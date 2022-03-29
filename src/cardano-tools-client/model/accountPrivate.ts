@@ -11,6 +11,7 @@
  */
 import { AddressPrivate } from './addressPrivate';
 import { PolicyPrivate } from './policyPrivate';
+import { StakePositionPrivate } from './stakePositionPrivate';
 
 export interface AccountPrivate { 
     key: string;
@@ -18,6 +19,7 @@ export interface AccountPrivate {
     policies: Array<PolicyPrivate>;
     address: AddressPrivate;
     fundingAddresses: Array<string>;
+    stakePositions: Array<StakePositionPrivate>;
     fundingAddressesHistory: Array<string>;
     stake: number;
     lastUpdate: Date;

@@ -70,6 +70,26 @@
   </mat-select>
 </mat-form-field>
 
+<div *ngIf="adaBalance && account?.stakePositions?.length === 0" class="hazard-border">
+  <h3>
+    😳 <b>Oops</b> your wallet doesn't seem to be delegated, quickly rush to your wallet and delegate it to <b>EURO-pool!</b> 😳
+  </h3>
+  <p>This will generate you <b>additional ADA</b> without risk every five days and strongly supports cardano-tools-io. Delegating is very intuitive in most wallets, but just in case here are some guides, hope your wallet is among them:</p>
+  <ul>
+    <li><a target="_blank" href="https://forum.cardano.org/t/staking-and-delegating-for-beginners-a-step-by-step-guide/36681">How-to stake with Daedalus</a></li>
+    <li><a target="_blank" href="https://medium.com/infstones/cardano-delegation-tutorial-delegating-tokens-for-infstones-a14365af7a07">How-to stake with Yoroi</a></li>
+    <li><a target="_blank" href="https://www.altcoinbuzz.io/bitcoin-and-crypto-guide/how-to-use-the-nami-wallet/#Delegate">How-to stake with nami</a></li>
+    <li><a target="_blank" href="https://www.youtube.com/watch?v=RL4eQy0beC8">How-to stake with ccvault/eternl</a></li>
+  </ul>
+  <p><b>Thank you very much!</b></p>
+</div>
+
+<ng-container *ngFor="let stakePosition of account?.stakePositions">
+  <h3 class="hazard-border" *ngIf="stakePosition.totalStake! > 5_000_000_000">
+    😳 <b>WOW</b> your wallet of <b>{{stakePosition.funds!/1000000 | number: '1.0-0'}}&nbsp;₳</b> is currently delegated to the very big pool <b>{{stakePosition.tickerName}}</b>. It would be very cash money of you redelegate it to <b>EURO-pool</b> to support <b>decentralisation</b> and <b>cardano-tools.io!</b> 🦍
+  </h3>
+</ng-container>
+
 <!-- hidden validator -->
 <mat-checkbox fxHide [ngModel]="adaBalance >= minAdaBalance" name="adaBalanceInput" #adaBalanceInput="ngModel" required></mat-checkbox>
 <mat-checkbox fxHide [ngModel]="mintTransaction.txSize <= 16384" name="txSizeInput" #txSizeInput="ngModel" required></mat-checkbox>
