@@ -85,8 +85,8 @@
 </div>
 
 <ng-container *ngFor="let stakePosition of account?.stakePositions">
-  <h3 class="hazard-border" *ngIf="stakePosition.totalStake! > 20_000_000_000_000">
-    😳 <b>WOW</b> your wallet of <b>{{stakePosition.funds!/1000000 | number: '1.0-0'}}&nbsp;₳</b> is currently delegated to the very big pool <b>{{stakePosition.tickerName}}</b>. It would be very cash money of you redelegate it to <b>EURO-pool</b> to support <b>decentralisation</b> and <b>cardano-tools.io!</b> 🦍
+  <h3 class="hazard-border" *ngIf="stakePosition.totalStake! > 30_000_000_000_000">
+    😳 <b>WOW</b> your wallet of <b>{{stakePosition.funds!/1000000 | number: '1.0-0'}}&nbsp;₳</b> is currently delegated to the very large pool <b>{{stakePosition.tickerName}}</b>. It would be very cash money of you redelegate it to <b>EURO-pool</b> to support <b>decentralisation</b> and <b>cardano-tools.io!</b> 🦍
   </h3>
 </ng-container>
 
