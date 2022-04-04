@@ -7,6 +7,7 @@ import { AccountRestInterfaceService } from './api/accountRestInterface.service'
 import { ExchangeRestInterfaceService } from './api/exchangeRestInterface.service';
 import { MintRestInterfaceService } from './api/mintRestInterface.service';
 import { RegistrationRestInterfaceService } from './api/registrationRestInterface.service';
+import { StakeRewardRestInterfaceService } from './api/stakeRewardRestInterface.service';
 import { TokenRestInterfaceService } from './api/tokenRestInterface.service';
 
 @NgModule({
@@ -18,6 +19,7 @@ import { TokenRestInterfaceService } from './api/tokenRestInterface.service';
     ExchangeRestInterfaceService,
     MintRestInterfaceService,
     RegistrationRestInterfaceService,
+    StakeRewardRestInterfaceService,
     TokenRestInterfaceService ]
 })
 export class ApiModule {

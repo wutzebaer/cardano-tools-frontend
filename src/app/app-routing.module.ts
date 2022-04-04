@@ -1,3 +1,4 @@
+import { StakeRewardsComponent } from './stake-rewards/stake-rewards.component';
 import { BurnTokensComponent } from './burn-tokens/burn-tokens.component';
 import { ExchangeComponent } from './exchange/exchange.component';
 import { BurnComponent } from './burn/burn.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'my', component: MyTokensComponent },
   { path: 'exchange', component: ExchangeComponent },
   { path: 'royaltiescip27', component: RoyaltiesCip27MintComponent },
+  { path: 'reward-stakers', component: StakeRewardsComponent },
 ];
 
 @NgModule({
