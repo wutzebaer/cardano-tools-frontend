@@ -112,15 +112,22 @@ export class StakeRewardRestInterfaceService {
     /**
      * 
      * 
+     * @param key 
      * @param poolHash 
      * @param epoch 
+     * @param tip 
+     * @param minStake 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEpochStakes(poolHash: string, epoch: number, observe?: 'body', reportProgress?: boolean): Observable<Array<EpochStakePosition>>;
-    public getEpochStakes(poolHash: string, epoch: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<EpochStakePosition>>>;
-    public getEpochStakes(poolHash: string, epoch: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<EpochStakePosition>>>;
-    public getEpochStakes(poolHash: string, epoch: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, observe?: 'body', reportProgress?: boolean): Observable<Array<EpochStakePosition>>;
+    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<EpochStakePosition>>>;
+    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<EpochStakePosition>>>;
+    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling getEpochStakes.');
+        }
 
         if (poolHash === null || poolHash === undefined) {
             throw new Error('Required parameter poolHash was null or undefined when calling getEpochStakes.');
@@ -128,6 +135,22 @@ export class StakeRewardRestInterfaceService {
 
         if (epoch === null || epoch === undefined) {
             throw new Error('Required parameter epoch was null or undefined when calling getEpochStakes.');
+        }
+
+        if (tip === null || tip === undefined) {
+            throw new Error('Required parameter tip was null or undefined when calling getEpochStakes.');
+        }
+
+        if (minStake === null || minStake === undefined) {
+            throw new Error('Required parameter minStake was null or undefined when calling getEpochStakes.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tip !== undefined && tip !== null) {
+            queryParameters = queryParameters.set('tip', <any>tip);
+        }
+        if (minStake !== undefined && minStake !== null) {
+            queryParameters = queryParameters.set('minStake', <any>minStake);
         }
 
         let headers = this.defaultHeaders;
@@ -145,8 +168,9 @@ export class StakeRewardRestInterfaceService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<EpochStakePosition>>('get',`${this.basePath}/api/rewards/${encodeURIComponent(String(poolHash))}/${encodeURIComponent(String(epoch))}`,
+        return this.httpClient.request<Array<EpochStakePosition>>('get',`${this.basePath}/api/rewards/${encodeURIComponent(String(key))}/${encodeURIComponent(String(poolHash))}/${encodeURIComponent(String(epoch))}`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

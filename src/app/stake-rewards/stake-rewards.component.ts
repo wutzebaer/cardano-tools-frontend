@@ -34,7 +34,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
     tip: true,
     outputs: {}
   };
-  
+
   mintTransaction: Transaction = {
     rawData: "",
     txId: "",
@@ -62,14 +62,13 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   }
 
   refresh() {
-    this.stakeRewardRestInterfaceService.getEpochStakes(this.poolHash, this.epoch).subscribe(result => {
-      result = result.filter(r => r.amount / 1000000 >= this.minStakeAda);
+    this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, true, this.minStakeAda * 1_000_000).subscribe(result => {
       this.epochStakes = result
       this.totalStake = result.map(r => r.amount).reduce((p, c) => p + c, 0)
       this.dataSource.data = result;
       this.dataSource.sort = this.sort;
-      this.buildRewards();
-      this.buildTransaction();
+      //this.buildRewards();
+      //this.buildTransaction();
     });
   }
 
