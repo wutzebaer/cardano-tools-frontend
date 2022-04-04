@@ -91,6 +91,14 @@
             </mat-form-field>
           </div>
 
+          <!-- Decimals -->
+          <div>
+            <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+              <mat-label>Decimals</mat-label>
+              <input matInput [(ngModel)]="registrationMetadata.decimals" name="decimals" type="number" min="0" max="6">
+            </mat-form-field>
+          </div>
+
           <!-- Policy Id -->
           <div>
             <mat-form-field fxFlex appearance="outline" fxFlex="100%">

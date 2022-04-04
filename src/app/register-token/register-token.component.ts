@@ -29,6 +29,7 @@ export class RegisterTokenComponent implements OnInit, OnDestroy {
     description: "",
     ticker: "",
     url: "",
+    decimals: 0
   }
 
   uploadProgress: number = 0;
