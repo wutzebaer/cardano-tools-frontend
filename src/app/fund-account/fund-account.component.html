@@ -5,7 +5,8 @@
 <!-- fund instruction-->
 <p>
   Please send at least
-  <b matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
+  <b *ngIf="showTooltip" matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
+  <b *ngIf="!showTooltip">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
   <button class="inline-button" mat-icon-button (click)="copyFunds()">
     <mat-icon>content_copy</mat-icon>
   </button>
@@ -32,7 +33,7 @@
   </span>
 </p>
 
-<p *ngIf="adaBalanceInput.valid && account?.fundingAddresses?.length == 0">
+<p *ngIf="adaBalanceInput.valid && account?.fundingAddresses?.length == 0 && requesttargetAddress">
   <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
     <mat-icon color="warn">dangerous</mat-icon>
     <span>Waiting for target address... </span>

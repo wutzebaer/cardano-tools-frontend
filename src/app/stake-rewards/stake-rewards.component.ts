@@ -1,8 +1,10 @@
+import { MatDialog } from '@angular/material/dialog';
+import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
 import { Submission } from './../fund-account/fund-account.component';
 import { StakeRewardRestInterfaceService } from './../../cardano-tools-client/api/stakeRewardRestInterface.service';
 import { Subscription } from 'rxjs';
 import { AccountService } from './../account.service';
-import { Transaction, MintOrderSubmission, AccountPrivate, TokenData } from 'src/cardano-tools-client';
+import { Transaction, MintOrderSubmission, AccountPrivate, TokenData, MintRestInterfaceService } from 'src/cardano-tools-client';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -28,6 +30,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   accountSubscription: Subscription
   account?: AccountPrivate;
   minStakeAda = 1000
+  oldFunds?: number;
 
   mintOrderSubmission: Submission = {
     tip: true,
@@ -46,11 +49,26 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
     signedData: ""
   };
 
-  constructor(private stakeRewardRestInterfaceService: StakeRewardRestInterfaceService, private accountService: AccountService) {
+  constructor(
+    private stakeRewardRestInterfaceService: StakeRewardRestInterfaceService,
+    private accountService: AccountService,
+    private mintRestInterfaceService: MintRestInterfaceService,
+    public dialog: MatDialog) {
+
     this.accountSubscription = accountService.account.subscribe(account => {
       this.account = account
-      if(this.mintTransaction.minOutput == 0)
-      this.refresh();
+      if (this.oldFunds !== account.address.balance) {
+        this.oldFunds = account.address.balance;
+        this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, this.mintOrderSubmission.tip, this.minStakeAda * 1_000_000).subscribe(result => {
+          this.epochStakes = result
+          this.totalStake = result.map(r => r.amount).reduce((p, c) => p + c, 0)
+          this.dataSource.data = result;
+          this.dataSource.sort = this.sort;
+          //this.buildRewards();
+          console.log(this.mintTransaction.minOutput)
+          this.buildTransaction();
+        });
+      }
     });
   }
 
@@ -64,15 +82,8 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   }
 
   refresh() {
-    this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, this.mintOrderSubmission.tip, this.minStakeAda * 1_000_000).subscribe(result => {
-      this.epochStakes = result
-      this.totalStake = result.map(r => r.amount).reduce((p, c) => p + c, 0)
-      this.dataSource.data = result;
-      this.dataSource.sort = this.sort;
-      //this.buildRewards();
-      console.log(this.mintTransaction.minOutput)
-      this.buildTransaction();
-    });
+    this.oldFunds = undefined;
+    this.accountService.updateAccount();
   }
 
 
@@ -85,6 +96,21 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
 
   typeSafeOutputs(ident: any): { [key: string]: number; } {
     return ident;
+  }
+
+  submit() {
+    if (confirm('Do you really want to submit this transaction?')) {
+      this.mintRestInterfaceService.submitMintTransaction(this.mintTransaction, this.account!.key).subscribe({
+        complete: () => {
+          this.dialog.open(RoyaltiesCip27MintSuccessComponent, {
+            width: '600px',
+            maxWidth: '90vw',
+            data: { transaction: this.mintTransaction },
+            closeOnNavigation: true
+          });
+        }
+      });
+    }
   }
 
 }

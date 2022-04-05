@@ -15,7 +15,7 @@
                     <div>
                         <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Pool hash (pool123abc...)</mat-label>
-                            <input matInput [(ngModel)]="poolHash" name="poolHash" required (input)="refresh()">
+                            <input matInput [(ngModel)]="poolHash" name="poolHash" required (change)="refresh()">
                         </mat-form-field>
                     </div>
 
@@ -23,7 +23,7 @@
                     <div>
                         <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Epoch</mat-label>
-                            <input matInput [(ngModel)]="epoch" name="epoch" required type="number" (input)="refresh()">
+                            <input matInput [(ngModel)]="epoch" name="epoch" required type="number" (change)="refresh()">
                         </mat-form-field>
                     </div>
 
@@ -31,7 +31,7 @@
                     <div>
                         <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                             <mat-label>Minimum ₳ delegated</mat-label>
-                            <input matInput [(ngModel)]="minStakeAda" name="minSTakeAda" required type="number" (input)="refresh()">
+                            <input matInput [(ngModel)]="minStakeAda" name="minSTakeAda" required type="number" (change)="refresh()">
                         </mat-form-field>
                     </div>
 
@@ -75,10 +75,19 @@
                     </p>
 
                     <form #fundForm="ngForm">
-                        <app-fund-account #fundAccount [activeStep]="true" [mintTransaction]="mintTransaction" (updateMintTransaction)="refresh()" [mintOrderSubmission]="mintOrderSubmission" [requesttargetAddress]="false"></app-fund-account>
+                        <app-fund-account #fundAccount [activeStep]="true" [mintTransaction]="mintTransaction" (updateMintTransaction)="refresh()" [mintOrderSubmission]="mintOrderSubmission" [requesttargetAddress]="false" [showTooltip]="false"></app-fund-account>
                     </form>
+                </div>
 
-
+                <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+                    <button mat-raised-button color="accent" (click)="refresh()" fxFlex.lt-sm>
+                        <mat-icon>refresh</mat-icon>
+                        <span fxHide.lt-sm> Refresh</span>
+                    </button>
+                    <button mat-raised-button color="primary" [disabled]="fundForm.invalid" fxFlex.lt-sm (click)="submit()" [disabled]="!epochStakes.length">
+                        <mat-icon>cell_tower</mat-icon>
+                        <span fxHide.lt-sm> Distribute</span>
+                    </button>
                 </div>
 
             </mat-card-content>
