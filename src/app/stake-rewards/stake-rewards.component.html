@@ -81,6 +81,13 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         </table>
 
+                        <div>
+                            <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+                                <mat-label>Include a message for your delegators</mat-label>
+                                <input matInput name="message" (change)="refresh()" [(ngModel)]="message" [maxLength]="64">
+                            </mat-form-field>
+                        </div>
+
                         <p>
                             <b>Send ₳ and other tokes you want to distribute to this address:</b>
                         </p>

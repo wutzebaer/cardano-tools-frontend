@@ -39,6 +39,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   poolList?: PoolInfo[];
   filteredOptions!: Subject<PoolInfo[]>;
   excludePledge = true;
+  message = '';
 
   mintOrderSubmission: Submission = {
     tip: true,
@@ -69,7 +70,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
       this.account = account
       if (this.oldFunds !== account.address.balance && this.rewardForm?.valid) {
         this.oldFunds = account.address.balance;
-        this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, this.mintOrderSubmission.tip, this.minStakeAda * 1_000_000, this.excludePledge).subscribe(result => {
+        this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, this.mintOrderSubmission.tip, this.minStakeAda * 1_000_000, this.excludePledge, this.message).subscribe(result => {
           this.epochStakes = result
           this.totalStake = result.map(r => r.amount).reduce((p, c) => p + c, 0)
           this.dataSource.data = result;
@@ -106,7 +107,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
 
 
   buildTransaction() {
-    this.stakeRewardRestInterfaceService.buildTransaction(this.epochStakes, this.account!.key).subscribe(mintTransaction => {
+    this.stakeRewardRestInterfaceService.buildTransaction(this.epochStakes, this.message, this.account!.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
     })
   }

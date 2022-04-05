@@ -61,21 +61,31 @@ export class StakeRewardRestInterfaceService {
      * 
      * 
      * @param body 
+     * @param message 
      * @param key 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public buildTransaction(body: Array<EpochStakePosition>, key: string, observe?: 'body', reportProgress?: boolean): Observable<Transaction>;
-    public buildTransaction(body: Array<EpochStakePosition>, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Transaction>>;
-    public buildTransaction(body: Array<EpochStakePosition>, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Transaction>>;
-    public buildTransaction(body: Array<EpochStakePosition>, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public buildTransaction(body: Array<EpochStakePosition>, message: string, key: string, observe?: 'body', reportProgress?: boolean): Observable<Transaction>;
+    public buildTransaction(body: Array<EpochStakePosition>, message: string, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Transaction>>;
+    public buildTransaction(body: Array<EpochStakePosition>, message: string, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Transaction>>;
+    public buildTransaction(body: Array<EpochStakePosition>, message: string, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling buildTransaction.');
         }
 
+        if (message === null || message === undefined) {
+            throw new Error('Required parameter message was null or undefined when calling buildTransaction.');
+        }
+
         if (key === null || key === undefined) {
             throw new Error('Required parameter key was null or undefined when calling buildTransaction.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (message !== undefined && message !== null) {
+            queryParameters = queryParameters.set('message', <any>message);
         }
 
         let headers = this.defaultHeaders;
@@ -101,6 +111,7 @@ export class StakeRewardRestInterfaceService {
         return this.httpClient.request<Transaction>('post',`${this.basePath}/api/rewards/${encodeURIComponent(String(key))}/buildTransaction`,
             {
                 body: body,
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -118,13 +129,14 @@ export class StakeRewardRestInterfaceService {
      * @param tip 
      * @param minStake 
      * @param excludePledge 
+     * @param message 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<EpochStakePosition>>;
-    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<EpochStakePosition>>>;
-    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<EpochStakePosition>>>;
-    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, message: string, observe?: 'body', reportProgress?: boolean): Observable<Array<EpochStakePosition>>;
+    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, message: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<EpochStakePosition>>>;
+    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, message: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<EpochStakePosition>>>;
+    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, message: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (key === null || key === undefined) {
             throw new Error('Required parameter key was null or undefined when calling getEpochStakes.');
@@ -150,6 +162,10 @@ export class StakeRewardRestInterfaceService {
             throw new Error('Required parameter excludePledge was null or undefined when calling getEpochStakes.');
         }
 
+        if (message === null || message === undefined) {
+            throw new Error('Required parameter message was null or undefined when calling getEpochStakes.');
+        }
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (tip !== undefined && tip !== null) {
             queryParameters = queryParameters.set('tip', <any>tip);
@@ -159,6 +175,9 @@ export class StakeRewardRestInterfaceService {
         }
         if (excludePledge !== undefined && excludePledge !== null) {
             queryParameters = queryParameters.set('excludePledge', <any>excludePledge);
+        }
+        if (message !== undefined && message !== null) {
+            queryParameters = queryParameters.set('message', <any>message);
         }
 
         let headers = this.defaultHeaders;
