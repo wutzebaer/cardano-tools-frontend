@@ -23,8 +23,8 @@ export class FundAccountComponent implements OnInit, OnDestroy {
 
   @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
-
   @Input() mintOrderSubmission!: Submission;
+  @Input() requesttargetAddress = true;
 
   @ViewChild('adaBalanceInput') adaBalanceInput!: NgModel
   @ViewChild('targetAddressInput') targetAddressInput!: NgModel

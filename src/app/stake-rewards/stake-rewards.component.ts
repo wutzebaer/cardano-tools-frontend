@@ -1,5 +1,5 @@
+import { Submission } from './../fund-account/fund-account.component';
 import { StakeRewardRestInterfaceService } from './../../cardano-tools-client/api/stakeRewardRestInterface.service';
-import { StakeRewardSubmission } from './../../cardano-tools-client/model/stakeRewardSubmission';
 import { Subscription } from 'rxjs';
 import { AccountService } from './../account.service';
 import { Transaction, MintOrderSubmission, AccountPrivate, TokenData } from 'src/cardano-tools-client';
@@ -29,10 +29,9 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   account?: AccountPrivate;
   minStakeAda = 1000
 
-
-  mintOrderSubmission: StakeRewardSubmission = {
+  mintOrderSubmission: Submission = {
     tip: true,
-    outputs: {}
+    targetAddress: ''
   };
 
   mintTransaction: Transaction = {
@@ -48,13 +47,16 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   };
 
   constructor(private stakeRewardRestInterfaceService: StakeRewardRestInterfaceService, private accountService: AccountService) {
-    this.accountSubscription = accountService.account.subscribe(account => this.account = account);
+    this.accountSubscription = accountService.account.subscribe(account => {
+      this.account = account
+      if(this.mintTransaction.minOutput == 0)
+      this.refresh();
+    });
   }
 
   ngOnInit(): void {
     this.poolHash = 'pool1uyhmy8mxfly2hgmcgkpedsw3juszrwl6au7p3t2d8zmgwaved6q'
     this.epoch = 196;
-    this.refresh();
   }
 
   ngOnDestroy(): void {
@@ -62,34 +64,27 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   }
 
   refresh() {
-    this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, true, this.minStakeAda * 1_000_000).subscribe(result => {
+    this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, this.mintOrderSubmission.tip, this.minStakeAda * 1_000_000).subscribe(result => {
       this.epochStakes = result
       this.totalStake = result.map(r => r.amount).reduce((p, c) => p + c, 0)
       this.dataSource.data = result;
       this.dataSource.sort = this.sort;
       //this.buildRewards();
-      //this.buildTransaction();
+      console.log(this.mintTransaction.minOutput)
+      this.buildTransaction();
     });
   }
 
-  buildRewards() {
-    let tokenData: TokenData[] = JSON.parse(this.account!.address.tokensData);
-    this.rewards = {}
-    this.epochStakes.forEach(epochStake => {
-      this.rewards[epochStake.address] = this.rewards[epochStake.address] || {};
-      this.rewards[epochStake.address][''] = Math.floor(this.account!.address.balance * (epochStake.amount / this.totalStake))
-      tokenData.forEach(token => {
-        this.rewards[epochStake.address][token.policyId + '.' + token.name] = Math.floor(token.quantity * (epochStake.amount / this.totalStake))
-      });
-    });
-    console.log(this.rewards);
-  }
 
   buildTransaction() {
-    this.mintOrderSubmission.outputs = this.rewards;
-    this.stakeRewardRestInterfaceService.buildTransaction(this.mintOrderSubmission, this.account!.key).subscribe(mintTransaction => {
+    console.trace()
+    this.stakeRewardRestInterfaceService.buildTransaction(this.epochStakes, this.account!.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
     })
+  }
+
+  typeSafeOutputs(ident: any): { [key: string]: number; } {
+    return ident;
   }
 
 }

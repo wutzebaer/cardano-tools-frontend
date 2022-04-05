@@ -60,7 +60,7 @@
                         <ng-container matColumnDef="rewards">
                             <th mat-header-cell *matHeaderCellDef> Rewards </th>
                             <td mat-cell *matCellDef="let element">
-                                <div *ngFor="let item of element.outputs | keyvalue">
+                                <div *ngFor="let item of typeSafeOutputs(element.outputs) | keyvalue">
                                     {{ item.key==='' ? item.value/1000000 : item.value | number : '1.0-6'}} {{ item.key==='' ? '₳' : '$' + item.key.split('.')[1] }}
                                 </div>
                             </td>
@@ -75,7 +75,7 @@
                     </p>
 
                     <form #fundForm="ngForm">
-                        <app-fund-account #fundAccount [activeStep]="true" [mintTransaction]="mintTransaction" (updateMintTransaction)="buildTransaction()" [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
+                        <app-fund-account #fundAccount [activeStep]="true" [mintTransaction]="mintTransaction" (updateMintTransaction)="refresh()" [mintOrderSubmission]="mintOrderSubmission" [requesttargetAddress]="false"></app-fund-account>
                     </form>
 
 

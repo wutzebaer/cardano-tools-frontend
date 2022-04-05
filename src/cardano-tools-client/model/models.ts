@@ -8,7 +8,6 @@ export * from './mintOrderSubmission';
 export * from './policyPrivate';
 export * from './projectMetadata';
 export * from './stakePositionPrivate';
-export * from './stakeRewardSubmission';
 export * from './tokenData';
 export * from './tokenOffer';
 export * from './tokenOfferPost';

@@ -18,7 +18,6 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { EpochStakePosition } from '../model/epochStakePosition';
-import { StakeRewardSubmission } from '../model/stakeRewardSubmission';
 import { Transaction } from '../model/transaction';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -65,10 +64,10 @@ export class StakeRewardRestInterfaceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public buildTransaction(body: StakeRewardSubmission, key: string, observe?: 'body', reportProgress?: boolean): Observable<Transaction>;
-    public buildTransaction(body: StakeRewardSubmission, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Transaction>>;
-    public buildTransaction(body: StakeRewardSubmission, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Transaction>>;
-    public buildTransaction(body: StakeRewardSubmission, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public buildTransaction(body: Array<EpochStakePosition>, key: string, observe?: 'body', reportProgress?: boolean): Observable<Transaction>;
+    public buildTransaction(body: Array<EpochStakePosition>, key: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Transaction>>;
+    public buildTransaction(body: Array<EpochStakePosition>, key: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Transaction>>;
+    public buildTransaction(body: Array<EpochStakePosition>, key: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling buildTransaction.');
