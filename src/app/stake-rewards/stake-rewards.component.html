@@ -6,7 +6,7 @@
                 <h2>Reward stakers</h2>
 
                 <p>
-                    This tool is handy if you are a stekepool operator. YOu enter your pool-hah (pool123abc...) and an epoch no and you get a listing of your stakers and their shares.
+                    This tool is handy if you are a stekepool operator. You enter your pool-hah (pool123abc...) and an epoch no and you get a listing of your stakers and their shares.
                 </p>
 
                 <div fxLayout="column">
@@ -15,8 +15,14 @@
                         <!-- pool-hash -->
                         <div>
                             <mat-form-field fxFlex appearance="outline" fxFlex="100%">
-                                <mat-label>Pool hash (pool123abc...)</mat-label>
-                                <input matInput [(ngModel)]="poolHash" name="poolHash" required (change)="refresh()">
+                                <mat-label>Ticker or pool-hash (pool123abc...)</mat-label>
+                                <input matInput name="poolHash" required (change)="refresh()" [(ngModel)]="poolHash" [matAutocomplete]="auto" (ngModelChange)="filter()">
+
+                                <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="refresh()">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.hash">
+                                        {{option.ticker}} ({{option.hash}})
+                                    </mat-option>
+                                </mat-autocomplete>
                             </mat-form-field>
                         </div>
 

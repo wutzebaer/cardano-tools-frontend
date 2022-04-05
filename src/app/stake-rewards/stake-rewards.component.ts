@@ -1,9 +1,10 @@
-import { NgForm } from '@angular/forms';
+import { PoolInfo } from './../../cardano-tools-client/model/poolInfo';
+import { FormControl, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
 import { Submission } from './../fund-account/fund-account.component';
 import { StakeRewardRestInterfaceService } from './../../cardano-tools-client/api/stakeRewardRestInterface.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { AccountService } from './../account.service';
 import { Transaction, MintOrderSubmission, AccountPrivate, TokenData, MintRestInterfaceService } from 'src/cardano-tools-client';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
@@ -12,6 +13,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CardanoUtils } from '../cardano-utils';
 import { EpochStakePosition } from './../../cardano-tools-client/model/epochStakePosition';
 import { JsonpClientBackend } from '@angular/common/http';
+import { startWith, map, filter } from 'rxjs/operators';
+import { I } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-stake-rewards',
@@ -20,7 +23,7 @@ import { JsonpClientBackend } from '@angular/common/http';
 })
 export class StakeRewardsComponent implements OnInit, OnDestroy {
 
-  @ViewChild('rewardForm') rewardForm?: NgForm;
+  @ViewChild('rewardForm') rewardForm!: NgForm;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource: MatTableDataSource<EpochStakePosition> = new MatTableDataSource();
   displayedColumns = ['stakeAddress', 'rewardAddress', 'amount', 'share', 'rewards']
@@ -33,6 +36,8 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   account?: AccountPrivate;
   minStakeAda = 1000
   oldFunds?: number;
+  poolList?: PoolInfo[];
+  filteredOptions!: Subject<PoolInfo[]>;
 
   mintOrderSubmission: Submission = {
     tip: true,
@@ -57,9 +62,10 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
     private mintRestInterfaceService: MintRestInterfaceService,
     public dialog: MatDialog) {
 
+    stakeRewardRestInterfaceService.getPoolList().subscribe(list => this.poolList = list);
+
     this.accountSubscription = accountService.account.subscribe(account => {
       this.account = account
-      console.log(this.rewardForm?.valid)
       if (this.oldFunds !== account.address.balance && this.rewardForm?.valid) {
         this.oldFunds = account.address.balance;
         this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, this.mintOrderSubmission.tip, this.minStakeAda * 1_000_000).subscribe(result => {
@@ -76,6 +82,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.filteredOptions = new BehaviorSubject([] as PoolInfo[]);
   }
 
   ngOnDestroy(): void {
@@ -88,8 +95,16 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   }
 
 
+  filter() {
+    if (!this.poolList) {
+      return;
+    }
+    const filterValue = this.poolHash.toLowerCase();
+    this.filteredOptions.next(this.poolList.filter(option => option.ticker.toLowerCase().includes(filterValue)));
+  }
+
+
   buildTransaction() {
-    console.trace()
     this.stakeRewardRestInterfaceService.buildTransaction(this.epochStakes, this.account!.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
     })

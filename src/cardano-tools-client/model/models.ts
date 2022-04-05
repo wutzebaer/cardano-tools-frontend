@@ -6,6 +6,7 @@ export * from './body1';
 export * from './epochStakePosition';
 export * from './mintOrderSubmission';
 export * from './policyPrivate';
+export * from './poolInfo';
 export * from './projectMetadata';
 export * from './stakePositionPrivate';
 export * from './tokenData';

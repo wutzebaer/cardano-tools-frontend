@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { EpochStakePosition } from '../model/epochStakePosition';
+import { PoolInfo } from '../model/poolInfo';
 import { Transaction } from '../model/transaction';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -170,6 +171,42 @@ export class StakeRewardRestInterfaceService {
         return this.httpClient.request<Array<EpochStakePosition>>('get',`${this.basePath}/api/rewards/${encodeURIComponent(String(key))}/${encodeURIComponent(String(poolHash))}/${encodeURIComponent(String(epoch))}`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPoolList(observe?: 'body', reportProgress?: boolean): Observable<Array<PoolInfo>>;
+    public getPoolList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PoolInfo>>>;
+    public getPoolList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PoolInfo>>>;
+    public getPoolList(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<PoolInfo>>('get',`${this.basePath}/api/rewards/pools`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
