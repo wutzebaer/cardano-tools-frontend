@@ -73,8 +73,6 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.poolHash = 'pool1uyhmy8mxfly2hgmcgkpedsw3juszrwl6au7p3t2d8zmgwaved6q'
-    this.epoch = 196;
   }
 
   ngOnDestroy(): void {
