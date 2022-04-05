@@ -16,7 +16,7 @@
                         <div>
                             <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                                 <mat-label>Ticker or pool-hash (pool123abc...)</mat-label>
-                                <input matInput name="poolHash" required (change)="refresh()" [(ngModel)]="poolHash" [matAutocomplete]="auto" (ngModelChange)="filter()">
+                                <input matInput name="poolHash" required (change)="refresh()" [(ngModel)]="poolHash" [matAutocomplete]="auto" (ngModelChange)="filter()" [minlength]="56" [maxLength]="56">
 
                                 <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="refresh()">
                                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option.hash">
@@ -41,6 +41,10 @@
                                 <input matInput [(ngModel)]="minStakeAda" name="minSTakeAda" required type="number" (change)="refresh()">
                             </mat-form-field>
                         </div>
+
+                        <p>
+                            <mat-checkbox name="tip" [(ngModel)]="excludePledge" (change)="refresh()">Exclude pledge</mat-checkbox>
+                        </p>
 
                         <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort matSortActive="amount" matSortDirection="desc" style="margin-bottom: 20px;">
 
