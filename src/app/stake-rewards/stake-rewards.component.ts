@@ -1,3 +1,4 @@
+import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
 import { Submission } from './../fund-account/fund-account.component';
@@ -19,6 +20,7 @@ import { JsonpClientBackend } from '@angular/common/http';
 })
 export class StakeRewardsComponent implements OnInit, OnDestroy {
 
+  @ViewChild('rewardForm') rewardForm?: NgForm;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource: MatTableDataSource<EpochStakePosition> = new MatTableDataSource();
   displayedColumns = ['stakeAddress', 'rewardAddress', 'amount', 'share', 'rewards']
@@ -57,7 +59,8 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
 
     this.accountSubscription = accountService.account.subscribe(account => {
       this.account = account
-      if (this.oldFunds !== account.address.balance) {
+      console.log(this.rewardForm?.valid)
+      if (this.oldFunds !== account.address.balance && this.rewardForm?.valid) {
         this.oldFunds = account.address.balance;
         this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, this.mintOrderSubmission.tip, this.minStakeAda * 1_000_000).subscribe(result => {
           this.epochStakes = result
