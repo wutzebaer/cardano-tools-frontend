@@ -13,6 +13,11 @@ export class CardanoUtils {
         return new Date().getTime() / 1000 - 1596491091 + 4924800;
     }
 
+
+    static currentEpoch() {
+        return Math.floor((new Date().getTime() / 1000 - 1506203091) / 432000);
+    }
+
     static getTimeLeft(policy: PolicyPrivate): number {
         if (policy) {
             const timeLeft = policy.policyDueSlot - this.currentSlot();

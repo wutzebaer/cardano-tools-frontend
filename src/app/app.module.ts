@@ -72,10 +72,12 @@ import { PolicySelectorComponent } from './policy-selector/policy-selector.compo
 import { RoyaltiesCip27MintComponent } from './royalties-cip27-mint/royalties-cip27-mint.component';
 import { RoyaltiesCip27MintSuccessComponent } from './royalties-cip27-mint-success/royalties-cip27-mint-success.component';
 import { BurnTokensComponent } from './burn-tokens/burn-tokens.component';
+import { StakeRewardsComponent } from './stake-rewards/stake-rewards.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent, ExchangeSellFormComponent, TokenDetailsComponent, ExchangeBuyFormComponent, MintPolicyFormComponent, PolicySelectorComponent, RoyaltiesCip27MintComponent, RoyaltiesCip27MintSuccessComponent, BurnTokensComponent
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent, ExchangeSellFormComponent, TokenDetailsComponent, ExchangeBuyFormComponent, MintPolicyFormComponent, PolicySelectorComponent, RoyaltiesCip27MintComponent, RoyaltiesCip27MintSuccessComponent, BurnTokensComponent, StakeRewardsComponent
   ],
   imports: [
     BrowserModule,
@@ -112,7 +114,8 @@ import { BurnTokensComponent } from './burn-tokens/burn-tokens.component';
     MatDialogModule,
     InfiniteScrollModule,
     MatTabsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSortModule
   ],
   providers: [
     AjaxInterceptor,

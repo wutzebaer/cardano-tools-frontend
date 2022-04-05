@@ -3,6 +3,7 @@ export * from './address';
 export * from './addressPrivate';
 export * from './body';
 export * from './body1';
+export * from './epochStakePosition';
 export * from './mintOrderSubmission';
 export * from './policyPrivate';
 export * from './projectMetadata';

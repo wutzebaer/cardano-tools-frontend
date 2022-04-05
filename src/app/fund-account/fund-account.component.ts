@@ -6,7 +6,10 @@ import { AccountPrivate, MintOrderSubmission } from 'src/cardano-tools-client';
 import { Transaction } from './../../cardano-tools-client/model/transaction';
 import { AccountService } from './../account.service';
 
-
+export interface Submission {
+  targetAddress?: string;
+  tip: boolean;
+}
 
 @Component({
   selector: 'app-fund-account',
@@ -20,8 +23,9 @@ export class FundAccountComponent implements OnInit, OnDestroy {
 
   @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
-
-  @Input() mintOrderSubmission!: MintOrderSubmission;
+  @Input() mintOrderSubmission!: Submission;
+  @Input() requesttargetAddress = true;
+  @Input() showTooltip = true;
 
   @ViewChild('adaBalanceInput') adaBalanceInput!: NgModel
   @ViewChild('targetAddressInput') targetAddressInput!: NgModel

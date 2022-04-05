@@ -1,0 +1,96 @@
+<div fxLayoutAlign="center">
+    <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="1000px">
+        <mat-card>
+            <mat-card-content>
+
+                <h2>Reward stakers</h2>
+
+                <p>
+                    This tool is handy if you are a stekepool operator. YOu enter your pool-hah (pool123abc...) and an epoch no and you get a listing of your stakers and their shares.
+                </p>
+
+                <div fxLayout="column">
+
+                    <!-- pool-hash -->
+                    <div>
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+                            <mat-label>Pool hash (pool123abc...)</mat-label>
+                            <input matInput [(ngModel)]="poolHash" name="poolHash" required (change)="refresh()">
+                        </mat-form-field>
+                    </div>
+
+                    <!-- epoch -->
+                    <div>
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+                            <mat-label>Epoch</mat-label>
+                            <input matInput [(ngModel)]="epoch" name="epoch" required type="number" (change)="refresh()">
+                        </mat-form-field>
+                    </div>
+
+                    <!-- minSTakeAda -->
+                    <div>
+                        <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+                            <mat-label>Minimum ₳ delegated</mat-label>
+                            <input matInput [(ngModel)]="minStakeAda" name="minSTakeAda" required type="number" (change)="refresh()">
+                        </mat-form-field>
+                    </div>
+
+                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort matSortActive="amount" matSortDirection="desc" style="margin-bottom: 20px;">
+
+                        <ng-container matColumnDef="stakeAddress">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Stake address </th>
+                            <td mat-cell *matCellDef="let element"> {{element.stakeAddress}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="rewardAddress">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Reward address </th>
+                            <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="amount">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount&nbsp;₳ </th>
+                            <td mat-cell *matCellDef="let element"> {{element.amount/1000000 | number : '1.0-0'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="share">
+                            <th mat-header-cell *matHeaderCellDef> Share </th>
+                            <td mat-cell *matCellDef="let element"> {{element.amount/totalStake | number : '1.0-6'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="rewards">
+                            <th mat-header-cell *matHeaderCellDef> Rewards </th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngFor="let item of typeSafeOutputs(element.outputs) | keyvalue">
+                                    {{ item.key==='' ? item.value/1000000 : item.value | number : '1.0-6'}} {{ item.key==='' ? '₳' : '$' + item.key.split('.')[1] }}
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+
+                    <p>
+                        <b>Send ₳ and other tokes you want to distribute to this address:</b>
+                    </p>
+
+                    <form #fundForm="ngForm">
+                        <app-fund-account #fundAccount [activeStep]="true" [mintTransaction]="mintTransaction" (updateMintTransaction)="refresh()" [mintOrderSubmission]="mintOrderSubmission" [requesttargetAddress]="false" [showTooltip]="false"></app-fund-account>
+                    </form>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+                    <button mat-raised-button color="accent" (click)="refresh()" fxFlex.lt-sm>
+                        <mat-icon>refresh</mat-icon>
+                        <span fxHide.lt-sm> Refresh</span>
+                    </button>
+                    <button mat-raised-button color="primary" [disabled]="fundForm.invalid" fxFlex.lt-sm (click)="submit()" [disabled]="!epochStakes.length">
+                        <mat-icon>cell_tower</mat-icon>
+                        <span fxHide.lt-sm> Distribute</span>
+                    </button>
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
