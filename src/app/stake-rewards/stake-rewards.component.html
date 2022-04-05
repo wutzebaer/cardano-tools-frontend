@@ -89,7 +89,7 @@
                         </div>
 
                         <p>
-                            <b>Send ₳ and other tokes you want to distribute to this address:</b>
+                            <b>How it works:</b> Anything you send to this address will be distributed evenly according to their stake share. After you send the tokens the table will update automatically. When you hit the distribute button a transaction with according outputs will be submitted to the blockchain. To refund just go to the mint menu and mint a dummy token.
                         </p>
                     </form>
 
@@ -104,7 +104,7 @@
                         <span fxHide.lt-sm> Refresh</span>
                     </button>
                     <button mat-raised-button color="primary" [disabled]="fundForm.invalid" fxFlex.lt-sm (click)="submit()" [disabled]="!epochStakes.length">
-                        <mat-icon>cell_tower</mat-icon>
+                        <mat-icon>podcasts</mat-icon>
                         <span fxHide.lt-sm> Distribute</span>
                     </button>
                 </div>
