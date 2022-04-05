@@ -29,7 +29,7 @@
 
           <!-- logo -->
           <div>
-            <div fxLayout="row" fxLayoutAlign="center center" fxFlex="100%">
+            <div fxLayout="column" fxLayoutAlign="center center" fxFlex="100%">
               <div class="upload-wrapper">
                 <input id="logo" fxHide type="file" (change)="addFile($event)" name="logo" />
                 <label for="logo" (drop)="dropFile($event)" (dragover)="$event.preventDefault();">
@@ -40,7 +40,7 @@
                     </svg>
                     Logo
                   </div>
-                  <div [fxHide]="file == null" class="preview" fxLayout="row" fxLayoutAlign="center center">
+                  <div [fxHide]="file == null" class="preview" fxLayout="column" fxLayoutAlign="center center">
                     <img [src]="url">
                   </div>
                 </label>
@@ -49,7 +49,9 @@
             </div>
           </div>
 
-
+          <p *ngIf="file && (file.size>65536 || file.type!='image/png')" style="text-align: center;">
+            <b style="color: red;">Your image is larger than 65536 bytes or not an png, it will get reprocessed.</b>
+          </p>
 
           <!-- Asset Name -->
           <div>
