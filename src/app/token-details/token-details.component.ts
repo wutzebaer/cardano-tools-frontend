@@ -65,7 +65,7 @@ export class TokenDetailsComponent implements OnInit {
   }
 
   buildShareUrl(){
-    return window.location.origin + this.location.prepareExternalUrl('latest?q=' + this.token.policyId + '.' + this.token.name);
+    return window.location.origin + this.location.prepareExternalUrl('latest?q=' + this.token.fingerprint);
   }
 
   buildPoolpmUrl(){
