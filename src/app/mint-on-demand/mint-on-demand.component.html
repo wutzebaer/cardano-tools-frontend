@@ -1,0 +1,109 @@
+<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+    <app-policy-selector (changedPolicyId)="changePolicyId($event)" fxFlex="100%" fxFlex.gt-sm="550px">
+        <mat-hint *ngIf="tokens.length == 0">Your policy is fresh, you might want to to <a routerLink="/royaltiescip27">add royalties first?</a></mat-hint>
+    </app-policy-selector>
+</div>
+
+<div fxLayoutAlign="center">
+    <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="1000px">
+        <mat-card>
+            <mat-card-content>
+                <!-- DIMENSIONS -->
+                <h2>Dimensions</h2>
+                <div fxLayout="row" fxLayoutGap="15px">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Width</mat-label>
+                        <input matInput name="width" [(ngModel)]="mintOnDemand.width" [required]="true" type="number">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Height</mat-label>
+                        <input matInput name="height" [(ngModel)]="mintOnDemand.height" [required]="true" type="number">
+                    </mat-form-field>
+                </div>
+
+                <!-- Layers -->
+                <h2 fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <span>Layers</span>
+                </h2>
+                <div fxLayout="column" fxLayoutGap="15px" class="container">
+                    <div *ngFor="let layer of mintOnDemand.layers;let indexOfLayer=index;">
+
+                        <!-- LAYER NAME -->
+                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                            <mat-form-field appearance="outline" [style.width.px]="mintOnDemand.width">
+                                <mat-label>Layer {{indexOfLayer+1}} name</mat-label>
+                                <input matInput name="layername_{{indexOfLayer}}" maxlength="64" [(ngModel)]="layer.name" [required]="true" (input)="serializeMetaData()">
+
+                                <!-- remove layer -->
+                                <button matSuffix mat-icon-button color="primary" type="button" (click)="removeLayer(layer)" title="Remove layer">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" class="layer" fxLayoutGap="10px">
+                            <!-- UPLOAD -->
+                            <input id="multiadd{{indexOfLayer}}" fxHide type="file" (change)="addFiles(layer, $event)" name="multiadd" multiple />
+                            <label for="multiadd{{indexOfLayer}}" [fxFlex]="mintOnDemand.width+'px'" [style.height.px]="mintOnDemand.height">
+                                <div class="dropArea" fxLayout="column" fxLayoutAlign="center center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43">
+                                        <path d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z">
+                                        </path>
+                                    </svg>
+                                    Add Images
+                                </div>
+                            </label>
+
+                            <!-- IMAGES -->
+                            <div *ngFor="let file of layer.files;let indexOfFile=index;" class="layer-item">
+                                <button matSuffix mat-icon-button color="primary" type="button" (click)="removeFile(layer, file)" title="Remove image">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                <img [src]="urls.get(file.name)" [style.width.px]="mintOnDemand.width" [style.height.px]="mintOnDemand.height">
+                                <input name="layername_{{indexOfFile}}_fileweight" min="0" max="100" [(ngModel)]="file.weight" [required]="true" (input)="serializeMetaData()" type="number" matTooltip="Weight">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+                        <button mat-button color="accent" (click)="addLayer()">
+                            <mat-icon>add</mat-icon> Add layer
+                        </button>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="mintOnDemand.layers.length && mintOnDemand.layers[0].files.length">
+                    <h2>Samples</h2>
+                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" class="layer container">
+                        <div *ngFor="let sample of samples;" class="layer-item" [fxFlex]="(mintOnDemand.width + 2)+'px'" [style.height.px]="mintOnDemand.height + 2">
+                            <img *ngFor="let safeUrl of sample" [src]="safeUrl" class="sample-image" [style.width.px]="mintOnDemand.width" [style.height.px]="mintOnDemand.height">
+                        </div>
+                    </div>
+                </ng-container>
+
+                <h2>Metadata</h2>
+                <div class="container">
+                    <p><b>$mintcount</b> and <b>$ipfs</b> will be replaced automatically. Please edit <b>AssetName</b> and <b>MyNFTName</b> with your needs. You should edit or remove the description field. You can also add further fields. The layernames and used images will be added to the attributes array, it can not be customized, the displayed value is just an example.</p>
+                    <mat-form-field class="metadata-form-field" appearance="fill">
+                        <mat-label>Metadata</mat-label>
+                        <textarea [(ngModel)]="mintOnDemand.metadataString" matInput cdkTextareaAutosize (input)="deserializeMetaData()" (change)="serializeMetaData()"></textarea>
+                        <mat-hint style="color: red;">{{parseError}}</mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <div class="container">
+                    <button mat-raised-button color="primary" (click)="upload()">
+                        <mat-icon>fast_forward</mat-icon>
+                        <span> Save</span>
+                    </button>
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+
+        <p>
+            Need help? Join our <a target="_blank" href="https://t.me/joinchat/XrlIF21NDzAyODUy">telegram channel</a>!
+        </p>
+
+    </div>
+</div>

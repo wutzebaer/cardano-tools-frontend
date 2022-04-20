@@ -1,3 +1,4 @@
+import { MintOnDemandComponent } from './mint-on-demand/mint-on-demand.component';
 import { StakeRewardsComponent } from './stake-rewards/stake-rewards.component';
 import { BurnTokensComponent } from './burn-tokens/burn-tokens.component';
 import { ExchangeComponent } from './exchange/exchange.component';
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'exchange', component: ExchangeComponent },
   { path: 'royaltiescip27', component: RoyaltiesCip27MintComponent },
   { path: 'reward-stakers', component: StakeRewardsComponent },
+  { path: 'mint-on-demand', component: MintOnDemandComponent },
 ];
 
 @NgModule({

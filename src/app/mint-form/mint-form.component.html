@@ -33,12 +33,14 @@
 
     </div>
 
-    <div fxLayout="row" style="padding-bottom: 1.25em;">
+    <div fxLayout="row" style="padding-bottom: 1.25em;" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
       <a type="button" mat-raised-button (click)="openPoolPmPreview()" target="_blank">
         <img width="24" height="24" src="/assets/poolpm.ico">
         <span fxHide.lt-sm> Preview</span>
       </a>
+      <span class="flex-right"><mat-slide-toggle name="isNft" (change)="isNftChanged()" [(ngModel)]="isNft" fxFlexAlign="end center" labelPosition="before">NFT</mat-slide-toggle></span>
     </div>
+
 
     <div fxLayout="row" style="padding-bottom: 1.25em;" *ngIf="metaData.files">
       <mat-chip-list #chipList multiple>
@@ -60,7 +62,7 @@
       <!-- Amount -->
       <mat-form-field fxFlex=25 appearance="outline">
         <mat-label>Amount</mat-label>
-        <input matInput type="number" [(ngModel)]="token.amount" name="amount{{counter}}" required min="1">
+        <input matInput type="number" [(ngModel)]="token.amount" name="amount{{counter}}" required min="1" [disabled]="isNft">
       </mat-form-field>
     </div>
 
@@ -70,7 +72,7 @@
         <!-- Simple Metafield-->
         <mat-form-field *ngIf="isSimpleValue(metaData[key])" appearance="outline">
           <mat-label>{{toString(key) | titlecase}}</mat-label>
-          <input matInput name="{{key}}{{counter}}" maxlength="64" [(ngModel)]="metaData[key]" (input)="updatePreview()" [required]="requiredMetaFields.includes(key)" [readonly]="lockedMetaFields.includes(key)">
+          <input matInput name="{{key}}{{counter}}" maxlength="64" [(ngModel)]="metaData[key]" (input)="updatePreview()" [required]="requiredMetaFields.includes(key) && isNft" [readonly]="lockedMetaFields.includes(key)">
           <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])">
             <mat-icon>auto_fix_high</mat-icon>
           </button>

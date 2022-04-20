@@ -31,6 +31,7 @@ export class MintFormComponent implements OnInit {
   metaData: any = {};
   previewUrl = ""
   previewType = ""
+  isNft = true
 
   @Input() token!: TokenSubmission;
   @Output() spreadMetaValue = new EventEmitter<MetaValue>();
@@ -134,19 +135,20 @@ export class MintFormComponent implements OnInit {
       reader.onload = _event => {
 
         // create metadata
-        if (file.type.startsWith('image')) {
+        if (file.type.startsWith('image') && !this.metaData["image"]) {
           this.metaData["image"] = (reader.result as string).match(/.{1,64}/g);
           this.metaData["mediaType"] = file.type
+        } else {
+          if (!this.metaData["files"]) {
+            this.metaData["files"] = [];
+          }
+          this.metaData["files"].push({
+            src: (reader.result as string).match(/.{1,64}/g),
+            name: file.name,
+            mediaType: file.type
+          })
         }
 
-        if (!this.metaData["files"]) {
-          this.metaData["files"] = [];
-        }
-        this.metaData["files"].push({
-          src: (reader.result as string).match(/.{1,64}/g),
-          name: file.name,
-          mediaType: file.type
-        })
         this.updatePreview()
       };
 
@@ -161,19 +163,19 @@ export class MintFormComponent implements OnInit {
           } else if (event.type === HttpEventType.Response) {
 
             // create metadata
-            if (file.type.startsWith('image')) {
+            if (file.type.startsWith('image') && !this.metaData["image"]) {
               this.metaData["image"] = "ipfs://" + event.body;
               this.metaData["mediaType"] = file.type
+            } else {
+              if (!this.metaData["files"]) {
+                this.metaData["files"] = [];
+              }
+              this.metaData["files"].push({
+                src: "ipfs://" + event.body,
+                name: file.name,
+                mediaType: file.type
+              })
             }
-
-            if (!this.metaData["files"]) {
-              this.metaData["files"] = [];
-            }
-            this.metaData["files"].push({
-              src: "ipfs://" + event.body,
-              name: file.name,
-              mediaType: file.type
-            })
 
             this.updatePreview()
 
@@ -210,6 +212,12 @@ export class MintFormComponent implements OnInit {
   openPoolPmPreview() {
     const metadata = { '721': { '00000000000000000000000000000000000000000000000000000000': { [this.token.assetName]: this.metaData } } };
     window.open('https://pool.pm/test/metadata?metadata=' + encodeURIComponent(encodeURIComponent(JSON.stringify(metadata))));
+  }
+
+  isNftChanged() {
+    if (this.isNft) {
+      this.token.amount = 1;
+    }
   }
 
 }
