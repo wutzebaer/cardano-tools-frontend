@@ -7,6 +7,10 @@ import { AccountService } from './../account.service';
 import { TokenDataWithMetadata, TokenEnhancerService } from './../token-enhancer.service';
 
 
+export interface Permutation {
+  
+}
+
 @Component({
   selector: 'app-mint-on-demand',
   templateUrl: './mint-on-demand.component.html',
@@ -19,12 +23,14 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
     ],
     width: 200,
     height: 200,
-    metadataString: ''
+    metadataString: '',
+    amount: 1000
   }
   samples: SafeUrl[][] = [];
   tokens: TokenDataWithMetadata[] = [];
   policyId = '';
-  metadata: any;
+  metadataTemplate: any;
+  metadataTemplateString: string = '';
   parseError = '';
   account?: AccountPrivate;
   accountSubscription: Subscription;
@@ -43,11 +49,11 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
       this.account = account;
     });
 
-    this.metadata = {
+    this.metadataTemplate = {
       '721': {
         [this.policyId]: {
-          'AssetName#$mintcount': {
-            'name': 'MyNFTName #$mintcount',
+          'AssetName#$number': {
+            'name': 'MyNFTName #$number',
             'description': 'My description',
             'image': '$ipfs',
             'attributes': []
@@ -68,36 +74,78 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
   }
 
   changePolicyId(newPolicyId: string) {
-    this.metadata['721'][newPolicyId] = this.metadata['721'][this.policyId];
-    delete this.metadata['721'][this.policyId]
+    this.metadataTemplate['721'][newPolicyId] = this.metadataTemplate['721'][this.policyId];
+    delete this.metadataTemplate['721'][this.policyId]
     this.policyId = newPolicyId;
     this.serializeMetaData();
     this.tokenApi.policyTokens(newPolicyId).subscribe({ next: tokens => this.tokens = this.tokenEnhancerService.enhanceTokens(tokens) });
   }
 
   serializeMetaData() {
-    const assetName = Object.keys(this.metadata['721'][this.policyId])[0];
-    const assetObject = this.metadata['721'][this.policyId][assetName];
+    const assetName = Object.keys(this.metadataTemplate['721'][this.policyId])[0];
+    const assetObject = this.metadataTemplate['721'][this.policyId][assetName];
     assetObject.attributes = [];
     this.mintOnDemand.layers.forEach(layer => {
-      assetObject.attributes.push({ [layer.name]: (layer.files.length ? layer.files[0].name.split('.')[1] : '') });
+      assetObject.attributes.push({ [layer.name]: (layer.files.length ? layer.files[0].name.split('.').slice(0, -1).join('.') : '') });
     });
-    this.mintOnDemand.metadataString = JSON.stringify(this.metadata, null, 3);
+
+
+    this.metadataTemplateString = JSON.stringify(this.metadataTemplate, null, 3);
     this.parseError = '';
     this.updateSamples();
+    this.generateMetadata();
   }
 
   deserializeMetaData() {
     try {
-      let parsed = JSON.parse(this.mintOnDemand.metadataString);
+      let parsed = JSON.parse(this.metadataTemplateString);
       if (!parsed['721'][this.policyId]) {
         throw "PolicyId must be " + this.policyId;
       }
-      this.metadata = parsed;
+      this.metadataTemplate = parsed;
       this.parseError = '';
     } catch (error) {
       this.parseError = error as string;
     }
+  }
+
+  permuteLayers(layerIndex: number = 0, register: MintOnDemandLayerFile[] = [], result: MintOnDemandLayerFile[][] = []) {
+    if (layerIndex >= this.mintOnDemand.layers.length) {
+      result.push([...register]);
+      return result;
+    }
+    const layer = this.mintOnDemand.layers[layerIndex];
+    layer.files.forEach(f => {
+      register[layerIndex] = f;
+      this.permuteLayers(layerIndex + 1, register, result);
+    });
+    return result;
+  }
+
+  generateMetadata() {
+    console.log('generateMetadata')
+    let permuteLayers = this.permuteLayers();
+    console.log(permuteLayers);
+
+    let parsed = JSON.parse(this.metadataTemplateString);
+    const assetName = Object.keys(parsed['721'][this.policyId])[0];
+    const assetObjectTemplate = JSON.stringify(parsed['721'][this.policyId][assetName]);
+    this.metadataTemplate['721'][this.policyId][assetName]
+    delete parsed['721'][this.policyId][assetName];
+
+
+    for (let number = 1; number <= this.mintOnDemand.amount; number++) {
+      const assetObject = JSON.parse(assetObjectTemplate.replace('$number', number.toString()));
+      assetObject.attributes = [];
+
+      this.mintOnDemand.layers.forEach(layer => {
+        let file = this.getWeightedRandomLayerFile(layer);
+        assetObject.attributes.push({ [layer.name]: (file ? file.name.split('.').slice(0, -1).join('.') : '') });
+      });
+
+      parsed['721'][this.policyId][assetName.replace('$number', number.toString())] = assetObject;
+    }
+    this.mintOnDemand.metadataString = JSON.stringify(parsed, null, 3);
   }
 
   addLayer() {
@@ -120,7 +168,7 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
   }
 
 
-  async addFiles(layer: MintOnDemandLayer, event: any) {
+  addFiles(layer: MintOnDemandLayer, event: any) {
     let newFiles: MintOnDemandLayerFile[] = [];
     for (let index in Object.values(event.target.files)) {
       let file: File = event.target.files.item(index);
@@ -129,10 +177,9 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
         return;
       }
 
-      const filename = (await this.sha256(file)) + '.' + file.name;
+      const filename = file.name;
       this.files.set(filename, file);
       this.urls.set(filename, this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(file)))
-      console.log(filename)
 
       newFiles.push({
         name: filename,
@@ -145,19 +192,20 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
     this.serializeMetaData()
   }
 
-  async sha256(file: File) {
-    // get byte array of file
-    let buffer = await file.arrayBuffer();
-
-    // hash the message
-    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-
-    // convert ArrayBuffer to Array
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-
-    // convert bytes to hex string
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
+  getWeightedRandomLayerFile(layer: MintOnDemandLayer) {
+    if (layer.files.length) {
+      let totalWeight = layer.files.map(f => f.weight).reduce((p, c) => p + c, 0);
+      let sum = 0;
+      let target = Math.random() * totalWeight;
+      for (let index in layer.files) {
+        let file = layer.files[index];
+        sum += file.weight;
+        if (sum >= target) {
+          return file;
+        }
+      }
+    }
+    return null;
   }
 
   updateSamples() {
@@ -166,18 +214,9 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
       let sample: SafeUrl[] = [];
       this.mintOnDemand.layers.forEach(
         layer => {
-          if (layer.files.length) {
-            let totalWeight = layer.files.map(f => f.weight).reduce((p, c) => p + c, 0);
-            let sum = 0;
-            let target = Math.random() * totalWeight;
-            for (let index in layer.files) {
-              let file = layer.files[index];
-              sum += file.weight;
-              if (sum >= target) {
-                sample.push(this.urls.get(file.name));
-                break;
-              }
-            }
+          let file = this.getWeightedRandomLayerFile(layer);
+          if (file) {
+            sample.push(this.urls.get(file.name));
           }
         }
       );

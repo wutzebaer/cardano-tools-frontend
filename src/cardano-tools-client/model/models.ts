@@ -7,6 +7,7 @@ export * from './mintOnDemand';
 export * from './mintOnDemandLayer';
 export * from './mintOnDemandLayerFile';
 export * from './mintOrderSubmission';
+export * from './policy';
 export * from './policyIdFilenameBody';
 export * from './policyPrivate';
 export * from './poolInfo';

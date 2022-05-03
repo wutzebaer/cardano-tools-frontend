@@ -21,6 +21,15 @@
                     </mat-form-field>
                 </div>
 
+                <!-- AMOUNT -->
+                <h2>Amount</h2>
+                <div fxLayout="row" fxLayoutGap="15px">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Amount</mat-label>
+                        <input matInput name="height" [(ngModel)]="mintOnDemand.amount" [required]="true" type="number">
+                    </mat-form-field>
+                </div>
+
                 <!-- Layers -->
                 <h2 fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <span>Layers</span>
@@ -81,12 +90,21 @@
                     </div>
                 </ng-container>
 
-                <h2>Metadata</h2>
+                <h2>Metadata Template</h2>
                 <div class="container">
-                    <p><b>$mintcount</b> and <b>$ipfs</b> will be replaced automatically. Please edit <b>AssetName</b> and <b>MyNFTName</b> with your needs. You should edit or remove the description field. You can also add further fields. The layernames and used images will be added to the attributes array, it can not be customized, the displayed value is just an example.</p>
+                    <p><b>$number</b> and <b>$ipfs</b> will be replaced automatically. Please edit <b>AssetName</b> and <b>MyNFTName</b> with your needs. You should edit or remove the description field. You can also add further fields. The layernames and used images will be added to the attributes array, it can not be customized, the displayed value is just an example.</p>
                     <mat-form-field class="metadata-form-field" appearance="fill">
                         <mat-label>Metadata</mat-label>
-                        <textarea [(ngModel)]="mintOnDemand.metadataString" matInput cdkTextareaAutosize (input)="deserializeMetaData()" (change)="serializeMetaData()"></textarea>
+                        <textarea [(ngModel)]="metadataTemplateString" matInput cdkTextareaAutosize (input)="deserializeMetaData()" (change)="serializeMetaData()"></textarea>
+                        <mat-hint style="color: red;">{{parseError}}</mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <h2>Metadata Result</h2>
+                <div class="container">
+                    <mat-form-field class="metadata-form-field" appearance="fill">
+                        <mat-label>Metadata</mat-label>
+                        <textarea [(ngModel)]="mintOnDemand.metadataString" matInput readonly="true" style="height: 50vh;"></textarea>
                         <mat-hint style="color: red;">{{parseError}}</mat-hint>
                     </mat-form-field>
                 </div>

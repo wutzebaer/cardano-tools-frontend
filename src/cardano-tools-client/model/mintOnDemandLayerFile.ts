@@ -11,6 +11,7 @@
  */
 
 export interface MintOnDemandLayerFile { 
+    id?: number;
     name: string;
     weight: number;
 }

@@ -9,15 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { MintOnDemandLayer } from './mintOnDemandLayer';
-import { Policy } from './policy';
+import { Address } from './address';
 
-export interface MintOnDemand { 
+export interface Policy { 
     id?: number;
-    policy?: Policy;
-    width: number;
-    height: number;
-    amount: number;
-    metadataString: string;
-    layers: Array<MintOnDemandLayer>;
+    policyId: string;
+    policy: string;
+    address: Address;
+    policyDueSlot: number;
 }

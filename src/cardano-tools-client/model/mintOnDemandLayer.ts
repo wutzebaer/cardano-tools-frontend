@@ -12,6 +12,7 @@
 import { MintOnDemandLayerFile } from './mintOnDemandLayerFile';
 
 export interface MintOnDemandLayer { 
+    id?: number;
     name: string;
     files: Array<MintOnDemandLayerFile>;
 }
