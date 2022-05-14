@@ -4,9 +4,9 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { AccountRestInterfaceService } from './api/accountRestInterface.service';
+import { DropRestInterfaceService } from './api/dropRestInterface.service';
 import { ExchangeRestInterfaceService } from './api/exchangeRestInterface.service';
 import { MintRestInterfaceService } from './api/mintRestInterface.service';
-import { MintoOnDemandRestInterfaceService } from './api/mintoOnDemandRestInterface.service';
 import { RegistrationRestInterfaceService } from './api/registrationRestInterface.service';
 import { StakeRewardRestInterfaceService } from './api/stakeRewardRestInterface.service';
 import { TokenRestInterfaceService } from './api/tokenRestInterface.service';
@@ -17,9 +17,9 @@ import { TokenRestInterfaceService } from './api/tokenRestInterface.service';
   exports:      [],
   providers: [
     AccountRestInterfaceService,
+    DropRestInterfaceService,
     ExchangeRestInterfaceService,
     MintRestInterfaceService,
-    MintoOnDemandRestInterfaceService,
     RegistrationRestInterfaceService,
     StakeRewardRestInterfaceService,
     TokenRestInterfaceService ]

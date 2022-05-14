@@ -61,6 +61,15 @@
             <mat-icon>fast_forward</mat-icon>
             <span fxHide.lt-sm> Proceed</span>
           </button>
+          
+          <!-- next step -->
+          <button mat-raised-button color="primary" (click)="mintOnDemand()" [disabled]="tokenCountInput.invalid || loadingInput.invalid" fxFlex.lt-sm>
+            <mat-icon>water_drop</mat-icon>
+            <span fxHide.lt-sm> Dropper</span>
+          </button>
+
+
+
         </div>
       </div>
     </form>

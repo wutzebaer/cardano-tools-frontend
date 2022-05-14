@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface PolicyIdFilenameBody { 
-    file: Blob;
+export interface DropNft { 
+    assetName: string;
+    metadata: string;
 }

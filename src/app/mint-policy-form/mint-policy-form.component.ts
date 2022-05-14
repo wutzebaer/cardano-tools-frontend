@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MintPolicyFormComponent implements OnInit {
 
-  days = 7
+  days = 365
   loading = false;
 
   constructor(private dialogRef: MatDialogRef<MintPolicyFormComponent>, private accountService: AccountService) { }

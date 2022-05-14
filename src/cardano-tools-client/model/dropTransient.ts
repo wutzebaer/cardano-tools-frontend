@@ -9,9 +9,16 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DropNftTransient } from './dropNftTransient';
 
-export interface MintOnDemandLayerFile { 
-    id?: number;
+export interface DropTransient { 
     name: string;
-    weight: number;
+    price: number;
+    maxPerTransaction: number;
+    running: boolean;
+    profitAddress: string;
+    whitelist: Array<string>;
+    dropNfts: Array<DropNftTransient>;
+    dropNftsSoldAssetNames: Array<string>;
+    dropNftsAvailableAssetNames: Array<string>;
 }

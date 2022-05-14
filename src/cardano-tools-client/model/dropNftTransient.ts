@@ -9,15 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { MintOnDemandLayer } from './mintOnDemandLayer';
-import { Policy } from './policy';
 
-export interface MintOnDemand { 
-    id?: number;
-    policy?: Policy;
-    width: number;
-    height: number;
-    amount: number;
-    metadataString: string;
-    layers: Array<MintOnDemandLayer>;
+export interface DropNftTransient { 
+    assetName: string;
+    metadata: string;
 }

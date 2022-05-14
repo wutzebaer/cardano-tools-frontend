@@ -1,0 +1,71 @@
+<form #nftForm="ngForm" (ngSubmit)="upload()">
+    <fieldset [disabled]="drop.running">
+        <!-- Name -->
+        <div>
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput name="name" [(ngModel)]="drop.name" [required]="true" placeholder="My NFT Drop">
+            </mat-form-field>
+        </div>
+
+        <!-- Price -->
+        <div>
+            <mat-form-field appearance="outline">
+                <mat-label>Price per NFT in ₳</mat-label>
+                <input matInput name="priceAda" [(ngModel)]="priceAda" [required]="true" type="number" min="5">
+            </mat-form-field>
+        </div>
+
+        <!-- maxPerTransaction -->
+        <div>
+            <mat-form-field appearance="outline" matTooltip="How many NFTs can a buyer buy at once">
+                <mat-label>Maximum NFTs per transaction</mat-label>
+                <input matInput name="maxPerTransaction" [(ngModel)]="drop.maxPerTransaction" [required]="true" type="number" min="1">
+            </mat-form-field>
+        </div>
+
+        <!-- profitAddress -->
+        <div>
+            <mat-form-field appearance="outline" class="metadata-form-field">
+                <mat-label>Profit address</mat-label>
+                <input matInput name="profitAddress" [(ngModel)]="drop.profitAddress" [required]="true" placeholder="addr1...">
+            </mat-form-field>
+        </div>
+
+        <!-- whitelist -->
+        <div>
+            <mat-form-field class="metadata-form-field" appearance="fill">
+                <mat-label>Whitelist</mat-label>
+                <textarea name="whitelist" [(ngModel)]="whitelistString" matInput cdkTextareaAutosize placeholder="one address per line" (change)="formatWhitelist()"></textarea>
+            </mat-form-field>
+        </div>
+
+        <!-- NFTs -->
+        <div class="container">
+            <mat-form-field class="metadata-form-field" appearance="fill">
+                <mat-label>NFTs</mat-label>
+                <textarea name="nftsString" [(ngModel)]="nftsString" matInput cdkTextareaAutosize (input)="deserializeMetaData()" (change)="serializeMetaData()"></textarea>
+                <mat-hint style="color: red;">{{parseError}}</mat-hint>
+            </mat-form-field>
+        </div>
+    </fieldset>
+
+    <div *ngIf="isPersited()" class="container">
+        {{getAddress()}}
+    </div>
+
+    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+        <button mat-raised-button color="primary" [disabled]="drop.running">
+            <mat-icon>save</mat-icon>
+            <span> Save</span>
+        </button>
+        <button mat-raised-button color="accent" *ngIf="isPersited() && !drop.running" type="button" (click)="start()">
+            <mat-icon>play_arrow</mat-icon>
+            <span> Start</span>
+        </button>
+        <button mat-raised-button color="accent" *ngIf="isPersited() && drop.running" type="button" (click)="stop()">
+            <mat-icon>stop</mat-icon>
+            <span> Stop</span>
+        </button>
+    </div>
+</form>
