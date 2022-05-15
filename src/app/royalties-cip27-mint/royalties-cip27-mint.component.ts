@@ -9,6 +9,7 @@ import { AccountPrivate, MintOrderSubmission, MintRestInterfaceService, PolicyPr
 import { AccountService } from './../account.service';
 import { AjaxInterceptor } from './../ajax.interceptor';
 import { TokenDataWithMetadata, TokenEnhancerService } from './../token-enhancer.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-royalties-cip27-mint',
@@ -31,6 +32,7 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
     tokens: [],
     targetAddress: '',
     tip: true,
+    pin: false,
     policyId: '',
     metaData: '{}'
   };
@@ -56,7 +58,9 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
     private tokenEnhancerService: TokenEnhancerService,
     private clipboard: Clipboard,
     private api: MintRestInterfaceService,
-    ajaxInterceptor: AjaxInterceptor) {
+    ajaxInterceptor: AjaxInterceptor,
+    private snackBar: MatSnackBar
+  ) {
 
     this.accountSubscription = accountService.account.subscribe(account => {
       let balanceChanged = !this.account || account.address.balance != this.account.address.balance || account.key != this.account.key;
@@ -98,6 +102,7 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
 
   copyToClipboard(value: string) {
     this.clipboard.copy(value);
+    let snackBarRef = this.snackBar.open('Copied to clipboard: ' + value, undefined, { duration: 2000 });
   }
 
   changePolicyId(policyId: string) {

@@ -1,5 +1,7 @@
 export * from './accountRestInterface.service';
 import { AccountRestInterfaceService } from './accountRestInterface.service';
+export * from './dropRestInterface.service';
+import { DropRestInterfaceService } from './dropRestInterface.service';
 export * from './exchangeRestInterface.service';
 import { ExchangeRestInterfaceService } from './exchangeRestInterface.service';
 export * from './mintRestInterface.service';
@@ -10,4 +12,4 @@ export * from './stakeRewardRestInterface.service';
 import { StakeRewardRestInterfaceService } from './stakeRewardRestInterface.service';
 export * from './tokenRestInterface.service';
 import { TokenRestInterfaceService } from './tokenRestInterface.service';
-export const APIS = [AccountRestInterfaceService, ExchangeRestInterfaceService, MintRestInterfaceService, RegistrationRestInterfaceService, StakeRewardRestInterfaceService, TokenRestInterfaceService];
+export const APIS = [AccountRestInterfaceService, DropRestInterfaceService, ExchangeRestInterfaceService, MintRestInterfaceService, RegistrationRestInterfaceService, StakeRewardRestInterfaceService, TokenRestInterfaceService];

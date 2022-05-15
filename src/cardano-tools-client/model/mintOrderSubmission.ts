@@ -15,6 +15,7 @@ export interface MintOrderSubmission {
     tokens: Array<TokenSubmission>;
     targetAddress: string;
     tip: boolean;
+    pin: boolean;
     policyId: string;
     metaData?: string;
 }

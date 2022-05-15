@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
@@ -34,7 +35,8 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mintOrderSubmission = {
       tokens: [],
       targetAddress: '',
-      tip: true,
+      tip: false,
+      pin: true,
       policyId: '',
       metaData: '{}'
     };
@@ -59,6 +61,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     private accountService: AccountService,
     private tokenApi: TokenRestInterfaceService,
     private tokenEnhancerService: TokenEnhancerService,
+    private router: Router
   ) {
 
     this.initializeValues();
@@ -217,6 +220,11 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.mintOrderSubmission.metaData = result;
     });
+  }
+
+  mintOnDemand(){
+    let route = '/mint-on-demand';
+    this.router.navigate([route], { state: { mintMetadata: this.buildMetadata()['721'][this.mintOrderSubmission.policyId] } });
   }
 
 }

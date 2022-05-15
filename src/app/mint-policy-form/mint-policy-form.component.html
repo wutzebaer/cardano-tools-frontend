@@ -4,11 +4,47 @@
 
 <mat-dialog-content>
   <form #policyForm="ngForm" (ngSubmit)="apply()">
+
+    <p>
+      <mat-slide-toggle name="import" [(ngModel)]="import" fxFlexAlign="end center" labelPosition="after">import policy</mat-slide-toggle>
+    </p>
+
+    <div>
+      <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+        <mat-label>Policy name</mat-label>
+        <input matInput [(ngModel)]="policyConfig.name" required name="name">
+      </mat-form-field>
+    </div>
+
     <!-- Days -->
-    <mat-form-field fxFlex appearance="outline" fxFlex="100%">
-      <mat-label>Days until policy will lock</mat-label>
-      <input matInput [(ngModel)]="days" type="number" [appMinValidator]="1" [appMaxValidator]="10000" required name="days">
-    </mat-form-field>
+    <div *ngIf="!import">
+      <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+        <mat-label>Days until policy will lock</mat-label>
+        <input matInput [(ngModel)]="policyConfig.days" type="number" [appMinValidator]="1" [appMaxValidator]="10000" required name="days">
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="import">
+      <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+        <mat-label>Policy id</mat-label>
+        <input matInput [(ngModel)]="policyConfig.policyId" required name="policyId">
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="import">
+      <mat-form-field fxFlex appearance="fill" fxFlex="100%">
+        <mat-label>Policy script</mat-label>
+        <textarea name="policy" [(ngModel)]="policyConfig.policy" matInput cdkTextareaAutosize></textarea>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="import">
+      <mat-form-field fxFlex appearance="fill" fxFlex="100%">
+        <mat-label>Policy signing key</mat-label>
+        <textarea name="skey" [(ngModel)]="policyConfig.skey" matInput cdkTextareaAutosize></textarea>
+      </mat-form-field>
+    </div>
+
   </form>
 </mat-dialog-content>
 

@@ -11,6 +11,7 @@ import { AccountService } from './../account.service';
 import { AjaxInterceptor } from './../ajax.interceptor';
 import { TokenDataWithMetadata, TokenEnhancerService } from './../token-enhancer.service';
 import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-burn-tokens',
   templateUrl: './burn-tokens.component.html',
@@ -38,7 +39,9 @@ export class BurnTokensComponent implements OnInit, OnDestroy {
     private tokenEnhancerService: TokenEnhancerService,
     private clipboard: Clipboard,
     private api: MintRestInterfaceService,
-    ajaxInterceptor: AjaxInterceptor) {
+    ajaxInterceptor: AjaxInterceptor,
+    private snackBar: MatSnackBar
+  ) {
 
     this.accountSubscription = accountService.account.subscribe(account => {
       this.account = account;
@@ -72,6 +75,7 @@ export class BurnTokensComponent implements OnInit, OnDestroy {
 
   copyToClipboard(value: string) {
     this.clipboard.copy(value);
+    let snackBarRef = this.snackBar.open('Copied to clipboard: ' + value, undefined, { duration: 2000 });
   }
 
   changePolicyId(policyId: string) {
@@ -95,6 +99,7 @@ export class BurnTokensComponent implements OnInit, OnDestroy {
       tokens: this.tokens.map(t => ({ amount: -t.quantity, assetName: t.name } as TokenSubmission)),
       targetAddress: this.account!.fundingAddresses[0],
       tip: false,
+      pin: false,
       policyId: this.policy!.policyId,
       metaData: '{}'
     };

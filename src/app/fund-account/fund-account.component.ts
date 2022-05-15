@@ -9,6 +9,7 @@ import { AccountService } from './../account.service';
 export interface Submission {
   targetAddress?: string;
   tip: boolean;
+  pin: boolean;
 }
 
 @Component({
@@ -26,6 +27,8 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   @Input() mintOrderSubmission!: Submission;
   @Input() requesttargetAddress = true;
   @Input() showTooltip = true;
+  @Input() showTip = true;
+  @Input() showPin = false;
 
   @ViewChild('adaBalanceInput') adaBalanceInput!: NgModel
   @ViewChild('targetAddressInput') targetAddressInput!: NgModel
@@ -86,14 +89,22 @@ export class FundAccountComponent implements OnInit, OnDestroy {
     if (!this.mintTransaction.mintOrderSubmission?.tip) {
       return 0;
     }
-    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
+    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput || 0) - (this.mintTransaction.pinFee || 0)
     return (Math.max(change, 1000000)) / 1000000;
+  }
+
+  get adaPinFee() {
+    if (!this.mintTransaction.pinFee) {
+      return 0;
+    }
+    return this.mintTransaction.pinFee / 1000000;
   }
 
   get minAdaBalance() {
     let minBalance = 0;
     minBalance += (this.mintTransaction.fee || 0)
-    minBalance += this.mintTransaction.minOutput as number
+    minBalance += (this.mintTransaction.minOutput || 0)
+    minBalance += (this.mintTransaction.pinFee || 0)
 
     if (this.mintTransaction.mintOrderSubmission?.tip)
       minBalance += 1000000

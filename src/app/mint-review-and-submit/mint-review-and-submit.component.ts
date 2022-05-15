@@ -39,12 +39,12 @@ export class MintReviewAndSubmitComponent implements OnInit, OnDestroy {
   }
 
   get adaTip() {
-    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput as number)
+    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput || 0) - (this.mintTransaction.pinFee || 0)
     return (Math.max(change, 0)) / 1000000;
   }
 
   get adaChange() {
-    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0)
+    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.pinFee || 0)
     return (Math.max(change, 0)) / 1000000;
   }
 

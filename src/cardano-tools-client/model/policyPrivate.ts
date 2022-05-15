@@ -17,4 +17,5 @@ export interface PolicyPrivate {
     policy: string;
     address: AddressPrivate;
     policyDueSlot: number;
+    name?: string;
 }
