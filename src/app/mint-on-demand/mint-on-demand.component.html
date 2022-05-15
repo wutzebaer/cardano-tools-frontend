@@ -4,10 +4,12 @@
     </app-policy-selector>
 </div>
 
+
+
 <div fxLayoutAlign="center">
     <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="1000px">
 
-        <mat-accordion>
+        <mat-accordion class="accordion-headers-align">
             <mat-expansion-panel [expanded]="true">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
@@ -18,20 +20,18 @@
                 </mat-expansion-panel-header>
                 <app-mint-on-demand-form [drop]="drop" [account]="account" [policyId]="policyId" (dropChanged)="updateDrops()"></app-mint-on-demand-form>
             </mat-expansion-panel>
-            <mat-expansion-panel hideToggle *ngFor="let drop of drops" expanded="true">
+            <mat-expansion-panel hideToggle *ngFor="let drop of drops" [expanded]="openLatestDrop()">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         {{drop.name}}
                     </mat-panel-title>
                     <mat-panel-description>
-                        Sold: {{drop.dropNftsSoldAssetNames.length}} Available: {{drop.dropNftsAvailableAssetNames.length}}
+                        Sold: {{drop.dropNftsSoldAssetNames.length}} Available: {{drop.dropNftsAvailableAssetNames.length}} Status: {{drop.running ? 'running' : 'stopped'}}
                     </mat-panel-description>
                 </mat-expansion-panel-header>
                 <app-mint-on-demand-form [drop]="drop" [account]="account" [policyId]="policyId" (dropChanged)="updateDrops()"></app-mint-on-demand-form>
             </mat-expansion-panel>
         </mat-accordion>
-
-
 
         <p>
             Need help? Join our <a target="_blank" href="https://t.me/joinchat/XrlIF21NDzAyODUy">telegram channel</a>!

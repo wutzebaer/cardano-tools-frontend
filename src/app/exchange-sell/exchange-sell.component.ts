@@ -1,6 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { interval, Subscription } from 'rxjs';
 import { AccountPrivate, ExchangeRestInterfaceService } from 'src/cardano-tools-client';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
@@ -23,7 +24,7 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
   offeredTokens: any = {};
 
 
-  constructor(private accountService: AccountService, private api: ExchangeRestInterfaceService, private tokenEnhancerService: TokenEnhancerService, public dialog: MatDialog, private clipboard: Clipboard) {
+  constructor(private accountService: AccountService, private api: ExchangeRestInterfaceService, private tokenEnhancerService: TokenEnhancerService, public dialog: MatDialog, private clipboard: Clipboard, private snackBar: MatSnackBar) {
     this.accountSubscription = accountService.account.subscribe(account => {
       this.account = account;
       if (account.key && account.stake > this.minStake) {
@@ -70,6 +71,7 @@ export class ExchangeSellComponent implements OnInit, OnDestroy {
 
   copyToClipboard(value: string) {
     this.clipboard.copy(value);
+    let snackBarRef = this.snackBar.open('Copied to clipboard: ' + value, undefined, { duration: 2000 });
   }
 
   reloadMyOfferedTokens() {

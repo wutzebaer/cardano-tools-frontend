@@ -12,6 +12,7 @@ export * from './policy';
 export * from './policyPrivate';
 export * from './poolInfo';
 export * from './projectMetadata';
+export * from './publicDropInfo';
 export * from './registrationGenerateTokenRegistrationBody';
 export * from './stakePositionPrivate';
 export * from './tokenData';

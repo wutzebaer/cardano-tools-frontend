@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { Drop } from '../model/drop';
 import { DropTransient } from '../model/dropTransient';
+import { PublicDropInfo } from '../model/publicDropInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -104,6 +105,47 @@ export class DropRestInterfaceService {
         return this.httpClient.request<any>('post',`${this.basePath}/api/drop/${encodeURIComponent(String(key))}/${encodeURIComponent(String(policyId))}`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param prettyUrl 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getDrop(prettyUrl: string, observe?: 'body', reportProgress?: boolean): Observable<PublicDropInfo>;
+    public getDrop(prettyUrl: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PublicDropInfo>>;
+    public getDrop(prettyUrl: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PublicDropInfo>>;
+    public getDrop(prettyUrl: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (prettyUrl === null || prettyUrl === undefined) {
+            throw new Error('Required parameter prettyUrl was null or undefined when calling getDrop.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<PublicDropInfo>('get',`${this.basePath}/api/drop/${encodeURIComponent(String(prettyUrl))}`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

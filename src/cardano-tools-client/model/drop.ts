@@ -26,4 +26,5 @@ export interface Drop {
     dropNfts: Array<DropNft>;
     dropNftsSoldAssetNames: Array<string>;
     dropNftsAvailableAssetNames: Array<string>;
+    prettyUrl: string;
 }

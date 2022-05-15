@@ -1,3 +1,4 @@
+import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions/mint-on-demand-instructions.component';
 import { MintOnDemandComponent } from './mint-on-demand/mint-on-demand.component';
 import { StakeRewardsComponent } from './stake-rewards/stake-rewards.component';
 import { BurnTokensComponent } from './burn-tokens/burn-tokens.component';
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'royaltiescip27', component: RoyaltiesCip27MintComponent },
   { path: 'reward-stakers', component: StakeRewardsComponent },
   { path: 'mint-on-demand', component: MintOnDemandComponent },
+  { path: 'drop/:prettyUrl', component: MintOnDemandInstructionsComponent },
 ];
 
 @NgModule({

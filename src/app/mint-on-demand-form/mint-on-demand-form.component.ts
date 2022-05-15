@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AccountPrivate, Drop, DropNftTransient, DropRestInterfaceService, DropTransient } from 'src/cardano-tools-client';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-mint-on-demand-form',
@@ -23,6 +25,8 @@ export class MintOnDemandFormComponent implements OnInit {
 
   constructor(
     private dropRestInterfaceService: DropRestInterfaceService,
+    private clipboard: Clipboard,
+    private snackBar: MatSnackBar
   ) {
   }
 
@@ -85,17 +89,30 @@ export class MintOnDemandFormComponent implements OnInit {
     return (this.drop as Drop).address.address
   }
 
+  getPrettyUrl() {
+    return (this.drop as Drop).prettyUrl
+  }
+
+  getApiUrl() {
+    return location.origin + '/api/drop/' + this.drop.prettyUrl;
+  }
+
+  getPageUrl() {
+    return location.origin + '/drop/' + this.drop.prettyUrl;
+  }
+
   upload() {
     if (!this.nftForm.form.valid) {
       return;
     }
-
     if (this.isPersited()) {
-      this.dropRestInterfaceService.updateDrop(this.drop, this.account!.key, this.policyId, (this.drop as Drop).id).subscribe(() => {
-        this.dropChanged.next();
+      let persistedDrop = (this.drop as Drop);
+      persistedDrop.prettyUrl = persistedDrop.name.toLowerCase().replace(/[^a-z\\s0-9]/g, '-') + '-' + persistedDrop.id;
+      this.dropRestInterfaceService.updateDrop(this.drop, this.account!.key, this.policyId, persistedDrop.id).subscribe(() => {
       });
     } else {
       this.dropRestInterfaceService.createDrop(this.drop, this.account!.key, this.policyId).subscribe(() => {
+        delete history.state.mintMetadata
         this.dropChanged.next();
       });
     }
@@ -109,6 +126,11 @@ export class MintOnDemandFormComponent implements OnInit {
   stop() {
     this.drop.running = false;
     this.upload();
+  }
+
+  copyToClipboard(value: string) {
+    this.clipboard.copy(value);
+    let snackBarRef = this.snackBar.open('Copied to clipboard: ' + value, undefined, { duration: 2000 });
   }
 
 }

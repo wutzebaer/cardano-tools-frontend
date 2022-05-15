@@ -16,3 +16,12 @@ fieldset {
   padding: 0;
   border: none;
 }
+
+.inline-button {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  mat-icon {
+    font-size: 15px;
+  }
+}

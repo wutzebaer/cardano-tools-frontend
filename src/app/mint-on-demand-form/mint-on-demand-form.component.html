@@ -12,14 +12,14 @@
         <div>
             <mat-form-field appearance="outline">
                 <mat-label>Price per NFT in ₳</mat-label>
-                <input matInput name="priceAda" [(ngModel)]="priceAda" [required]="true" type="number" min="5">
+                <input matInput name="priceAda" [(ngModel)]="priceAda" [required]="true" type="number" min="3">
             </mat-form-field>
         </div>
 
         <!-- maxPerTransaction -->
         <div>
             <mat-form-field appearance="outline" matTooltip="How many NFTs can a buyer buy at once">
-                <mat-label>Maximum NFTs per transaction</mat-label>
+                <mat-label>Maximum NFTs per transaction/whitelist entry</mat-label>
                 <input matInput name="maxPerTransaction" [(ngModel)]="drop.maxPerTransaction" [required]="true" type="number" min="1">
             </mat-form-field>
         </div>
@@ -51,7 +51,35 @@
     </fieldset>
 
     <div *ngIf="isPersited()" class="container">
-        {{getAddress()}}
+        <h2>Payment address</h2>
+        Users must send funds to this address in order to mint tokens:
+        <br>
+        <p>
+            <a target="_blank" href="https://cardanoscan.io/address/{{getAddress()}}">{{getAddress()}}</a>
+            <button type="button" mat-icon-button class="inline-button" (click)="copyToClipboard(getAddress())">
+                <mat-icon>content_copy</mat-icon>
+            </button>
+        </p>
+
+        <h2>API Url</h2>
+        <p>
+            With this URL you can retrieve public information of your drop and show it on your page:
+            <br>
+            <a target="_blank" [href]="getApiUrl()">{{getApiUrl()}}</a>
+            <button type="button" mat-icon-button class="inline-button" (click)="copyToClipboard(getApiUrl())">
+                <mat-icon>content_copy</mat-icon>
+            </button>
+        </p>
+
+        <h2>Landingpage</h2>
+        <p>
+            You can use this landingpage with instructions how to buy for your users:
+            <br>
+            <a target="_blank" [href]="getPageUrl()">{{getPageUrl()}}</a>
+            <button type="button" mat-icon-button class="inline-button" (click)="copyToClipboard(getPageUrl())">
+                <mat-icon>content_copy</mat-icon>
+            </button>
+        </p>
     </div>
 
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">

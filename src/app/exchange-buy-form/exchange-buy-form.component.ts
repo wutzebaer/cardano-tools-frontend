@@ -4,6 +4,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ExchangeRestInterfaceService } from 'src/cardano-tools-client';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-exchange-buy-form',
@@ -16,7 +17,7 @@ export class ExchangeBuyFormComponent implements OnInit, OnDestroy {
   receivedToken?: TokenDataWithMetadata;
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { offer: TokenOfferWithParsedTokenData }, private clipboard: Clipboard, private api: ExchangeRestInterfaceService, private tokenEnhancerService: TokenEnhancerService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { offer: TokenOfferWithParsedTokenData }, private clipboard: Clipboard, private api: ExchangeRestInterfaceService, private tokenEnhancerService: TokenEnhancerService, private snackBar: MatSnackBar) {
     this.offer = data.offer;
 
     this.timer = interval(10000).subscribe(() => { this.updateOffer(api); });
@@ -42,6 +43,7 @@ export class ExchangeBuyFormComponent implements OnInit, OnDestroy {
 
   copyToClipboard(value: string) {
     this.clipboard.copy(value);
+    let snackBarRef = this.snackBar.open('Copied to clipboard: ' + value, undefined, { duration: 2000 });
   }
 
 }

@@ -25,10 +25,10 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
   tokens: TokenDataWithMetadata[] = [];
   drops: Drop[] = [];
   drop: DropTransient = {
-    name: 'dfg',
+    name: '',
     price: 5_000_000,
     maxPerTransaction: 5,
-    profitAddress: 'dfgdfgdfgdfg',
+    profitAddress: '',
     whitelist: [],
     dropNfts: [
       {
@@ -54,7 +54,8 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
     ],
     running: false,
     dropNftsAvailableAssetNames: [],
-    dropNftsSoldAssetNames: []
+    dropNftsSoldAssetNames: [],
+    prettyUrl: ''
   };
 
   constructor(
@@ -83,6 +84,10 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
         this.drop.dropNfts = nfts;
       })
     }
+  }
+
+  openLatestDrop() {
+    return !history.state.mintMetadata;
   }
 
   ngOnDestroy(): void {
