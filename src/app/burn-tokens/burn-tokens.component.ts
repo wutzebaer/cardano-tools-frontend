@@ -99,6 +99,7 @@ export class BurnTokensComponent implements OnInit, OnDestroy {
       tokens: this.tokens.map(t => ({ amount: -t.quantity, assetName: t.name } as TokenSubmission)),
       targetAddress: this.account!.fundingAddresses[0],
       tip: false,
+      pin: false,
       policyId: this.policy!.policyId,
       metaData: '{}'
     };

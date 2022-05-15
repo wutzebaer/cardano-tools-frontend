@@ -32,6 +32,7 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
     tokens: [],
     targetAddress: '',
     tip: true,
+    pin: false,
     policyId: '',
     metaData: '{}'
   };

@@ -43,6 +43,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
 
   mintOrderSubmission: Submission = {
     tip: true,
+    pin: false,
     targetAddress: ''
   };
 

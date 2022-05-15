@@ -1,11 +1,15 @@
-<p>
+<p *ngIf="showTip">
   <mat-checkbox name="tip" [(ngModel)]="mintOrderSubmission.tip" (change)="emitUpdateMintTransaction()">I give a tip to the [EURO]-Pool pledge</mat-checkbox>
+</p>
+
+<p *ngIf="showPin">
+  <mat-checkbox name="pin" [(ngModel)]="mintOrderSubmission.pin" (change)="emitUpdateMintTransaction()" matTooltip="Otherwise you have to take care of yourself that the files are pinned">Pin IPFS files</mat-checkbox>
 </p>
 
 <!-- fund instruction-->
 <p>
   Please send at least
-  <b *ngIf="showTooltip" matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
+  <b *ngIf="showTooltip" matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped, {{adaPinFee}}&nbsp;₳ will be used to pin the files">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
   <b *ngIf="!showTooltip">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
   <button class="inline-button" mat-icon-button (click)="copyFunds()">
     <mat-icon>content_copy</mat-icon>

@@ -35,7 +35,8 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mintOrderSubmission = {
       tokens: [],
       targetAddress: '',
-      tip: true,
+      tip: false,
+      pin: true,
       policyId: '',
       metaData: '{}'
     };

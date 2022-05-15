@@ -16,6 +16,7 @@ export interface Transaction {
     rawData: string;
     txId: string;
     fee: number;
+    pinFee?: number;
     minOutput?: number;
     txSize: number;
     outputs: string;
