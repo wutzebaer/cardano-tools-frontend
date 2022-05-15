@@ -1,3 +1,4 @@
+import { PolicyConfigPrivate } from './../../cardano-tools-client/model/policyConfigPrivate';
 import { AccountService } from './../account.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
@@ -9,8 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MintPolicyFormComponent implements OnInit {
 
-  days = 365
+  policyConfig: PolicyConfigPrivate = {
+    days: 365
+  };
   loading = false;
+  import = false;
 
   constructor(private dialogRef: MatDialogRef<MintPolicyFormComponent>, private accountService: AccountService) { }
 
@@ -18,10 +22,8 @@ export class MintPolicyFormComponent implements OnInit {
   }
 
   apply() {
-    //if (confirm('Discard policy and start with a new one? You will not be able to mint more tokens for the old one!')) {
-    this.accountService.discardPolicy(this.days);
+    this.accountService.createPolicy(this.policyConfig);
     this.dialogRef.close(true);
-    //}
   }
 
 }

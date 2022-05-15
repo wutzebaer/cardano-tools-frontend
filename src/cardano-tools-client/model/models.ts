@@ -9,6 +9,7 @@ export * from './epochStakePosition';
 export * from './mintFileBody';
 export * from './mintOrderSubmission';
 export * from './policy';
+export * from './policyConfigPrivate';
 export * from './policyPrivate';
 export * from './poolInfo';
 export * from './projectMetadata';

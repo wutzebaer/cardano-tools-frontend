@@ -1,3 +1,4 @@
+import { PolicyConfigPrivate } from './../cardano-tools-client/model/policyConfigPrivate';
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { AccountPrivate, AccountRestInterfaceService } from 'src/cardano-tools-client';
@@ -27,10 +28,10 @@ export class AccountService {
     this.loadAccount(accountObservable);
   }
 
-  discardPolicy(days: number) {
+  createPolicy(policyConfig: PolicyConfigPrivate) {
     let accountKey = this.localStorageService.retrieveAccountKey();
     if (accountKey) {
-      this.loadAccount(this.api.refreshPolicy(days, accountKey));
+      this.loadAccount(this.api.createNewPolicy(policyConfig, accountKey));
     }
   }
 

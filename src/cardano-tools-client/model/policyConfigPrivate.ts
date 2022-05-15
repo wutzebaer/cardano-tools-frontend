@@ -9,13 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { AddressPrivate } from './addressPrivate';
 
-export interface PolicyPrivate { 
-    id?: number;
-    policyId: string;
-    policy: string;
-    address: AddressPrivate;
-    policyDueSlot: number;
+export interface PolicyConfigPrivate { 
+    days?: number;
     name?: string;
+    policyId?: string;
+    policy?: string;
+    skey?: string;
 }

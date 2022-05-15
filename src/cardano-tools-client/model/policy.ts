@@ -17,4 +17,5 @@ export interface Policy {
     policy: string;
     address: Address;
     policyDueSlot: number;
+    name?: string;
 }
