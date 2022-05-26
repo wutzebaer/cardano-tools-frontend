@@ -57,3 +57,16 @@ label {
 .flex-right {
   margin-left: auto;
 }
+
+
+.simple-object-list {
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 5px;
+  padding: 10px;
+  table {
+    width: 100%;
+    mat-form-field {
+      width: 100%;
+    }
+  }
+}

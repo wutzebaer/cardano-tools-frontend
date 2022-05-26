@@ -133,8 +133,9 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   spreadMetaValue($event: MetaValue) {
+    let value = JSON.stringify($event.value);
     this.components.forEach(c => {
-      c.metaData[$event.key] = $event.value
+      c.metaData[$event.key] = JSON.parse(value);
       c.updatePreview()
     })
   }
@@ -222,7 +223,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  mintOnDemand(){
+  mintOnDemand() {
     let route = '/mint-on-demand';
     this.router.navigate([route], { state: { mintMetadata: this.buildMetadata()['721'][this.mintOrderSubmission.policyId] } });
   }

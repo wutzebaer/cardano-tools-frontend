@@ -38,7 +38,9 @@
         <img width="24" height="24" src="/assets/poolpm.ico">
         <span fxHide.lt-sm> Preview</span>
       </a>
-      <span class="flex-right"><mat-slide-toggle name="isNft" (change)="isNftChanged()" [(ngModel)]="isNft" fxFlexAlign="end center" labelPosition="before">NFT</mat-slide-toggle></span>
+      <span class="flex-right">
+        <mat-slide-toggle name="isNft" (change)="isNftChanged()" [(ngModel)]="isNft" fxFlexAlign="end center" labelPosition="before">NFT</mat-slide-toggle>
+      </span>
     </div>
 
 
@@ -73,23 +75,45 @@
         <mat-form-field *ngIf="isSimpleValue(metaData[key])" appearance="outline">
           <mat-label>{{toString(key) | titlecase}}</mat-label>
           <input matInput name="{{key}}{{counter}}" maxlength="64" [(ngModel)]="metaData[key]" (input)="updatePreview()" [required]="requiredMetaFields.includes(key) && isNft" [readonly]="lockedMetaFields.includes(key)">
-          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])">
+          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])" type="button">
             <mat-icon>auto_fix_high</mat-icon>
           </button>
         </mat-form-field>
 
         <!-- List Metafied -->
         <app-chiplist *ngIf="isSimpleList(metaData[key])" placeholder="add {{key}}..." [(items)]="metaData[key]">
-          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])">
+          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])" type="button">
             <mat-icon>auto_fix_high</mat-icon>
           </button>
         </app-chiplist>
 
+        <!-- ObjectList Metafied -->
+        <div *ngIf="isSimpleObjectList(metaData[key])" class="simple-object-list" fxLayout="column">
+          <h4>{{toString(key) | titlecase}}</h4>
+
+          <mat-form-field *ngFor="let object of metaData[key]" appearance="fill">
+            <mat-label>{{Object.keys(object)[0] | titlecase}}</mat-label>
+            <input matInput name="{{key}}{{Object.keys(object)[0]}}{{counter}}key" maxlength="64" [(ngModel)]="object[Object.keys(object)[0]]">
+            <button mat-icon-button matSuffix matTooltip="Remove this attribute" (click)="removeSimpleObjectListItem(key, object)" type="button">
+              <mat-icon>remove</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <div>
+            <button mat-icon-button matSuffix matTooltip="Add new attribute" (click)="addSimpleObjectListItem(metaData[key])" type="button">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])" type="button">
+              <mat-icon>auto_fix_high</mat-icon>
+            </button>
+          </div>
+        </div>
+
         <!-- objects -->
-        <mat-form-field *ngIf="!isSimpleValue(metaData[key]) && !isSimpleList(metaData[key])" appearance="outline">
+        <mat-form-field *ngIf="!isSimpleValue(metaData[key]) && !isSimpleList(metaData[key]) && !isSimpleObjectList(metaData[key])" appearance="outline">
           <mat-label>{{toString(key) | titlecase}}</mat-label>
           <input matInput [value]="toJson(metaData[key])" readonly>
-          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])">
+          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])" type="button">
             <mat-icon>auto_fix_high</mat-icon>
           </button>
         </mat-form-field>

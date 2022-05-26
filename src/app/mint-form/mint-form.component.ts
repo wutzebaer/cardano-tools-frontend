@@ -23,10 +23,11 @@ export class MintFormComponent implements OnInit {
   static globalCounter = 0;
 
   counter!: number;
-  availableMetaFields: string[] = ['description', 'type', 'traits', 'artist', 'publisher', 'copyright', 'homepage', 'url'];
+  availableMetaFields: string[] = ['description', 'type', 'traits', 'attributes', 'artist', 'publisher', 'copyright', 'homepage', 'url'];
   requiredMetaFields: string[] = ['image', 'name', 'mediaType'];
   lockedMetaFields: string[] = ['mediaType', 'image'];
-  listFields: string[] = ['traits'];
+  listFields: string[] = [];
+  mapFields: string[] = ['traits', 'attributes'];
   uploadProgress: number = 0;
   metaData: any = {};
   previewUrl = ""
@@ -80,6 +81,10 @@ export class MintFormComponent implements OnInit {
     return Array.isArray(value) && typeof value[0] !== 'object' && !(value[0] + '').startsWith('data:');
   }
 
+  isSimpleObjectList(value: any) {
+    return Array.isArray(value) && typeof value[0] === 'object' && Object.keys(value[0]).length === 1 && typeof value[0][Object.keys(value[0])[0]] !== 'object';
+  }
+
   spreadMetaValueClicked(key: string, value: any) {
     this.spreadMetaValue.emit({ key: key, value: value });
   }
@@ -87,14 +92,40 @@ export class MintFormComponent implements OnInit {
   addMetaField(metaField: string) {
     if (typeof this.metaData[metaField] !== 'undefined') {
       delete this.metaData[metaField];
-    } else {
-      if (this.listFields.indexOf(metaField) !== -1) {
-        this.metaData[metaField] = [];
-      } else {
-        this.metaData[metaField] = "";
-      }
     }
+    else if (this.listFields.indexOf(metaField) !== -1) {
+      this.metaData[metaField] = [];
+    }
+    else if (this.mapFields.indexOf(metaField) !== -1) {
+      let key = prompt("Enter name of first attribute") as string;
+      if (!key) {
+        return;
+      }
+      this.metaData[metaField] = [{ [key.toLowerCase()]: "" }];
+    }
+    else {
+      this.metaData[metaField] = "";
+    }
+
     this.updatePreview();
+  }
+
+  addSimpleObjectListItem(list: any[]) {
+    let key = prompt("Enter name of new attribute") as string;
+    if (!key) {
+      return;
+    }
+    list.push({ [key.toLowerCase()]: "" })
+  }
+  removeSimpleObjectListItem(metaDataKey: string, object: any) {
+    let list = this.metaData[metaDataKey];
+    const index = list.indexOf(object);
+    if (index >= 0) {
+      list.splice(index, 1);
+    }
+    if (list.length === 0) {
+      delete this.metaData[metaDataKey];
+    }
   }
 
   updatePreview() {
