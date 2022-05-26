@@ -23,7 +23,7 @@ export class MintFormComponent implements OnInit {
   static globalCounter = 0;
 
   counter!: number;
-  availableMetaFields: string[] = ['description', 'type', 'traits', 'attributes', 'artist', 'publisher', 'copyright', 'homepage', 'url'];
+  availableMetaFields: string[] = ['description', 'type', 'traits', 'attributes', 'artist', 'publisher', 'copyright', 'homepage', 'website', 'url', 'twitter', 'discord'];
   requiredMetaFields: string[] = ['image', 'name', 'mediaType'];
   lockedMetaFields: string[] = ['mediaType', 'image'];
   listFields: string[] = [];
@@ -101,7 +101,7 @@ export class MintFormComponent implements OnInit {
       if (!key) {
         return;
       }
-      this.metaData[metaField] = [{ [key.toLowerCase()]: "" }];
+      this.metaData[metaField] = [{ [key]: "" }];
     }
     else {
       this.metaData[metaField] = "";
@@ -115,7 +115,7 @@ export class MintFormComponent implements OnInit {
     if (!key) {
       return;
     }
-    list.push({ [key.toLowerCase()]: "" })
+    list.push({ [key]: "" })
   }
   removeSimpleObjectListItem(metaDataKey: string, object: any) {
     let list = this.metaData[metaDataKey];
