@@ -23,11 +23,11 @@ export class MintFormComponent implements OnInit {
   static globalCounter = 0;
 
   counter!: number;
-  availableMetaFields: string[] = ['description', 'type', 'traits', 'attributes', 'artist', 'publisher', 'copyright', 'homepage', 'website', 'url', 'twitter', 'discord'];
+  static availableMetaFields: string[] = ['project', 'description', 'type', 'artist', 'publisher', 'copyright', 'homepage', 'website', 'url', 'twitter', 'discord', 'traits', 'attributes'];
   requiredMetaFields: string[] = ['image', 'name', 'mediaType'];
   lockedMetaFields: string[] = ['mediaType', 'image'];
-  listFields: string[] = [];
-  mapFields: string[] = ['traits', 'attributes'];
+  listFields: string[] = ['traits'];
+  mapFields: string[] = ['attributes'];
   uploadProgress: number = 0;
   metaData: any = {};
   previewUrl = ""
@@ -108,6 +108,19 @@ export class MintFormComponent implements OnInit {
     }
 
     this.updatePreview();
+  }
+
+  get availableMetaFields() {
+    return MintFormComponent.availableMetaFields;
+  }
+
+  addNewMetaField() {
+    let key = prompt("Enter name of new attribute") as string;
+    if (!key) {
+      return;
+    }
+    this.metaData[key] = "";
+    MintFormComponent.availableMetaFields.push(key)
   }
 
   addSimpleObjectListItem(list: any[]) {

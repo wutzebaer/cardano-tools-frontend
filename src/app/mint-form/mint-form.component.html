@@ -125,8 +125,11 @@
   <mat-card-actions>
     <div fxLayout="row">
       <mat-chip-list #chipList multiple>
-        <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)" [selected]="!!metaData[metaField]">
+        <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)" [selected]="metaData[metaField]">
           {{metaField | titlecase}}
+        </mat-chip>
+        <mat-chip (click)="addNewMetaField()" matTooltip="Add new field with custom name" color="accent">
+          <mat-icon>add</mat-icon> Add attribute
         </mat-chip>
       </mat-chip-list>
     </div>
