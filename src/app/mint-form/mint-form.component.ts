@@ -23,7 +23,7 @@ export class MintFormComponent implements OnInit {
   static globalCounter = 0;
 
   counter!: number;
-  static availableMetaFields: string[] = ['project', 'description', 'type', 'artist', 'publisher', 'copyright', 'homepage', 'website', 'url', 'twitter', 'discord', 'traits', 'attributes'];
+  static availableMetaFields: string[] = ['project', 'description', 'type', 'artist', 'publisher', 'copyright', 'homepage', 'website', 'url', 'twitter', 'discord'];
   requiredMetaFields: string[] = ['image', 'name', 'mediaType'];
   lockedMetaFields: string[] = ['mediaType', 'image'];
   listFields: string[] = ['traits'];

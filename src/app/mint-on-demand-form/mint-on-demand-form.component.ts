@@ -39,6 +39,7 @@ export class MintOnDemandFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.serializeMetaData();
+    this.deserializeMetaData();
     this.whitelistString = this.drop.whitelist.join('\n')
   }
 
@@ -63,20 +64,41 @@ export class MintOnDemandFormComponent implements OnInit {
     this.nftsString = JSON.stringify(embeddedMetadata, null, 3);
   }
 
-  checkIfDuplicateExists(arr: any[]) {
-    return new Set(arr).size !== arr.length
+  checkIfDuplicateExists(array: string[]) {
+    let usedNames: string[] = [];
+    for (let index = 0; index < array.length; index++) {
+      const element = array[index];
+      if (usedNames.indexOf(element) !== -1) {
+        throw new Error("Duplicate AssetName: " + element);
+      }
+      usedNames.push(element)
+    }
+  }
+
+  checkStringLengthRecursive(object: any) {
+    for (const key in object) {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        const element = object[key];
+        if (typeof element === 'string') {
+          if (element.length > 64) {
+            throw new Error("String longer than 64: " + element);
+          }
+        } else if (typeof element === 'object') {
+          this.checkStringLengthRecursive(element);
+        }
+      }
+    }
   }
 
   deserializeMetaData() {
     try {
       let parsed: DropNftTransient[] = JSON.parse(this.nftsString);
       parsed.forEach(dropNft => {
+        this.checkStringLengthRecursive(parsed.map(p => dropNft.metadata));
         dropNft.metadata = JSON.stringify(dropNft.metadata, null, 3);
       });
 
-      if (this.checkIfDuplicateExists(parsed.map(p => p.assetName))) {
-        throw new Error("Duplicate AssetNames!");
-      }
+      this.checkIfDuplicateExists(parsed.map(p => p.assetName));
 
       this.drop.dropNfts = parsed;
       this.parseError = '';
