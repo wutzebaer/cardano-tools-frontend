@@ -14,6 +14,7 @@
       <a mat-list-item [routerLink]="'/burn-address'"> Burn address </a>
       <a mat-list-item [routerLink]="'/register'"> Register tokens </a>
       <a mat-list-item [routerLink]="'/reward-stakers'"> Reward stakers </a>
+      <a mat-list-item href="https://scp-anomaly.io" target="_blank" style="font-family: uwch">scp-anomaly.io</a>
       <!--
       <a mat-list-item [routerLink]="'/mint'" matTooltip="Comming soon"> Burn </a>
       <a mat-list-item [routerLink]="'/mint'" matTooltip="Comming soon"> Wallet </a>
@@ -38,8 +39,29 @@
     </mat-toolbar>
     <div class="main-content" fxLayout="column" fxLayoutGap="10px">
       <mat-card *ngIf="false" class="notice">Support cardano-tools.io by voting in FUND7: <a target="_blank" href="https://cardano.ideascale.com/a/dtd/Cardano-features-for-everyone/380919-48088">Cardano features for everyone</a></mat-card>
-      <mat-card *ngIf="false" class="warn"><mat-icon>construction</mat-icon>cardano-tools.io has currently technical problems, it might take several hours until balances are up to date<mat-icon>construction</mat-icon></mat-card>
-      <a *ngIf="true" href="https://scp-anomaly.io" target="_blank"><mat-card class="scp crt"><img src="/assets/logo_scp.png"> Support cardano-tools by adopting an SCP at scp-anomaly.io <img src="/assets/logo_scp.png"></mat-card></a>
+      <mat-card *ngIf="false" class="warn">
+        <mat-icon>construction</mat-icon>cardano-tools.io has currently technical problems, it might take several hours until balances are up to date<mat-icon>construction</mat-icon>
+      </mat-card>
+      <a *ngIf="false" href="https://scp-anomaly.io" target="_blank">
+        <mat-card class="scp crt"><img src="/assets/logo_scp.png"> Support cardano-tools by adopting an SCP at scp-anomaly.io <img src="/assets/logo_scp.png"></mat-card>
+      </a>
+
+      <div *ngIf="true" class="support" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center" fxHide.lt-md="true">
+        <a href="https://charly-token.io/" target="_blank"><img src="/assets/charly.jpg"></a>
+        <div>Join <a href="https://adapools.org/pool/3bd3996595321d951291b11e1331061c5d8659d9e69390536dfc922c" target="_blank">EURO-Pool</a> to support cardano-tools and earn additional <a href="https://taptools.io/projects?assetName=CavalierKingCharles&policyID=89267e9a35153a419e1b8ffa23e511ac39ea4e3b00452e9d500f2982" target="_blank">$Charly</a> and <a href="https://taptools.io/projects?assetName=WOLF&policyID=1a71dc14baa0b4fcfb34464adc6656d0e562571e2ac1bc990c9ce5f6" target="_blank">$WOLF</a> tokens on taptools.io</div>
+        <a href="https://www.wolfcardano.io/" target="_blank"><img src="/assets/wolf.jpg"></a>
+      </div>
+
+      <div *ngIf="true" fxHide.gt-sm="true">
+        <div class="support" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+          <a href="https://charly-token.io/" target="_blank"><img src="/assets/charly.jpg"></a>
+          <a href="https://www.wolfcardano.io/" target="_blank"><img src="/assets/wolf.jpg"></a>
+        </div>
+        <div class="support" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+          <div>Join <a href="https://adapools.org/pool/3bd3996595321d951291b11e1331061c5d8659d9e69390536dfc922c" target="_blank">EURO-Pool</a> to support cardano-tools and earn additional <a href="https://taptools.io/projects?assetName=CavalierKingCharles&policyID=89267e9a35153a419e1b8ffa23e511ac39ea4e3b00452e9d500f2982" target="_blank">$Charly</a> and <a href="https://taptools.io/projects?assetName=WOLF&policyID=1a71dc14baa0b4fcfb34464adc6656d0e562571e2ac1bc990c9ce5f6" target="_blank">$WOLF</a> tokens on taptools.io</div>
+        </div>
+      </div>
+
       <router-outlet></router-outlet>
     </div>
     <app-footer fxFlexOffset="auto"></app-footer>

@@ -31,15 +31,26 @@
 }
 
 .notice {
-  background-color:#dde7ff;
+  background-color: #dde7ff;
   text-align: center;
   font-size: x-large;
 }
 
 .warn {
-  background-color:#ffcc00;
+  background-color: #ffcc00;
   text-align: center;
   font-size: x-large;
+}
+
+.support {
+  text-align: center;
+  font-size: large;
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 10px;
+  }
 }
 
 @font-face {
@@ -69,33 +80,36 @@
   min-height: 64px;
 }
 
-
 .crt {
-	position: relative;
+  position: relative;
 }
 
 .crt:after {
-	content: '';
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	z-index: 900;
-	background: repeating-linear-gradient(0deg, #111 0px, #111 1px, transparent 2px,
-		transparent 5px);
-	background-size: 100% 5px;
-	animation: lines 2s linear infinite;
-	opacity: 0.3;
-	pointer-events: none;
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 900;
+  background: repeating-linear-gradient(
+    0deg,
+    #111 0px,
+    #111 1px,
+    transparent 2px,
+    transparent 5px
+  );
+  background-size: 100% 5px;
+  animation: lines 2s linear infinite;
+  opacity: 0.3;
+  pointer-events: none;
 }
 
-
- @keyframes lines {
-   0% {
-      background-position:0px 0px;
-   }
-   100% {
-      background-position:0px 25px;
-   }
+@keyframes lines {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px 25px;
+  }
 }
