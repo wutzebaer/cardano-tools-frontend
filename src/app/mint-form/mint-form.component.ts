@@ -164,7 +164,7 @@ export class MintFormComponent implements OnInit {
 
   appendFile(file: File) {
 
-    if (file?.size as number > 52428800 * 2) {
+    if (file?.size as number > 104857600) {
       alert("Max 100mb");
       return;
     }
