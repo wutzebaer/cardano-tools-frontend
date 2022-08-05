@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { EpochStakePosition } from '../model/epochStakePosition';
+import { EpochStakesRequest } from '../model/epochStakesRequest';
 import { PoolInfo } from '../model/poolInfo';
 import { Transaction } from '../model/transaction';
 
@@ -123,20 +124,21 @@ export class StakeRewardRestInterfaceService {
     /**
      * 
      * 
+     * @param body 
      * @param key 
      * @param poolHash 
      * @param epoch 
-     * @param tip 
-     * @param minStake 
-     * @param excludePledge 
-     * @param message 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, message: string, observe?: 'body', reportProgress?: boolean): Observable<Array<EpochStakePosition>>;
-    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, message: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<EpochStakePosition>>>;
-    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, message: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<EpochStakePosition>>>;
-    public getEpochStakes(key: string, poolHash: string, epoch: number, tip: boolean, minStake: number, excludePledge: boolean, message: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getEpochStakes(body: EpochStakesRequest, key: string, poolHash: string, epoch: number, observe?: 'body', reportProgress?: boolean): Observable<Array<EpochStakePosition>>;
+    public getEpochStakes(body: EpochStakesRequest, key: string, poolHash: string, epoch: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<EpochStakePosition>>>;
+    public getEpochStakes(body: EpochStakesRequest, key: string, poolHash: string, epoch: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<EpochStakePosition>>>;
+    public getEpochStakes(body: EpochStakesRequest, key: string, poolHash: string, epoch: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getEpochStakes.');
+        }
 
         if (key === null || key === undefined) {
             throw new Error('Required parameter key was null or undefined when calling getEpochStakes.');
@@ -148,36 +150,6 @@ export class StakeRewardRestInterfaceService {
 
         if (epoch === null || epoch === undefined) {
             throw new Error('Required parameter epoch was null or undefined when calling getEpochStakes.');
-        }
-
-        if (tip === null || tip === undefined) {
-            throw new Error('Required parameter tip was null or undefined when calling getEpochStakes.');
-        }
-
-        if (minStake === null || minStake === undefined) {
-            throw new Error('Required parameter minStake was null or undefined when calling getEpochStakes.');
-        }
-
-        if (excludePledge === null || excludePledge === undefined) {
-            throw new Error('Required parameter excludePledge was null or undefined when calling getEpochStakes.');
-        }
-
-        if (message === null || message === undefined) {
-            throw new Error('Required parameter message was null or undefined when calling getEpochStakes.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (tip !== undefined && tip !== null) {
-            queryParameters = queryParameters.set('tip', <any>tip);
-        }
-        if (minStake !== undefined && minStake !== null) {
-            queryParameters = queryParameters.set('minStake', <any>minStake);
-        }
-        if (excludePledge !== undefined && excludePledge !== null) {
-            queryParameters = queryParameters.set('excludePledge', <any>excludePledge);
-        }
-        if (message !== undefined && message !== null) {
-            queryParameters = queryParameters.set('message', <any>message);
         }
 
         let headers = this.defaultHeaders;
@@ -193,11 +165,16 @@ export class StakeRewardRestInterfaceService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
+            'application/json'
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
-        return this.httpClient.request<Array<EpochStakePosition>>('get',`${this.basePath}/api/rewards/${encodeURIComponent(String(key))}/${encodeURIComponent(String(poolHash))}/${encodeURIComponent(String(epoch))}`,
+        return this.httpClient.request<Array<EpochStakePosition>>('post',`${this.basePath}/api/rewards/${encodeURIComponent(String(key))}/${encodeURIComponent(String(poolHash))}/${encodeURIComponent(String(epoch))}`,
             {
-                params: queryParameters,
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

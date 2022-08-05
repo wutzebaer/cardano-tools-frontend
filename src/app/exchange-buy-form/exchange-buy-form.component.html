@@ -43,7 +43,7 @@
     </div>
 
     <p *ngIf="offer.transaction">
-      This token has been sold: <a href="https://explorer.cardano.org/en/transaction?id={{offer.transaction.txId}}" target="_blank">{{offer.transaction.txId}}</a>
+      This token has been sold: <a href="https://cardanoscan.io/search?filter=all&value={{offer.transaction.txId}}" target="_blank">{{offer.transaction.txId}}</a>
       <button class="inline-button" mat-icon-button (click)="copyToClipboard(offer.transaction.txId)">
         <mat-icon>content_copy</mat-icon>
       </button>

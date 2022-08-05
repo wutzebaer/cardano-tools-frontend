@@ -7,6 +7,7 @@ import { AccountRestInterfaceService } from './api/accountRestInterface.service'
 import { DropRestInterfaceService } from './api/dropRestInterface.service';
 import { ExchangeRestInterfaceService } from './api/exchangeRestInterface.service';
 import { MintRestInterfaceService } from './api/mintRestInterface.service';
+import { QueryApiService } from './api/queryApi.service';
 import { RegistrationRestInterfaceService } from './api/registrationRestInterface.service';
 import { StakeRewardRestInterfaceService } from './api/stakeRewardRestInterface.service';
 import { TokenRestInterfaceService } from './api/tokenRestInterface.service';
@@ -20,6 +21,7 @@ import { TokenRestInterfaceService } from './api/tokenRestInterface.service';
     DropRestInterfaceService,
     ExchangeRestInterfaceService,
     MintRestInterfaceService,
+    QueryApiService,
     RegistrationRestInterfaceService,
     StakeRewardRestInterfaceService,
     TokenRestInterfaceService ]

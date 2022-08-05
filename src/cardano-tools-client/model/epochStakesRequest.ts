@@ -10,10 +10,9 @@
  * Do not edit the class manually.
  */
 
-export interface EpochStakePosition { 
-    amount: number;
-    stakeAddress: string;
-    address: string;
-    outputs: { [key: string]: number; };
-    share: number;
+export interface EpochStakesRequest { 
+    tip?: boolean;
+    minStake?: number;
+    message?: string;
+    excludedStakers?: Array<string>;
 }

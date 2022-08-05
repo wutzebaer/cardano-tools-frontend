@@ -6,7 +6,7 @@ import { Submission } from './../fund-account/fund-account.component';
 import { StakeRewardRestInterfaceService } from './../../cardano-tools-client/api/stakeRewardRestInterface.service';
 import { Subscription, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { AccountService } from './../account.service';
-import { Transaction, MintOrderSubmission, AccountPrivate, TokenData, MintRestInterfaceService } from 'src/cardano-tools-client';
+import { Transaction, MintOrderSubmission, AccountPrivate, TokenData, MintRestInterfaceService, EpochStakesRequest } from 'src/cardano-tools-client';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -26,11 +26,10 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   @ViewChild('rewardForm') rewardForm!: NgForm;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource: MatTableDataSource<EpochStakePosition> = new MatTableDataSource();
-  displayedColumns = ['stakeAddress', 'rewardAddress', 'amount', 'share', 'rewards']
+  displayedColumns = ['stakeAddress', 'rewardAddress', 'amount', 'share', 'rewards', 'exclude']
   poolHash: string = '';
   epoch: number = CardanoUtils.currentEpoch();
   epochStakes: EpochStakePosition[] = [];
-  totalStake = 0;
   rewards: { [key: string]: { [key: string]: number; }; } = {};
   accountSubscription: Subscription
   account?: AccountPrivate;
@@ -38,8 +37,10 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   oldFunds?: number;
   poolList?: PoolInfo[];
   filteredOptions!: Subject<PoolInfo[]>;
-  excludePledge = true;
   message = '';
+  excludedStakersCheckboxes: { [key: string]: boolean; } = {};
+  isValid = true;
+
 
   mintOrderSubmission: Submission = {
     tip: true,
@@ -71,9 +72,16 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
       this.account = account
       if (this.oldFunds !== account.address.balance && this.rewardForm?.valid) {
         this.oldFunds = account.address.balance;
-        this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, this.mintOrderSubmission.tip, this.minStakeAda * 1_000_000, this.excludePledge, this.message).subscribe(result => {
+
+        let excludedStakers: string[] = Object.entries(this.excludedStakersCheckboxes).filter(entry => entry[1]).map(entry => entry[0]);
+        let request: EpochStakesRequest = {
+          tip: this.mintOrderSubmission.tip,
+          minStake: this.minStakeAda * 1_000_000,
+          message: this.message,
+          excludedStakers: excludedStakers
+        };
+        this.stakeRewardRestInterfaceService.getEpochStakes(request, this.account!.key, this.poolHash, this.epoch).subscribe(result => {
           this.epochStakes = result
-          this.totalStake = result.map(r => r.amount).reduce((p, c) => p + c, 0)
           this.dataSource.data = result;
           this.dataSource.sort = this.sort;
           //this.buildRewards();
@@ -90,6 +98,10 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.accountSubscription.unsubscribe();
+  }
+
+  invalidate() {
+    this.isValid = false;
   }
 
   refresh() {
@@ -110,6 +122,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   buildTransaction() {
     this.stakeRewardRestInterfaceService.buildTransaction(this.epochStakes, this.message, this.account!.key).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
+      this.isValid = true;
     })
   }
 

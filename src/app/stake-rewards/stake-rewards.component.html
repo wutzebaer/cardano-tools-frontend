@@ -18,7 +18,7 @@
                                 <mat-label>Ticker or pool-hash (pool123abc...)</mat-label>
                                 <input matInput name="poolHash" required (change)="refresh()" [(ngModel)]="poolHash" [matAutocomplete]="auto" (ngModelChange)="filter()" [minlength]="56" [maxLength]="56">
 
-                                <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="refresh()">
+                                <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
                                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option.hash">
                                         {{option.ticker}} ({{option.hash}})
                                     </mat-option>
@@ -42,10 +42,6 @@
                             </mat-form-field>
                         </div>
 
-                        <p>
-                            <mat-checkbox name="tip" [(ngModel)]="excludePledge" (change)="refresh()">Exclude pledge</mat-checkbox>
-                        </p>
-
                         <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort matSortActive="amount" matSortDirection="desc" style="margin-bottom: 20px;">
 
                             <ng-container matColumnDef="stakeAddress">
@@ -65,7 +61,7 @@
 
                             <ng-container matColumnDef="share">
                                 <th mat-header-cell *matHeaderCellDef> Share </th>
-                                <td mat-cell *matCellDef="let element"> {{element.amount/totalStake | number : '1.0-6'}} </td>
+                                <td mat-cell *matCellDef="let element"> {{element.share | number : '1.0-6'}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="rewards">
@@ -77,6 +73,13 @@
                                 </td>
                             </ng-container>
 
+                            <ng-container matColumnDef="exclude">
+                                <th mat-header-cell *matHeaderCellDef> Exclude </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-checkbox [(ngModel)]="excludedStakersCheckboxes[element.stakeAddress]" name="exclude_checkbox_{{element.stakeAddress}}" (change)="invalidate()"></mat-checkbox>
+                                </td>
+                            </ng-container>
+
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         </table>
@@ -84,7 +87,7 @@
                         <div>
                             <mat-form-field fxFlex appearance="outline" fxFlex="100%">
                                 <mat-label>Include a message for your delegators</mat-label>
-                                <input matInput name="message" (change)="refresh()" [(ngModel)]="message" [maxLength]="64">
+                                <input matInput name="message" (change)="invalidate()" [(ngModel)]="message" [maxLength]="64">
                             </mat-form-field>
                         </div>
 
@@ -103,7 +106,7 @@
                         <mat-icon>refresh</mat-icon>
                         <span fxHide.lt-sm> Refresh</span>
                     </button>
-                    <button mat-raised-button color="primary" [disabled]="fundForm.invalid" fxFlex.lt-sm (click)="submit()" [disabled]="!epochStakes.length">
+                    <button mat-raised-button color="primary" fxFlex.lt-sm (click)="submit()" [disabled]="!epochStakes.length || !isValid || fundForm.invalid">
                         <mat-icon>podcasts</mat-icon>
                         <span fxHide.lt-sm> Distribute</span>
                     </button>
