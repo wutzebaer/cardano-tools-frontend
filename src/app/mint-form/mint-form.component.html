@@ -74,7 +74,7 @@
         <!-- Simple Metafield-->
         <mat-form-field *ngIf="isSimpleValue(metaData[key])" appearance="outline">
           <mat-label>{{toString(key) | titlecase}}</mat-label>
-          <input matInput name="{{key}}{{counter}}" maxlength="64" [(ngModel)]="metaData[key]" (input)="updatePreview()" [required]="requiredMetaFields.includes(key) && isNft" [readonly]="lockedMetaFields.includes(key)">
+          <input matInput name="{{key}}{{counter}}" [appMaxBytesValidator]="64" maxlength="64" [(ngModel)]="metaData[key]" (input)="updatePreview()" [required]="requiredMetaFields.includes(key) && isNft" [readonly]="lockedMetaFields.includes(key)">
           <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])" type="button">
             <mat-icon>auto_fix_high</mat-icon>
           </button>
@@ -93,7 +93,7 @@
 
           <mat-form-field *ngFor="let object of metaData[key]" appearance="fill">
             <mat-label>{{Object.keys(object)[0] | titlecase}}</mat-label>
-            <input matInput name="{{key}}{{Object.keys(object)[0]}}{{counter}}key" maxlength="64" [(ngModel)]="object[Object.keys(object)[0]]">
+            <input matInput name="{{key}}{{Object.keys(object)[0]}}{{counter}}key" [appMaxBytesValidator]="64" maxlength="64" [(ngModel)]="object[Object.keys(object)[0]]">
             <button mat-icon-button matSuffix matTooltip="Remove this attribute" (click)="removeSimpleObjectListItem(key, object)" type="button">
               <mat-icon>remove</mat-icon>
             </button>

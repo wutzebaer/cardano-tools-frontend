@@ -1,3 +1,4 @@
+import { MaxBytesValidatorDirective } from './../max-bytes-validator.directive';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { LayoutModule } from '@angular/cdk/layout';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -81,7 +82,7 @@ import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent, ExchangeSellFormComponent, TokenDetailsComponent, ExchangeBuyFormComponent, MintPolicyFormComponent, PolicySelectorComponent, RoyaltiesCip27MintComponent, RoyaltiesCip27MintSuccessComponent, BurnTokensComponent, StakeRewardsComponent, MintOnDemandComponent, MintOnDemandFormComponent, MintOnDemandInstructionsComponent
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MaxBytesValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent, ExchangeSellFormComponent, TokenDetailsComponent, ExchangeBuyFormComponent, MintPolicyFormComponent, PolicySelectorComponent, RoyaltiesCip27MintComponent, RoyaltiesCip27MintSuccessComponent, BurnTokensComponent, StakeRewardsComponent, MintOnDemandComponent, MintOnDemandFormComponent, MintOnDemandInstructionsComponent
   ],
   imports: [
     BrowserModule,

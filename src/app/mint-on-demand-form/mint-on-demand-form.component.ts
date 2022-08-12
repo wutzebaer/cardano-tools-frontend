@@ -80,7 +80,7 @@ export class MintOnDemandFormComponent implements OnInit {
       if (Object.prototype.hasOwnProperty.call(object, key)) {
         const element = object[key];
         if (typeof element === 'string') {
-          if (element.length > 64) {
+          if (Buffer.from(element).length > 64) {
             throw new Error("String longer than 64: " + element);
           }
         } else if (typeof element === 'object') {

@@ -19,7 +19,7 @@ export class MintFormAdvancedComponent implements OnInit {
 
   apply() {
     try {
-      JSON.parse(this.metaDataJson)
+      this.checkStringLengthRecursive(JSON.parse(this.metaDataJson));
       this.dialogRef.close(this.metaDataJson)
     } catch (error) {
       alert(error)
@@ -28,9 +28,27 @@ export class MintFormAdvancedComponent implements OnInit {
 
   format() {
     try {
-      this.metaDataJson = JSON.stringify(JSON.parse(this.metaDataJson), null, 3)
+      const parsed = JSON.parse(this.metaDataJson);
+      this.checkStringLengthRecursive(parsed);
+      this.metaDataJson = JSON.stringify(parsed, null, 3)
     } catch (error) {
       alert(error)
+    }
+  }
+
+
+  checkStringLengthRecursive(object: any) {
+    for (const key in object) {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        const element = object[key];
+        if (typeof element === 'string') {
+          if (Buffer.from(element).length > 64) {
+            throw new Error("String longer than 64: " + element);
+          }
+        } else if (typeof element === 'object') {
+          this.checkStringLengthRecursive(element);
+        }
+      }
     }
   }
 
