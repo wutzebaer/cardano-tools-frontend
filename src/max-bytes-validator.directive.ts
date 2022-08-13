@@ -11,8 +11,7 @@ export class MaxBytesValidatorDirective implements Validator {
   appMaxBytesValidator!: number;
 
   validate(control: AbstractControl): ValidationErrors | null {
-    console.log(Buffer.from(control.value as string).length)
-    return (Buffer.from(control.value as string).length > this.appMaxBytesValidator) ? { appMaxBytesValidator: true } : null;
+    return (control.value && Buffer.from(control.value as string).length > this.appMaxBytesValidator) ? { appMaxBytesValidator: true } : null;
   }
 
 }
