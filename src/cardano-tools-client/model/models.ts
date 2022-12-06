@@ -1,4 +1,5 @@
 export * from './accountPrivate';
+export * from './accountStatementRow';
 export * from './address';
 export * from './addressPrivate';
 export * from './drop';
@@ -16,6 +17,11 @@ export * from './poolInfo';
 export * from './projectMetadata';
 export * from './publicDropInfo';
 export * from './registrationGenerateTokenRegistrationBody';
+export * from './snapshotRequest';
+export * from './snapshotRequestPolicy';
+export * from './snapshotResult';
+export * from './snapshotResultRow';
+export * from './snapshotResultToken';
 export * from './stakePositionPrivate';
 export * from './tokenAmountByAddress';
 export * from './tokenData';

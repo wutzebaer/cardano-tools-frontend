@@ -3,7 +3,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { LayoutModule } from '@angular/cdk/layout';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -76,13 +76,16 @@ import { BurnTokensComponent } from './burn-tokens/burn-tokens.component';
 import { StakeRewardsComponent } from './stake-rewards/stake-rewards.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MintOnDemandComponent } from './mint-on-demand/mint-on-demand.component';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MintOnDemandFormComponent } from './mint-on-demand-form/mint-on-demand-form.component';
-import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions/mint-on-demand-instructions.component'; 
+import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions/mint-on-demand-instructions.component';
+import { WalletStatementComponent } from './wallet-statement/wallet-statement.component';
+import { AdaPipe } from './ada.pipe';
+import { registerLocaleData } from '@angular/common';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MaxBytesValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent, ExchangeSellFormComponent, TokenDetailsComponent, ExchangeBuyFormComponent, MintPolicyFormComponent, PolicySelectorComponent, RoyaltiesCip27MintComponent, RoyaltiesCip27MintSuccessComponent, BurnTokensComponent, StakeRewardsComponent, MintOnDemandComponent, MintOnDemandFormComponent, MintOnDemandInstructionsComponent
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MaxBytesValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent, ExchangeSellFormComponent, TokenDetailsComponent, ExchangeBuyFormComponent, MintPolicyFormComponent, PolicySelectorComponent, RoyaltiesCip27MintComponent, RoyaltiesCip27MintSuccessComponent, BurnTokensComponent, StakeRewardsComponent, MintOnDemandComponent, MintOnDemandFormComponent, MintOnDemandInstructionsComponent, WalletStatementComponent, AdaPipe
   ],
   imports: [
     BrowserModule,
@@ -133,6 +136,10 @@ import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions
     {
       provide: BASE_PATH,
       useValue: '.'
+    },
+    {
+      provide: LOCALE_ID,
+      useValue: navigator.language
     }
   ],
   bootstrap: [AppComponent]

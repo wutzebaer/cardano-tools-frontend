@@ -1,8 +1,8 @@
 import { LocalStorageService } from './local-storage.service';
 import { AccountService } from './account.service';
 import { AjaxInterceptor } from './ajax.interceptor';
-import { Component, OnInit } from '@angular/core';
-import { Location, PopStateEvent } from '@angular/common';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { Location, PopStateEvent, registerLocaleData } from '@angular/common';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -16,7 +16,13 @@ export class AppComponent implements OnInit {
   title = 'cardano-tools-frontend';
   ajaxStatus: boolean = false;
 
-  constructor(private ajaxInterceptor: AjaxInterceptor, private location: Location, private dialogRef: MatDialog, private router: Router, private activatedRoute: ActivatedRoute, private accountService: AccountService, private localStorageService: LocalStorageService) {
+  constructor(@Inject(LOCALE_ID) private locale: string, private ajaxInterceptor: AjaxInterceptor, private location: Location, private dialogRef: MatDialog, private router: Router, private activatedRoute: ActivatedRoute, private accountService: AccountService, private localStorageService: LocalStorageService) {
+
+    import(
+      /* webpackInclude: /(.*)\.js$/ */
+      `@angular/common/locales/${locale.substring(0, 2)}.js`
+    ).then(module => registerLocaleData(module.default))
+
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.ajaxStatus = ajaxStatus);
 
     // push history state when a dialog is opened

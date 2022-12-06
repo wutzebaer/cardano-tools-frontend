@@ -100,8 +100,7 @@ export class BurnTokensComponent implements OnInit, OnDestroy {
       targetAddress: this.account!.fundingAddresses[0],
       tip: false,
       pin: false,
-      policyId: this.policy!.policyId,
-      metaData: '{}'
+      policyId: this.policy!.policyId
     };
 
     this.api.buildMintTransaction(mintOrderSubmission, this.account!.key).subscribe({

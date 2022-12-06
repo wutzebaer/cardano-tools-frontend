@@ -1,3 +1,4 @@
+import { WalletStatementComponent } from './wallet-statement/wallet-statement.component';
 import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions/mint-on-demand-instructions.component';
 import { MintOnDemandComponent } from './mint-on-demand/mint-on-demand.component';
 import { StakeRewardsComponent } from './stake-rewards/stake-rewards.component';
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'reward-stakers', component: StakeRewardsComponent },
   { path: 'mint-on-demand', component: MintOnDemandComponent },
   { path: 'drop/:prettyUrl', component: MintOnDemandInstructionsComponent },
+  { path: 'wallet-statement', component: WalletStatementComponent }
 ];
 
 @NgModule({

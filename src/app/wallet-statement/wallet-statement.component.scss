@@ -1,0 +1,14 @@
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  .neg {
+    color: red;
+  }
+  .pos {
+    color: green;
+  }
+}

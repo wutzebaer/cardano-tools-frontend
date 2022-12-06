@@ -9,8 +9,10 @@ import { ExchangeRestInterfaceService } from './api/exchangeRestInterface.servic
 import { MintRestInterfaceService } from './api/mintRestInterface.service';
 import { QueryApiService } from './api/queryApi.service';
 import { RegistrationRestInterfaceService } from './api/registrationRestInterface.service';
+import { SnapshotRestInterfaceService } from './api/snapshotRestInterface.service';
 import { StakeRewardRestInterfaceService } from './api/stakeRewardRestInterface.service';
 import { TokenRestInterfaceService } from './api/tokenRestInterface.service';
+import { WalletStatementRestInterfaceService } from './api/walletStatementRestInterface.service';
 
 @NgModule({
   imports:      [],
@@ -23,8 +25,10 @@ import { TokenRestInterfaceService } from './api/tokenRestInterface.service';
     MintRestInterfaceService,
     QueryApiService,
     RegistrationRestInterfaceService,
+    SnapshotRestInterfaceService,
     StakeRewardRestInterfaceService,
-    TokenRestInterfaceService ]
+    TokenRestInterfaceService,
+    WalletStatementRestInterfaceService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {
