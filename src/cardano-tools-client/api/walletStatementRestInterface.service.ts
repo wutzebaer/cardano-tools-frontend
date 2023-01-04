@@ -59,16 +59,26 @@ export class WalletStatementRestInterfaceService {
      * 
      * 
      * @param stakeAddress 
+     * @param currency 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public accountStatement(stakeAddress: string, observe?: 'body', reportProgress?: boolean): Observable<Array<AccountStatementRow>>;
-    public accountStatement(stakeAddress: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AccountStatementRow>>>;
-    public accountStatement(stakeAddress: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AccountStatementRow>>>;
-    public accountStatement(stakeAddress: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public accountStatement(stakeAddress: string, currency: string, observe?: 'body', reportProgress?: boolean): Observable<Array<AccountStatementRow>>;
+    public accountStatement(stakeAddress: string, currency: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AccountStatementRow>>>;
+    public accountStatement(stakeAddress: string, currency: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AccountStatementRow>>>;
+    public accountStatement(stakeAddress: string, currency: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (stakeAddress === null || stakeAddress === undefined) {
             throw new Error('Required parameter stakeAddress was null or undefined when calling accountStatement.');
+        }
+
+        if (currency === null || currency === undefined) {
+            throw new Error('Required parameter currency was null or undefined when calling accountStatement.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (currency !== undefined && currency !== null) {
+            queryParameters = queryParameters.set('currency', <any>currency);
         }
 
         let headers = this.defaultHeaders;
@@ -88,6 +98,7 @@ export class WalletStatementRestInterfaceService {
 
         return this.httpClient.request<Array<AccountStatementRow>>('get',`${this.basePath}/api/statement/${encodeURIComponent(String(stakeAddress))}`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

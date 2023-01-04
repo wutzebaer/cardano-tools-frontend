@@ -5,8 +5,11 @@
 
     <p fxLayout="row" fxLayoutAlign="center" class="search-box" fxLayoutGap="10px">
       <mat-form-field appearance="outline" fxFlex="500px" fxFlex.lt-md="100%">
-        <input matInput placeholder="Enter your staking address stake1..." [(ngModel)]="myaddress">
+        <textarea placeholder="Enter your staking address stake1..." matInput [mat-autosize]="true" [matAutosizeMinRows]="1" [(ngModel)]="myaddress"></textarea>
       </mat-form-field>
+
+      
+
       <span>
         <button mat-raised-button color="accent" style="margin-top: 4px; height: 51px;" type="button" (click)="update()">
           <mat-icon>fast_forward</mat-icon>
@@ -14,67 +17,78 @@
       </span>
     </p>
 
+    <button mat-raised-button color="primary" (click)="exportAsExcel()">Export as Excel</button>
 
-    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z1" matSort matSortActive="timestamp" matSortDirection="desc" style="margin-bottom: 20px;">
+    <div #table>
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z1" matSort matSortActive="timestamp" matSortDirection="desc" style="margin-bottom: 20px;">
 
-      <ng-container matColumnDef="timestamp">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 125px;"> Timestamp </th>
-        <td mat-cell *matCellDef="let element">
-          {{element.timestamp | date : 'yyyy-MM-dd'}} {{element.timestamp | date : 'HH:mm'}}
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="timestamp">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 125px;"> Timestamp </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.timestamp | date : 'yyyy-MM-dd'}} {{element.timestamp | date : 'HH:mm'}}
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="epoch">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 75px;"> Epoch </th>
-        <td mat-cell *matCellDef="let element"> {{element.epoch}} </td>
-      </ng-container>
+        <ng-container matColumnDef="epoch">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 75px;"> Epoch </th>
+          <td mat-cell *matCellDef="let element"> {{element.epoch}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="txHash">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> TxHash </th>
-        <td mat-cell *matCellDef="let element" style="padding-right: 20px;">
-          <a href="https://cardanoscan.io/search?filter=all&value={{element.txHash}}" target="_blank">{{element.txHash}}</a>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="txHash">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> TxHash </th>
+          <td mat-cell *matCellDef="let element" style="padding-right: 20px;">
+            <a href="https://cardanoscan.io/search?filter=all&value={{element.txHash}}" target="_blank">{{element.txHash}}</a>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="withdrawn">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> withdrawn </th>
-        <td mat-cell *matCellDef="let element"> {{element.withdrawn | ada}} </td>
-      </ng-container>
+        <ng-container matColumnDef="withdrawn">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> withdrawn </th>
+          <td mat-cell *matCellDef="let element"> {{element.withdrawn | ada}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="rewards">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Rewards </th>
-        <td mat-cell *matCellDef="let element"> {{element.rewards | ada}} </td>
-      </ng-container>
+        <ng-container matColumnDef="rewards">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Rewards </th>
+          <td mat-cell *matCellDef="let element"> {{element.rewards | ada}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="out">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> out </th>
-        <td mat-cell *matCellDef="let element"> {{element.out | ada}} </td>
-      </ng-container>
+        <ng-container matColumnDef="out">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> out </th>
+          <td mat-cell *matCellDef="let element"> {{element.out | ada}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="in">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> in </th>
-        <td mat-cell *matCellDef="let element"> {{element.in | ada}} </td>
-      </ng-container>
+        <ng-container matColumnDef="in">
+          <th mat-header-cell *matHead erCellDef mat-sort-header> in </th>
+          <td mat-cell *matCellDef="let element"> {{element.in | ada}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="change">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Change </th>
-        <td mat-cell *matCellDef="let element" title="{{element.change}}">
-          <span [class.neg]="element.change < 0" [class.pos]="element.change >= 0">{{element.change | ada}}</span>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="change">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Change </th>
+          <td mat-cell *matCellDef="let element" title="{{element.change}}">
+            <span [class.neg]="element.change < 0" [class.pos]="element.change >= 0">{{element.change | ada}}</span>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="sum">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Balance </th>
-        <td mat-cell *matCellDef="let element" title="{{element.sum}}"> {{element.sum | ada}} </td>
-      </ng-container>
+        <ng-container matColumnDef="changeInFiat">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fiat </th>
+          <td mat-cell *matCellDef="let element" title="{{element.rate}}">
+            <span [class.neg]="element.changeInFiat < 0" [class.pos]="element.changeInFiat >= 0">{{element.changeInFiat | currency : 'EUR'}}</span>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="operations">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Operations </th>
-        <td mat-cell *matCellDef="let element"> {{element.operations}} </td>
-      </ng-container>
+        <ng-container matColumnDef="sum">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Balance </th>
+          <td mat-cell *matCellDef="let element" title="{{element.sum}}"> {{element.sum | ada}} </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+        <ng-container matColumnDef="operations">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Operations </th>
+          <td mat-cell *matCellDef="let element"> {{element.operations}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
   </div>
 </div>

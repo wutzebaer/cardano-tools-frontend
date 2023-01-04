@@ -19,6 +19,8 @@ export interface AccountStatementRow {
     out?: number;
     _in?: number;
     change?: number;
+    changeInFiat?: number;
+    rate?: number;
     sum?: number;
     operations?: Array<string>;
 }
