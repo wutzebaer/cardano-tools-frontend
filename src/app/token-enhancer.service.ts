@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TokenData, TokenRegistryMetadata, TokenOffer } from 'src/cardano-tools-client';
+import { TokenDetails } from 'src/dbsync-client';
 
-export interface TokenOfferWithParsedTokenData extends TokenOffer {
-  tokenDataParsed: TokenDataWithMetadata
-  receivedTokensParsed: TokenDataWithMetadata[]
-}
 
-export interface TokenDataWithMetadata extends TokenData {
-  metaData: any
-  tokenRegistryMetadata: TokenRegistryMetadata
+export interface TokenDataWithMetadata extends TokenDetails {
+  metaDataObject: any
+  //tokenRegistryMetadata: TokenRegistryMetadata
   mediaTypes: string[]
   mediaUrls: any[]
   lockDate?: Date
@@ -25,28 +21,12 @@ export class TokenEnhancerService {
 
   constructor(private sanitizer: DomSanitizer) { }
 
-  enhanceOffer(offer: TokenOffer): TokenOfferWithParsedTokenData {
-    const parsed: TokenOfferWithParsedTokenData = offer as TokenOfferWithParsedTokenData;
-    parsed.tokenDataParsed = this.enhanceToken(JSON.parse(offer.tokenData));
-    parsed.receivedTokensParsed = this.enhanceTokens(JSON.parse(parsed.address.tokensData));
-    return parsed;
-  }
-
-  enhanceTokens(tokens: TokenData[]): TokenDataWithMetadata[] {
-
-    let enhancedTokens = tokens.map(element => {
-      return this.enhanceToken(element);
-    });
-
-    return enhancedTokens
-  }
-
-  enhanceToken(element: TokenData): TokenDataWithMetadata {
+  enhanceToken(element: TokenDetails): TokenDataWithMetadata {
     // cast element
     let tokenDataWithMetadata = element as TokenDataWithMetadata;
     tokenDataWithMetadata.mediaTypes = []
     tokenDataWithMetadata.mediaUrls = []
-    tokenDataWithMetadata.metaData = {}
+    tokenDataWithMetadata.metaDataObject = {}
 
     // timestamp
     tokenDataWithMetadata.timestamp = new Date((1596491091 + (tokenDataWithMetadata.slotNo - 4924800)) * 1000)
@@ -54,35 +34,34 @@ export class TokenEnhancerService {
     // find lockdate
     tokenDataWithMetadata.locked = false;
     tokenDataWithMetadata.nft = false;
-    if (tokenDataWithMetadata.policy) {
-      let policy = JSON.parse(tokenDataWithMetadata.policy);
+
+    // parse policy
+    if (tokenDataWithMetadata.maPolicyScript) {
+      let policy = JSON.parse(tokenDataWithMetadata.maPolicyScript);
       if (policy.type === 'all') {
-        let minLockDate: Date | undefined = undefined;
+        let minLockDate: Date | undefined;
         policy.scripts?.forEach((script: any) => {
           if (script.type === 'before') {
             let slot = script.slot
             let lockDate = new Date((1596491091 + (slot - 4924800)) * 1000)
             if (!minLockDate || lockDate < minLockDate) {
-              minLockDate = lockDate
+              minLockDate = lockDate;
             }
           }
         });
         tokenDataWithMetadata.lockDate = minLockDate
-        if (minLockDate && minLockDate < new Date()) {
+        if (minLockDate && (minLockDate < new Date())) {
           tokenDataWithMetadata.locked = true;
         }
         tokenDataWithMetadata.nft = tokenDataWithMetadata.locked && tokenDataWithMetadata.totalSupply === 1;
       }
-      // let policy = JSON.parse(this.account.policy);
-      // let slot = policy.scripts[0].slot
-      // return new Date((1596491091 + (slot - 4924800)) * 1000)
     }
 
     // check if transaction metadata present
-    if (element.json && element.json !== 'null') {
+    if (element.metadata && element.metadata !== 'null') {
 
       // find metadata of token in transaction metadata
-      let metaData = JSON.parse(element.json)
+      let metaData = JSON.parse(element.metadata)
 
       if (Array.isArray(metaData['files'])) {
         metaData['files'].forEach(file => {
@@ -114,13 +93,13 @@ export class TokenEnhancerService {
       }
 
       // assign metadata
-      tokenDataWithMetadata.metaData = metaData;
+      tokenDataWithMetadata.metaDataObject = metaData;
     }
 
-    if (element.tokenRegistryMetadata?.logo) {
-      tokenDataWithMetadata.mediaTypes.push('image')
-      tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl("data:image/gif;base64," + element.tokenRegistryMetadata.logo))
-    }
+    /*     if (element.tokenRegistryMetadata?.logo) {
+          tokenDataWithMetadata.mediaTypes.push('image')
+          tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl("data:image/gif;base64," + element.tokenRegistryMetadata.logo))
+        } */
 
     // return enhanced
     return tokenDataWithMetadata;
@@ -129,7 +108,7 @@ export class TokenEnhancerService {
   ipfsProviders = [
     //'https://ipfs.io/ipfs/',
     //'https://ipfs.blockfrost.dev/ipfs/',
-    '/ipfs/',
+    'https://cardano-tools.io/ipfs/',
     //'https://infura-ipfs.io/ipfs/',
   ]
 
@@ -137,28 +116,21 @@ export class TokenEnhancerService {
     return this.ipfsProviders[Math.floor(Math.random() * this.ipfsProviders.length)]
   }
 
-  toIpfsUrl(ipfs: any) {
+  toIpfsUrl(ipfs: string) {
     if (Array.isArray(ipfs)) {
       ipfs = ipfs.join("")
     }
 
     if ((ipfs as string).startsWith('data:')) {
-      return this.sanitizer.bypassSecurityTrustResourceUrl(ipfs) as string;
-    }
-
-    return this.sanitizer.bypassSecurityTrustResourceUrl(this.pullRandomIpfsProvider() + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "")) as string;
-  }
-
-  toSimpleIpfsUrl(ipfs: any) {
-    if (Array.isArray(ipfs)) {
-      ipfs = ipfs.join("")
-    }
-
-    if ((ipfs as string).startsWith('data:')) {
+      // return this.sanitizer.bypassSecurityTrustResourceUrl(ipfs) as string;
       return ipfs;
     }
 
-    return this.pullRandomIpfsProvider() + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "").replace("https://ipfs.io/", "");
+    if ((ipfs as string).startsWith('http')) {
+      return ipfs;
+    }
+
+    return this.pullRandomIpfsProvider() + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "");
   }
 
   findAnyIpfsUrl(object: any): any {

@@ -31,7 +31,7 @@
         Cardano Tools
       </span>
       <span class="example-spacer"></span>
-      <span *ngIf="account?.address?.balance" class="slogan">Balance: {{account?.address?.balance!/1000000 | number: '1.0-6'}}&nbsp;₳</span>
+      <span *ngIf="funds" class="slogan">Balance: {{funds/1000000 | number: '1.0-6'}}&nbsp;₳</span>
       <span class="example-spacer"></span>
       <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="true || (isHandset$ | async)">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>

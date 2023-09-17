@@ -8,16 +8,11 @@
                 <p>Your Transaction has been submitted it might take serveral minutes until it appears in the blockchain</p>
 
                 <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-                    <b class="address"><a target="_blank" href="https://cardanoscan.io/search?filter=all&value={{mintTransaction.txId}}">{{mintTransaction.txId}}</a></b>
+                    <b class="address"><a target="_blank" href="https://cexplorer.io/search?query={{mintTransaction.txId}}">{{mintTransaction.txId}}</a></b>
                 </p>
 
-
-                <p *ngIf="!mintTransaction.mintOrderSubmission?.tip">
+                <p>
                     The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> has also be sent to your address
-                </p>
-
-                <p *ngIf="mintTransaction.mintOrderSubmission?.tip">
-                    The tip of <b>{{adaTip | number: '1.0-6'}}&nbsp;₳</b> has be sent to the [EURO]-Pool pledge. <b>Thank you!</b><br>
                 </p>
 
                 <!-- key -->

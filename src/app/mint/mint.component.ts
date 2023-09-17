@@ -10,8 +10,9 @@ import { AjaxInterceptor } from 'src/app/ajax.interceptor';
 import { MintFormAdvancedComponent } from 'src/app/mint-form-advanced/mint-form-advanced.component';
 import { MetaValue, MintFormComponent } from 'src/app/mint-form/mint-form.component';
 import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
-import { AccountPrivate, MintOrderSubmission, MintRestInterfaceService, TokenRestInterfaceService, Transaction } from 'src/cardano-tools-client';
 import { TokenDataWithMetadata, TokenEnhancerService } from '../token-enhancer.service';
+import { AccountPrivate, MintOrderSubmission, MintRestInterfaceService, Transaction } from 'src/cardano-tools-client';
+import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 
 @Component({
   selector: 'app-mint',
@@ -25,17 +26,21 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('mintForm') components!: QueryList<MintFormComponent>;
 
   account?: AccountPrivate;
+  funds?: number;
+  fundingAddresses?: string[];
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: Transaction;
   loading = false;
-  tokens: TokenDataWithMetadata[] = [];
+  tokens: TokenListItem[] = [];
+
   accountSubscription: Subscription
+  fundsSubscription: Subscription
+  fundingAddressesSubscription: Subscription
 
   initializeValues() {
     this.mintOrderSubmission = {
       tokens: [],
       targetAddress: '',
-      tip: false,
       pin: true,
       policyId: '',
       metaData: '{}'
@@ -59,7 +64,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     ajaxInterceptor: AjaxInterceptor,
     private dialog: MatDialog,
     private accountService: AccountService,
-    private tokenApi: TokenRestInterfaceService,
+    private tokenApi: RestHandlerService,
     private tokenEnhancerService: TokenEnhancerService,
     private router: Router
   ) {
@@ -67,11 +72,19 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initializeValues();
 
     this.accountSubscription = accountService.account.subscribe(account => {
-      let balanceChanged = !this.account || account.address.balance != this.account.address.balance || account.key != this.account.key;
       this.account = account;
-      if (account.fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
-        this.mintOrderSubmission.targetAddress = account.fundingAddresses[0];
+    });
+
+    this.fundingAddressesSubscription = accountService.fundingAddresses.subscribe(fundingAddresses => {
+      this.fundingAddresses = fundingAddresses;
+      if (fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) === -1) {
+        this.mintOrderSubmission.targetAddress = fundingAddresses[0];
       }
+    })
+
+    this.fundsSubscription = accountService.funds.subscribe(funds => {
+      let balanceChanged = funds != this.funds;
+      this.funds = funds;
       if (this.stepper?.selectedIndex > 0 && balanceChanged) {
         this.updateMintTransaction();
       }
@@ -83,6 +96,8 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.accountSubscription.unsubscribe();
+    this.fundsSubscription.unsubscribe();
+    this.fundingAddressesSubscription.unsubscribe();
   }
 
   changePolicyId(policyId: string) {
@@ -91,7 +106,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
       delete metaData['721'][this.mintOrderSubmission.policyId];
       this.mintOrderSubmission.metaData = JSON.stringify(metaData);
     }
-    this.tokenApi.policyTokens(policyId).subscribe({ next: tokens => this.tokens = this.tokenEnhancerService.enhanceTokens(tokens) });
+    this.tokenApi.getTokenList(undefined, undefined, policyId).subscribe({ next: tokens => this.tokens = tokens });
     this.mintOrderSubmission.policyId = policyId;
   }
 
@@ -107,8 +122,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     const metaData = this.buildMetadata();
     let metaDataString = JSON.stringify(metaData, null, 3);
     this.mintOrderSubmission.metaData = metaDataString;
-
-    this.api.buildMintTransaction(this.mintOrderSubmission, this.account!.key).subscribe(mintTransaction => {
+    this.api.buildMintTransaction(this.account!.key, this.mintOrderSubmission).subscribe(mintTransaction => {
       this.mintTransaction = mintTransaction;
     })
   }
@@ -129,8 +143,6 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.addToken();
   }
-
-
 
   spreadMetaValue($event: MetaValue) {
     let value = JSON.stringify($event.value);
@@ -163,8 +175,8 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     event.target.value = '';
   }
 
-  updateAccount() {
-    this.accountService.updateAccount();
+  updateFunds() {
+    this.accountService.updateFunds();
   }
 
   mintSuccess() {
@@ -180,7 +192,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     const oldPolicyId = this.mintOrderSubmission.policyId;
     this.initializeValues()
     this.addToken()
-    this.updateAccount();
+    this.updateFunds();
     this.mintOrderSubmission.policyId = oldPolicyId;
   }
 

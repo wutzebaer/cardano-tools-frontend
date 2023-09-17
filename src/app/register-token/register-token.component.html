@@ -21,7 +21,7 @@
               <mat-label>Token</mat-label>
               <mat-select [(ngModel)]="selectedToken" (selectionChange)="tokenChanged()" name="selectedToken" [required]="true">
                 <mat-option *ngFor="let token of tokens" [value]="token">
-                  {{token.metaData.name}} ({{token.name}})
+                  {{token.name || token.maName}}
                 </mat-option>
               </mat-select>
             </mat-form-field>

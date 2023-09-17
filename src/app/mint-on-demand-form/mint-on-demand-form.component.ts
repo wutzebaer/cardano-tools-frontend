@@ -40,7 +40,7 @@ export class MintOnDemandFormComponent implements OnInit {
   ngOnInit(): void {
     this.serializeMetaData();
     this.deserializeMetaData();
-    this.whitelistString = this.drop.whitelist.join('\n')
+    this.whitelistString = [...this.drop.whitelist].join('\n')
   }
 
   isPersited() {
@@ -50,7 +50,7 @@ export class MintOnDemandFormComponent implements OnInit {
 
   formatWhitelist() {
     this.whitelistString = this.whitelistString.replace(/[\s]+/g, '\n').replace(/[\s]+$/, '').trim();
-    this.drop.whitelist = this.whitelistString.split(/[\s]+/);
+    this.drop.whitelist = new Set(this.whitelistString.split(/[\s]+/));
   }
 
   serializeMetaData() {
@@ -130,10 +130,10 @@ export class MintOnDemandFormComponent implements OnInit {
     if (this.isPersited()) {
       let persistedDrop = (this.drop as Drop);
       persistedDrop.prettyUrl = persistedDrop.name.toLowerCase().replace(/[^a-z\\s0-9]/g, '-') + '-' + persistedDrop.id;
-      this.dropRestInterfaceService.updateDrop(this.drop, this.account!.key, this.policyId, persistedDrop.id).subscribe(() => {
+      this.dropRestInterfaceService.updateDrop(this.account!.key, this.policyId, persistedDrop.id, this.drop).subscribe(() => {
       });
     } else {
-      this.dropRestInterfaceService.createDrop(this.drop, this.account!.key, this.policyId).subscribe(() => {
+      this.dropRestInterfaceService.createDrop(this.account!.key, this.policyId, this.drop).subscribe(() => {
         delete history.state.mintMetadata
         this.dropChanged.next();
       });

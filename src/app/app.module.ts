@@ -32,9 +32,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { ApiModule } from 'src/cardano-tools-client';
+import { BackendApiModule } from 'src/cardano-tools-client';
+import { DbsyncApiModule } from 'src/dbsync-client';
 import { MaxValidatorDirective } from 'src/max-validator.directive';
-import { BASE_PATH } from './../cardano-tools-client/variables';
+import { BASE_PATH as BACKEND_BASE_PATH } from './../cardano-tools-client/variables';
+import { BASE_PATH as DBSYNC_BASE_PATH } from './../dbsync-client/variables';
 import { MinValidatorDirective } from './../min-validator.directive';
 import { AccountKeyComponent } from './account-key/account-key.component';
 import { AjaxInterceptor } from './ajax.interceptor';
@@ -44,11 +46,6 @@ import { BurnComponent } from './burn/burn.component';
 import { ChiplistComponent } from './chiplist/chiplist.component';
 import { ContactComponent } from './contact/contact.component';
 import { EuroPoolComponent } from './euro-pool/euro-pool.component';
-import { ExchangeBuyFormComponent } from './exchange-buy-form/exchange-buy-form.component';
-import { ExchangeBuyComponent } from './exchange-buy/exchange-buy.component';
-import { ExchangeSellFormComponent } from './exchange-sell-form/exchange-sell-form.component';
-import { ExchangeSellComponent } from './exchange-sell/exchange-sell.component';
-import { ExchangeComponent } from './exchange/exchange.component';
 import { FooterComponent } from './footer/footer.component';
 import { FundAccountComponent } from './fund-account/fund-account.component';
 import { ImprintComponent } from './imprint/imprint.component';
@@ -82,10 +79,13 @@ import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions
 import { WalletStatementComponent } from './wallet-statement/wallet-statement.component';
 import { AdaPipe } from './ada.pipe';
 import { registerLocaleData } from '@angular/common';
+import { SlotPipe } from './slot.pipe';
+import { HexToStringPipe } from './hex-to-string.pipe';
+import { JsonFormatPipe } from './json-format.pipe';
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MaxBytesValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, ExchangeComponent, ExchangeSellComponent, ExchangeBuyComponent, ExchangeSellFormComponent, TokenDetailsComponent, ExchangeBuyFormComponent, MintPolicyFormComponent, PolicySelectorComponent, RoyaltiesCip27MintComponent, RoyaltiesCip27MintSuccessComponent, BurnTokensComponent, StakeRewardsComponent, MintOnDemandComponent, MintOnDemandFormComponent, MintOnDemandInstructionsComponent, WalletStatementComponent, AdaPipe
+    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MaxBytesValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, TokenDetailsComponent, MintPolicyFormComponent, PolicySelectorComponent, RoyaltiesCip27MintComponent, RoyaltiesCip27MintSuccessComponent, BurnTokensComponent, StakeRewardsComponent, MintOnDemandComponent, MintOnDemandFormComponent, MintOnDemandInstructionsComponent, WalletStatementComponent, AdaPipe, SlotPipe, HexToStringPipe, JsonFormatPipe
   ],
   imports: [
     BrowserModule,
@@ -106,7 +106,8 @@ import { registerLocaleData } from '@angular/common';
     MatSelectModule,
     MatRadioModule,
     FormsModule,
-    ApiModule,
+    BackendApiModule,
+    DbsyncApiModule,
     MatChipsModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
@@ -134,7 +135,11 @@ import { registerLocaleData } from '@angular/common';
       multi: true
     },
     {
-      provide: BASE_PATH,
+      provide: BACKEND_BASE_PATH,
+      useValue: '.'
+    },
+    {
+      provide: DBSYNC_BASE_PATH,
       useValue: '.'
     },
     {

@@ -1,8 +1,7 @@
 <div fxLayout="column" fxLayoutGap="10px" style="padding: 1px;">
 
   <h2 class="title">
-    <span *ngIf="token.metaData['name']">{{token.metaData['name']}} ({{token.name}})</span>
-    <span *ngIf="!token.metaData['name']">{{token.name}}</span>
+    <span>{{tokenListItem.name || tokenListItem.maName}}</span>
     <button type="button" mat-icon-button (click)="copyToClipboard(buildShareUrl())">
       <mat-icon>share</mat-icon>
     </button>
@@ -12,30 +11,15 @@
   </h2>
 
   <div fxLayout="row" fxLayoutAlign="center center">
-    <button type="button" mat-icon-button (click)="prev()">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-    </button>
-
     <div class="preview" fxLayout="row" fxLayoutAlign="center center">
-      <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading && previewType.startsWith('image')" style="pointer-events: none;">
-        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
-          image
-        </mat-icon>
-      </div>
-
-      <img *ngIf="previewType.startsWith('image')" [src]="previewUrl" (load)="onLoad()" loading="lazy">
-      <audio controls *ngIf="previewType.startsWith('audio')" [src]="previewUrl" (load)="onLoad()"></audio>
-      <video controls *ngIf="previewType.startsWith('video')" [src]="previewUrl" (load)="onLoad()"></video>
-      <iframe loading="lazy" *ngIf="previewType.startsWith('text')" [src]="previewUrl" (load)="onLoad()"></iframe>
-
-      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="token.mediaTypes.length == 0">
+      <img *ngIf="previewType.startsWith('image')" [src]="previewUrl" loading="lazy">
+      <audio controls *ngIf="previewType.startsWith('audio')" [src]="previewUrl"></audio>
+      <video controls *ngIf="previewType.startsWith('video')" [src]="previewUrl"></video>
+      <iframe loading="lazy" *ngIf="previewType.startsWith('text')" [src]="previewUrl"></iframe>
+      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!previewUrl">
         <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
       </div>
     </div>
-
-    <button type="button" mat-icon-button (click)="next()">
-      <mat-icon>keyboard_arrow_right</mat-icon>
-    </button>
   </div>
 
   <ng-content></ng-content>
@@ -43,25 +27,25 @@
   <div fxLayout="column" fxLayoutGap="20px">
 
     <mat-accordion>
-      <h3>Trusted data</h3>
+      <h3>Infos</h3>
 
       <!-- Project -->
-      <mat-expansion-panel>
+      <!--       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title fxFlex="100px">
             Project
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.projectMetadata?.project || 'Policy ID unknown')">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenDataWithMetadata?.projectMetadata?.project || 'Policy ID unknown')">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.projectMetadata?.project || 'Policy ID unknown'}}
+            {{tokenDataWithMetadata?.projectMetadata?.project || 'Policy ID unknown'}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
-          <span>{{token.projectMetadata?.project || 'Policy ID unknown'}}</span>
+          <span>{{tokenDataWithMetadata?.projectMetadata?.project || 'Policy ID unknown'}}</span>
         </div>
-      </mat-expansion-panel>
+      </mat-expansion-panel> -->
 
       <!-- Amount -->
       <mat-expansion-panel>
@@ -70,14 +54,14 @@
             Amount
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard('' + token.quantity)">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard('' + tokenListItem.quantity)">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.quantity}}
+            {{tokenListItem.quantity}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
-          <span>{{token.quantity}}</span>
+          <span>{{tokenListItem.quantity}}</span>
         </div>
       </mat-expansion-panel>
 
@@ -88,14 +72,32 @@
             Fingerprint
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.fingerprint)">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenListItem.maFingerprint)">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.fingerprint}}
+            {{tokenListItem.maFingerprint}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
-          <span>{{token.fingerprint}}</span>
+          <span>{{tokenListItem.maFingerprint}}</span>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- assetName -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title fxFlex="100px">
+            Assetname
+          </mat-panel-title>
+          <mat-panel-description fxFlex>
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenListItem.maName)">
+              <mat-icon>content_copy</mat-icon>
+            </button>
+            {{tokenListItem.maName | hexToString}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="expansion-content">
+          <a [routerLink]="['/latest']" [queryParams]="{q:tokenListItem.maFingerprint}">{{tokenListItem.maName| hexToString}}</a>
         </div>
       </mat-expansion-panel>
 
@@ -106,14 +108,14 @@
             Policy ID
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.policyId)">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenListItem.maPolicyId)">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.policyId}}
+            {{tokenListItem.maPolicyId}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
-          <a [routerLink]="['/latest']" [queryParams]="{q:token.policyId}">{{token.policyId}}</a>
+          <a [routerLink]="['/latest']" [queryParams]="{q:tokenListItem.maPolicyId}">{{tokenListItem.maPolicyId}}</a>
         </div>
       </mat-expansion-panel>
 
@@ -124,34 +126,34 @@
             Policy
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.policy || '')">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenDataWithMetadata?.maPolicyScript ?? '')">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.policy}}
+            {{tokenDataWithMetadata?.maPolicyScript}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
           <span>
-            <pre>{{token.policy}}</pre>
+            <pre>{{tokenDataWithMetadata?.maPolicyScript | jsonFormat}}</pre>
           </span>
         </div>
       </mat-expansion-panel>
 
       <!-- Lock date -->
-      <mat-expansion-panel *ngIf="token.lockDate">
+      <mat-expansion-panel *ngIf="tokenDataWithMetadata?.lockDate">
         <mat-expansion-panel-header>
           <mat-panel-title fxFlex="100px">
             Lock date
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.lockDate + '')">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenDataWithMetadata?.lockDate + '')">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.lockDate | date : 'medium'}}
+            {{tokenDataWithMetadata?.lockDate | date : 'medium'}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
-          {{token.lockDate | date : 'medium'}}
+          {{tokenDataWithMetadata?.lockDate | date : 'medium'}}
         </div>
       </mat-expansion-panel>
 
@@ -162,14 +164,14 @@
             Locked
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.locked + '')">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenDataWithMetadata?.locked + '')">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.locked}}
+            {{tokenDataWithMetadata?.locked}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
-          {{token.locked}}
+          {{tokenDataWithMetadata?.locked}}
         </div>
       </mat-expansion-panel>
 
@@ -180,14 +182,14 @@
             Total supply
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.totalSupply + '')">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenDataWithMetadata?.totalSupply + '')">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.totalSupply}}
+            {{tokenDataWithMetadata?.totalSupply}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
-          {{token.totalSupply}}
+          {{tokenDataWithMetadata?.totalSupply}}
         </div>
       </mat-expansion-panel>
 
@@ -196,21 +198,21 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title fxFlex="100px">
-            TX ID
+            Transaction
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.txId)">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenDataWithMetadata?.txHash + '')">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.txId}}
+            {{tokenDataWithMetadata?.txHash}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
-          <a href="https://cardanoscan.io/search?filter=all&value={{token.txId}}" target="_blank">{{token.txId}}</a>
+          <a href="https://cexplorer.io/search?query={{tokenDataWithMetadata?.txHash}}" target="_blank">{{tokenDataWithMetadata?.txHash}}</a>
         </div>
       </mat-expansion-panel>
 
-      <!-- Registered Data -->
+      <!-- Registered Data
       <mat-expansion-panel *ngIf="tokenRegistryMetadataFormatted">
         <mat-expansion-panel-header>
           <mat-panel-title fxFlex="100px">
@@ -226,22 +228,22 @@
         <span>
           <pre>{{tokenRegistryMetadataFormatted}}</pre>
         </span>
-      </mat-expansion-panel>
+      </mat-expansion-panel> -->
 
-      <!-- Registered Data Logo -->
-      <mat-expansion-panel *ngIf="token.tokenRegistryMetadata">
+      <!-- Registered Data Logo 
+      <mat-expansion-panel *ngIf="tokenDataWithMetadata?.tokenRegistryMetadata">
         <mat-expansion-panel-header>
           <mat-panel-title fxFlex="100px">
             Reg. Logo
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <img width="20" height="20" src="data:image/gif;base64,{{token.tokenRegistryMetadata.logo}}">
+            <img width="20" height="20" src="data:image/gif;base64,{{tokenDataWithMetadata?.tokenRegistryMetadata.logo}}">
           </mat-panel-description>
         </mat-expansion-panel-header>
         <span>
-          <img src="data:image/gif;base64,{{token.tokenRegistryMetadata.logo}}">
+          <img src="data:image/gif;base64,{{tokenDataWithMetadata?.tokenRegistryMetadata.logo}}">
         </span>
-      </mat-expansion-panel>
+      </mat-expansion-panel>-->
 
 
       <!-- Timestamp -->
@@ -251,20 +253,20 @@
             Created at
           </mat-panel-title>
           <mat-panel-description fxFlex>
-            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(token.txId)">
+            <button type="button" class="inline-button" mat-icon-button (click)="copyToClipboard(tokenDataWithMetadata?.timestamp + '')">
               <mat-icon>content_copy</mat-icon>
             </button>
-            {{token.timestamp | date : 'medium'}}
+            {{tokenDataWithMetadata?.timestamp | date : 'medium'}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="expansion-content">
-          {{token.timestamp | date : 'medium'}}
+          {{tokenDataWithMetadata?.timestamp | date : 'medium'}}
         </div>
       </mat-expansion-panel>
     </mat-accordion>
 
     <mat-accordion *ngIf="tableData.length">
-      <h3>Custom data <button type="button" class="inline-button" mat-icon-button (click)="copyMetadataToClipboard()">
+      <h3>Metadata <button type="button" class="inline-button" mat-icon-button (click)="copyMetadataToClipboard()">
           <mat-icon>content_copy</mat-icon>
         </button></h3>
       <mat-expansion-panel *ngFor="let element of tableData">

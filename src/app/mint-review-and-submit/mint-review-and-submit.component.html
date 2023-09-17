@@ -7,11 +7,8 @@
       <div>
         <p>The tokens will be sent back to your address</p>
 
-        <p *ngIf="!mintTransaction.mintOrderSubmission?.tip">
+        <p>
           The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will also be sent to your address
-        </p>
-        <p *ngIf="mintTransaction.mintOrderSubmission?.tip">
-          The tip of <b>{{adaTip | number: '1.0-6'}}&nbsp;₳</b> will be sent to the [EURO]-Pool pledge. <b>Thank you!</b><br>
         </p>
 
         <mat-accordion class="example-headers-align">

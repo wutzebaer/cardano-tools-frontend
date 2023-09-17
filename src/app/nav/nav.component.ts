@@ -13,9 +13,9 @@ import { AccountService } from './../account.service';
 })
 export class NavComponent implements OnDestroy {
 
-  account?: AccountPrivate;
+  funds?: number;
   scrollPosition = 0
-  accountSubscription: Subscription
+  fundsSubscription: Subscription
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -30,13 +30,13 @@ export class NavComponent implements OnDestroy {
       }
       document.getElementsByTagName('mat-sidenav-content')[0].scrollTo(0, 0)
     });
-    this.accountSubscription = accountService.account.subscribe(account => {
-      this.account = account;
+    this.fundsSubscription = accountService.funds.subscribe(funds => {
+      this.funds = funds;
     });
   }
 
   ngOnDestroy(): void {
-    this.accountSubscription.unsubscribe();
+    this.fundsSubscription.unsubscribe();
   }
 
 

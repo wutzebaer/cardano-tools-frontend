@@ -3,10 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, retry, switchMap } from 'rxjs/operators';
-import { TokenData, TokenRestInterfaceService } from 'src/cardano-tools-client';
 import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
 import { TokenEnhancerService } from './../token-enhancer.service';
+import { TokenRestInterfaceService } from 'src/cardano-tools-client';
+import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 
 
 export enum FetchMode {
@@ -23,11 +24,11 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
   searchInput: string = "";
   searchText: string = "";
   searchText$ = new Subject<string>();
-  latestTokens: TokenDataWithMetadata[] = []
+  latestTokens: TokenListItem[] = []
   lastOffset = 0
   timer: Subscription;
 
-  constructor(private api: TokenRestInterfaceService, private activatedRoute: ActivatedRoute, public dialog: MatDialog, private router: Router, private tokenEnhancerService: TokenEnhancerService) {
+  constructor(private api: RestHandlerService, private activatedRoute: ActivatedRoute, public dialog: MatDialog, private router: Router, private tokenEnhancerService: TokenEnhancerService) {
     this.searchText$.pipe(
       debounceTime(500),
       distinctUntilChanged(),
@@ -35,11 +36,10 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
         this.updateTokens([], FetchMode.replace)
         if (searchText != '') {
           router.navigate(['/latest'], { queryParams: { q: searchText } })
-          return this.api.findTokens(searchText)
         } else {
           router.navigate(['/latest'])
-          return this.api.latestTokens()
         }
+        return this.api.getTokenList(undefined, undefined, searchText)
       }),
       retry()
     ).subscribe(foundTokens => this.updateTokens(foundTokens, FetchMode.replace))
@@ -55,15 +55,13 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
         this.searchString("")
     });
 
-    this.timer = interval(1000).subscribe(() => {
-      if (this.searchText == '') {
-        let mintid = this.latestTokens[0].mintid
-        this.api.latestTokens(-mintid).subscribe(
-          latestTokens => {
-            this.updateTokens(latestTokens, FetchMode.prepend);
-          }
-        );
-      }
+    this.timer = interval(5000).subscribe(() => {
+      let mintid = this.latestTokens[0].maMintId
+      this.api.getTokenList(mintid, undefined, this.searchText).subscribe(
+        latestTokens => {
+          this.updateTokens(latestTokens, FetchMode.prepend);
+        }
+      );
     });
   }
   ngOnDestroy(): void {
@@ -73,11 +71,11 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
-  details(token: TokenDataWithMetadata) {
+  details(token: TokenListItem) {
     this.dialog.open(LatestTokensDetailComponent, {
       width: '750px',
       maxWidth: '90vw',
-      data: { tokens: this.latestTokens, tokenIndex: this.latestTokens.indexOf(token) },
+      data: { tokenListItem: token },
       closeOnNavigation: true
     });
   }
@@ -95,13 +93,12 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
     this.searchText$.next(searchText);
   }
 
-  updateTokens(latestTokens: TokenData[], fetchMode: FetchMode) {
+  updateTokens(latestTokens: TokenListItem[], fetchMode: FetchMode) {
 
     if (!latestTokens.length && fetchMode !== FetchMode.replace) {
       return;
     }
 
-    let enhancedLatestTokens = this.tokenEnhancerService.enhanceTokens(latestTokens);
 
     if (fetchMode == FetchMode.replace) {
       this.latestTokens = []
@@ -110,9 +107,9 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
     }
 
     if (fetchMode == FetchMode.prepend) {
-      this.latestTokens = enhancedLatestTokens.concat(this.latestTokens)
+      this.latestTokens = latestTokens.concat(this.latestTokens)
     } else {
-      this.latestTokens = this.latestTokens.concat(enhancedLatestTokens)
+      this.latestTokens = this.latestTokens.concat(latestTokens)
     }
 
 
@@ -122,10 +119,8 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
 
   }
 
-
-
   onScroll() {
-    let mintid = this.latestTokens[this.latestTokens.length - 1].mintid
+    let mintid = this.latestTokens[this.latestTokens.length - 1].maMintId ?? 0;
 
     if (mintid == this.lastOffset) {
       return
@@ -133,20 +128,11 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
       this.lastOffset = mintid
     }
 
-    if (this.searchText == '') {
-      this.api.latestTokens(mintid).subscribe(
-        latestTokens => {
-          this.updateTokens(latestTokens, FetchMode.append)
-        }
-      );
-    } else {
-      this.api.findTokens(this.searchText, mintid).subscribe(
-        latestTokens => {
-          this.updateTokens(latestTokens, FetchMode.append)
-        }
-      );
-    }
-
+    this.api.getTokenList(undefined, mintid, this.searchText).subscribe(
+      latestTokens => {
+        this.updateTokens(latestTokens, FetchMode.append)
+      }
+    );
   }
 
 }

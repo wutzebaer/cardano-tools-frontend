@@ -8,7 +8,7 @@ import { AccountService } from './../account.service';
 
 export interface Submission {
   targetAddress?: string;
-  tip: boolean;
+  tip?: boolean;
   pin: boolean;
 }
 
@@ -21,6 +21,8 @@ export interface Submission {
 export class FundAccountComponent implements OnInit, OnDestroy {
 
   account?: AccountPrivate;
+  funds?: number;
+  fundingAddresses?: string[];
 
   @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
@@ -38,12 +40,17 @@ export class FundAccountComponent implements OnInit, OnDestroy {
 
   timer: Subscription;
   accountSubscription: Subscription
+  fundsSubscription: Subscription
+  fundingAddressesSubscription: Subscription
 
   constructor(private clipboard: Clipboard, private accountService: AccountService) {
     this.accountSubscription = accountService.account.subscribe(account => this.account = account);
+    this.fundsSubscription = accountService.funds.subscribe(funds => this.funds = funds);
+    this.fundingAddressesSubscription = accountService.fundingAddresses.subscribe(fundingAddresses => this.fundingAddresses = fundingAddresses)
+
     this.timer = interval(10000).subscribe(() => {
-      if (this.activeStep && (this.adaBalance < this.minAdaBalance || this.account?.fundingAddresses.length == 0)) {
-        this.updateAccount();
+      if (this.activeStep && (this.adaBalance < this.minAdaBalance || this.fundingAddresses?.length == 0)) {
+        this.updateFunds();
       }
     });
   }
@@ -60,6 +67,8 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.timer.unsubscribe();
     this.accountSubscription.unsubscribe();
+    this.fundsSubscription.unsubscribe();
+    this.fundingAddressesSubscription.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -69,8 +78,8 @@ export class FundAccountComponent implements OnInit, OnDestroy {
     return this.adaBalanceInput?.invalid || this.targetAddressInput?.invalid || this.txSizeInput?.invalid
   }
 
-  updateAccount() {
-    this.accountService.updateAccount();
+  updateFunds() {
+    this.accountService.updateFunds();
   }
 
   emitUpdateMintTransaction() {
@@ -85,14 +94,6 @@ export class FundAccountComponent implements OnInit, OnDestroy {
     this.clipboard.copy(this.minAdaBalance + "");
   }
 
-  get adaTip() {
-    if (!this.mintTransaction.mintOrderSubmission?.tip) {
-      return 0;
-    }
-    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput || 0) - (this.mintTransaction.pinFee || 0)
-    return (Math.max(change, 1000000)) / 1000000;
-  }
-
   get adaPinFee() {
     if (!this.mintTransaction.pinFee) {
       return 0;
@@ -105,15 +106,11 @@ export class FundAccountComponent implements OnInit, OnDestroy {
     minBalance += (this.mintTransaction.fee || 0)
     minBalance += (this.mintTransaction.minOutput || 0)
     minBalance += (this.mintTransaction.pinFee || 0)
-
-    if (this.mintTransaction.mintOrderSubmission?.tip)
-      minBalance += 1000000
-
     return minBalance / 1000000;
   }
 
   get adaBalance() {
-    return ((this.account?.address.balance || 0)) / 1000000;
+    return ((this.funds || 0)) / 1000000;
   }
 
   get adaFee() {

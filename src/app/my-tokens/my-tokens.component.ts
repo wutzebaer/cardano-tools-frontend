@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TokenRestInterfaceService, TokenData } from 'src/cardano-tools-client';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
 import { LatestTokensDetailComponent } from './../latest-tokens-detail/latest-tokens-detail.component';
 import { LocalStorageService } from './../local-storage.service';
 import { TokenEnhancerService } from './../token-enhancer.service';
+import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 
 
 @Component({
@@ -14,13 +14,12 @@ import { TokenEnhancerService } from './../token-enhancer.service';
 })
 export class MyTokensComponent implements OnInit {
 
-  myTokens: TokenDataWithMetadata[] = []
+  myTokens: TokenListItem[] = []
   myaddress: string | null;
 
-  constructor(private api: TokenRestInterfaceService, public dialog: MatDialog, private localStorageService: LocalStorageService, private tokenEnhancerService: TokenEnhancerService) {
+  constructor(private api: RestHandlerService, public dialog: MatDialog, private localStorageService: LocalStorageService, private tokenEnhancerService: TokenEnhancerService) {
     this.myaddress = localStorageService.retrieveMyAddress();
     this.update()
-
   }
 
   ngOnInit(): void {
@@ -33,11 +32,11 @@ export class MyTokensComponent implements OnInit {
     return timestamp;
   }
 
-  details(token: TokenDataWithMetadata) {
+  details(token: TokenListItem) {
     this.dialog.open(LatestTokensDetailComponent, {
       width: '750px',
       maxWidth: '90vw',
-      data: { tokens: this.myTokens, tokenIndex: this.myTokens.indexOf(token)  },
+      data: { tokenListItem: token },
       closeOnNavigation: true
     });
   }
@@ -45,13 +44,10 @@ export class MyTokensComponent implements OnInit {
   update() {
     if (this.myaddress) {
       this.localStorageService.storeMyAddress(this.myaddress);
-      this.api.walletTokens(this.myaddress).subscribe(foundTokens => this.updateTokens(foundTokens));
+      this.api.getAddressTokenList(this.myaddress).subscribe(foundTokens => this.myTokens = foundTokens);
     }
   }
 
-  updateTokens(latestTokens: TokenData[]) {
-    this.myTokens = this.tokenEnhancerService.enhanceTokens(latestTokens);
-  }
 
   findAnyIpfsUrl(object: any): any {
     for (let key in object) {

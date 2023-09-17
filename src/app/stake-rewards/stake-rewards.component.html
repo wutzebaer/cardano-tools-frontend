@@ -19,8 +19,8 @@
                                 <input matInput name="poolHash" required (change)="refresh()" [(ngModel)]="poolHash" [matAutocomplete]="auto" (ngModelChange)="filter()" [minlength]="56" [maxLength]="56">
 
                                 <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
-                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.hash">
-                                        {{option.ticker}} ({{option.hash}})
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.poolHash">
+                                        {{option.tickerName}} ({{option.poolHash}})
                                     </mat-option>
                                 </mat-autocomplete>
                             </mat-form-field>

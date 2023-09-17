@@ -53,7 +53,6 @@ export class AppComponent implements OnInit {
     if (accountKeyParam) {
       this.localStorageService.storeAccountKey(accountKeyParam);
     }
-    this.accountService.updateAccount();
 
   }
   ngOnInit(): void {

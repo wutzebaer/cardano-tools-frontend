@@ -10,6 +10,7 @@ import { DropNftTransient } from './../../cardano-tools-client/model/dropNftTran
 import { DropTransient } from './../../cardano-tools-client/model/dropTransient';
 import { AccountService } from './../account.service';
 import { TokenDataWithMetadata, TokenEnhancerService } from './../token-enhancer.service';
+import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 
 
 
@@ -22,14 +23,14 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
   policyId = '';
   account?: AccountPrivate;
   accountSubscription: Subscription;
-  tokens: TokenDataWithMetadata[] = [];
+  tokens: TokenListItem[] = [];
   drops: Drop[] = [];
   drop: DropTransient = {
     name: '',
     price: 5_000_000,
     maxPerTransaction: 5,
     profitAddress: '',
-    whitelist: [],
+    whitelist: new Set(),
     dropNfts: [
       {
         assetName: 'Assetname#1',
@@ -53,13 +54,13 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
       },
     ],
     running: false,
-    dropNftsAvailableAssetNames: [],
-    dropNftsSoldAssetNames: [],
+    dropNftsAvailableAssetNames: new Set(),
+    dropNftsSoldAssetNames: new Set(),
     prettyUrl: ''
   };
 
   constructor(
-    private tokenApi: TokenRestInterfaceService,
+    private tokenApi: RestHandlerService,
     private tokenEnhancerService: TokenEnhancerService,
     private sanitizer: DomSanitizer,
     private dropRestInterfaceService: DropRestInterfaceService,
@@ -96,7 +97,7 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
 
   changePolicyId(newPolicyId: string) {
     this.policyId = newPolicyId;
-    this.tokenApi.policyTokens(newPolicyId).subscribe({ next: tokens => this.tokens = this.tokenEnhancerService.enhanceTokens(tokens) });
+    this.tokenApi.getTokenList(undefined, undefined, newPolicyId).subscribe({ next: tokens => this.tokens = tokens });
     this.updateDrops();
   }
 

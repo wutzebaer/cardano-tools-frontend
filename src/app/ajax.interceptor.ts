@@ -18,7 +18,7 @@ export class AjaxInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
-    const hideLoader = (request.params.get('fromMintid') || 0) < 0;
+    const hideLoader = request.params.get('afterMintid') != null;
 
     if (!hideLoader) {
       this.counter++

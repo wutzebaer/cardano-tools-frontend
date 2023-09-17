@@ -1,12 +1,13 @@
-import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { TokenDataWithMetadata, TokenEnhancerService } from './../token-enhancer.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 import { AccountService } from 'src/app/account.service';
-import { AccountPrivate,  RegistrationRestInterfaceService, TokenData, TokenRestInterfaceService } from 'src/cardano-tools-client';
+import { AccountPrivate, PolicyPrivate, RegistrationRestInterfaceService } from 'src/cardano-tools-client';
+import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 import { RegisterTokenSuccessComponent } from './../register-token-success/register-token-success.component';
+import { TokenDataWithMetadata, TokenEnhancerService } from './../token-enhancer.service';
 
 @Component({
   selector: 'app-register-token',
@@ -15,10 +16,12 @@ import { RegisterTokenSuccessComponent } from './../register-token-success/regis
 })
 export class RegisterTokenComponent implements OnInit, OnDestroy {
 
-  account!: AccountPrivate;
-  tokens: TokenDataWithMetadata[] = [];
-  selectedToken?: TokenDataWithMetadata;
+  account?: AccountPrivate;
+  policies?: PolicyPrivate[];
+  tokens: TokenListItem[] = [];
+  selectedToken?: TokenListItem;
   accountSubscription: Subscription
+  policiesSubscription: Subscription
 
   registrationMetadata: any = {
     assetName: "",
@@ -37,9 +40,13 @@ export class RegisterTokenComponent implements OnInit, OnDestroy {
   file!: Blob | null;
   url!: SafeUrl | null;
 
-  constructor(private api: RegistrationRestInterfaceService, private sanitizer: DomSanitizer, public dialog: MatDialog, private accountService: AccountService, private tokenApi: TokenRestInterfaceService, private tokenEnhancerService: TokenEnhancerService, private httpClient: HttpClient) {
+  constructor(private api: RegistrationRestInterfaceService, private sanitizer: DomSanitizer, public dialog: MatDialog, private accountService: AccountService, private dbsyncApi: RestHandlerService, private tokenEnhancerService: TokenEnhancerService, private httpClient: HttpClient) {
     this.accountSubscription = accountService.account.subscribe(account => {
       this.account = account;
+    });
+
+    this.policiesSubscription = accountService.policies.subscribe(policies => {
+      this.policies = policies;
     });
   }
 
@@ -48,23 +55,24 @@ export class RegisterTokenComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.accountSubscription.unsubscribe();
+    this.policiesSubscription.unsubscribe();
   }
 
   changePolicyId(policyId: string) {
-    const policy = this.account.policies.find(p => p.policyId === policyId)
-    this.registrationMetadata.policyId = policy!.policyId;
-    this.registrationMetadata.policy = policy!.policy;
-    this.registrationMetadata.policySkey = policy!.address.skey;
-    this.tokenApi.policyTokens(policy!.policyId).subscribe({ next: tokens => this.tokens = this.tokenEnhancerService.enhanceTokens(tokens) });
+    const policy = this.policies?.find(p => p.policyId === policyId)!
+    this.registrationMetadata.policyId = policy.policyId;
+    this.registrationMetadata.policy = policy.policy;
+    this.registrationMetadata.policySkey = policy.address.skey;
+    this.dbsyncApi.getTokenList(undefined, undefined, policy.policyId).subscribe({ next: tokens => this.tokens = tokens });
 
   }
 
   tokenChanged() {
-    this.registrationMetadata.assetName = this.selectedToken?.name!;
-    this.registrationMetadata.name = this.selectedToken?.metaData?.name;
+    this.registrationMetadata.assetName = this.selectedToken?.maName;
+    this.registrationMetadata.name = this.selectedToken?.name;
 
-    if (this.selectedToken?.metaData?.image) {
-      const url = this.tokenEnhancerService.toSimpleIpfsUrl(this.selectedToken?.metaData?.image);
+    if (this.selectedToken?.image) {
+      const url = this.tokenEnhancerService.toIpfsUrl(this.selectedToken.image);
       this.httpClient.get(url, { responseType: 'blob' }).subscribe(
         results => {
           this.appendFile(results);
@@ -101,18 +109,14 @@ export class RegisterTokenComponent implements OnInit, OnDestroy {
   }
 
   generateRegistration() {
-    this.api.generateTokenRegistrationForm(JSON.stringify(this.registrationMetadata), this.file as Blob).subscribe(tokenRegistration => {
-
+    this.api.generateTokenRegistration(JSON.stringify(this.registrationMetadata), this.file as Blob).subscribe(tokenRegistration => {
       this.dialog.open(RegisterTokenSuccessComponent, {
         width: '600px',
         maxWidth: '90vw',
         data: { tokenRegistration: tokenRegistration },
         closeOnNavigation: true
       });
-
-
     })
   }
-
 
 }

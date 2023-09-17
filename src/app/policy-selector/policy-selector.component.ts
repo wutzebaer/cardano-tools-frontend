@@ -7,8 +7,8 @@ import { AccountService } from './../account.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { I } from '@angular/cdk/keycodes';
-import { AccountPrivate, PolicyPrivate } from 'src/cardano-tools-client';
 import { interval, Subscription } from 'rxjs';
+import { PolicyPrivate } from 'src/cardano-tools-client';
 
 @Component({
   selector: 'app-policy-selector',
@@ -20,49 +20,49 @@ export class PolicySelectorComponent implements AfterViewInit, OnDestroy {
   @Input() disabled = false;
   @Input() createPolicies = true;
   @Output() changedPolicyId = new EventEmitter<string>();
-  account?: AccountPrivate;
+  policies?: PolicyPrivate[];
   selectedPolicyId?: string | null;
   timer: Subscription;
-  accountSubscription!: Subscription
+  policiesSubscription!: Subscription
 
   constructor(private accountService: AccountService, private localStorageService: LocalStorageService, private dialog: MatDialog) {
     this.selectedPolicyId = this.localStorageService.retrievePolicyId();
+    this.policiesSubscription = accountService.policies.subscribe(policies => {
+      this.policies = policies;
+
+      const oldPolicyId = this.selectedPolicyId;
+
+      // policyid from localStorage is invalid
+      if (!policies.find(p => p.policyId === this.selectedPolicyId)) {
+        this.selectedPolicyId = this.findUnlockedPolicy(policies).policyId;
+      }
+
+      // policyid from localStorage is closed
+      if (this.getTimeLeft(policies.find(p => p.policyId === this.selectedPolicyId)!) === 0) {
+        this.selectedPolicyId = this.findUnlockedPolicy(policies).policyId;
+      }
+
+      // publish policy id
+      if (!this.policies || this.selectedPolicyId != oldPolicyId) {
+        this.policyChanged();
+      }
+
+    });
     // updates time
     this.timer = interval(1000).subscribe(() => {
     });
   }
 
   ngAfterViewInit() {
-    this.accountSubscription = this.accountService.account.subscribe(newAccount => {
-      const oldPolicyId = this.selectedPolicyId;
-
-      // policyid from localStorage is invalid
-      if (!newAccount.policies.find(p => p.policyId === this.selectedPolicyId)) {
-        this.selectedPolicyId = this.findUnlockedPolicy(newAccount).policyId;
-      }
-
-      // policyid from localStorage is closed
-      if (this.getTimeLeft(newAccount.policies.find(p => p.policyId === this.selectedPolicyId)!) === 0) {
-        this.selectedPolicyId = this.findUnlockedPolicy(newAccount).policyId;
-      }
-
-      // publish policy id
-      if (!this.account || this.selectedPolicyId != oldPolicyId) {
-        this.policyChanged();
-      }
-
-      this.account = newAccount;
-
-    });
   }
 
   ngOnDestroy(): void {
     this.timer.unsubscribe();
-    this.accountSubscription.unsubscribe();
+    this.policiesSubscription.unsubscribe();
   }
 
-  findUnlockedPolicy(account: AccountPrivate): PolicyPrivate {
-    return account.policies.find(p => this.getTimeLeft(p) > 0)!;
+  findUnlockedPolicy(policies: PolicyPrivate[]): PolicyPrivate {
+    return policies.find(p => this.getTimeLeft(p) > 0)!;
   }
 
 

@@ -9,8 +9,7 @@ export class AdaPipe implements PipeTransform {
   constructor(@Inject(LOCALE_ID) private locale: string
   ) { }
 
-  transform(value: number): string | null {
-    console.log(this.locale);
+  transform(value: number): string {
     let decimalPipe = new DecimalPipe(this.locale);
     return decimalPipe.transform(value / 1000000, '1.0-2') + '\xa0₳';
   }

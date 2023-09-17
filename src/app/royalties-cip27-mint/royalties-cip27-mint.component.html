@@ -47,10 +47,10 @@
         </mat-card>
 
         <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-            <button mat-raised-button color="accent" (click)="updateAccount()" fxFlex.lt-sm>
+            <button mat-raised-button color="accent" (click)="updateFunds()" fxFlex.lt-sm>
                 <mat-icon>refresh</mat-icon>
                 <span fxHide.lt-sm> Refresh</span>
-              </button>
+            </button>
             <button mat-raised-button color="primary" [disabled]="instructionsForm.invalid || fundForm.invalid" fxFlex.lt-sm (click)="generateCip27()">
                 <mat-icon>token</mat-icon>
                 <span fxHide.lt-sm> Submit</span>

@@ -15,13 +15,17 @@ import { Clipboard } from '@angular/cdk/clipboard';
 export class MintSuccessComponent implements OnInit, OnDestroy {
 
   account?: AccountPrivate;
+  funds?: number;
   @Input() mintTransaction!: Transaction;
   @Output() updateMintTransaction = new EventEmitter<void>();
   @Output() restart = new EventEmitter<void>();
+
   accountSubscription: Subscription
+  fundsSubscription: Subscription
 
   constructor(public dialog: MatDialog, private clipboard: Clipboard, accountService: AccountService) {
     this.accountSubscription = accountService.account.subscribe(account => this.account = account);
+    this.fundsSubscription = accountService.funds.subscribe(funds => this.funds = funds);
   }
 
   ngOnInit(): void {
@@ -29,6 +33,7 @@ export class MintSuccessComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.accountSubscription.unsubscribe();
+    this.fundsSubscription.unsubscribe();
   }
 
   accountKeyPopup() {
@@ -42,12 +47,12 @@ export class MintSuccessComponent implements OnInit, OnDestroy {
   }
 
   get adaTip() {
-    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput || 0) - (this.mintTransaction.pinFee || 0)
+    let change = (this.funds || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.minOutput || 0) - (this.mintTransaction.pinFee || 0)
     return (Math.max(change, 0)) / 1000000;
   }
 
   get adaChange() {
-    let change = (this.account?.address.balance || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.pinFee || 0)
+    let change = (this.funds || 0) - (this.mintTransaction.fee || 0) - (this.mintTransaction.pinFee || 0)
     return (Math.max(change, 0)) / 1000000;
   }
 
