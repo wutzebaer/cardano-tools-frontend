@@ -6,7 +6,6 @@
     <div fxLayout="row" fxLayoutAlign="center center">
 
       <div class="upload-wrapper">
-
         <input id="file{{counter}}" fxHide type="file" (change)="addFile($event)" name="file{{counter}}" />
         <label for="file{{counter}}" (drop)="dropFile($event)" (dragover)="$event.preventDefault();">
           <div *ngIf="!previewUrl" class="dropArea" fxLayout="column" fxLayoutAlign="center center">
@@ -27,8 +26,6 @@
           </div>
         </label>
         <mat-progress-bar *ngIf="uploadProgress!=0" mode="determinate" strokeWidth="20" [value]="uploadProgress"></mat-progress-bar>
-
-
       </div>
 
     </div>

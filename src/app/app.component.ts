@@ -17,12 +17,6 @@ export class AppComponent implements OnInit {
   ajaxStatus: boolean = false;
 
   constructor(@Inject(LOCALE_ID) private locale: string, private ajaxInterceptor: AjaxInterceptor, private location: Location, private dialogRef: MatDialog, private router: Router, private activatedRoute: ActivatedRoute, private accountService: AccountService, private localStorageService: LocalStorageService) {
-
-    import(
-      /* webpackInclude: /(.*)\.js$/ */
-      `@angular/common/locales/${locale.substring(0, 2)}.js`
-    ).then(module => registerLocaleData(module.default))
-
     ajaxInterceptor.ajaxStatusChanged$.subscribe(ajaxStatus => this.ajaxStatus = ajaxStatus);
 
     // push history state when a dialog is opened
