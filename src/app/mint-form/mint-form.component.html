@@ -1,53 +1,126 @@
 <mat-card>
   <mat-card-content>
-
-    <h2>{{token.assetName}}</h2>
+    <h2>{{ token.assetName }}</h2>
 
     <div fxLayout="row" fxLayoutAlign="center center">
-
       <div class="upload-wrapper">
-
-        <input id="file{{counter}}" fxHide type="file" (change)="addFile($event)" name="file{{counter}}" />
-        <label for="file{{counter}}" (drop)="dropFile($event)" (dragover)="$event.preventDefault();">
-          <div *ngIf="!previewUrl" class="dropArea" fxLayout="column" fxLayoutAlign="center center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43">
-              <path d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z">
-              </path>
+        <input
+          id="file{{ counter }}"
+          fxHide
+          type="file"
+          (change)="addFile($event)"
+          name="file{{ counter }}"
+        />
+        <label
+          for="file{{ counter }}"
+          (drop)="dropFile($event)"
+          (dragover)="$event.preventDefault()"
+        >
+          <div
+            *ngIf="!previewUrl"
+            class="dropArea"
+            fxLayout="column"
+            fxLayoutAlign="center center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="50"
+              height="43"
+              viewBox="0 0 50 43"
+            >
+              <path
+                d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z"
+              ></path>
             </svg>
             Upload Image, Audio or Video file
           </div>
-          <div *ngIf="previewUrl" class="preview" fxLayout="row" fxLayoutAlign="center center">
-            <img *ngIf="previewType.startsWith('image')" [src]="previewUrl">
-            <audio *ngIf="previewType.startsWith('audio')" controls [src]="previewUrl"></audio>
-            <video *ngIf="previewType.startsWith('video')" controls [src]="previewUrl"></video>
-            <iframe loading="lazy" *ngIf="previewType.startsWith('text')" [src]="previewUrl"></iframe>
+          <div
+            *ngIf="previewUrl"
+            class="preview"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+          >
+            <img *ngIf="previewType.startsWith('image')" [src]="previewUrl" />
+            <audio
+              *ngIf="previewType.startsWith('audio')"
+              controls
+              [src]="previewUrl"
+            ></audio>
+            <video
+              *ngIf="previewType.startsWith('video')"
+              controls
+              [src]="previewUrl"
+            ></video>
+            <iframe
+              loading="lazy"
+              *ngIf="previewType.startsWith('text')"
+              [src]="previewUrl"
+            ></iframe>
             <div>
-              <mat-icon class="big-icon" color="primary" *ngIf="!previewType.startsWith('image') && !previewType.startsWith('audio') && !previewType.startsWith('video') && !previewType.startsWith('text')" fontSet="material-icons-outlined">description</mat-icon>
+              <mat-icon
+                class="big-icon"
+                color="primary"
+                *ngIf="
+                  !previewType.startsWith('image') &&
+                  !previewType.startsWith('audio') &&
+                  !previewType.startsWith('video') &&
+                  !previewType.startsWith('text')
+                "
+                fontSet="material-icons-outlined"
+                >description</mat-icon
+              >
             </div>
           </div>
         </label>
-        <mat-progress-bar *ngIf="uploadProgress!=0" mode="determinate" strokeWidth="20" [value]="uploadProgress"></mat-progress-bar>
-
-
+        <mat-progress-bar
+          *ngIf="uploadProgress != 0"
+          mode="determinate"
+          strokeWidth="20"
+          [value]="uploadProgress"
+        ></mat-progress-bar>
       </div>
-
     </div>
 
-    <div fxLayout="row" style="padding-bottom: 1.25em;" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-      <a type="button" mat-raised-button (click)="openPoolPmPreview()" target="_blank">
-        <img width="24" height="24" src="/assets/poolpm.ico">
+    <div
+      fxLayout="row"
+      style="padding-bottom: 1.25em"
+      fxLayout="row"
+      fxLayoutGap="10px"
+      fxLayoutAlign="start center"
+    >
+      <a
+        type="button"
+        mat-raised-button
+        (click)="openPoolPmPreview()"
+        target="_blank"
+      >
+        <img width="24" height="24" src="/assets/poolpm.ico" />
         <span fxHide.lt-sm> Preview</span>
       </a>
       <span class="flex-right">
-        <mat-slide-toggle name="isNft" (change)="isNftChanged()" [(ngModel)]="isNft" fxFlexAlign="end center" labelPosition="before">NFT</mat-slide-toggle>
+        <mat-slide-toggle
+          name="isNft"
+          (change)="isNftChanged()"
+          [(ngModel)]="isNft"
+          fxFlexAlign="end center"
+          labelPosition="before"
+          >NFT</mat-slide-toggle
+        >
       </span>
     </div>
 
-
-    <div fxLayout="row" style="padding-bottom: 1.25em;" *ngIf="metaData.files">
+    <div fxLayout="row" style="padding-bottom: 1.25em" *ngIf="metaData.files">
       <mat-chip-list #chipList multiple>
-        <mat-chip *ngFor="let file of metaData.files" color="primary" (removed)="removeFile(file)">
-          <a [href]="tokenEnhancerService.toIpfsUrl(file.src)" target="_blank">{{file.name}}</a>
+        <mat-chip
+          *ngFor="let file of metaData.files"
+          color="primary"
+          (removed)="removeFile(file)"
+        >
+          <a
+            [href]="tokenEnhancerService.toIpfsUrl(file.src)"
+            target="_blank"
+            >{{ file.name }}</a
+          >
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>
@@ -59,76 +132,166 @@
       <!-- Asset Name -->
       <mat-form-field fxFlex appearance="outline">
         <mat-label>Asset Name</mat-label>
-        <input matInput [(ngModel)]="token.assetName" name="assetName{{counter}}" maxlength="32">
+        <input
+          matInput
+          [(ngModel)]="token.assetName"
+          name="assetName{{ counter }}"
+          maxlength="32"
+        />
       </mat-form-field>
       <!-- Amount -->
-      <mat-form-field fxFlex=25 appearance="outline">
+      <mat-form-field fxFlex="25" appearance="outline">
         <mat-label>Amount</mat-label>
-        <input matInput type="number" [(ngModel)]="token.amount" name="amount{{counter}}" required min="1" [disabled]="isNft">
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="token.amount"
+          name="amount{{ counter }}"
+          required
+          min="1"
+          [disabled]="isNft"
+        />
       </mat-form-field>
     </div>
 
     <div fxLayout="column">
       <div *ngFor="let key of Object.keys(metaData)" fxLayout="column">
-
         <!-- Simple Metafield-->
-        <mat-form-field *ngIf="isSimpleValue(metaData[key])" appearance="outline">
-          <mat-label>{{toString(key) | titlecase}}</mat-label>
-          <input matInput name="{{key}}{{counter}}" [appMaxBytesValidator]="64" maxlength="64" [(ngModel)]="metaData[key]" (input)="updatePreview()" [required]="requiredMetaFields.includes(key) && isNft" [readonly]="lockedMetaFields.includes(key)">
-          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])" type="button">
+        <mat-form-field
+          *ngIf="isSimpleValue(metaData[key])"
+          appearance="outline"
+        >
+          <mat-label>{{ toString(key) | titlecase }}</mat-label>
+          <input
+            matInput
+            name="{{ key }}{{ counter }}"
+            [appMaxBytesValidator]="64"
+            maxlength="64"
+            [(ngModel)]="metaData[key]"
+            (input)="updatePreview()"
+            [required]="requiredMetaFields.includes(key) && isNft"
+            [readonly]="lockedMetaFields.includes(key)"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            matTooltip="Copy value to all other tokens"
+            (click)="spreadMetaValueClicked(key, metaData[key])"
+            type="button"
+          >
             <mat-icon>auto_fix_high</mat-icon>
           </button>
         </mat-form-field>
 
         <!-- List Metafied -->
-        <app-chiplist *ngIf="isSimpleList(metaData[key])" placeholder="add {{key}}..." [(items)]="metaData[key]">
-          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])" type="button">
+        <app-chiplist
+          *ngIf="isSimpleList(metaData[key])"
+          placeholder="add {{ key }}..."
+          [(items)]="metaData[key]"
+        >
+          <button
+            mat-icon-button
+            matSuffix
+            matTooltip="Copy value to all other tokens"
+            (click)="spreadMetaValueClicked(key, metaData[key])"
+            type="button"
+          >
             <mat-icon>auto_fix_high</mat-icon>
           </button>
         </app-chiplist>
 
         <!-- ObjectList Metafied -->
-        <div *ngIf="isSimpleObjectList(metaData[key])" class="simple-object-list" fxLayout="column">
-          <h4>{{toString(key) | titlecase}}</h4>
+        <div
+          *ngIf="isSimpleObjectList(metaData[key])"
+          class="simple-object-list"
+          fxLayout="column"
+        >
+          <h4>{{ toString(key) | titlecase }}</h4>
 
-          <mat-form-field *ngFor="let object of metaData[key]" appearance="fill">
-            <mat-label>{{Object.keys(object)[0] | titlecase}}</mat-label>
-            <input matInput name="{{key}}{{Object.keys(object)[0]}}{{counter}}key" [appMaxBytesValidator]="64" maxlength="64" [(ngModel)]="object[Object.keys(object)[0]]">
-            <button mat-icon-button matSuffix matTooltip="Remove this attribute" (click)="removeSimpleObjectListItem(key, object)" type="button">
+          <mat-form-field
+            *ngFor="let object of metaData[key]"
+            appearance="fill"
+          >
+            <mat-label>{{ Object.keys(object)[0] | titlecase }}</mat-label>
+            <input
+              matInput
+              name="{{ key }}{{ Object.keys(object)[0] }}{{ counter }}key"
+              [appMaxBytesValidator]="64"
+              maxlength="64"
+              [(ngModel)]="object[Object.keys(object)[0]]"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              matTooltip="Remove this attribute"
+              (click)="removeSimpleObjectListItem(key, object)"
+              type="button"
+            >
               <mat-icon>remove</mat-icon>
             </button>
           </mat-form-field>
 
           <div>
-            <button mat-icon-button matSuffix matTooltip="Add new attribute" (click)="addSimpleObjectListItem(metaData[key])" type="button">
+            <button
+              mat-icon-button
+              matSuffix
+              matTooltip="Add new attribute"
+              (click)="addSimpleObjectListItem(metaData[key])"
+              type="button"
+            >
               <mat-icon>add</mat-icon>
             </button>
-            <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])" type="button">
+            <button
+              mat-icon-button
+              matSuffix
+              matTooltip="Copy value to all other tokens"
+              (click)="spreadMetaValueClicked(key, metaData[key])"
+              type="button"
+            >
               <mat-icon>auto_fix_high</mat-icon>
             </button>
           </div>
         </div>
 
         <!-- objects -->
-        <mat-form-field *ngIf="!isSimpleValue(metaData[key]) && !isSimpleList(metaData[key]) && !isSimpleObjectList(metaData[key])" appearance="outline">
-          <mat-label>{{toString(key) | titlecase}}</mat-label>
-          <input matInput [value]="toJson(metaData[key])" readonly>
-          <button mat-icon-button matSuffix matTooltip="Copy value to all other tokens" (click)="spreadMetaValueClicked(key, metaData[key])" type="button">
+        <mat-form-field
+          *ngIf="
+            !isSimpleValue(metaData[key]) &&
+            !isSimpleList(metaData[key]) &&
+            !isSimpleObjectList(metaData[key])
+          "
+          appearance="outline"
+        >
+          <mat-label>{{ toString(key) | titlecase }}</mat-label>
+          <input matInput [value]="toJson(metaData[key])" readonly />
+          <button
+            mat-icon-button
+            matSuffix
+            matTooltip="Copy value to all other tokens"
+            (click)="spreadMetaValueClicked(key, metaData[key])"
+            type="button"
+          >
             <mat-icon>auto_fix_high</mat-icon>
           </button>
         </mat-form-field>
-
       </div>
     </div>
-
   </mat-card-content>
   <mat-card-actions>
     <div fxLayout="row">
       <mat-chip-list #chipList multiple>
-        <mat-chip *ngFor="let metaField of availableMetaFields" (click)="addMetaField(metaField)" [selected]="metaData[metaField]">
-          {{metaField | titlecase}}
+        <mat-chip
+          *ngFor="let metaField of availableMetaFields"
+          (click)="addMetaField(metaField)"
+          [selected]="metaData[metaField]"
+        >
+          {{ metaField | titlecase }}
         </mat-chip>
-        <mat-chip (click)="addNewMetaField()" matTooltip="Add new field with custom name" color="accent">
+        <mat-chip
+          (click)="addNewMetaField()"
+          matTooltip="Add new field with custom name"
+          color="accent"
+        >
           <mat-icon>add</mat-icon> Add attribute
         </mat-chip>
       </mat-chip-list>

@@ -8,9 +8,8 @@ describe('MintTokenMiniComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MintTokenMiniComponent ]
-    })
-    .compileComponents();
+      declarations: [MintTokenMiniComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

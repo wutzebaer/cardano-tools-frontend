@@ -5,10 +5,9 @@ import { MatChipInputEvent } from '@angular/material/chips';
 @Component({
   selector: 'app-chiplist',
   templateUrl: './chiplist.component.html',
-  styleUrls: ['./chiplist.component.scss']
+  styleUrls: ['./chiplist.component.scss'],
 })
 export class ChiplistComponent implements OnInit {
-
   @Input() label!: string;
   @Input() placeholder!: string;
   @Input() items!: any;
@@ -17,10 +16,9 @@ export class ChiplistComponent implements OnInit {
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
@@ -48,5 +46,4 @@ export class ChiplistComponent implements OnInit {
 
     this.itemsChange.emit(this.items);
   }
-
 }

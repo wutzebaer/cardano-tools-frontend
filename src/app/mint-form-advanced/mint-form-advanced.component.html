@@ -1,16 +1,19 @@
-<h2 mat-dialog-title>
-  Advanced settings
-</h2>
+<h2 mat-dialog-title>Advanced settings</h2>
 
 <mat-dialog-content>
   <!-- Metadata -->
   <div>
     <mat-form-field fxFlex appearance="outline" fxFlex="100%">
       <mat-label>Metadata</mat-label>
-      <textarea matInput name="metadata" [mat-autosize]="true" [matAutosizeMinRows]="13" [(ngModel)]="metaDataJson"></textarea>
+      <textarea
+        matInput
+        name="metadata"
+        [mat-autosize]="true"
+        [matAutosizeMinRows]="13"
+        [(ngModel)]="metaDataJson"
+      ></textarea>
     </mat-form-field>
   </div>
-
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

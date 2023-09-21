@@ -26,9 +26,8 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
-
-
 ## Rebuild Swagger
+
 ```bash
 git clone https://github.com/swagger-api/swagger-codegen
 git checkout v3.0.25
@@ -36,8 +35,8 @@ mvn clean package -DskipTests=true
 copy modules\swagger-codegen-cli\target\swagger-codegen-cli.jar ..\cardano-tools-frontend
 ```
 
-
 ## Rebuild Frontend client from BFF api docs
+
 ```bash
 del /S /F /Q src\cardano-tools-client
 java -jar swagger-codegen-cli.jar generate -i http://localhost:8080/v3/api-docs -l typescript-angular -o src/cardano-tools-client

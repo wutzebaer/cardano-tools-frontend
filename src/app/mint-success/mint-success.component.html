@@ -1,48 +1,72 @@
 <div fxLayout="column" fxLayoutGap="15px">
-    <mat-card>
-        <mat-card-content>
+  <mat-card>
+    <mat-card-content>
+      <h1>Success</h1>
 
-            <h1>Success</h1>
+      <div>
+        <p>
+          Your Transaction has been submitted it might take serveral minutes
+          until it appears in the blockchain
+        </p>
 
-            <div>
-                <p>Your Transaction has been submitted it might take serveral minutes until it appears in the blockchain</p>
+        <p
+          style="text-align: center"
+          fyLayout="row"
+          fxLayoutAlign="center center"
+          fxLayoutGap="5px"
+        >
+          <b class="address"
+            ><a
+              target="_blank"
+              href="https://cexplorer.io/search?query={{
+                mintTransaction.txId
+              }}"
+              >{{ mintTransaction.txId }}</a
+            ></b
+          >
+        </p>
 
-                <p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-                    <b class="address"><a target="_blank" href="https://cardanoscan.io/search?filter=all&value={{mintTransaction.txId}}">{{mintTransaction.txId}}</a></b>
-                </p>
+        <p>
+          The change of <b>{{ adaChange | number: "1.0-6" }}&nbsp;₳</b> has also
+          be sent to your address
+        </p>
 
+        <!-- key -->
+        <p>
+          Please copy your account key
+          <b>{{ account?.key }}</b>
+          <button
+            class="inline-button"
+            mat-icon-button
+            (click)="copyAccountKey()"
+          >
+            <mat-icon>content_copy</mat-icon>
+          </button>
+          and keep it secretly, you will need it for support questions or to
+          recover your keys.
+        </p>
 
-                <p *ngIf="!mintTransaction.mintOrderSubmission?.tip">
-                    The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> has also be sent to your address
-                </p>
-
-                <p *ngIf="mintTransaction.mintOrderSubmission?.tip">
-                    The tip of <b>{{adaTip | number: '1.0-6'}}&nbsp;₳</b> has be sent to the [EURO]-Pool pledge. <b>Thank you!</b><br>
-                </p>
-
-                <!-- key -->
-                <p>
-                    Please copy your account key
-                    <b>{{account?.key}}</b>
-                    <button class="inline-button" mat-icon-button (click)="copyAccountKey()">
-                        <mat-icon>content_copy</mat-icon>
-                    </button>
-                    and keep it secretly, you will need it for support questions or to recover your keys.
-                </p>
-
-                <div fxLayout="row wrap" fxLayoutGap="10px grid">
-                    <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="50%" fxFlex.gt-lg="33%" *ngFor="let token of mintTransaction.mintOrderSubmission?.tokens">
-                        <app-mint-token-mini [token]="token" [mintOrderSubmission]="mintTransaction.mintOrderSubmission!"></app-mint-token-mini>
-                    </div>
-                </div>
-
-            </div>
-        </mat-card-content>
-    </mat-card>
-    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-        <button mat-raised-button color="primary" (click)="restartMinting()">
-            <mat-icon>restart_alt</mat-icon>
-            Mint more tokens
-        </button>
-    </div>
+        <div fxLayout="row wrap" fxLayoutGap="10px grid">
+          <div
+            fxFlex="100%"
+            fxFlex.gt-sm="50%"
+            fxFlex.gt-md="50%"
+            fxFlex.gt-lg="33%"
+            *ngFor="let token of mintTransaction.mintOrderSubmission?.tokens"
+          >
+            <app-mint-token-mini
+              [token]="token"
+              [mintOrderSubmission]="mintTransaction.mintOrderSubmission!"
+            ></app-mint-token-mini>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+    <button mat-raised-button color="primary" (click)="restartMinting()">
+      <mat-icon>restart_alt</mat-icon>
+      Mint more tokens
+    </button>
+  </div>
 </div>

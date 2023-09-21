@@ -8,9 +8,8 @@ describe('BurnComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BurnComponent ]
-    })
-    .compileComponents();
+      declarations: [BurnComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

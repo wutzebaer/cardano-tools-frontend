@@ -1,47 +1,11 @@
-.min-height {
-  min-height: 150px;
-}
-
 a {
   text-decoration: none;
 }
 
-.icons {
-  .nft-icon {
-    font-size: 10px;
-    color: #3f51b5;
-    font-weight: bold;
-    line-height: 20px;
-    width: auto;
-    height: auto;
-    border: 1px solid;
-    border-radius: 10px;
-    padding: 0 3px;
-  }
-
-  .verified-icon {
-    font-size: 20px;
-    color: #ffd700;
-    line-height: auto;
-    width: auto;
-    height: auto;
-  }
-
-  .locked-icon {
-    font-size: 20px;
-    color: #ffd700;
-    line-height: auto;
-    width: auto;
-    height: auto;
-  }
-
-  .locked-open-icon {
-    font-size: 20px;
-    color: #c4c4c4;
-    line-height: auto;
-    width: auto;
-    height: auto;
-  }
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .preview {
@@ -53,65 +17,10 @@ a {
     height: 100%;
     object-fit: scale-down;
   }
-  audio {
-    width: 100%;
-    object-fit: scale-down;
-  }
-  video {
-    width: 100%;
-    height: 100%;
-    object-fit: scale-down;
-  }
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    pointer-events: none;
-  }
   .big-icon {
     font-size: 100px;
     line-height: auto;
     width: auto;
     height: auto;
   }
-  .centered-icon-wrapper {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 100%;
-  }
-
-  @keyframes flickerAnimation {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-  .blink {
-    animation: flickerAnimation 2s infinite;
-  }
-}
-
-table {
-  width: 100%;
-  table-layout: fixed;
-}
-td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.mat-column-name {
-  width: 60px;
-}
-
-.title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }

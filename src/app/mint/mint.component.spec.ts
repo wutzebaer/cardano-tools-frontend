@@ -8,9 +8,8 @@ describe('MintFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MintComponent ]
-    })
-    .compileComponents();
+      declarations: [MintComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

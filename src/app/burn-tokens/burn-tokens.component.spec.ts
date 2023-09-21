@@ -8,9 +8,8 @@ describe('BurnTokensComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BurnTokensComponent ]
-    })
-    .compileComponents();
+      declarations: [BurnTokensComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

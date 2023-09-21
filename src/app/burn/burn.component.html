@@ -2,7 +2,6 @@
   <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="1000px">
     <mat-card>
       <mat-card-content>
-
         <h2>Burn address</h2>
 
         <p>
@@ -10,12 +9,20 @@
         </p>
 
         <p>
-          Burn address: <b><a target="_blank" href="https://cardanoscan.io/search?filter=all&value=addr1wxa7ec20249sqg87yu2aqkqp735qa02q6yd93u28gzul93ghspjnt">addr1wxa7ec20249sqg87yu2aqkqp735qa02q6yd93u28gzul93ghspjnt</a></b>
+          Burn address:
+          <b
+            ><a
+              target="_blank"
+              href="https://cexplorer.io/search?query=addr1wxa7ec20249sqg87yu2aqkqp735qa02q6yd93u28gzul93ghspjnt"
+              >addr1wxa7ec20249sqg87yu2aqkqp735qa02q6yd93u28gzul93ghspjnt</a
+            ></b
+          >
         </p>
-        
+
         <h2>Verify the address</h2>
         <p>
-          To verify that this address is really locked forever save this to a file named <code>locked_script.json</code>
+          To verify that this address is really locked forever save this to a
+          file named <code>locked_script.json</code>
         </p>
 
         <pre>
@@ -28,23 +35,25 @@
       "slot": 0
     &#125;
   ]
-&#125;</pre>
+&#125;</pre
+        >
 
-        <p>
-          Then generate the address from it
-        </p>
-
+        <p>Then generate the address from it</p>
 
         <pre>
 cardano-cli address build --payment-script-file locked_script.json --mainnet --out-file locked.addr
-cat locked.addr</pre>
-
-        <p>It results in <b>addr1wxa7ec20249sqg87yu2aqkqp735qa02q6yd93u28gzul93ghspjnt</b></p>
+cat locked.addr</pre
+        >
 
         <p>
-          Since the script validates only when the current slot is before 0 it will never be able to succeed.
+          It results in
+          <b>addr1wxa7ec20249sqg87yu2aqkqp735qa02q6yd93u28gzul93ghspjnt</b>
         </p>
 
+        <p>
+          Since the script validates only when the current slot is before 0 it
+          will never be able to succeed.
+        </p>
       </mat-card-content>
     </mat-card>
   </div>

@@ -1,21 +1,27 @@
 <div fxLayoutAlign="center" *ngIf="publicDropInfo">
+  <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="1000px">
+    <mat-card>
+      <mat-card-content
+        *ngIf="!publicDropInfo.running || publicDropInfo.left === 0"
+      >
+        <h1>{{ publicDropInfo.name }}</h1>
+        <p>Sorry drop is currently stopped.</p>
+      </mat-card-content>
 
-    <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="1000px">
-        <mat-card>
-            <mat-card-content *ngIf="!publicDropInfo.running || publicDropInfo.left===0">
-                <h1>{{publicDropInfo.name}}</h1>
-                <p>Sorry drop is currently stopped.</p>
-            </mat-card-content>
+      <mat-card-content
+        *ngIf="publicDropInfo.running && publicDropInfo.left > 0"
+      >
+        <h1>{{ publicDropInfo.name }}</h1>
 
-            <mat-card-content *ngIf="publicDropInfo.running && publicDropInfo.left > 0">
+        <p>
+          A collection of {{ publicDropInfo.total }} NFTs, hurry there are only
+          {{ publicDropInfo.left }} NFTs at
+          {{ publicDropInfo.price / 1000000 | number: "1.0-6" }} ₳ left!
+        </p>
 
-                <h1>{{publicDropInfo.name}}</h1>
+        <h2>How to buy</h2>
 
-                <p>A collection of {{publicDropInfo.total}} NFTs, hurry there are only {{publicDropInfo.left}} NFTs at {{publicDropInfo.price / 1000000 | number: '1.0-6'}} ₳ left!</p>
-
-                <h2>How to buy</h2>
-
-                <!--
+        <!--
                 <ul>
                     <li>Choose the quantity you would like to purchase</li>
                     <li>Send the correct amount of ADA to the wallet address below</li>
@@ -23,48 +29,74 @@
                 </ul>
                 -->
 
-
-                <h3><b>Step 1:</b> Choose the quantity you would like to purchase</h3>
-                <p>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Amount</mat-label>
-                        <mat-select [(ngModel)]="amount">
-                            <mat-option *ngFor="let amount of availableAmounts" [value]="amount">
-                                {{amount}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </p>
-
-                <h3><b>Step 2:</b> Send the correct amount of ADA to the wallet address below</h3>
-                <p>
-                    Please send <b>{{publicDropInfo.price / 1000000 * amount | number: '1.0-6'}} ₳</b>
-                    <button mat-icon-button class="inline-button" (click)="copyToClipboard((publicDropInfo.price / 1000000 * amount).toString())">
-                        <mat-icon>content_copy</mat-icon>
-                    </button>
-
-                    to address <b>{{publicDropInfo.address}}</b>
-                    <button mat-icon-button class="inline-button" (click)="copyToClipboard(publicDropInfo.address)">
-                        <mat-icon>content_copy</mat-icon>
-                    </button>
-                </p>
-
-                <h3><b>Step 3:</b> Wait to receive the NFTs in your wallet</h3>
-
-                <h2>Terms & Conditions.</h2>
-                <p>NFTs will be sent to your wallet address once payment is received. We limit maximum quantity to {{publicDropInfo.max}} NFTs per Transaction. DON'T SEND FUNDS FROM AN EXCHANGE. Thanks</p>
-
-                <h2>PolicyId</h2>
-                <p>{{publicDropInfo.policyId}}</p>
-
-            </mat-card-content>
-        </mat-card>
-
-
+        <h3><b>Step 1:</b> Choose the quantity you would like to purchase</h3>
         <p>
-            Need help? Join our <a target="_blank" href="https://t.me/joinchat/XrlIF21NDzAyODUy">telegram channel</a>!
+          <mat-form-field appearance="outline">
+            <mat-label>Amount</mat-label>
+            <mat-select [(ngModel)]="amount">
+              <mat-option
+                *ngFor="let amount of availableAmounts"
+                [value]="amount"
+              >
+                {{ amount }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </p>
 
-    </div>
+        <h3>
+          <b>Step 2:</b> Send the correct amount of ADA to the wallet address
+          below
+        </h3>
+        <p>
+          Please send
+          <b
+            >{{
+              (publicDropInfo.price / 1000000) * amount | number: "1.0-6"
+            }}
+            ₳</b
+          >
+          <button
+            mat-icon-button
+            class="inline-button"
+            (click)="
+              copyToClipboard(
+                ((publicDropInfo.price / 1000000) * amount).toString()
+              )
+            "
+          >
+            <mat-icon>content_copy</mat-icon>
+          </button>
 
+          to address <b>{{ publicDropInfo.address }}</b>
+          <button
+            mat-icon-button
+            class="inline-button"
+            (click)="copyToClipboard(publicDropInfo.address)"
+          >
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </p>
+
+        <h3><b>Step 3:</b> Wait to receive the NFTs in your wallet</h3>
+
+        <h2>Terms & Conditions.</h2>
+        <p>
+          NFTs will be sent to your wallet address once payment is received. We
+          limit maximum quantity to {{ publicDropInfo.max }} NFTs per
+          Transaction. DON'T SEND FUNDS FROM AN EXCHANGE. Thanks
+        </p>
+
+        <h2>PolicyId</h2>
+        <p>{{ publicDropInfo.policyId }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <p>
+      Need help? Join our
+      <a target="_blank" href="https://t.me/joinchat/XrlIF21NDzAyODUy"
+        >telegram channel</a
+      >!
+    </p>
+  </div>
 </div>

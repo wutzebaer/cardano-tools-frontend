@@ -1,11 +1,21 @@
 <mat-form-field class="chip-list">
-  <mat-label>{{label}}</mat-label>
+  <mat-label>{{ label }}</mat-label>
   <mat-chip-list #chipList>
-    <mat-chip *ngFor="let item of items" [removable]="true" (removed)="remove(item)">
-      {{item}}
+    <mat-chip
+      *ngFor="let item of items"
+      [removable]="true"
+      (removed)="remove(item)"
+    >
+      {{ item }}
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
-    <input placeholder="{{placeholder}}" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="add($event)">
+    <input
+      placeholder="{{ placeholder }}"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matChipInputAddOnBlur]="true"
+      (matChipInputTokenEnd)="add($event)"
+    />
     <ng-content></ng-content>
   </mat-chip-list>
 </mat-form-field>

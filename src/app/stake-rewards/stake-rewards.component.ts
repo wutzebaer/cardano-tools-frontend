@@ -1,93 +1,111 @@
-import { PoolInfo } from './../../cardano-tools-client/model/poolInfo';
-import { FormControl, NgForm, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
-import { Submission } from './../fund-account/fund-account.component';
-import { StakeRewardRestInterfaceService } from './../../cardano-tools-client/api/stakeRewardRestInterface.service';
-import { Subscription, Observable, BehaviorSubject, Subject } from 'rxjs';
-import { AccountService } from './../account.service';
-import { Transaction, MintOrderSubmission, AccountPrivate, TokenData, MintRestInterfaceService, EpochStakesRequest } from 'src/cardano-tools-client';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { CardanoUtils } from '../cardano-utils';
-import { EpochStakePosition } from './../../cardano-tools-client/model/epochStakePosition';
-import { JsonpClientBackend } from '@angular/common/http';
-import { startWith, map, filter } from 'rxjs/operators';
-import { I } from '@angular/cdk/keycodes';
+import { StakeRewardRestInterfaceService } from './../../cardano-tools-client/api/stakeRewardRestInterface.service';
+import { AccountService } from './../account.service';
+import { Submission } from './../fund-account/fund-account.component';
+import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
+import {
+  AccountPrivate,
+  EpochStakesRequest,
+  MintRestInterfaceService,
+  StakeRewardPosition,
+  Transaction,
+} from 'src/cardano-tools-client';
+import { PoolInfo, RestHandlerService } from 'src/dbsync-client';
 
 @Component({
   selector: 'app-stake-rewards',
   templateUrl: './stake-rewards.component.html',
-  styleUrls: ['./stake-rewards.component.scss']
+  styleUrls: ['./stake-rewards.component.scss'],
 })
 export class StakeRewardsComponent implements OnInit, OnDestroy {
-
   @ViewChild('rewardForm') rewardForm!: NgForm;
   @ViewChild(MatSort) sort!: MatSort;
-  dataSource: MatTableDataSource<EpochStakePosition> = new MatTableDataSource();
-  displayedColumns = ['stakeAddress', 'rewardAddress', 'amount', 'share', 'rewards', 'exclude']
+  dataSource: MatTableDataSource<StakeRewardPosition> =
+    new MatTableDataSource();
+  displayedColumns = [
+    'stakeAddress',
+    'rewardAddress',
+    'amount',
+    'share',
+    'rewards',
+    'exclude',
+  ];
   poolHash: string = '';
   epoch: number = CardanoUtils.currentEpoch();
-  epochStakes: EpochStakePosition[] = [];
-  rewards: { [key: string]: { [key: string]: number; }; } = {};
-  accountSubscription: Subscription
+  epochStakes: StakeRewardPosition[] = [];
+  rewards: { [key: string]: { [key: string]: number } } = {};
+  accountSubscription: Subscription;
+  fundsSubscription: Subscription;
   account?: AccountPrivate;
-  minStakeAda = 1000
+  minStakeAda = 1000;
   oldFunds?: number;
   poolList?: PoolInfo[];
   filteredOptions!: Subject<PoolInfo[]>;
   message = '';
-  excludedStakersCheckboxes: { [key: string]: boolean; } = {};
+  excludedStakersCheckboxes: { [key: string]: boolean } = {};
   isValid = true;
-
 
   mintOrderSubmission: Submission = {
     tip: true,
     pin: false,
-    targetAddress: ''
+    targetAddress: '',
   };
 
   mintTransaction: Transaction = {
-    rawData: "",
-    txId: "",
+    rawData: '',
+    txId: '',
     fee: 0,
-    outputs: "",
-    inputs: "",
-    metaDataJson: "",
+    outputs: '',
+    inputs: '',
+    metaDataJson: '',
     minOutput: 0,
     txSize: 0,
-    signedData: ""
+    signedData: '',
   };
 
   constructor(
-    private stakeRewardRestInterfaceService: StakeRewardRestInterfaceService,
+    restHandlerService: RestHandlerService,
     private accountService: AccountService,
+    private stakeRewardRestInterfaceService: StakeRewardRestInterfaceService,
     private mintRestInterfaceService: MintRestInterfaceService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+  ) {
+    restHandlerService
+      .getPoolList()
+      .subscribe((list) => (this.poolList = list));
 
-    stakeRewardRestInterfaceService.getPoolList().subscribe(list => this.poolList = list);
+    this.accountSubscription = accountService.account.subscribe((account) => {
+      this.account = account;
+    });
 
-    this.accountSubscription = accountService.account.subscribe(account => {
-      this.account = account
-      if (this.oldFunds !== account.address.balance && this.rewardForm?.valid) {
-        this.oldFunds = account.address.balance;
-
-        let excludedStakers: string[] = Object.entries(this.excludedStakersCheckboxes).filter(entry => entry[1]).map(entry => entry[0]);
+    this.fundsSubscription = accountService.funds.subscribe((funds) => {
+      if (this.oldFunds !== funds && this.rewardForm?.valid) {
+        this.oldFunds = funds;
+        let excludedStakers: string[] = Object.entries(
+          this.excludedStakersCheckboxes,
+        )
+          .filter((entry) => entry[1])
+          .map((entry) => entry[0]);
         let request: EpochStakesRequest = {
           tip: this.mintOrderSubmission.tip,
           minStake: this.minStakeAda * 1_000_000,
           message: this.message,
-          excludedStakers: excludedStakers
+          excludedStakers: excludedStakers,
         };
-        this.stakeRewardRestInterfaceService.getEpochStakes(request, this.account!.key, this.poolHash, this.epoch).subscribe(result => {
-          this.epochStakes = result
-          this.dataSource.data = result;
-          this.dataSource.sort = this.sort;
-          //this.buildRewards();
-          console.log(this.mintTransaction.minOutput)
-          this.buildTransaction();
-        });
+        this.stakeRewardRestInterfaceService
+          .getEpochStakes(this.account!.key, this.poolHash, this.epoch, request)
+          .subscribe((result) => {
+            this.epochStakes = result;
+            this.dataSource.data = result;
+            this.dataSource.sort = this.sort;
+            this.buildTransaction();
+          });
       }
     });
   }
@@ -98,6 +116,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.accountSubscription.unsubscribe();
+    this.fundsSubscription.unsubscribe();
   }
 
   invalidate() {
@@ -106,43 +125,48 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
 
   refresh() {
     this.oldFunds = undefined;
-    this.accountService.updateAccount();
+    this.accountService.updateFunds();
   }
-
 
   filter() {
     if (!this.poolList) {
       return;
     }
     const filterValue = this.poolHash.toLowerCase();
-    this.filteredOptions.next(this.poolList.filter(option => option.ticker.toLowerCase().includes(filterValue)));
+    this.filteredOptions.next(
+      this.poolList.filter((option) =>
+        option.tickerName.toLowerCase().includes(filterValue),
+      ),
+    );
   }
-
 
   buildTransaction() {
-    this.stakeRewardRestInterfaceService.buildTransaction(this.epochStakes, this.message, this.account!.key).subscribe(mintTransaction => {
-      this.mintTransaction = mintTransaction;
-      this.isValid = true;
-    })
+    this.stakeRewardRestInterfaceService
+      .buildTransaction(this.account!.key, this.message, this.epochStakes)
+      .subscribe((mintTransaction) => {
+        this.mintTransaction = mintTransaction;
+        this.isValid = true;
+      });
   }
 
-  typeSafeOutputs(ident: any): { [key: string]: number; } {
+  typeSafeOutputs(ident: any): { [key: string]: number } {
     return ident;
   }
 
   submit() {
     if (confirm('Do you really want to submit this transaction?')) {
-      this.mintRestInterfaceService.submitMintTransaction(this.mintTransaction, this.account!.key).subscribe({
-        complete: () => {
-          this.dialog.open(RoyaltiesCip27MintSuccessComponent, {
-            width: '600px',
-            maxWidth: '90vw',
-            data: { transaction: this.mintTransaction },
-            closeOnNavigation: true
-          });
-        }
-      });
+      this.mintRestInterfaceService
+        .submitMintTransaction(this.account!.key, this.mintTransaction)
+        .subscribe({
+          complete: () => {
+            this.dialog.open(RoyaltiesCip27MintSuccessComponent, {
+              width: '600px',
+              maxWidth: '90vw',
+              data: { transaction: this.mintTransaction },
+              closeOnNavigation: true,
+            });
+          },
+        });
     }
   }
-
 }

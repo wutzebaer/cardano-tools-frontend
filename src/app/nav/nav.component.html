@@ -1,12 +1,21 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="'dialog' || (isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="true && (isHandset$ | async) === false" (click)="drawer.mode === 'side' || drawer.close()">
-
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="'dialog' || (isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="true && (isHandset$ | async) === false"
+    (click)="drawer.mode === 'side' || drawer.close()"
+  >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item [routerLink]="'/europool'"> [EURO]-Pool </a>
       <a mat-list-item [routerLink]="'/latest'"> Browse NFTs </a>
       <a mat-list-item [routerLink]="'/mint'"> Mint NFTs </a>
-      <a mat-list-item [routerLink]="'/mint-on-demand'"> Mint NFTs on demand </a>
+      <a mat-list-item [routerLink]="'/mint-on-demand'">
+        Mint NFTs on demand
+      </a>
       <a mat-list-item [routerLink]="'/my'"> My NFTs </a>
       <a mat-list-item [routerLink]="'/wallet-statement'"> Wallet statement </a>
       <a mat-list-item [routerLink]="'/royaltiescip27'"> Royalties (CIP 27) </a>
@@ -26,35 +35,105 @@
   </mat-sidenav>
   <mat-sidenav-content fxLayout="column" class="my-sidenav-content">
     <mat-toolbar color="primary" class="mat-elevation-z8">
-      <img class="logo" src="/assets/logo.png">
-      <span>
-        Cardano Tools
-      </span>
+      <img class="logo" src="/assets/logo.png" />
+      <span> Cardano Tools </span>
       <span class="example-spacer"></span>
-      <span *ngIf="account?.address?.balance" class="slogan">Balance: {{account?.address?.balance!/1000000 | number: '1.0-6'}}&nbsp;₳</span>
+      <span *ngIf="funds" class="slogan"
+        >Balance: {{ funds / 1000000 | number: "1.0-6" }}&nbsp;₳</span
+      >
       <span class="example-spacer"></span>
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="true || (isHandset$ | async)">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="true || (isHandset$ | async)"
+      >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
     </mat-toolbar>
     <div class="main-content" fxLayout="column" fxLayoutGap="10px">
-      <mat-card *ngIf="false" class="notice">Support cardano-tools.io by voting in FUND7: <a target="_blank" href="https://cardano.ideascale.com/a/dtd/Cardano-features-for-everyone/380919-48088">Cardano features for everyone</a></mat-card>
+      <mat-card *ngIf="false" class="notice"
+        >Support cardano-tools.io by voting in FUND7:
+        <a
+          target="_blank"
+          href="https://cardano.ideascale.com/a/dtd/Cardano-features-for-everyone/380919-48088"
+          >Cardano features for everyone</a
+        ></mat-card
+      >
       <mat-card *ngIf="false" class="warn">
-        <mat-icon>construction</mat-icon>cardano-tools.io has currently technical problems, it might take several hours until balances are up to date<mat-icon>construction</mat-icon>
+        <mat-icon>construction</mat-icon>cardano-tools.io has currently
+        technical problems, it might take several hours until balances are up to
+        date<mat-icon>construction</mat-icon>
       </mat-card>
 
-      <div *ngIf="true" class="support" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center" fxHide.lt-md="true">
-        <a href="https://charly-token.io/" target="_blank"><img src="/assets/charly.jpg"></a>
-        <div>Join <a href="https://adapools.org/pool/3bd3996595321d951291b11e1331061c5d8659d9e69390536dfc922c" target="_blank">EURO-Pool</a> to support cardano-tools and earn additional <a href="https://charly-token.io/" target="_blank">$Charly</a>, <a href="https://pockettowne.io/" target="_blank">$PTC</a> and <a href="https://www.wolfcardano.io/" target="_blank">$WOLF</a> tokens on <a target="_blank" href="https://app.tosidrop.io/cardano/claim">tosidrop.io</a></div>
-        <a href="https://www.wolfcardano.io/" target="_blank"><img src="/assets/wolf.jpg"></a>
+      <div
+        *ngIf="true"
+        class="support"
+        fxLayout="row"
+        fxLayoutGap="10px"
+        fxLayoutAlign="center center"
+        fxHide.lt-md="true"
+      >
+        <a href="https://charly-token.io/" target="_blank"
+          ><img src="/assets/charly.jpg"
+        /></a>
+        <div>
+          Join
+          <a
+            href="https://adapools.org/pool/3bd3996595321d951291b11e1331061c5d8659d9e69390536dfc922c"
+            target="_blank"
+            >EURO-Pool</a
+          >
+          to support cardano-tools and earn additional
+          <a href="https://charly-token.io/" target="_blank">$Charly</a>,
+          <a href="https://pockettowne.io/" target="_blank">$PTC</a> and
+          <a href="https://www.wolfcardano.io/" target="_blank">$WOLF</a> tokens
+          on
+          <a target="_blank" href="https://app.tosidrop.io/cardano/claim"
+            >tosidrop.io</a
+          >
+        </div>
+        <a href="https://www.wolfcardano.io/" target="_blank"
+          ><img src="/assets/wolf.jpg"
+        /></a>
       </div>
       <div *ngIf="true" fxHide.gt-sm="true">
-        <div class="support" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
-          <a href="https://charly-token.io/" target="_blank"><img src="/assets/charly.jpg"></a>
-          <a href="https://www.wolfcardano.io/" target="_blank"><img src="/assets/wolf.jpg"></a>
+        <div
+          class="support"
+          fxLayout="row"
+          fxLayoutGap="10px"
+          fxLayoutAlign="center center"
+        >
+          <a href="https://charly-token.io/" target="_blank"
+            ><img src="/assets/charly.jpg"
+          /></a>
+          <a href="https://www.wolfcardano.io/" target="_blank"
+            ><img src="/assets/wolf.jpg"
+          /></a>
         </div>
-        <div class="support" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
-          <div>Join <a href="https://adapools.org/pool/3bd3996595321d951291b11e1331061c5d8659d9e69390536dfc922c" target="_blank">EURO-Pool</a> to support cardano-tools and earn additional <a href="https://charly-token.io/" target="_blank">$Charly</a>, <a href="https://pockettowne.io/" target="_blank">$PTC</a> and <a href="https://www.wolfcardano.io/" target="_blank">$WOLF</a> tokens on <a target="_blank" href="https://app.tosidrop.io/cardano/claim">tosidrop.io</a></div>
+        <div
+          class="support"
+          fxLayout="row"
+          fxLayoutGap="10px"
+          fxLayoutAlign="center center"
+        >
+          <div>
+            Join
+            <a
+              href="https://adapools.org/pool/3bd3996595321d951291b11e1331061c5d8659d9e69390536dfc922c"
+              target="_blank"
+              >EURO-Pool</a
+            >
+            to support cardano-tools and earn additional
+            <a href="https://charly-token.io/" target="_blank">$Charly</a>,
+            <a href="https://pockettowne.io/" target="_blank">$PTC</a> and
+            <a href="https://www.wolfcardano.io/" target="_blank">$WOLF</a>
+            tokens on
+            <a target="_blank" href="https://app.tosidrop.io/cardano/claim"
+              >tosidrop.io</a
+            >
+          </div>
         </div>
       </div>
 

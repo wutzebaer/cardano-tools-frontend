@@ -7,14 +7,12 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss']
+  styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
+  constructor(public dialog: MatDialog) {}
 
-  constructor(public dialog: MatDialog) { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   tos() {
     this.dialog.open(TermsOfServiceComponent);
@@ -27,5 +25,4 @@ export class FooterComponent implements OnInit {
   imprint() {
     this.dialog.open(ImprintComponent);
   }
-
 }

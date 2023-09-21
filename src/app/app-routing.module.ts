@@ -3,7 +3,6 @@ import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions
 import { MintOnDemandComponent } from './mint-on-demand/mint-on-demand.component';
 import { StakeRewardsComponent } from './stake-rewards/stake-rewards.component';
 import { BurnTokensComponent } from './burn-tokens/burn-tokens.component';
-import { ExchangeComponent } from './exchange/exchange.component';
 import { BurnComponent } from './burn/burn.component';
 import { EuroPoolComponent } from './euro-pool/euro-pool.component';
 import { MyTokensComponent } from './my-tokens/my-tokens.component';
@@ -23,16 +22,15 @@ const routes: Routes = [
   { path: 'register', component: RegisterTokenComponent },
   { path: 'latest', component: LatestTokensComponent },
   { path: 'my', component: MyTokensComponent },
-  { path: 'exchange', component: ExchangeComponent },
   { path: 'royaltiescip27', component: RoyaltiesCip27MintComponent },
   { path: 'reward-stakers', component: StakeRewardsComponent },
   { path: 'mint-on-demand', component: MintOnDemandComponent },
   { path: 'drop/:prettyUrl', component: MintOnDemandInstructionsComponent },
-  { path: 'wallet-statement', component: WalletStatementComponent }
+  { path: 'wallet-statement', component: WalletStatementComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

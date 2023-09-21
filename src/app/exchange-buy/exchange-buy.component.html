@@ -1,9 +1,0 @@
-<div fxLayout="row" fxLayoutAlign="center" style="padding-bottom: 10px;">
-  <div fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="center top" fxFlex="0 1 1200px" fxFlex.lt-md="100%">
-    <div fxFlex="100%" fxFlex.gt-xs="300px" *ngFor="let offer of offers; let i = index">
-      <app-latest-tokens-mini [token]="offer.tokenDataParsed" (click)="details(offer)">
-        <b style="float: right">{{offer.price/1000000 | number: '1.0-6'}}&nbsp;₳</b>
-      </app-latest-tokens-mini>
-    </div>
-  </div>
-</div>

@@ -1,43 +1,33 @@
 <mat-card>
   <mat-card-content fxLayout="column" fxLayoutGap="5px">
-
-    <div *ngIf="token.projectMetadata" class="title">Project: <b>{{token.projectMetadata.project}}</b></div>
-
     <div class="title">
-      <span *ngIf="token.metaData['name']">{{token.metaData['name']}}</span>
-      <span *ngIf="!token.metaData['name']">{{token.name}}</span>
+      {{ tokenListItem.name || tokenListItem.maName }}
     </div>
 
-    <div [className]="isLoadingImage() || !hasMedia() ? 'preview min-height' : 'preview'">
+    <div class="preview" fxLayout="column" fxLayoutAlign="center center">
+      <!-- image -->
+      <ng-container *ngIf="imageUrl; else noimage">
+        <img #imagetag [src]="imageUrl" loading="lazy" />
+      </ng-container>
 
-
-
-      <div class="centered-icon-wrapper blink" fxLayout="column" fxLayoutAlign="center center" *ngIf="isLoadingImage()">
-        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">
-          image
-        </mat-icon>
-      </div>
-
-      <img *ngIf="previewType.startsWith('image')" [src]="previewUrl" (load)="onLoad()" loading="lazy">
-      <audio controls *ngIf="previewType.startsWith('audio')" [src]="previewUrl" (load)="onLoad()"></audio>
-      <video controls *ngIf="previewType.startsWith('video')" [src]="previewUrl" (load)="onLoad()"></video>
-      <iframe loading="lazy" *ngIf="previewType.startsWith('text')" [src]="previewUrl" (load)="onLoad()"></iframe>
-
-      <div class="centered-icon-wrapper" fxLayout="column" fxLayoutAlign="center center" *ngIf="!hasMedia()">
-        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
-      </div>
-
+      <!-- no image -->
+      <ng-template #noimage>
+        <mat-icon
+          class="big-icon"
+          color="primary"
+          fontSet="material-icons-outlined"
+          >generating_tokens</mat-icon
+        >
+      </ng-template>
     </div>
 
-    <div fxlayout="row" fxLayoutAlign="start center" class="icons" fxLayoutGap="5px">
-      <ng-content></ng-content>
-      <mat-icon *ngIf="token.locked" class="locked-icon" fontSet="material-icons-outlined">lock</mat-icon>
-      <mat-icon *ngIf="!token.locked" class="locked-open-icon" fontSet="material-icons-outlined">lock_open</mat-icon>
-      <mat-icon *ngIf="token.tokenRegistryMetadata" class="verified-icon" fontSet="material-icons-outlined">how_to_reg</mat-icon>
-      <span *ngIf="token.nft" class="nft-icon">NFT</span>
-      <span *ngIf="token.quantity > 1" class="title">{{token.quantity}}x</span>
+    <div
+      fxlayout="row"
+      fxLayoutAlign="start center"
+      class="icons"
+      fxLayoutGap="5px"
+    >
+      <span class="title">{{ tokenListItem.quantity }}x</span>
     </div>
-
-
   </mat-card-content>
 </mat-card>

@@ -1,43 +1,72 @@
 <p *ngIf="showTip">
-  <mat-checkbox name="tip" [(ngModel)]="mintOrderSubmission.tip" (change)="emitUpdateMintTransaction()">I give a tip to the [EURO]-Pool pledge</mat-checkbox>
+  <mat-checkbox
+    name="tip"
+    [(ngModel)]="mintOrderSubmission.tip"
+    (change)="emitUpdateMintTransaction()"
+    >I give a tip to the [EURO]-Pool pledge</mat-checkbox
+  >
 </p>
 
 <p *ngIf="showPin">
-  <mat-checkbox name="pin" [(ngModel)]="mintOrderSubmission.pin" (change)="emitUpdateMintTransaction()" matTooltip="Otherwise you have to take care of yourself that the files are pinned">Pin IPFS files</mat-checkbox>
+  <mat-checkbox
+    name="pin"
+    [(ngModel)]="mintOrderSubmission.pin"
+    (change)="emitUpdateMintTransaction()"
+    matTooltip="Otherwise you have to take care of yourself that the files are pinned"
+    >Pin IPFS files</mat-checkbox
+  >
 </p>
 
 <!-- fund instruction-->
 <p>
   Please send at least
-  <b *ngIf="showTooltip" matTooltip="{{adaFee}}&nbsp;₳ fees, {{adaMinOutput}}&nbsp;₳ will be sent back to your address, {{adaTip}}&nbsp;₳ will be tipped, {{adaPinFee}}&nbsp;₳ will be used to pin the files">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
-  <b *ngIf="!showTooltip">{{minAdaBalance | number: '1.0-6'}}&nbsp;₳</b>
+  <b
+    *ngIf="showTooltip"
+    matTooltip="{{ adaFee }}&nbsp;₳ fees, {{
+      adaMinOutput
+    }}&nbsp;₳ will be sent back to your address, {{
+      adaPinFee
+    }}&nbsp;₳ will be used to pin the files"
+    >{{ minAdaBalance | number: "1.0-6" }}&nbsp;₳</b
+  >
+  <b *ngIf="!showTooltip">{{ minAdaBalance | number: "1.0-6" }}&nbsp;₳</b>
   <button class="inline-button" mat-icon-button (click)="copyFunds()">
     <mat-icon>content_copy</mat-icon>
   </button>
   to this address
 </p>
 
-
-<p style="text-align: center;" fyLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-  <b class="address">{{account?.address?.address}}</b>
+<p
+  style="text-align: center"
+  fyLayout="row"
+  fxLayoutAlign="center center"
+  fxLayoutGap="5px"
+>
+  <b class="address">{{ account?.address?.address }}</b>
   <button mat-icon-button (click)="copyAddressToClipboard()">
     <mat-icon>content_copy</mat-icon>
   </button>
 </p>
 
-
-
 <!-- current balance -->
 <p>
   <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
     <mat-icon class="green" [fxShow]="adaBalanceInput.valid">done</mat-icon>
-    <mat-icon color="warn" [fxShow]="adaBalanceInput.invalid">dangerous</mat-icon>
+    <mat-icon color="warn" [fxShow]="adaBalanceInput.invalid"
+      >dangerous</mat-icon
+    >
     <span>Curent address balance </span>
-    <b>{{adaBalance | number: '1.0-6'}}&nbsp;₳</b>
+    <b>{{ adaBalance | number: "1.0-6" }}&nbsp;₳</b>
   </span>
 </p>
 
-<p *ngIf="adaBalanceInput.valid && account?.fundingAddresses?.length == 0 && requesttargetAddress">
+<p
+  *ngIf="
+    adaBalanceInput.valid &&
+    fundingAddresses?.length == 0 &&
+    requesttargetAddress
+  "
+>
   <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
     <mat-icon color="warn">dangerous</mat-icon>
     <span>Waiting for target address... </span>
@@ -47,54 +76,59 @@
 <p *ngIf="mintTransaction.txSize <= 16384">
   <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
     <mat-icon class="green">done</mat-icon>
-    <span>Your transaction size is currently at {{niceBytes(mintTransaction.txSize)}} ({{mintTransaction.txSize / 16384 | percent}})</span>
+    <span
+      >Your transaction size is currently at
+      {{ niceBytes(mintTransaction.txSize) }} ({{
+        mintTransaction.txSize / 16384 | percent
+      }})</span
+    >
   </span>
 </p>
 <p *ngIf="mintTransaction.txSize > 16384">
   <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
     <mat-icon color="warn">dangerous</mat-icon>
-    <span>Your transaction exceeds the maximum size, please remove tokens or metadata, the threshold is currently at {{mintTransaction.txSize / 16384 | percent}}</span>
-  </span>
-</p>
-
-<!-- tip -->
-<p *ngIf="mintTransaction.mintOrderSubmission?.tip && adaBalanceInput.valid">
-  <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-    <span>Tip for the [EURO]-Pool pledge</span>
-    <b>{{adaTip | number: '1.0-6'}}&nbsp;₳ Thank You!</b>
+    <span
+      >Your transaction exceeds the maximum size, please remove tokens or
+      metadata, the threshold is currently at
+      {{ mintTransaction.txSize / 16384 | percent }}</span
+    >
   </span>
 </p>
 
 <!-- receiver address-->
-<mat-form-field appearance="outline" style="width: 100%; max-width: 850px;" [fxShow]="account?.fundingAddresses?.length || 0 > 1" *ngIf="requesttargetAddress">
+<mat-form-field
+  appearance="outline"
+  style="width: 100%; max-width: 850px"
+  [fxShow]="fundingAddresses?.length || 0 > 1"
+  *ngIf="requesttargetAddress"
+>
   <mat-label>Send tokens to</mat-label>
-  <mat-select placeholder="Select target address" [(ngModel)]="mintOrderSubmission.targetAddress" #targetAddressInput="ngModel" name="targetAddress" (selectionChange)="emitUpdateMintTransaction()" required>
-    <mat-option *ngFor="let address of account?.fundingAddresses" [value]="address">
-      {{address}}
+  <mat-select
+    placeholder="Select target address"
+    [(ngModel)]="mintOrderSubmission.targetAddress"
+    #targetAddressInput="ngModel"
+    name="targetAddress"
+    (selectionChange)="emitUpdateMintTransaction()"
+    required
+  >
+    <mat-option *ngFor="let address of fundingAddresses" [value]="address">
+      {{ address }}
     </mat-option>
   </mat-select>
 </mat-form-field>
 
-<div *ngIf="adaBalance && account?.stakePositions?.length === 0" class="hazard-border">
-  <h3>
-    😳 <b>Oops</b> your wallet doesn't seem to be delegated, quickly rush to your wallet and delegate it to <b>EURO-pool!</b> 😳
-  </h3>
-  <p>This will generate you <b>additional ADA</b> without risk every five days and strongly supports cardano-tools-io. Delegating is very intuitive in most wallets, but just in case here are some guides, hope your wallet is among them:</p>
-  <ul>
-    <li><a target="_blank" href="https://forum.cardano.org/t/staking-and-delegating-for-beginners-a-step-by-step-guide/36681">How-to stake with Daedalus</a></li>
-    <li><a target="_blank" href="https://medium.com/infstones/cardano-delegation-tutorial-delegating-tokens-for-infstones-a14365af7a07">How-to stake with Yoroi</a></li>
-    <li><a target="_blank" href="https://www.altcoinbuzz.io/bitcoin-and-crypto-guide/how-to-use-the-nami-wallet/#Delegate">How-to stake with nami</a></li>
-    <li><a target="_blank" href="https://www.youtube.com/watch?v=RL4eQy0beC8">How-to stake with ccvault/eternl</a></li>
-  </ul>
-  <p><b>Thank you very much!</b></p>
-</div>
-
-<ng-container *ngFor="let stakePosition of account?.stakePositions">
-  <h3 class="hazard-border" *ngIf="stakePosition.totalStake! > 30_000_000_000_000">
-    😳 <b>WOW</b> your wallet of <b>{{stakePosition.funds!/1000000 | number: '1.0-0'}}&nbsp;₳</b> is currently delegated to the very large pool <b>{{stakePosition.tickerName}}</b>. It would be very cash money of you if you redelegate it to <b>EURO-pool</b> to support <b>decentralisation</b> and <b>cardano-tools.io!</b> 🦍
-  </h3>
-</ng-container>
-
 <!-- hidden validator -->
-<mat-checkbox fxHide [ngModel]="adaBalance >= minAdaBalance" name="adaBalanceInput" #adaBalanceInput="ngModel" required></mat-checkbox>
-<mat-checkbox fxHide [ngModel]="mintTransaction.txSize <= 16384" name="txSizeInput" #txSizeInput="ngModel" required></mat-checkbox>
+<mat-checkbox
+  fxHide
+  [ngModel]="adaBalance >= minAdaBalance"
+  name="adaBalanceInput"
+  #adaBalanceInput="ngModel"
+  required
+></mat-checkbox>
+<mat-checkbox
+  fxHide
+  [ngModel]="mintTransaction.txSize <= 16384"
+  name="txSizeInput"
+  #txSizeInput="ngModel"
+  required
+></mat-checkbox>
