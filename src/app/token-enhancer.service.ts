@@ -2,34 +2,34 @@ import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TokenDetails } from 'src/dbsync-client';
 
-
 export interface TokenDataWithMetadata extends TokenDetails {
-  metaDataObject: any
+  metaDataObject: any;
   //tokenRegistryMetadata: TokenRegistryMetadata
-  mediaTypes: string[]
-  mediaUrls: any[]
-  lockDate?: Date
-  timestamp: Date
-  locked: boolean
-  nft: boolean
+  mediaTypes: string[];
+  mediaUrls: any[];
+  lockDate?: Date;
+  timestamp: Date;
+  locked: boolean;
+  nft: boolean;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenEnhancerService {
-
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor(private sanitizer: DomSanitizer) {}
 
   enhanceToken(element: TokenDetails): TokenDataWithMetadata {
     // cast element
     let tokenDataWithMetadata = element as TokenDataWithMetadata;
-    tokenDataWithMetadata.mediaTypes = []
-    tokenDataWithMetadata.mediaUrls = []
-    tokenDataWithMetadata.metaDataObject = {}
+    tokenDataWithMetadata.mediaTypes = [];
+    tokenDataWithMetadata.mediaUrls = [];
+    tokenDataWithMetadata.metaDataObject = {};
 
     // timestamp
-    tokenDataWithMetadata.timestamp = new Date((1596491091 + (tokenDataWithMetadata.slotNo - 4924800)) * 1000)
+    tokenDataWithMetadata.timestamp = new Date(
+      (1596491091 + (tokenDataWithMetadata.slotNo - 4924800)) * 1000,
+    );
 
     // find lockdate
     tokenDataWithMetadata.locked = false;
@@ -42,53 +42,56 @@ export class TokenEnhancerService {
         let minLockDate: Date | undefined;
         policy.scripts?.forEach((script: any) => {
           if (script.type === 'before') {
-            let slot = script.slot
-            let lockDate = new Date((1596491091 + (slot - 4924800)) * 1000)
+            let slot = script.slot;
+            let lockDate = new Date((1596491091 + (slot - 4924800)) * 1000);
             if (!minLockDate || lockDate < minLockDate) {
               minLockDate = lockDate;
             }
           }
         });
-        tokenDataWithMetadata.lockDate = minLockDate
-        if (minLockDate && (minLockDate < new Date())) {
+        tokenDataWithMetadata.lockDate = minLockDate;
+        if (minLockDate && minLockDate < new Date()) {
           tokenDataWithMetadata.locked = true;
         }
-        tokenDataWithMetadata.nft = tokenDataWithMetadata.locked && tokenDataWithMetadata.totalSupply === 1;
+        tokenDataWithMetadata.nft =
+          tokenDataWithMetadata.locked &&
+          tokenDataWithMetadata.totalSupply === 1;
       }
     }
 
     // check if transaction metadata present
     if (element.metadata && element.metadata !== 'null') {
-
       // find metadata of token in transaction metadata
-      let metaData = JSON.parse(element.metadata)
+      let metaData = JSON.parse(element.metadata);
 
       if (Array.isArray(metaData['files'])) {
-        metaData['files'].forEach(file => {
+        metaData['files'].forEach((file) => {
           if (file.src && (file.mediatype || file.mediaType)) {
-            tokenDataWithMetadata.mediaTypes.push(file.mediatype || file.mediaType)
-            tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(file.src))
+            tokenDataWithMetadata.mediaTypes.push(
+              file.mediatype || file.mediaType,
+            );
+            tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(file.src));
           }
         });
       }
       if (metaData['image']) {
-        tokenDataWithMetadata.mediaTypes.push('image')
-        tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(metaData['image']))
+        tokenDataWithMetadata.mediaTypes.push('image');
+        tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(metaData['image']));
       }
       if (metaData['audio']) {
-        tokenDataWithMetadata.mediaTypes.push('audio')
-        tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(metaData['audio']))
+        tokenDataWithMetadata.mediaTypes.push('audio');
+        tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(metaData['audio']));
       }
       if (metaData['video']) {
-        tokenDataWithMetadata.mediaTypes.push('video')
-        tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(metaData['video']))
+        tokenDataWithMetadata.mediaTypes.push('video');
+        tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(metaData['video']));
       }
 
       if (tokenDataWithMetadata.mediaTypes.length === 0) {
-        let foundImage = this.findAnyIpfsUrl(metaData)
+        let foundImage = this.findAnyIpfsUrl(metaData);
         if (foundImage) {
-          tokenDataWithMetadata.mediaTypes.push('image')
-          tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(foundImage))
+          tokenDataWithMetadata.mediaTypes.push('image');
+          tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(foundImage));
         }
       }
 
@@ -110,15 +113,17 @@ export class TokenEnhancerService {
     //'https://ipfs.blockfrost.dev/ipfs/',
     'https://cardano-tools.io/ipfs/',
     //'https://infura-ipfs.io/ipfs/',
-  ]
+  ];
 
   pullRandomIpfsProvider() {
-    return this.ipfsProviders[Math.floor(Math.random() * this.ipfsProviders.length)]
+    return this.ipfsProviders[
+      Math.floor(Math.random() * this.ipfsProviders.length)
+    ];
   }
 
   toIpfsUrl(ipfs: string) {
     if (Array.isArray(ipfs)) {
-      ipfs = ipfs.join("")
+      ipfs = ipfs.join('');
     }
 
     if ((ipfs as string).startsWith('data:')) {
@@ -130,23 +135,33 @@ export class TokenEnhancerService {
       return ipfs;
     }
 
-    return this.pullRandomIpfsProvider() + ipfs.replace("ipfs://ipfs/", "").replace("ipfs://", "").replace("ipfs/", "");
+    return (
+      this.pullRandomIpfsProvider() +
+      ipfs
+        .replace('ipfs://ipfs/', '')
+        .replace('ipfs://', '')
+        .replace('ipfs/', '')
+    );
   }
 
   findAnyIpfsUrl(object: any): any {
     for (let key in object) {
       let value = object[key];
-      if (value !== null && typeof (value) == "object") {
+      if (value !== null && typeof value == 'object') {
         let result = this.findAnyIpfsUrl(value);
         if (result) {
-          return result
+          return result;
         }
       } else {
-        if (value.substring && (value.startsWith("ipfs") || value.startsWith("Qm") || value.startsWith("data:"))) {
+        if (
+          value.substring &&
+          (value.startsWith('ipfs') ||
+            value.startsWith('Qm') ||
+            value.startsWith('data:'))
+        ) {
           return value;
         }
       }
     }
   }
-
 }

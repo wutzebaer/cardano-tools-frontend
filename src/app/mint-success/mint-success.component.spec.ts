@@ -8,9 +8,8 @@ describe('MintSuccessComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MintSuccessComponent ]
-    })
-    .compileComponents();
+      declarations: [MintSuccessComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

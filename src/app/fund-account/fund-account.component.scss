@@ -2,7 +2,6 @@
   color: green;
 }
 
-
 .inline-button {
   width: 20px;
   height: 20px;
@@ -15,12 +14,13 @@
 .hazard-border {
   border: 10px solid pink;
   border-image: repeating-linear-gradient(
-    -55deg,
-    #000,
-    #000 20px,
-    #ffb101 20px,
-    #ffb101 40px
-  ) 10;
+      -55deg,
+      #000,
+      #000 20px,
+      #ffb101 20px,
+      #ffb101 40px
+    )
+    10;
   padding: 10px;
   margin-bottom: 12px;
 }

@@ -4,32 +4,32 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 
 @Injectable()
 export class AjaxInterceptor implements HttpInterceptor {
-
   public ajaxStatusChanged$: EventEmitter<boolean> = new EventEmitter();
-  constructor() { }
+  constructor() {}
   counter = 0;
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<unknown>> {
     const hideLoader = request.params.get('afterMintid') != null;
 
     if (!hideLoader) {
-      this.counter++
+      this.counter++;
       this.ajaxStatusChanged$.emit(true);
     }
     const response = next.handle(request);
     return response.pipe(
       tap({
-        next: event => {
-        },
-        error: errorResponse => {
+        next: (event) => {},
+        error: (errorResponse) => {
           alert(errorResponse.error?.message || errorResponse.message);
           if (!hideLoader) {
             this.ajaxStatusChanged$.emit(this.counter > 0);
@@ -39,14 +39,14 @@ export class AjaxInterceptor implements HttpInterceptor {
           if (!hideLoader) {
             this.ajaxStatusChanged$.emit(this.counter > 0);
           }
-        }
+        },
       }),
       finalize(() => {
         if (!hideLoader) {
-          this.counter--
+          this.counter--;
           this.ajaxStatusChanged$.emit(this.counter > 0);
         }
-      })
+      }),
     );
   }
 }

@@ -1,8 +1,18 @@
 import { HttpEventType } from '@angular/common/http';
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MintRestInterfaceService, TokenSubmission } from 'src/cardano-tools-client';
+import {
+  MintRestInterfaceService,
+  TokenSubmission,
+} from 'src/cardano-tools-client';
 import { TokenEnhancerService } from './../token-enhancer.service';
 
 export interface MetaValue {
@@ -17,60 +27,75 @@ export interface MetaValue {
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
 export class MintFormComponent implements OnInit {
-
   Object = Object;
 
   static globalCounter = 0;
 
   counter!: number;
-  static availableMetaFields: string[] = ['project', 'description', 'type', 'artist', 'publisher', 'copyright', 'homepage', 'website', 'url', 'twitter', 'discord'];
+  static availableMetaFields: string[] = [
+    'project',
+    'description',
+    'type',
+    'artist',
+    'publisher',
+    'copyright',
+    'homepage',
+    'website',
+    'url',
+    'twitter',
+    'discord',
+  ];
   requiredMetaFields: string[] = ['image', 'name', 'mediaType'];
   lockedMetaFields: string[] = ['mediaType', 'image'];
   listFields: string[] = ['traits'];
   mapFields: string[] = ['attributes'];
   uploadProgress: number = 0;
   metaData: any = {};
-  previewUrl = ""
-  previewType = ""
-  isNft = true
+  previewUrl = '';
+  previewType = '';
+  isNft = true;
 
   @Input() token!: TokenSubmission;
   @Output() spreadMetaValue = new EventEmitter<MetaValue>();
 
-  constructor(private sanitizer: DomSanitizer, private api: MintRestInterfaceService, private cdRef: ChangeDetectorRef, public tokenEnhancerService: TokenEnhancerService) {
+  constructor(
+    private sanitizer: DomSanitizer,
+    private api: MintRestInterfaceService,
+    private cdRef: ChangeDetectorRef,
+    public tokenEnhancerService: TokenEnhancerService,
+  ) {
     MintFormComponent.globalCounter++;
     this.counter = MintFormComponent.globalCounter;
   }
 
   ngOnInit(): void {
     if (!this.token.assetName) {
-      this.token.assetName = "Token" + this.counter;
+      this.token.assetName = 'Token' + this.counter;
     }
 
-    let hack = this.token as any
+    let hack = this.token as any;
     if (hack.file) {
-      this.appendFile(hack.file)
-      delete hack.file
+      this.appendFile(hack.file);
+      delete hack.file;
     }
 
     if (hack.metaData) {
-      this.metaData = hack.metaData
-      delete hack.metaData
+      this.metaData = hack.metaData;
+      delete hack.metaData;
     } else {
       if (!this.metaData.name) {
-        this.metaData.name = "";
+        this.metaData.name = '';
       }
       if (!this.metaData.image) {
-        this.metaData.image = "";
+        this.metaData.image = '';
       }
     }
 
-
-    this.reloadMetadata()
+    this.reloadMetadata();
   }
 
   reloadMetadata() {
-    this.updatePreview()
+    this.updatePreview();
   }
 
   isSimpleValue(value: any) {
@@ -78,11 +103,20 @@ export class MintFormComponent implements OnInit {
   }
 
   isSimpleList(value: any) {
-    return Array.isArray(value) && typeof value[0] !== 'object' && !(value[0] + '').startsWith('data:');
+    return (
+      Array.isArray(value) &&
+      typeof value[0] !== 'object' &&
+      !(value[0] + '').startsWith('data:')
+    );
   }
 
   isSimpleObjectList(value: any) {
-    return Array.isArray(value) && typeof value[0] === 'object' && Object.keys(value[0]).length === 1 && typeof value[0][Object.keys(value[0])[0]] !== 'object';
+    return (
+      Array.isArray(value) &&
+      typeof value[0] === 'object' &&
+      Object.keys(value[0]).length === 1 &&
+      typeof value[0][Object.keys(value[0])[0]] !== 'object'
+    );
   }
 
   spreadMetaValueClicked(key: string, value: any) {
@@ -92,19 +126,16 @@ export class MintFormComponent implements OnInit {
   addMetaField(metaField: string) {
     if (typeof this.metaData[metaField] !== 'undefined') {
       delete this.metaData[metaField];
-    }
-    else if (this.listFields.indexOf(metaField) !== -1) {
+    } else if (this.listFields.indexOf(metaField) !== -1) {
       this.metaData[metaField] = [];
-    }
-    else if (this.mapFields.indexOf(metaField) !== -1) {
-      let key = prompt("Enter name of first attribute") as string;
+    } else if (this.mapFields.indexOf(metaField) !== -1) {
+      let key = prompt('Enter name of first attribute') as string;
       if (!key) {
         return;
       }
-      this.metaData[metaField] = [{ [key]: "" }];
-    }
-    else {
-      this.metaData[metaField] = "";
+      this.metaData[metaField] = [{ [key]: '' }];
+    } else {
+      this.metaData[metaField] = '';
     }
 
     this.updatePreview();
@@ -115,20 +146,20 @@ export class MintFormComponent implements OnInit {
   }
 
   addNewMetaField() {
-    let key = prompt("Enter name of new attribute") as string;
+    let key = prompt('Enter name of new attribute') as string;
     if (!key) {
       return;
     }
-    this.metaData[key] = "";
-    MintFormComponent.availableMetaFields.push(key)
+    this.metaData[key] = '';
+    MintFormComponent.availableMetaFields.push(key);
   }
 
   addSimpleObjectListItem(list: any[]) {
-    let key = prompt("Enter name of new attribute") as string;
+    let key = prompt('Enter name of new attribute') as string;
     if (!key) {
       return;
     }
-    list.push({ [key]: "" })
+    list.push({ [key]: '' });
   }
   removeSimpleObjectListItem(metaDataKey: string, object: any) {
     let list = this.metaData[metaDataKey];
@@ -143,12 +174,13 @@ export class MintFormComponent implements OnInit {
 
   updatePreview() {
     if (this.metaData.image) {
-      this.previewType = 'image'
-      this.previewUrl = this.tokenEnhancerService.toIpfsUrl(this.metaData.image)
-    }
-    else {
-      this.previewType = ""
-      this.previewUrl = ""
+      this.previewType = 'image';
+      this.previewUrl = this.tokenEnhancerService.toIpfsUrl(
+        this.metaData.image,
+      );
+    } else {
+      this.previewType = '';
+      this.previewUrl = '';
     }
   }
 
@@ -163,83 +195,84 @@ export class MintFormComponent implements OnInit {
   }
 
   appendFile(file: File) {
-
-    if (file?.size as number > 104857600) {
-      alert("Max 100mb");
+    if ((file?.size as number) > 104857600) {
+      alert('Max 100mb');
       return;
     }
 
-    this.metaData["name"] = file.name.split(".")[0].substring(0, 60);
-    this.token.assetName = file.name.split(".")[0].replace(/[^a-zA-Z0-9]/g, "").substring(0, 32);
+    this.metaData['name'] = file.name.split('.')[0].substring(0, 60);
+    this.token.assetName = file.name
+      .split('.')[0]
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .substring(0, 32);
 
-    if (file?.size as number < 16384 && confirm('Store file ' + file.name + ' onchain?')) {
-
+    if (
+      (file?.size as number) < 16384 &&
+      confirm('Store file ' + file.name + ' onchain?')
+    ) {
       const reader = new FileReader();
       reader.readAsDataURL(file as Blob);
-      reader.onload = _event => {
-
+      reader.onload = (_event) => {
         // create metadata
-        if (file.type.startsWith('image') && !this.metaData["image"]) {
-          this.metaData["image"] = (reader.result as string).match(/.{1,64}/g);
-          this.metaData["mediaType"] = file.type
+        if (file.type.startsWith('image') && !this.metaData['image']) {
+          this.metaData['image'] = (reader.result as string).match(/.{1,64}/g);
+          this.metaData['mediaType'] = file.type;
         } else {
-          if (!this.metaData["files"]) {
-            this.metaData["files"] = [];
+          if (!this.metaData['files']) {
+            this.metaData['files'] = [];
           }
-          this.metaData["files"].push({
+          this.metaData['files'].push({
             src: (reader.result as string).match(/.{1,64}/g),
             name: file.name,
-            mediaType: file.type
-          })
+            mediaType: file.type,
+          });
         }
 
-        this.updatePreview()
+        this.updatePreview();
       };
-
     } else {
       this.api.postFile(file as Blob, 'events', true).subscribe({
-        error: (error) => { this.uploadProgress = 0; },
+        error: (error) => {
+          this.uploadProgress = 0;
+        },
         next: (event) => {
           if (event.type === HttpEventType.UploadProgress) {
             if (event.total) {
-              this.uploadProgress = event.loaded * 100 / event.total;
+              this.uploadProgress = (event.loaded * 100) / event.total;
             }
           } else if (event.type === HttpEventType.Response) {
-
             // create metadata
-            if (file.type.startsWith('image') && !this.metaData["image"]) {
-              this.metaData["image"] = "ipfs://" + event.body;
-              this.metaData["mediaType"] = file.type
+            if (file.type.startsWith('image') && !this.metaData['image']) {
+              this.metaData['image'] = 'ipfs://' + event.body;
+              this.metaData['mediaType'] = file.type;
             } else {
-              if (!this.metaData["files"]) {
-                this.metaData["files"] = [];
+              if (!this.metaData['files']) {
+                this.metaData['files'] = [];
               }
-              this.metaData["files"].push({
-                src: "ipfs://" + event.body,
+              this.metaData['files'].push({
+                src: 'ipfs://' + event.body,
                 name: file.name,
-                mediaType: file.type
-              })
+                mediaType: file.type,
+              });
             }
 
-            this.updatePreview()
+            this.updatePreview();
 
             this.uploadProgress = 0;
           }
-        }
+        },
       });
     }
-
   }
 
   removeFile(file: any) {
-    const index = this.metaData["files"].indexOf(file);
-    this.metaData["files"].splice(index, 1);
-    if (this.metaData["files"].length == 0) {
-      delete this.metaData["files"]
+    const index = this.metaData['files'].indexOf(file);
+    this.metaData['files'].splice(index, 1);
+    if (this.metaData['files'].length == 0) {
+      delete this.metaData['files'];
     }
     this.updatePreview();
   }
-
 
   toArray(value: any[]): any[] {
     return value;
@@ -254,8 +287,17 @@ export class MintFormComponent implements OnInit {
   }
 
   openPoolPmPreview() {
-    const metadata = { '721': { '00000000000000000000000000000000000000000000000000000000': { [this.token.assetName]: this.metaData } } };
-    window.open('https://pool.pm/test/metadata?metadata=' + encodeURIComponent(encodeURIComponent(JSON.stringify(metadata))));
+    const metadata = {
+      '721': {
+        '00000000000000000000000000000000000000000000000000000000': {
+          [this.token.assetName]: this.metaData,
+        },
+      },
+    };
+    window.open(
+      'https://pool.pm/test/metadata?metadata=' +
+        encodeURIComponent(encodeURIComponent(JSON.stringify(metadata))),
+    );
   }
 
   isNftChanged() {
@@ -263,5 +305,4 @@ export class MintFormComponent implements OnInit {
       this.token.amount = 1;
     }
   }
-
 }

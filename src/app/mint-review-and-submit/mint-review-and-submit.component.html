@@ -1,79 +1,82 @@
 <div fxLayout="column" fxLayoutGap="15px">
   <mat-card>
     <mat-card-content>
-
       <h2>Review and Submit</h2>
 
       <div>
         <p>The tokens will be sent back to your address</p>
 
         <p>
-          The change of <b>{{adaChange | number: '1.0-6'}}&nbsp;₳</b> will also be sent to your address
+          The change of <b>{{ adaChange | number: "1.0-6" }}&nbsp;₳</b> will
+          also be sent to your address
         </p>
 
         <mat-accordion class="example-headers-align">
-
           <!-- Policy Id -->
           <mat-expansion-panel>
             <mat-expansion-panel-header>
-              <mat-panel-title>
-                Policy id
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
+              <mat-panel-title> Policy id </mat-panel-title>
+              <mat-panel-description> </mat-panel-description>
             </mat-expansion-panel-header>
-            <pre>{{mintTransaction.mintOrderSubmission?.policyId}}</pre>
+            <pre>{{ mintTransaction.mintOrderSubmission?.policyId }}</pre>
           </mat-expansion-panel>
 
           <!-- Policy -->
           <mat-expansion-panel>
             <mat-expansion-panel-header>
-              <mat-panel-title>
-                Policy script
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
+              <mat-panel-title> Policy script </mat-panel-title>
+              <mat-panel-description> </mat-panel-description>
             </mat-expansion-panel-header>
-            <pre>{{getPolicy()}}</pre>
+            <pre>{{ getPolicy() }}</pre>
           </mat-expansion-panel>
 
           <!-- Metadata -->
           <mat-expansion-panel>
             <mat-expansion-panel-header>
-              <mat-panel-title>
-                Metadata
-              </mat-panel-title>
+              <mat-panel-title> Metadata </mat-panel-title>
             </mat-expansion-panel-header>
-            <pre>{{mintTransaction.metaDataJson}}</pre>
+            <pre>{{ mintTransaction.metaDataJson }}</pre>
           </mat-expansion-panel>
 
           <!-- Outputs -->
           <mat-expansion-panel>
             <mat-expansion-panel-header>
-              <mat-panel-title>
-                Tx Outputs
-              </mat-panel-title>
+              <mat-panel-title> Tx Outputs </mat-panel-title>
             </mat-expansion-panel-header>
-            <pre>{{mintTransaction.outputs}}</pre>
+            <pre>{{ mintTransaction.outputs }}</pre>
           </mat-expansion-panel>
 
           <!-- Tokens -->
           <mat-expansion-panel>
             <mat-expansion-panel-header>
-              <mat-panel-title>
-                Tokens
-              </mat-panel-title>
+              <mat-panel-title> Tokens </mat-panel-title>
             </mat-expansion-panel-header>
             <div fxLayout="row wrap" fxLayoutGap="10px grid">
-              <div fxFlex="100%" fxFlex.gt-sm="50%" fxFlex.gt-md="50%" fxFlex.gt-lg="33%" *ngFor="let token of mintTransaction.mintOrderSubmission?.tokens">
-                <app-mint-token-mini [token]="token" [mintOrderSubmission]="mintTransaction.mintOrderSubmission!"></app-mint-token-mini>
+              <div
+                fxFlex="100%"
+                fxFlex.gt-sm="50%"
+                fxFlex.gt-md="50%"
+                fxFlex.gt-lg="33%"
+                *ngFor="
+                  let token of mintTransaction.mintOrderSubmission?.tokens
+                "
+              >
+                <app-mint-token-mini
+                  [token]="token"
+                  [mintOrderSubmission]="mintTransaction.mintOrderSubmission!"
+                ></app-mint-token-mini>
               </div>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
 
-        <mat-checkbox fxHide #submittedInput="ngModel" name="submitted" [(ngModel)]="submitted" required></mat-checkbox>
-
+        <mat-checkbox
+          fxHide
+          #submittedInput="ngModel"
+          name="submitted"
+          [(ngModel)]="submitted"
+          required
+        ></mat-checkbox>
       </div>
     </mat-card-content>
   </mat-card>

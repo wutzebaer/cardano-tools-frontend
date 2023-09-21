@@ -9,52 +9,64 @@ import { StakeRewardRestInterfaceService } from './../../cardano-tools-client/ap
 import { AccountService } from './../account.service';
 import { Submission } from './../fund-account/fund-account.component';
 import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
-import { AccountPrivate, EpochStakesRequest, MintRestInterfaceService, StakeRewardPosition, Transaction } from 'src/cardano-tools-client';
+import {
+  AccountPrivate,
+  EpochStakesRequest,
+  MintRestInterfaceService,
+  StakeRewardPosition,
+  Transaction,
+} from 'src/cardano-tools-client';
 import { PoolInfo, RestHandlerService } from 'src/dbsync-client';
 
 @Component({
   selector: 'app-stake-rewards',
   templateUrl: './stake-rewards.component.html',
-  styleUrls: ['./stake-rewards.component.scss']
+  styleUrls: ['./stake-rewards.component.scss'],
 })
 export class StakeRewardsComponent implements OnInit, OnDestroy {
-
   @ViewChild('rewardForm') rewardForm!: NgForm;
   @ViewChild(MatSort) sort!: MatSort;
-  dataSource: MatTableDataSource<StakeRewardPosition> = new MatTableDataSource();
-  displayedColumns = ['stakeAddress', 'rewardAddress', 'amount', 'share', 'rewards', 'exclude']
+  dataSource: MatTableDataSource<StakeRewardPosition> =
+    new MatTableDataSource();
+  displayedColumns = [
+    'stakeAddress',
+    'rewardAddress',
+    'amount',
+    'share',
+    'rewards',
+    'exclude',
+  ];
   poolHash: string = '';
   epoch: number = CardanoUtils.currentEpoch();
   epochStakes: StakeRewardPosition[] = [];
-  rewards: { [key: string]: { [key: string]: number; }; } = {};
-  accountSubscription: Subscription
-  fundsSubscription: Subscription
+  rewards: { [key: string]: { [key: string]: number } } = {};
+  accountSubscription: Subscription;
+  fundsSubscription: Subscription;
   account?: AccountPrivate;
-  minStakeAda = 1000
+  minStakeAda = 1000;
   oldFunds?: number;
   poolList?: PoolInfo[];
   filteredOptions!: Subject<PoolInfo[]>;
   message = '';
-  excludedStakersCheckboxes: { [key: string]: boolean; } = {};
+  excludedStakersCheckboxes: { [key: string]: boolean } = {};
   isValid = true;
-
 
   mintOrderSubmission: Submission = {
     tip: true,
     pin: false,
-    targetAddress: ''
+    targetAddress: '',
   };
 
   mintTransaction: Transaction = {
-    rawData: "",
-    txId: "",
+    rawData: '',
+    txId: '',
     fee: 0,
-    outputs: "",
-    inputs: "",
-    metaDataJson: "",
+    outputs: '',
+    inputs: '',
+    metaDataJson: '',
     minOutput: 0,
     txSize: 0,
-    signedData: ""
+    signedData: '',
   };
 
   constructor(
@@ -62,33 +74,40 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private stakeRewardRestInterfaceService: StakeRewardRestInterfaceService,
     private mintRestInterfaceService: MintRestInterfaceService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+  ) {
+    restHandlerService
+      .getPoolList()
+      .subscribe((list) => (this.poolList = list));
 
-    restHandlerService.getPoolList().subscribe(list => this.poolList = list);
-
-    this.accountSubscription = accountService.account.subscribe(account => {
-      this.account = account
+    this.accountSubscription = accountService.account.subscribe((account) => {
+      this.account = account;
     });
 
-    this.fundsSubscription = accountService.funds.subscribe(funds => {
+    this.fundsSubscription = accountService.funds.subscribe((funds) => {
       if (this.oldFunds !== funds && this.rewardForm?.valid) {
         this.oldFunds = funds;
-        let excludedStakers: string[] = Object.entries(this.excludedStakersCheckboxes).filter(entry => entry[1]).map(entry => entry[0]);
+        let excludedStakers: string[] = Object.entries(
+          this.excludedStakersCheckboxes,
+        )
+          .filter((entry) => entry[1])
+          .map((entry) => entry[0]);
         let request: EpochStakesRequest = {
           tip: this.mintOrderSubmission.tip,
           minStake: this.minStakeAda * 1_000_000,
           message: this.message,
-          excludedStakers: excludedStakers
+          excludedStakers: excludedStakers,
         };
-        this.stakeRewardRestInterfaceService.getEpochStakes(this.account!.key, this.poolHash, this.epoch, request).subscribe(result => {
-          this.epochStakes = result
-          this.dataSource.data = result;
-          this.dataSource.sort = this.sort;
-          this.buildTransaction();
-        });
+        this.stakeRewardRestInterfaceService
+          .getEpochStakes(this.account!.key, this.poolHash, this.epoch, request)
+          .subscribe((result) => {
+            this.epochStakes = result;
+            this.dataSource.data = result;
+            this.dataSource.sort = this.sort;
+            this.buildTransaction();
+          });
       }
-    })
-
+    });
   }
 
   ngOnInit(): void {
@@ -114,34 +133,40 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
       return;
     }
     const filterValue = this.poolHash.toLowerCase();
-    this.filteredOptions.next(this.poolList.filter(option => option.tickerName.toLowerCase().includes(filterValue)));
+    this.filteredOptions.next(
+      this.poolList.filter((option) =>
+        option.tickerName.toLowerCase().includes(filterValue),
+      ),
+    );
   }
-
 
   buildTransaction() {
-    this.stakeRewardRestInterfaceService.buildTransaction(this.account!.key, this.message, this.epochStakes).subscribe(mintTransaction => {
-      this.mintTransaction = mintTransaction;
-      this.isValid = true;
-    })
+    this.stakeRewardRestInterfaceService
+      .buildTransaction(this.account!.key, this.message, this.epochStakes)
+      .subscribe((mintTransaction) => {
+        this.mintTransaction = mintTransaction;
+        this.isValid = true;
+      });
   }
 
-  typeSafeOutputs(ident: any): { [key: string]: number; } {
+  typeSafeOutputs(ident: any): { [key: string]: number } {
     return ident;
   }
 
   submit() {
     if (confirm('Do you really want to submit this transaction?')) {
-      this.mintRestInterfaceService.submitMintTransaction(this.account!.key, this.mintTransaction).subscribe({
-        complete: () => {
-          this.dialog.open(RoyaltiesCip27MintSuccessComponent, {
-            width: '600px',
-            maxWidth: '90vw',
-            data: { transaction: this.mintTransaction },
-            closeOnNavigation: true
-          });
-        }
-      });
+      this.mintRestInterfaceService
+        .submitMintTransaction(this.account!.key, this.mintTransaction)
+        .subscribe({
+          complete: () => {
+            this.dialog.open(RoyaltiesCip27MintSuccessComponent, {
+              width: '600px',
+              maxWidth: '90vw',
+              data: { transaction: this.mintTransaction },
+              closeOnNavigation: true,
+            });
+          },
+        });
     }
   }
-
 }

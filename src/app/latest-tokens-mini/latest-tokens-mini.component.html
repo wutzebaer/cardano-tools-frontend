@@ -1,27 +1,33 @@
 <mat-card>
   <mat-card-content fxLayout="column" fxLayoutGap="5px">
-
     <div class="title">
-      {{tokenListItem.name || tokenListItem.maName}}
+      {{ tokenListItem.name || tokenListItem.maName }}
     </div>
 
     <div class="preview" fxLayout="column" fxLayoutAlign="center center">
-
       <!-- image -->
       <ng-container *ngIf="imageUrl; else noimage">
-        <img #imagetag [src]="imageUrl" loading="lazy">
+        <img #imagetag [src]="imageUrl" loading="lazy" />
       </ng-container>
 
       <!-- no image -->
       <ng-template #noimage>
-        <mat-icon class="big-icon" color="primary" fontSet="material-icons-outlined">generating_tokens</mat-icon>
+        <mat-icon
+          class="big-icon"
+          color="primary"
+          fontSet="material-icons-outlined"
+          >generating_tokens</mat-icon
+        >
       </ng-template>
-
     </div>
 
-    <div fxlayout="row" fxLayoutAlign="start center" class="icons" fxLayoutGap="5px">
-      <span class="title">{{tokenListItem.quantity}}x</span>
+    <div
+      fxlayout="row"
+      fxLayoutAlign="start center"
+      class="icons"
+      fxLayoutGap="5px"
+    >
+      <span class="title">{{ tokenListItem.quantity }}x</span>
     </div>
-
   </mat-card-content>
 </mat-card>

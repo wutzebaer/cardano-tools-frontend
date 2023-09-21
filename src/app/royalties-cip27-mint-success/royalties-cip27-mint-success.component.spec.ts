@@ -8,9 +8,8 @@ describe('RoyaltiesCip27MintSuccessComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RoyaltiesCip27MintSuccessComponent ]
-    })
-    .compileComponents();
+      declarations: [RoyaltiesCip27MintSuccessComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

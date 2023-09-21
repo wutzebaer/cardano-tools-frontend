@@ -8,9 +8,8 @@ describe('MintOnDemandComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MintOnDemandComponent ]
-    })
-    .compileComponents();
+      declarations: [MintOnDemandComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

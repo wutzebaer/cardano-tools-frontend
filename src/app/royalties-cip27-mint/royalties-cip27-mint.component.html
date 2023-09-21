@@ -1,66 +1,106 @@
 <div fxLayoutAlign="center">
+  <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="800px">
+    <mat-card>
+      <mat-card-content>
+        <h2>CIP 27 - CNFT Community Royalties Standard</h2>
 
-    <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="800px">
-        <mat-card>
-            <mat-card-content>
+        <form #instructionsForm="ngForm">
+          <p>
+            Mint CIP-27 Royalties metadata into your policy. For further
+            explanations and requiremnts see
+            <a target="_blank" href="https://cips.cardano.org/cips/cip27/"
+              >https://cips.cardano.org/cips/cip27/</a
+            >
+          </p>
 
-                <h2>CIP 27 - CNFT Community Royalties Standard</h2>
+          <div fxLayout="column">
+            <!-- POLICY -->
+            <app-policy-selector
+              [createPolicies]="true"
+              (changedPolicyId)="changePolicyId($event)"
+            >
+              <mat-error *ngIf="tokens.length > 0"
+                >This policy has already minted
+                {{ tokens.length }} tokens</mat-error
+              >
+            </app-policy-selector>
 
-                <form #instructionsForm="ngForm">
-                    <p>
-                        Mint CIP-27 Royalties metadata into your policy. For further explanations and requiremnts see <a target="_blank" href="https://cips.cardano.org/cips/cip27/">https://cips.cardano.org/cips/cip27/</a>
-                    </p>
+            <!-- Percent -->
+            <div>
+              <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+                <mat-label>Royalties in %</mat-label>
+                <input
+                  matInput
+                  [(ngModel)]="percent"
+                  name="percent"
+                  required
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="10"
+                  (input)="inputChanged(percent)"
+                />
+              </mat-form-field>
+            </div>
 
-                    <div fxLayout="column">
+            <!-- Address -->
+            <div>
+              <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+                <mat-label>Royalties address</mat-label>
+                <input
+                  matInput
+                  [(ngModel)]="addr"
+                  name="addr"
+                  required
+                  (input)="inputChanged(addr)"
+                  minlength="59"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+        <br />
 
-                        <!-- POLICY -->
-                        <app-policy-selector [createPolicies]="true" (changedPolicyId)="changePolicyId($event)">
-                            <mat-error *ngIf="tokens.length > 0">This policy has already minted {{tokens.length}} tokens</mat-error>
-                        </app-policy-selector>
+        <!-- fund instruction-->
+        <form #fundForm="ngForm" [hidden]="instructionsForm.invalid">
+          <app-fund-account
+            #fundAccount
+            [activeStep]="true"
+            [mintTransaction]="mintTransaction"
+            (updateMintTransaction)="buildTransaction()"
+            [mintOrderSubmission]="mintOrderSubmission"
+          ></app-fund-account>
+        </form>
+      </mat-card-content>
+    </mat-card>
 
-                        <!-- Percent -->
-                        <div>
-                            <mat-form-field fxFlex appearance="outline" fxFlex="100%">
-                                <mat-label>Royalties in %</mat-label>
-                                <input matInput [(ngModel)]="percent" name="percent" required type="number" min="0" max="100" step="10" (input)="inputChanged(percent)">
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Address -->
-                        <div>
-                            <mat-form-field fxFlex appearance="outline" fxFlex="100%">
-                                <mat-label>Royalties address</mat-label>
-                                <input matInput [(ngModel)]="addr" name="addr" required (input)="inputChanged(addr)" minlength="59">
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-                </form>
-                <br>
-
-                <!-- fund instruction-->
-                <form #fundForm="ngForm" [hidden]="instructionsForm.invalid">
-                    <app-fund-account #fundAccount [activeStep]="true" [mintTransaction]="mintTransaction" (updateMintTransaction)="buildTransaction()" [mintOrderSubmission]="mintOrderSubmission"></app-fund-account>
-                </form>
-
-            </mat-card-content>
-        </mat-card>
-
-        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-            <button mat-raised-button color="accent" (click)="updateFunds()" fxFlex.lt-sm>
-                <mat-icon>refresh</mat-icon>
-                <span fxHide.lt-sm> Refresh</span>
-            </button>
-            <button mat-raised-button color="primary" [disabled]="instructionsForm.invalid || fundForm.invalid" fxFlex.lt-sm (click)="generateCip27()">
-                <mat-icon>token</mat-icon>
-                <span fxHide.lt-sm> Submit</span>
-            </button>
-        </div>
-
-        <p>
-            Need help? Join our <a target="_blank" href="https://t.me/joinchat/XrlIF21NDzAyODUy">telegram channel</a>!
-        </p>
-
+    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="updateFunds()"
+        fxFlex.lt-sm
+      >
+        <mat-icon>refresh</mat-icon>
+        <span fxHide.lt-sm> Refresh</span>
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="instructionsForm.invalid || fundForm.invalid"
+        fxFlex.lt-sm
+        (click)="generateCip27()"
+      >
+        <mat-icon>token</mat-icon>
+        <span fxHide.lt-sm> Submit</span>
+      </button>
     </div>
 
+    <p>
+      Need help? Join our
+      <a target="_blank" href="https://t.me/joinchat/XrlIF21NDzAyODUy"
+        >telegram channel</a
+      >!
+    </p>
+  </div>
 </div>

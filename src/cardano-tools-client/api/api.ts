@@ -12,4 +12,12 @@ export * from './tokenRestInterface.service';
 import { TokenRestInterfaceService } from './tokenRestInterface.service';
 export * from './walletStatementRestInterface.service';
 import { WalletStatementRestInterfaceService } from './walletStatementRestInterface.service';
-export const APIS = [AccountRestInterfaceService, DropRestInterfaceService, MintRestInterfaceService, RegistrationRestInterfaceService, StakeRewardRestInterfaceService, TokenRestInterfaceService, WalletStatementRestInterfaceService];
+export const APIS = [
+  AccountRestInterfaceService,
+  DropRestInterfaceService,
+  MintRestInterfaceService,
+  RegistrationRestInterfaceService,
+  StakeRewardRestInterfaceService,
+  TokenRestInterfaceService,
+  WalletStatementRestInterfaceService,
+];

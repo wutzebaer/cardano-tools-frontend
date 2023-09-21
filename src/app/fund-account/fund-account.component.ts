@@ -1,5 +1,13 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ControlContainer, NgForm, NgModel } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
 import { AccountPrivate, MintOrderSubmission } from 'src/cardano-tools-client';
@@ -19,7 +27,6 @@ export interface Submission {
   viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
 export class FundAccountComponent implements OnInit, OnDestroy {
-
   account?: AccountPrivate;
   funds?: number;
   fundingAddresses?: string[];
@@ -32,24 +39,38 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   @Input() showTip = true;
   @Input() showPin = false;
 
-  @ViewChild('adaBalanceInput') adaBalanceInput!: NgModel
-  @ViewChild('targetAddressInput') targetAddressInput!: NgModel
-  @ViewChild('txSizeInput') txSizeInput!: NgModel
+  @ViewChild('adaBalanceInput') adaBalanceInput!: NgModel;
+  @ViewChild('targetAddressInput') targetAddressInput!: NgModel;
+  @ViewChild('txSizeInput') txSizeInput!: NgModel;
 
   @Input() activeStep!: boolean;
 
   timer: Subscription;
-  accountSubscription: Subscription
-  fundsSubscription: Subscription
-  fundingAddressesSubscription: Subscription
+  accountSubscription: Subscription;
+  fundsSubscription: Subscription;
+  fundingAddressesSubscription: Subscription;
 
-  constructor(private clipboard: Clipboard, private accountService: AccountService) {
-    this.accountSubscription = accountService.account.subscribe(account => this.account = account);
-    this.fundsSubscription = accountService.funds.subscribe(funds => this.funds = funds);
-    this.fundingAddressesSubscription = accountService.fundingAddresses.subscribe(fundingAddresses => this.fundingAddresses = fundingAddresses)
+  constructor(
+    private clipboard: Clipboard,
+    private accountService: AccountService,
+  ) {
+    this.accountSubscription = accountService.account.subscribe(
+      (account) => (this.account = account),
+    );
+    this.fundsSubscription = accountService.funds.subscribe(
+      (funds) => (this.funds = funds),
+    );
+    this.fundingAddressesSubscription =
+      accountService.fundingAddresses.subscribe(
+        (fundingAddresses) => (this.fundingAddresses = fundingAddresses),
+      );
 
     this.timer = interval(10000).subscribe(() => {
-      if (this.activeStep && (this.adaBalance < this.minAdaBalance || this.fundingAddresses?.length == 0)) {
+      if (
+        this.activeStep &&
+        (this.adaBalance < this.minAdaBalance ||
+          this.fundingAddresses?.length == 0)
+      ) {
         this.updateFunds();
       }
     });
@@ -57,11 +78,12 @@ export class FundAccountComponent implements OnInit, OnDestroy {
 
   niceBytes(x: number) {
     const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    let l = 0, n = x || 0;
+    let l = 0,
+      n = x || 0;
     while (n >= 1024 && ++l) {
       n = n / 1024;
     }
-    return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
+    return n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l];
   }
 
   ngOnDestroy(): void {
@@ -71,11 +93,14 @@ export class FundAccountComponent implements OnInit, OnDestroy {
     this.fundingAddressesSubscription.unsubscribe();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   get invalid() {
-    return this.adaBalanceInput?.invalid || this.targetAddressInput?.invalid || this.txSizeInput?.invalid
+    return (
+      this.adaBalanceInput?.invalid ||
+      this.targetAddressInput?.invalid ||
+      this.txSizeInput?.invalid
+    );
   }
 
   updateFunds() {
@@ -91,7 +116,7 @@ export class FundAccountComponent implements OnInit, OnDestroy {
   }
 
   copyFunds() {
-    this.clipboard.copy(this.minAdaBalance + "");
+    this.clipboard.copy(this.minAdaBalance + '');
   }
 
   get adaPinFee() {
@@ -103,22 +128,21 @@ export class FundAccountComponent implements OnInit, OnDestroy {
 
   get minAdaBalance() {
     let minBalance = 0;
-    minBalance += (this.mintTransaction.fee || 0)
-    minBalance += (this.mintTransaction.minOutput || 0)
-    minBalance += (this.mintTransaction.pinFee || 0)
+    minBalance += this.mintTransaction.fee || 0;
+    minBalance += this.mintTransaction.minOutput || 0;
+    minBalance += this.mintTransaction.pinFee || 0;
     return minBalance / 1000000;
   }
 
   get adaBalance() {
-    return ((this.funds || 0)) / 1000000;
+    return (this.funds || 0) / 1000000;
   }
 
   get adaFee() {
-    return ((this.mintTransaction.fee || 0)) / 1000000;
+    return (this.mintTransaction.fee || 0) / 1000000;
   }
 
   get adaMinOutput() {
-    return ((this.mintTransaction.minOutput || 0)) / 1000000;
+    return (this.mintTransaction.minOutput || 0) / 1000000;
   }
-
 }

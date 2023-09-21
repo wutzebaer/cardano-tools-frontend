@@ -26,11 +26,11 @@ const routes: Routes = [
   { path: 'reward-stakers', component: StakeRewardsComponent },
   { path: 'mint-on-demand', component: MintOnDemandComponent },
   { path: 'drop/:prettyUrl', component: MintOnDemandInstructionsComponent },
-  { path: 'wallet-statement', component: WalletStatementComponent }
+  { path: 'wallet-statement', component: WalletStatementComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

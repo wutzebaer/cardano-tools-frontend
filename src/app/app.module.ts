@@ -89,7 +89,48 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
 
 @NgModule({
   declarations: [
-    AppComponent, NavComponent, MintComponent, MintFormComponent, ChiplistComponent, LoadingOverlayComponent, FundAccountComponent, MinValidatorDirective, MaxValidatorDirective, MaxBytesValidatorDirective, MintReviewAndSubmitComponent, MintTokenMiniComponent, MintSuccessComponent, FooterComponent, TermsOfServiceComponent, ContactComponent, ImprintComponent, AccountKeyComponent, RegisterTokenComponent, LatestTokensComponent, LatestTokensMiniComponent, LatestTokensDetailComponent, MintFormAdvancedComponent, RegisterTokenSuccessComponent, MyTokensComponent, EuroPoolComponent, BurnComponent, TokenDetailsComponent, MintPolicyFormComponent, PolicySelectorComponent, RoyaltiesCip27MintComponent, RoyaltiesCip27MintSuccessComponent, BurnTokensComponent, StakeRewardsComponent, MintOnDemandComponent, MintOnDemandFormComponent, MintOnDemandInstructionsComponent, WalletStatementComponent, AdaPipe, SlotPipe, HexToStringPipe, JsonFormatPipe
+    AppComponent,
+    NavComponent,
+    MintComponent,
+    MintFormComponent,
+    ChiplistComponent,
+    LoadingOverlayComponent,
+    FundAccountComponent,
+    MinValidatorDirective,
+    MaxValidatorDirective,
+    MaxBytesValidatorDirective,
+    MintReviewAndSubmitComponent,
+    MintTokenMiniComponent,
+    MintSuccessComponent,
+    FooterComponent,
+    TermsOfServiceComponent,
+    ContactComponent,
+    ImprintComponent,
+    AccountKeyComponent,
+    RegisterTokenComponent,
+    LatestTokensComponent,
+    LatestTokensMiniComponent,
+    LatestTokensDetailComponent,
+    MintFormAdvancedComponent,
+    RegisterTokenSuccessComponent,
+    MyTokensComponent,
+    EuroPoolComponent,
+    BurnComponent,
+    TokenDetailsComponent,
+    MintPolicyFormComponent,
+    PolicySelectorComponent,
+    RoyaltiesCip27MintComponent,
+    RoyaltiesCip27MintSuccessComponent,
+    BurnTokensComponent,
+    StakeRewardsComponent,
+    MintOnDemandComponent,
+    MintOnDemandFormComponent,
+    MintOnDemandInstructionsComponent,
+    WalletStatementComponent,
+    AdaPipe,
+    SlotPipe,
+    HexToStringPipe,
+    JsonFormatPipe,
   ],
   imports: [
     BrowserModule,
@@ -129,26 +170,26 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
     MatTabsModule,
     MatSnackBarModule,
     MatSortModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
   providers: [
     AjaxInterceptor,
     {
       provide: HTTP_INTERCEPTORS,
       useExisting: AjaxInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: BACKEND_BASE_PATH,
-      useValue: '.'
+      useValue: '.',
     },
     {
       provide: DBSYNC_BASE_PATH,
-      useValue: '.'
+      useValue: '.',
     },
     {
       provide: LOCALE_ID,
-      useValue: navigator.language
+      useValue: navigator.language,
     },
     {
       provide: APP_INITIALIZER,
@@ -157,6 +198,6 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
       multi: true,
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

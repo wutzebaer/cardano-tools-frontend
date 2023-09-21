@@ -6,21 +6,21 @@ import { AccountPrivate } from 'src/cardano-tools-client';
 @Component({
   selector: 'app-account-key',
   templateUrl: './account-key.component.html',
-  styleUrls: ['./account-key.component.scss']
+  styleUrls: ['./account-key.component.scss'],
 })
 export class AccountKeyComponent implements OnInit {
-
   account!: AccountPrivate;
 
-  constructor(private clipboard: Clipboard, @Inject(MAT_DIALOG_DATA) public data: { account: AccountPrivate }) {
+  constructor(
+    private clipboard: Clipboard,
+    @Inject(MAT_DIALOG_DATA) public data: { account: AccountPrivate },
+  ) {
     this.account = data.account;
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   copyAccountKey() {
     this.clipboard.copy(this.account.key);
   }
-
 }

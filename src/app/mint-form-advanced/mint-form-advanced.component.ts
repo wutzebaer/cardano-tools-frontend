@@ -4,25 +4,26 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-mint-form-advanced',
   templateUrl: './mint-form-advanced.component.html',
-  styleUrls: ['./mint-form-advanced.component.scss']
+  styleUrls: ['./mint-form-advanced.component.scss'],
 })
 export class MintFormAdvancedComponent implements OnInit {
-
   metaDataJson: string;
 
-  constructor(private dialogRef: MatDialogRef<MintFormAdvancedComponent>, @Inject(MAT_DIALOG_DATA) public data: { metaDataJson: string }) {
-    this.metaDataJson = data.metaDataJson
+  constructor(
+    private dialogRef: MatDialogRef<MintFormAdvancedComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { metaDataJson: string },
+  ) {
+    this.metaDataJson = data.metaDataJson;
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   apply() {
     try {
       this.checkStringLengthRecursive(JSON.parse(this.metaDataJson));
-      this.dialogRef.close(this.metaDataJson)
+      this.dialogRef.close(this.metaDataJson);
     } catch (error) {
-      alert(error)
+      alert(error);
     }
   }
 
@@ -30,12 +31,11 @@ export class MintFormAdvancedComponent implements OnInit {
     try {
       const parsed = JSON.parse(this.metaDataJson);
       this.checkStringLengthRecursive(parsed);
-      this.metaDataJson = JSON.stringify(parsed, null, 3)
+      this.metaDataJson = JSON.stringify(parsed, null, 3);
     } catch (error) {
-      alert(error)
+      alert(error);
     }
   }
-
 
   checkStringLengthRecursive(object: any) {
     for (const key in object) {
@@ -43,7 +43,7 @@ export class MintFormAdvancedComponent implements OnInit {
         const element = object[key];
         if (typeof element === 'string') {
           if (Buffer.from(element).length > 64) {
-            throw new Error("String longer than 64: " + element);
+            throw new Error('String longer than 64: ' + element);
           }
         } else if (typeof element === 'object') {
           this.checkStringLengthRecursive(element);
@@ -51,5 +51,4 @@ export class MintFormAdvancedComponent implements OnInit {
       }
     }
   }
-
 }

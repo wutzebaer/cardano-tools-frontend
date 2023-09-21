@@ -9,15 +9,16 @@ import { TokenRestInterfaceService } from './../../cardano-tools-client/api/toke
 import { DropNftTransient } from './../../cardano-tools-client/model/dropNftTransient';
 import { DropTransient } from './../../cardano-tools-client/model/dropTransient';
 import { AccountService } from './../account.service';
-import { TokenDataWithMetadata, TokenEnhancerService } from './../token-enhancer.service';
+import {
+  TokenDataWithMetadata,
+  TokenEnhancerService,
+} from './../token-enhancer.service';
 import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
-
-
 
 @Component({
   selector: 'app-mint-on-demand',
   templateUrl: './mint-on-demand.component.html',
-  styleUrls: ['./mint-on-demand.component.scss']
+  styleUrls: ['./mint-on-demand.component.scss'],
 })
 export class MintOnDemandComponent implements OnInit, OnDestroy {
   policyId = '';
@@ -40,7 +41,7 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
           "Website": "Website",
           "image": "ipfs://QmQ83JBXLTQtKXby3Hq29vbTAzrT5AH8Yds873Ni1fV5KY",
           "description": "Description"
-        }`
+        }`,
       },
       {
         assetName: 'Assetname#2',
@@ -50,13 +51,13 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
           "Website": "Website",
           "image": "ipfs://QmQ83JBXLTQtKXby3Hq29vbTAzrT5AH8Yds873Ni1fV5KY",
           "description": "Description"
-        }`
+        }`,
       },
     ],
     running: false,
     dropNftsAvailableAssetNames: [] as unknown as Set<string>,
     dropNftsSoldAssetNames: [] as unknown as Set<string>,
-    prettyUrl: ''
+    prettyUrl: '',
   };
 
   constructor(
@@ -65,10 +66,9 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private dropRestInterfaceService: DropRestInterfaceService,
     private accountService: AccountService,
-    private router: Router
+    private router: Router,
   ) {
-
-    this.accountSubscription = accountService.account.subscribe(account => {
+    this.accountSubscription = accountService.account.subscribe((account) => {
       this.account = account;
     });
   }
@@ -78,13 +78,13 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
     if (history.state.mintMetadata) {
       let tokenMetadata = history.state.mintMetadata;
       let nfts: DropNftTransient[] = [];
-      Object.keys(tokenMetadata).forEach(assetName => {
+      Object.keys(tokenMetadata).forEach((assetName) => {
         nfts.push({
-          'assetName': assetName,
-          'metadata': JSON.stringify(tokenMetadata[assetName], null, 3)
+          assetName: assetName,
+          metadata: JSON.stringify(tokenMetadata[assetName], null, 3),
         });
         this.drop.dropNfts = nfts;
-      })
+      });
     }
   }
 
@@ -98,11 +98,15 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
 
   changePolicyId(newPolicyId: string) {
     this.policyId = newPolicyId;
-    this.tokenApi.getTokenList(undefined, undefined, newPolicyId).subscribe({ next: tokens => this.tokens = tokens });
+    this.tokenApi
+      .getTokenList(undefined, undefined, newPolicyId)
+      .subscribe({ next: (tokens) => (this.tokens = tokens) });
     this.updateDrops();
   }
 
   updateDrops() {
-    this.dropRestInterfaceService.getDrops(this.account!.key, this.policyId).subscribe(drops => this.drops = drops);
+    this.dropRestInterfaceService
+      .getDrops(this.account!.key, this.policyId)
+      .subscribe((drops) => (this.drops = drops));
   }
 }

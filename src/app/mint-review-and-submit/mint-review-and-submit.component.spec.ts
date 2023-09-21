@@ -8,9 +8,8 @@ describe('MintReviewAndSubmitComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MintReviewAndSubmitComponent ]
-    })
-    .compileComponents();
+      declarations: [MintReviewAndSubmitComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

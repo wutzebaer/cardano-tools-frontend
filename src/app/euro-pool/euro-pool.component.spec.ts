@@ -8,9 +8,8 @@ describe('EuroPoolComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EuroPoolComponent ]
-    })
-    .compileComponents();
+      declarations: [EuroPoolComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
