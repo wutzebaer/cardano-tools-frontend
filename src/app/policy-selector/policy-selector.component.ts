@@ -7,7 +7,7 @@ import { AccountService } from './../account.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { I } from '@angular/cdk/keycodes';
-import { interval, Subscription } from 'rxjs';
+import { interval, ReplaySubject, Subscription } from 'rxjs';
 import { PolicyPrivate } from 'src/cardano-tools-client';
 
 @Component({
@@ -19,34 +19,44 @@ export class PolicySelectorComponent implements AfterViewInit, OnDestroy {
 
   @Input() disabled = false;
   @Input() createPolicies = true;
-  @Output() changedPolicyId = new EventEmitter<string>();
+  @Output() changedPolicyId = new ReplaySubject<string>();
   policies?: PolicyPrivate[];
   selectedPolicyId?: string | null;
   timer: Subscription;
   policiesSubscription!: Subscription
 
+
+
   constructor(private accountService: AccountService, private localStorageService: LocalStorageService, private dialog: MatDialog) {
+    // recall last selected policyId
     this.selectedPolicyId = this.localStorageService.retrievePolicyId();
+
     this.policiesSubscription = accountService.policies.subscribe(policies => {
       this.policies = policies;
 
-      const oldPolicyId = this.selectedPolicyId;
-
       // policyid from localStorage is invalid
       if (!policies.find(p => p.policyId === this.selectedPolicyId)) {
-        this.selectedPolicyId = this.findUnlockedPolicy(policies).policyId;
+        this.selectedPolicyId = null;
       }
 
       // policyid from localStorage is closed
       if (this.getTimeLeft(policies.find(p => p.policyId === this.selectedPolicyId)!) === 0) {
-        this.selectedPolicyId = this.findUnlockedPolicy(policies).policyId;
+        this.selectedPolicyId = null;
+      }
+
+      if (!this.selectedPolicyId) {
+        this.selectedPolicyId = this.findUnlockedPolicy(policies)?.policyId;
+      }
+
+      if (!this.selectedPolicyId) {
+        accountService.createPolicy({
+          name: 'My first Policy',
+          days: 365 * 10
+        });
       }
 
       // publish policy id
-      if (!this.policies || this.selectedPolicyId != oldPolicyId) {
-        this.policyChanged();
-      }
-
+      this.policyChanged();
     });
     // updates time
     this.timer = interval(1000).subscribe(() => {
