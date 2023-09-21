@@ -27,6 +27,7 @@ model/models.ts
 model/policy.ts
 model/policyConfigPrivate.ts
 model/policyPrivate.ts
+model/priceDto.ts
 model/publicDropInfo.ts
 model/stakeRewardPosition.ts
 model/tokenRegistryMetadata.ts

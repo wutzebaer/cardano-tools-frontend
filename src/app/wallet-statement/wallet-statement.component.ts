@@ -3,10 +3,12 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   AccountStatementRow,
+  PriceDto,
   WalletStatementRestInterfaceService,
 } from 'src/cardano-tools-client';
 import { LocalStorageService } from './../local-storage.service';
 import * as XLSX from 'xlsx';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-wallet-statement',
@@ -27,15 +29,18 @@ export class WalletStatementComponent implements OnInit {
     'sum',
     'operations',
   ];
+  prices: { [key: string]: PriceDto } = {};
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('table') table!: ElementRef;
 
   constructor(
     private localStorageService: LocalStorageService,
     private api: WalletStatementRestInterfaceService,
+    private datePipe: DatePipe
   ) {
     this.myaddress = localStorageService.retrieveMyAddress();
     this.update();
+    api.prices('eur').subscribe((prices) => (this.prices = prices));
   }
 
   ngOnInit(): void {}
@@ -57,9 +62,13 @@ export class WalletStatementComponent implements OnInit {
     }
   }
 
+  getPrice(date: Date) {
+    return this.prices[this.datePipe.transform(date, 'yyyy-MM-dd')!].value;
+  }
+
   exportAsExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
-      this.table.nativeElement,
+      this.table.nativeElement
     ); //converts a DOM TABLE element to a worksheet
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');

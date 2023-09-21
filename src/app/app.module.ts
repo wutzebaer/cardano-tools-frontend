@@ -82,6 +82,7 @@ import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.com
 import { TokenDetailsComponent } from './token-details/token-details.component';
 import { WalletStatementComponent } from './wallet-statement/wallet-statement.component';
 import { LocaleInitializerService } from './locale-initializer.service';
+import { DatePipe } from '@angular/common';
 
 export function initApp(localeInitializerService: LocaleInitializerService) {
   return () => localeInitializerService.initialize();
@@ -174,6 +175,7 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
   ],
   providers: [
     AjaxInterceptor,
+    DatePipe,
     {
       provide: HTTP_INTERCEPTORS,
       useExisting: AjaxInterceptor,

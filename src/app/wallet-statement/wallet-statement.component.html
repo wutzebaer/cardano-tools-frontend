@@ -56,8 +56,8 @@
             Timestamp
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element.timestamp | date: "yyyy-MM-dd" }}
-            {{ element.timestamp | date: "HH:mm" }}
+            {{ element.timestamp | date : "yyyy-MM-dd" }}
+            {{ element.timestamp | date : "HH:mm" }}
           </td>
         </ng-container>
 
@@ -123,9 +123,12 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Fiat</th>
           <td mat-cell *matCellDef="let element" title="{{ element.rate }}">
             <span
-              [class.neg]="element.changeInFiat < 0"
-              [class.pos]="element.changeInFiat >= 0"
-              >{{ element.changeInFiat | currency: "EUR" }}</span
+              [class.neg]="element.change < 0"
+              [class.pos]="element.change >= 0"
+              >{{
+                (getPrice(element.timestamp) * element.change) / 1000000
+                  | currency : "EUR"
+              }}</span
             >
           </td>
         </ng-container>

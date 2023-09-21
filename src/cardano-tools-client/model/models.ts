@@ -11,6 +11,7 @@ export * from './mintOrderSubmission';
 export * from './policy';
 export * from './policyConfigPrivate';
 export * from './policyPrivate';
+export * from './priceDto';
 export * from './publicDropInfo';
 export * from './stakeRewardPosition';
 export * from './tokenRegistryMetadata';
