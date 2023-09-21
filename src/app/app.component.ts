@@ -23,10 +23,10 @@ export class AppComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private accountService: AccountService,
-    private localStorageService: LocalStorageService,
+    private localStorageService: LocalStorageService
   ) {
     ajaxInterceptor.ajaxStatusChanged$.subscribe(
-      (ajaxStatus) => (this.ajaxStatus = ajaxStatus),
+      (ajaxStatus) => (this.ajaxStatus = ajaxStatus)
     );
 
     // push history state when a dialog is opened
@@ -51,12 +51,6 @@ export class AppComponent implements OnInit {
         frontDialog.close();
       }
     });
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const accountKeyParam = urlParams.get('accountKey');
-    if (accountKeyParam) {
-      this.localStorageService.storeAccountKey(accountKeyParam);
-    }
   }
   ngOnInit(): void {}
 }

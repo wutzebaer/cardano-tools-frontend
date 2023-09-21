@@ -31,7 +31,7 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
     price: 5_000_000,
     maxPerTransaction: 5,
     profitAddress: '',
-    whitelist: [] as unknown as Set<string>,
+    whitelist: [],
     dropNfts: [
       {
         assetName: 'Assetname#1',
@@ -55,8 +55,8 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
       },
     ],
     running: false,
-    dropNftsAvailableAssetNames: [] as unknown as Set<string>,
-    dropNftsSoldAssetNames: [] as unknown as Set<string>,
+    dropNftsAvailableAssetNames: [],
+    dropNftsSoldAssetNames: [],
     prettyUrl: '',
   };
 
@@ -66,7 +66,7 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private dropRestInterfaceService: DropRestInterfaceService,
     private accountService: AccountService,
-    private router: Router,
+    private router: Router
   ) {
     this.accountSubscription = accountService.account.subscribe((account) => {
       this.account = account;

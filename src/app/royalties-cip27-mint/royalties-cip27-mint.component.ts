@@ -72,7 +72,7 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
     private clipboard: Clipboard,
     private api: MintRestInterfaceService,
     ajaxInterceptor: AjaxInterceptor,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) {
     this.accountSubscription = accountService.account.subscribe((account) => {
       this.account = account;
@@ -82,8 +82,9 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
       accountService.fundingAddresses.subscribe((fundingAddresses) => {
         this.fundingAddresses = fundingAddresses;
         if (
-          fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) ===
-          -1
+          fundingAddresses.indexOf(
+            this.mintOrderSubmission.targetAddress ?? ''
+          ) === -1
         ) {
           this.mintOrderSubmission.targetAddress = fundingAddresses[0];
         }
@@ -100,7 +101,7 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
     this.policiesSubscription = accountService.policies.subscribe(
       (policies) => {
         this.policies = policies;
-      },
+      }
     );
 
     this.timer = interval(10000).subscribe(() => {
@@ -109,7 +110,7 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
       }
     });
     ajaxInterceptor.ajaxStatusChanged$.subscribe(
-      (ajaxStatus) => (this.loading = ajaxStatus),
+      (ajaxStatus) => (this.loading = ajaxStatus)
     );
   }
 
@@ -140,7 +141,7 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
     let snackBarRef = this.snackBar.open(
       'Copied to clipboard: ' + value,
       undefined,
-      { duration: 2000 },
+      { duration: 2000 }
     );
   }
 
@@ -166,7 +167,7 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
         },
       },
       null,
-      3,
+      3
     );
 
     this.api

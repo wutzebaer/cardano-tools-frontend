@@ -8,8 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "generate-backend-client": "npx @openapitools/openapi-generator-cli generate -i \"http://localhost:8081/v3/api-docs\" -g typescript-angular -o src/cardano-tools-client --additional-properties apiModulePrefix=Backend",
-    "generate-dbsync-client": "npx @openapitools/openapi-generator-cli generate -i \"http://localhost:8080/v3/api-docs\"  -g typescript-angular -o src/dbsync-client --additional-properties apiModulePrefix=Dbsync"
+    "generate-backend-client": "npx @openapitools/openapi-generator-cli generate -i \"http://localhost:8081/api/v3/api-docs\" -g typescript-angular -o src/cardano-tools-client --additional-properties apiModulePrefix=Backend",
+    "generate-dbsync-client": "npx @openapitools/openapi-generator-cli generate -i \"http://localhost:8080/cardanoDbSyncApi/v3/api-docs\"  -g typescript-angular -o src/dbsync-client --additional-properties apiModulePrefix=Dbsync"
   },
   "private": true,
   "dependencies": {

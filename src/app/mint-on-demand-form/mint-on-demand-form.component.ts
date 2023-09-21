@@ -38,7 +38,7 @@ export class MintOnDemandFormComponent implements OnInit {
   constructor(
     private dropRestInterfaceService: DropRestInterfaceService,
     private clipboard: Clipboard,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) {}
 
   get priceAda() {
@@ -62,9 +62,7 @@ export class MintOnDemandFormComponent implements OnInit {
       .replace(/[\s]+/g, '\n')
       .replace(/[\s]+$/, '')
       .trim();
-    this.drop.whitelist = this.whitelistString.split(
-      /[\s]+/,
-    ) as unknown as Set<string>;
+    this.drop.whitelist = this.whitelistString.split(/[\s]+/);
   }
 
   dropNftsToNftsString() {
@@ -181,7 +179,7 @@ export class MintOnDemandFormComponent implements OnInit {
           this.account!.key,
           this.policyId,
           persistedDrop.id,
-          this.drop,
+          this.drop
         )
         .subscribe(() => {});
     } else {
@@ -209,7 +207,7 @@ export class MintOnDemandFormComponent implements OnInit {
     let snackBarRef = this.snackBar.open(
       'Copied to clipboard: ' + value,
       undefined,
-      { duration: 2000 },
+      { duration: 2000 }
     );
   }
 }

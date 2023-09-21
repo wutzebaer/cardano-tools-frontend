@@ -27,13 +27,22 @@ export class AccountService {
   constructor(
     private localStorageService: LocalStorageService,
     private api: AccountRestInterfaceService,
-    private dbsyncApi: RestHandlerService,
+    private dbsyncApi: RestHandlerService
   ) {
     this.initializeAccount();
   }
 
   private initializeAccount() {
-    const accountKey = this.localStorageService.retrieveAccountKey();
+    let accountKey;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const accountKeyParam = urlParams.get('accountKey');
+    if (accountKeyParam) {
+      accountKey = accountKeyParam;
+    } else {
+      accountKey = this.localStorageService.retrieveAccountKey();
+    }
+
     const accountObservable = accountKey
       ? this.api.getAccount(accountKey)
       : this.api.createAccount();
@@ -46,7 +55,7 @@ export class AccountService {
           } else {
             return throwError(error);
           }
-        }),
+        })
       )
       .subscribe((account) => {
         this.localStorageService.storeAccountKey(account.key);
@@ -60,9 +69,7 @@ export class AccountService {
     this.account
       .pipe(
         take(1),
-        switchMap((account) =>
-          this.dbsyncApi.getUtxos(account.address.address),
-        ),
+        switchMap((account) => this.dbsyncApi.getUtxos(account.address.address))
       )
       .subscribe((utxos) => {
         this.fundingAddresses.next([
@@ -71,7 +78,7 @@ export class AccountService {
         this.funds.next(
           utxos
             .filter((utxo) => utxo.maPolicyId == null)
-            .reduce((sum, utxo) => sum + utxo.value, 0),
+            .reduce((sum, utxo) => sum + utxo.value, 0)
         );
       });
   }
@@ -80,7 +87,7 @@ export class AccountService {
     this.account
       .pipe(
         take(1),
-        switchMap((account) => this.api.getPolicies(account.key)),
+        switchMap((account) => this.api.getPolicies(account.key))
       )
       .subscribe((policies) => {
         this.policies.next(policies);

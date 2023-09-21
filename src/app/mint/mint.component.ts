@@ -84,7 +84,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     private accountService: AccountService,
     private tokenApi: RestHandlerService,
     private tokenEnhancerService: TokenEnhancerService,
-    private router: Router,
+    private router: Router
   ) {
     this.initializeValues();
 
@@ -96,8 +96,9 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
       accountService.fundingAddresses.subscribe((fundingAddresses) => {
         this.fundingAddresses = fundingAddresses;
         if (
-          fundingAddresses.indexOf(this.mintOrderSubmission.targetAddress) ===
-          -1
+          fundingAddresses.indexOf(
+            this.mintOrderSubmission.targetAddress ?? ''
+          ) === -1
         ) {
           this.mintOrderSubmission.targetAddress = fundingAddresses[0];
         }
@@ -112,7 +113,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     ajaxInterceptor.ajaxStatusChanged$.subscribe(
-      (ajaxStatus) => (this.loading = ajaxStatus),
+      (ajaxStatus) => (this.loading = ajaxStatus)
     );
   }
 
