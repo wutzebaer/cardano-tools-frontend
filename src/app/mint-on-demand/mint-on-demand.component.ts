@@ -30,7 +30,7 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
     price: 5_000_000,
     maxPerTransaction: 5,
     profitAddress: '',
-    whitelist: new Set(),
+    whitelist: [] as unknown as Set<string>,
     dropNfts: [
       {
         assetName: 'Assetname#1',
@@ -54,8 +54,8 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
       },
     ],
     running: false,
-    dropNftsAvailableAssetNames: new Set(),
-    dropNftsSoldAssetNames: new Set(),
+    dropNftsAvailableAssetNames: [] as unknown as Set<string>,
+    dropNftsSoldAssetNames: [] as unknown as Set<string>,
     prettyUrl: ''
   };
 
@@ -74,6 +74,7 @@ export class MintOnDemandComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // metadata passed from normal mint page
     if (history.state.mintMetadata) {
       let tokenMetadata = history.state.mintMetadata;
       let nfts: DropNftTransient[] = [];

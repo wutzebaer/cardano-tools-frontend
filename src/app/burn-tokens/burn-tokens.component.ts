@@ -106,7 +106,7 @@ export class BurnTokensComponent implements OnDestroy {
   burn() {
 
     let mintOrderSubmission: MintOrderSubmission = {
-      tokens: this.filteredTokens.map(t => ({ amount: -t.quantity, assetName: t.name } as TokenSubmission)),
+      tokens: this.filteredTokens.map(t => ({ amount: -t.quantity, assetName: Buffer.from(t.maName, 'hex').toString() } as TokenSubmission)),
       targetAddress: this.fundingAddresses![0],
       pin: false,
       policyId: this.policy!.policyId

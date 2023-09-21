@@ -44,7 +44,7 @@
         <div class="container">
             <mat-form-field class="metadata-form-field" appearance="fill">
                 <mat-label>NFTs</mat-label>
-                <textarea name="nftsString" [(ngModel)]="nftsString" matInput cdkTextareaAutosize (input)="deserializeMetaData()" (change)="serializeMetaData()"></textarea>
+                <textarea name="nftsString"  [(ngModel)]="nftsString" matInput cdkAutosizeMaxRows="30" cdkTextareaAutosize (change)="nftsStringToDropNfts()"></textarea>
                 <mat-hint style="color: red;">{{parseError}}</mat-hint>
             </mat-form-field>
         </div>

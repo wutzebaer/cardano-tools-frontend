@@ -38,8 +38,7 @@ export class MintOnDemandFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.serializeMetaData();
-    this.deserializeMetaData();
+    this.dropNftsToNftsString();
     this.whitelistString = [...this.drop.whitelist].join('\n')
   }
 
@@ -50,10 +49,11 @@ export class MintOnDemandFormComponent implements OnInit {
 
   formatWhitelist() {
     this.whitelistString = this.whitelistString.replace(/[\s]+/g, '\n').replace(/[\s]+$/, '').trim();
-    this.drop.whitelist = new Set(this.whitelistString.split(/[\s]+/));
+    this.drop.whitelist = this.whitelistString.split(/[\s]+/) as unknown as Set<string>;
   }
 
-  serializeMetaData() {
+  dropNftsToNftsString() {
+    console.log("serializeMetaData")
     let embeddedMetadata: any[] = [];
     this.drop.dropNfts.forEach(dropNft => {
       embeddedMetadata.push({
@@ -62,35 +62,11 @@ export class MintOnDemandFormComponent implements OnInit {
       });
     });
     this.nftsString = JSON.stringify(embeddedMetadata, null, 3);
+    console.log("serializeMetaData end")
   }
 
-  checkIfDuplicateExists(array: string[]) {
-    let usedNames: string[] = [];
-    for (let index = 0; index < array.length; index++) {
-      const element = array[index];
-      if (usedNames.indexOf(element) !== -1) {
-        throw new Error("Duplicate AssetName: " + element);
-      }
-      usedNames.push(element)
-    }
-  }
-
-  checkStringLengthRecursive(object: any) {
-    for (const key in object) {
-      if (Object.prototype.hasOwnProperty.call(object, key)) {
-        const element = object[key];
-        if (typeof element === 'string') {
-          if (Buffer.from(element).length > 64) {
-            throw new Error("String longer than 64: " + element);
-          }
-        } else if (typeof element === 'object') {
-          this.checkStringLengthRecursive(element);
-        }
-      }
-    }
-  }
-
-  deserializeMetaData() {
+  nftsStringToDropNfts() {
+    console.log("deserializeMetaData")
     try {
       let parsed: DropNftTransient[] = JSON.parse(this.nftsString);
       parsed.forEach(dropNft => {
@@ -105,6 +81,59 @@ export class MintOnDemandFormComponent implements OnInit {
     } catch (error) {
       this.parseError = error as string;
     }
+    console.log("deserializeMetaData end")
+  }
+
+  checkIfDuplicateExists(array: string[]) {
+    let usedNames: string[] = [];
+    for (let index = 0; index < array.length; index++) {
+      const element = array[index];
+      if (usedNames.indexOf(element) !== -1) {
+        throw new Error("Duplicate AssetName: " + element);
+      }
+      usedNames.push(element)
+    }
+  }
+
+  checkStringLengthRecursive(object: any) {
+    if (Array.isArray(object)) {
+      for (const element of object) {
+        this.checkStringLengthRecursive(element);
+      }
+    } else {
+
+      for (const key in object) {
+        const element = object[key];
+        if (typeof element === 'string') {
+          if (element.length > 64) {
+            throw new Error("String longer than 64: " + element);
+          }
+        } else if (typeof element === 'object') {
+          this.checkStringLengthRecursive(element);
+        }
+      }
+    }
+  }
+
+  utf8ByteCount(str: string) {
+    let count = 0;
+    for (let i = 0; i < str.length; i++) {
+      const codePoint = str.codePointAt(i);
+      if (codePoint == null) {
+        throw new Error("String illegal: " + str);
+      }
+      if (codePoint <= 0x7F) {
+        count += 1;
+      } else if (codePoint <= 0x7FF) {
+        count += 2;
+      } else if (codePoint <= 0xFFFF) {
+        count += 3;
+      } else if (codePoint <= 0x10FFFF) {
+        count += 4;
+        i++; // Surrogate pair, skip the next unit.
+      }
+    }
+    return count;
   }
 
   getAddress() {

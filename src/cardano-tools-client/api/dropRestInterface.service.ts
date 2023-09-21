@@ -155,6 +155,7 @@ export class DropRestInterfaceService {
             }
         }
 
+        console.log("sending", dropTransient)
         let localVarPath = `/api/drop/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "policyId", value: policyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
