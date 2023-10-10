@@ -1,14 +1,6 @@
 <div
   *ngIf="show"
-  class="loading-overlay"
-  fxLayout="column"
-  fxLayoutAlign="center center"
+  class="loading-overlay flex flex-col justify-center items-center"
 >
-  <mat-progress-bar
-    fxHide
-    mode="determinate"
-    strokeWidth="20"
-    [value]="50"
-  ></mat-progress-bar>
   <mat-spinner></mat-spinner>
 </div>
