@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { AccountService } from 'src/app/account.service';

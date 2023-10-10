@@ -1,7 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 import { TableRow } from '../mint-token-mini/mint-token-mini.component';
 import {

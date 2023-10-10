@@ -12,8 +12,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { AccountService } from './../account.service';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSelectChange } from '@angular/material/select';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
 import { I } from '@angular/cdk/keycodes';
 import { interval, ReplaySubject, Subscription } from 'rxjs';
 import { PolicyPrivate } from 'src/cardano-tools-client';

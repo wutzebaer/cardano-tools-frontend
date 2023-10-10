@@ -1,8 +1,8 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Subject, Subscription, interval } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { RestHandlerService, TokenListItem } from 'src/dbsync-client';

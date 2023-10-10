@@ -3,7 +3,7 @@ import { AccountService } from './account.service';
 import { AjaxInterceptor } from './ajax.interceptor';
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { Location, PopStateEvent, registerLocaleData } from '@angular/common';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
