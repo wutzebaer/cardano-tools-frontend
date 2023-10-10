@@ -33,7 +33,10 @@
       -->
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content fxLayout="column" class="my-sidenav-content">
+  <mat-sidenav-content
+    class="my-sidenav-content flex-col"
+    style="display: flex"
+  >
     <mat-toolbar color="primary" class="mat-elevation-z8">
       <img class="logo" src="/assets/logo.png" />
       <span> Cardano Tools </span>
@@ -53,7 +56,8 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
     </mat-toolbar>
-    <div class="main-content" fxLayout="column" fxLayoutGap="10px">
+    <div class="main-content flex flex-col gap-2">
+      <!-- FUND VOTE -->
       <mat-card *ngIf="false" class="notice"
         >Support cardano-tools.io by voting in FUND7:
         <a
@@ -62,24 +66,23 @@
           >Cardano features for everyone</a
         ></mat-card
       >
+
+      <!-- CONSTRUCTION -->
       <mat-card *ngIf="false" class="warn">
         <mat-icon>construction</mat-icon>cardano-tools.io has currently
         technical problems, it might take several hours until balances are up to
         date<mat-icon>construction</mat-icon>
       </mat-card>
 
+      <!-- CHARLY WOLF LINKS -->
       <div
         *ngIf="true"
-        class="support"
-        fxLayout="row"
-        fxLayoutGap="10px"
-        fxLayoutAlign="center center"
-        fxHide.lt-md="true"
+        class="support flex-row gap-2 justify-center items-center hidden xl:flex"
       >
-        <a href="https://charly-token.io/" target="_blank"
+        <a href="https://charly-token.io/" target="_blank" class="mr-2"
           ><img src="/assets/charly.jpg"
         /></a>
-        <div>
+        <div class="mr-2">
           Join
           <a
             href="https://adapools.org/pool/3bd3996595321d951291b11e1331061c5d8659d9e69390536dfc922c"
@@ -99,13 +102,8 @@
           ><img src="/assets/wolf.jpg"
         /></a>
       </div>
-      <div *ngIf="true" fxHide.gt-sm="true">
-        <div
-          class="support"
-          fxLayout="row"
-          fxLayoutGap="10px"
-          fxLayoutAlign="center center"
-        >
+      <div *ngIf="true" class="block xl:hidden">
+        <div class="support flex flex-row gap-2 justify-center items-center">
           <a href="https://charly-token.io/" target="_blank"
             ><img src="/assets/charly.jpg"
           /></a>
@@ -113,12 +111,7 @@
             ><img src="/assets/wolf.jpg"
           /></a>
         </div>
-        <div
-          class="support"
-          fxLayout="row"
-          fxLayoutGap="10px"
-          fxLayoutAlign="center center"
-        >
+        <div class="support flex flex-row justify-center items-center">
           <div>
             Join
             <a
@@ -140,6 +133,6 @@
 
       <router-outlet></router-outlet>
     </div>
-    <app-footer fxFlexOffset="auto"></app-footer>
+    <app-footer class="mt-auto"></app-footer>
   </mat-sidenav-content>
 </mat-sidenav-container>
