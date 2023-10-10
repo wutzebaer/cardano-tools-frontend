@@ -2,7 +2,7 @@ import { ImprintComponent } from './../imprint/imprint.component';
 import { ContactComponent } from './../contact/contact.component';
 import { TermsOfServiceComponent } from './../terms-of-service/terms-of-service.component';
 import { Component, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-footer',

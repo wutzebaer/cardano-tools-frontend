@@ -12,8 +12,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { AccountService } from './../account.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSelectChange } from '@angular/material/select';
 import { I } from '@angular/cdk/keycodes';
 import { interval, ReplaySubject, Subscription } from 'rxjs';
 import { PolicyPrivate } from 'src/cardano-tools-client';
@@ -35,7 +35,7 @@ export class PolicySelectorComponent implements AfterViewInit, OnDestroy {
   constructor(
     private accountService: AccountService,
     private localStorageService: LocalStorageService,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {
     // recall last selected policyId
     this.selectedPolicyId = this.localStorageService.retrievePolicyId();
@@ -52,7 +52,7 @@ export class PolicySelectorComponent implements AfterViewInit, OnDestroy {
         // policyid from localStorage is closed
         if (
           this.getTimeLeft(
-            policies.find((p) => p.policyId === this.selectedPolicyId)!,
+            policies.find((p) => p.policyId === this.selectedPolicyId)!
           ) === 0
         ) {
           this.selectedPolicyId = null;
@@ -71,7 +71,7 @@ export class PolicySelectorComponent implements AfterViewInit, OnDestroy {
 
         // publish policy id
         this.policyChanged();
-      },
+      }
     );
     // updates time
     this.timer = interval(1000).subscribe(() => {});

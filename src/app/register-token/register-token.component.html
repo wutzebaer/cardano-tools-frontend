@@ -58,7 +58,7 @@
                   (dragover)="$event.preventDefault()"
                 >
                   <div
-                    [fxHide]="file != null"
+                    *ngIf="file"
                     class="dropArea"
                     fxLayout="column"
                     fxLayoutAlign="center center"
@@ -76,7 +76,7 @@
                     Logo
                   </div>
                   <div
-                    [fxHide]="file == null"
+                    *ngIf="file"
                     class="preview"
                     fxLayout="column"
                     fxLayoutAlign="center center"

@@ -10,7 +10,7 @@ import {
 } from 'rxjs/operators';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { interval, Subscription, Subject } from 'rxjs';
 import {
   AccountPrivate,
@@ -27,7 +27,7 @@ import {
   TokenEnhancerService,
 } from './../token-enhancer.service';
 import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 @Component({
   selector: 'app-burn-tokens',

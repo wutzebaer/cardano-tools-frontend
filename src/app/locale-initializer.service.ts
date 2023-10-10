@@ -9,9 +9,10 @@ export class LocaleInitializerService {
 
   initialize(): Promise<void> {
     const localeId = this.locale.substring(0, 2);
+    console.log(localeId)
     return import(
-      /* webpackInclude: /(.*)\.js$/ */
-      `@angular/common/locales/${localeId}.js`
+      /* webpackInclude: /(.*)\.mjs$/ */
+      `@/../@angular/common/locales/${localeId}.mjs`
     ).then((module) => {
       registerLocaleData(module.default);
       return Promise.resolve();

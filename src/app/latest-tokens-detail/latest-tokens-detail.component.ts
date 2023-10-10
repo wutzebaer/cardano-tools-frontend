@@ -1,6 +1,6 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TableRow } from '../mint-token-mini/mint-token-mini.component';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
 import { TokenListItem } from 'src/dbsync-client';

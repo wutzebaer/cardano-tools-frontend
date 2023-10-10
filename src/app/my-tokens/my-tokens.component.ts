@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
 import { LatestTokensDetailComponent } from './../latest-tokens-detail/latest-tokens-detail.component';
 import { LocalStorageService } from './../local-storage.service';

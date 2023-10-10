@@ -110,7 +110,7 @@
     </div>
 
     <div fxLayout="row" style="padding-bottom: 1.25em" *ngIf="metaData.files">
-      <mat-chip-list #chipList multiple>
+      <mat-chip-listbox #chipList multiple>
         <mat-chip
           *ngFor="let file of metaData.files"
           color="primary"
@@ -125,7 +125,7 @@
             <mat-icon>cancel</mat-icon>
           </button>
         </mat-chip>
-      </mat-chip-list>
+      </mat-chip-listbox>
     </div>
 
     <div fxLayout="row" fxLayoutGap="10px">
@@ -279,14 +279,14 @@
   </mat-card-content>
   <mat-card-actions>
     <div fxLayout="row">
-      <mat-chip-list #chipList multiple>
-        <mat-chip
+      <mat-chip-listbox #chipList multiple>
+        <mat-chip-option
           *ngFor="let metaField of availableMetaFields"
           (click)="addMetaField(metaField)"
           [selected]="metaData[metaField]"
         >
           {{ metaField | titlecase }}
-        </mat-chip>
+        </mat-chip-option>
         <mat-chip
           (click)="addNewMetaField()"
           matTooltip="Add new field with custom name"
@@ -294,7 +294,7 @@
         >
           <mat-icon>add</mat-icon> Add attribute
         </mat-chip>
-      </mat-chip-list>
+      </mat-chip-listbox>
     </div>
   </mat-card-actions>
 </mat-card>

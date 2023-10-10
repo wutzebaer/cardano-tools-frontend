@@ -1,6 +1,6 @@
 import { PolicyConfigPrivate } from './../../cardano-tools-client/model/policyConfigPrivate';
 import { AccountService } from './../account.service';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

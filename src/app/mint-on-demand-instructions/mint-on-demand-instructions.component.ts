@@ -5,7 +5,7 @@ import {
   PublicDropInfo,
 } from 'src/cardano-tools-client';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-mint-on-demand-instructions',

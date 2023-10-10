@@ -11,7 +11,7 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { NgModel } from '@angular/forms';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { AccountService } from 'src/app/account.service';
 import { AjaxInterceptor } from 'src/app/ajax.interceptor';

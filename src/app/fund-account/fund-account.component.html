@@ -27,9 +27,9 @@
     }}&nbsp;₳ will be sent back to your address, {{
       adaPinFee
     }}&nbsp;₳ will be used to pin the files"
-    >{{ minAdaBalance | number: "1.0-6" }}&nbsp;₳</b
+    >{{ minAdaBalance | number : "1.0-6" }}&nbsp;₳</b
   >
-  <b *ngIf="!showTooltip">{{ minAdaBalance | number: "1.0-6" }}&nbsp;₳</b>
+  <b *ngIf="!showTooltip">{{ minAdaBalance | number : "1.0-6" }}&nbsp;₳</b>
   <button class="inline-button" mat-icon-button (click)="copyFunds()">
     <mat-icon>content_copy</mat-icon>
   </button>
@@ -51,12 +51,10 @@
 <!-- current balance -->
 <p>
   <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-    <mat-icon class="green" [fxShow]="adaBalanceInput.valid">done</mat-icon>
-    <mat-icon color="warn" [fxShow]="adaBalanceInput.invalid"
-      >dangerous</mat-icon
-    >
+    <mat-icon class="green" *ngIf="adaBalanceInput.valid">done</mat-icon>
+    <mat-icon color="warn" *ngIf="adaBalanceInput.invalid">dangerous</mat-icon>
     <span>Curent address balance </span>
-    <b>{{ adaBalance | number: "1.0-6" }}&nbsp;₳</b>
+    <b>{{ adaBalance | number : "1.0-6" }}&nbsp;₳</b>
   </span>
 </p>
 
@@ -99,7 +97,6 @@
 <mat-form-field
   appearance="outline"
   style="width: 100%; max-width: 850px"
-  [fxShow]="fundingAddresses?.length || 0 > 1"
   *ngIf="requesttargetAddress"
 >
   <mat-label>Send tokens to</mat-label>
