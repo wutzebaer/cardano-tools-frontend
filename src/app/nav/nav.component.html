@@ -39,8 +39,9 @@
       <span> Cardano Tools </span>
       <span class="example-spacer"></span>
       <span *ngIf="funds" class="slogan"
-        >Balance: {{ funds / 1000000 | number: "1.0-6" }}&nbsp;₳</span
+        >Balance: {{ funds / 1000000 | number : "1.0-6" }}&nbsp;₳</span
       >
+      <app-wallet-connect-button></app-wallet-connect-button>
       <span class="example-spacer"></span>
       <button
         type="button"

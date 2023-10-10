@@ -83,6 +83,7 @@ import { TokenDetailsComponent } from './token-details/token-details.component';
 import { WalletStatementComponent } from './wallet-statement/wallet-statement.component';
 import { LocaleInitializerService } from './locale-initializer.service';
 import { DatePipe } from '@angular/common';
+import { WalletConnectButtonComponent } from './wallet-connect-button/wallet-connect-button.component';
 
 export function initApp(localeInitializerService: LocaleInitializerService) {
   return () => localeInitializerService.initialize();
@@ -132,6 +133,7 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
     SlotPipe,
     HexToStringPipe,
     JsonFormatPipe,
+    WalletConnectButtonComponent,
   ],
   imports: [
     BrowserModule,
