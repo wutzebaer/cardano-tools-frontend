@@ -38,7 +38,7 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
     private router: Router,
-    private tokenEnhancerService: TokenEnhancerService,
+    private tokenEnhancerService: TokenEnhancerService
   ) {
     this.searchText$
       .pipe(
@@ -53,10 +53,10 @@ export class LatestTokensComponent implements OnInit, OnDestroy {
           }
           return this.api.getTokenList(undefined, undefined, searchText);
         }),
-        retry(),
+        retry()
       )
       .subscribe((foundTokens) =>
-        this.updateTokens(foundTokens, FetchMode.replace),
+        this.updateTokens(foundTokens, FetchMode.replace)
       );
 
     this.activatedRoute.queryParams.subscribe((params) => {
