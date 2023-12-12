@@ -2,11 +2,11 @@
   <mat-card-content>
     <h2>{{ token.assetName }}</h2>
 
-    <div fxLayout="row" fxLayoutAlign="center center">
+    <div class="flex flex-row justify-center items-center">
       <div class="upload-wrapper">
         <input
           id="file{{ counter }}"
-          fxHide
+          class="cdk-visually-hidden"
           type="file"
           (change)="addFile($event)"
           name="file{{ counter }}"
@@ -18,9 +18,7 @@
         >
           <div
             *ngIf="!previewUrl"
-            class="dropArea"
-            fxLayout="column"
-            fxLayoutAlign="center center"
+            class="dropArea flex flex-col justify-center items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -36,9 +34,7 @@
           </div>
           <div
             *ngIf="previewUrl"
-            class="preview"
-            fxLayout="row"
-            fxLayoutAlign="center center"
+            class="preview flex flex-row justify-center items-center"
           >
             <img *ngIf="previewType.startsWith('image')" [src]="previewUrl" />
             <audio
@@ -81,35 +77,37 @@
       </div>
     </div>
 
-    <div
-      fxLayout="row"
-      style="padding-bottom: 1.25em"
-      fxLayout="row"
-      fxLayoutGap="10px"
-      fxLayoutAlign="start center"
-    >
+    <div style="padding-bottom: 1.25em" class="flex items-center">
       <a
         type="button"
-        mat-raised-button
+        mat-button
         (click)="openPoolPmPreview()"
         target="_blank"
       >
-        <img width="24" height="24" src="/assets/poolpm.ico" />
-        <span fxHide.lt-sm> Preview</span>
+        <img
+          width="24"
+          height="24"
+          src="/assets/poolpm.ico"
+          style="display: inline"
+        />
+        <span class="hidden sm:inline"> Preview</span>
       </a>
       <span class="flex-right">
         <mat-slide-toggle
           name="isNft"
           (change)="isNftChanged()"
           [(ngModel)]="isNft"
-          fxFlexAlign="end center"
           labelPosition="before"
           >NFT</mat-slide-toggle
         >
       </span>
     </div>
 
-    <div fxLayout="row" style="padding-bottom: 1.25em" *ngIf="metaData.files">
+    <div
+      class="flex flex-row"
+      style="padding-bottom: 1.25em"
+      *ngIf="metaData.files"
+    >
       <mat-chip-listbox #chipList multiple>
         <mat-chip
           *ngFor="let file of metaData.files"
@@ -128,9 +126,9 @@
       </mat-chip-listbox>
     </div>
 
-    <div fxLayout="row" fxLayoutGap="10px">
+    <div class="flex flex-row gap-2">
       <!-- Asset Name -->
-      <mat-form-field fxFlex appearance="outline">
+      <mat-form-field class="w-full" appearance="outline">
         <mat-label>Asset Name</mat-label>
         <input
           matInput
@@ -140,7 +138,7 @@
         />
       </mat-form-field>
       <!-- Amount -->
-      <mat-form-field fxFlex="25" appearance="outline">
+      <mat-form-field appearance="outline">
         <mat-label>Amount</mat-label>
         <input
           matInput
@@ -154,8 +152,8 @@
       </mat-form-field>
     </div>
 
-    <div fxLayout="column">
-      <div *ngFor="let key of Object.keys(metaData)" fxLayout="column">
+    <div class="flex flex-col">
+      <div *ngFor="let key of Object.keys(metaData)" class="flex flex-col">
         <!-- Simple Metafield-->
         <mat-form-field
           *ngIf="isSimpleValue(metaData[key])"
@@ -203,8 +201,7 @@
         <!-- ObjectList Metafied -->
         <div
           *ngIf="isSimpleObjectList(metaData[key])"
-          class="simple-object-list"
-          fxLayout="column"
+          class="simple-object-list flex flex-col"
         >
           <h4>{{ toString(key) | titlecase }}</h4>
 
@@ -278,23 +275,23 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <div fxLayout="row">
-      <mat-chip-listbox #chipList multiple>
-        <mat-chip-option
-          *ngFor="let metaField of availableMetaFields"
-          (click)="addMetaField(metaField)"
-          [selected]="metaData[metaField]"
-        >
-          {{ metaField | titlecase }}
-        </mat-chip-option>
-        <mat-chip
-          (click)="addNewMetaField()"
-          matTooltip="Add new field with custom name"
-          color="accent"
-        >
-          <mat-icon>add</mat-icon> Add attribute
-        </mat-chip>
-      </mat-chip-listbox>
-    </div>
+    <mat-chip-listbox #chipList multiple>
+      <mat-chip-option
+        *ngFor="let metaField of availableMetaFields"
+        (click)="addMetaField(metaField)"
+        [selected]="metaData[metaField]"
+      >
+        {{ metaField | titlecase }}
+      </mat-chip-option>
+      <mat-chip
+        (click)="addNewMetaField()"
+        matTooltip="Add new field with custom name"
+        color="accent"
+      >
+        <span class="flex flex-row items-end cursor-pointer">
+          <mat-icon>add</mat-icon><span>Add attribute</span>
+        </span>
+      </mat-chip>
+    </mat-chip-listbox>
   </mat-card-actions>
 </mat-card>

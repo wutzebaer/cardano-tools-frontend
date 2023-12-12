@@ -77,6 +77,7 @@ export class BurnTokensComponent implements OnDestroy {
     this.timer = interval(10000).subscribe(() => {
       if (this.filteredTokens.length === 0) {
         this.updateTokens();
+        this.accountService.updateFunds();
       }
     });
     ajaxInterceptor.ajaxStatusChanged$.subscribe(

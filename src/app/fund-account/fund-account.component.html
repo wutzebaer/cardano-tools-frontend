@@ -36,12 +36,7 @@
   to this address
 </p>
 
-<p
-  style="text-align: center"
-  fyLayout="row"
-  fxLayoutAlign="center center"
-  fxLayoutGap="5px"
->
+<p class="flex flex-row items-center justify-center">
   <b class="address">{{ account?.address?.address }}</b>
   <button mat-icon-button (click)="copyAddressToClipboard()">
     <mat-icon>content_copy</mat-icon>
@@ -50,7 +45,7 @@
 
 <!-- current balance -->
 <p>
-  <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+  <span class="flex flex-row items-center justify-start gap-1">
     <mat-icon class="green" *ngIf="adaBalanceInput.valid">done</mat-icon>
     <mat-icon color="warn" *ngIf="adaBalanceInput.invalid">dangerous</mat-icon>
     <span>Curent address balance </span>
@@ -65,14 +60,14 @@
     requesttargetAddress
   "
 >
-  <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+  <span class="flex flex-row items-center justify-start gap-1">
     <mat-icon color="warn">dangerous</mat-icon>
     <span>Waiting for target address... </span>
   </span>
 </p>
 
 <p *ngIf="mintTransaction.txSize <= 16384">
-  <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+  <span class="flex flex-row items-center justify-start gap-1">
     <mat-icon class="green">done</mat-icon>
     <span
       >Your transaction size is currently at
@@ -83,7 +78,7 @@
   </span>
 </p>
 <p *ngIf="mintTransaction.txSize > 16384">
-  <span fyLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+  <span class="flex flex-row items-center justify-start gap-1">
     <mat-icon color="warn">dangerous</mat-icon>
     <span
       >Your transaction exceeds the maximum size, please remove tokens or
@@ -116,14 +111,14 @@
 
 <!-- hidden validator -->
 <mat-checkbox
-  fxHide
+  class="cdk-visually-hidden"
   [ngModel]="adaBalance >= minAdaBalance"
   name="adaBalanceInput"
   #adaBalanceInput="ngModel"
   required
 ></mat-checkbox>
 <mat-checkbox
-  fxHide
+class="cdk-visually-hidden"
   [ngModel]="mintTransaction.txSize <= 16384"
   name="txSizeInput"
   #txSizeInput="ngModel"

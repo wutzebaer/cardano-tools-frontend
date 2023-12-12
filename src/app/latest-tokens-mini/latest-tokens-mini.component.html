@@ -5,7 +5,7 @@
         {{ tokenListItem.name || tokenListItem.maName }}
       </div>
 
-      <div class="preview">
+      <div class="preview flex justify-center items-center">
         <!-- image -->
         <ng-container *ngIf="imageUrl; else noimage">
           <img #imagetag [src]="imageUrl" loading="lazy" />

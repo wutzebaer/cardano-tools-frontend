@@ -1,22 +1,18 @@
-import { distinctUntilChanged } from 'rxjs/operators';
-import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
-import { CardanoUtils } from './../cardano-utils';
-import { LocalStorageService } from './../local-storage.service';
 import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
   AfterViewInit,
+  Component,
+  Input,
   OnDestroy,
+  Output
 } from '@angular/core';
-import { AccountService } from './../account.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
-import { I } from '@angular/cdk/keycodes';
-import { interval, ReplaySubject, Subscription } from 'rxjs';
+import { ReplaySubject, Subscription, interval } from 'rxjs';
+import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
 import { PolicyPrivate } from 'src/cardano-tools-client';
+import { AccountService } from './../account.service';
+import { CardanoUtils } from './../cardano-utils';
+import { LocalStorageService } from './../local-storage.service';
 
 @Component({
   selector: 'app-policy-selector',

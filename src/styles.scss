@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+// https://github.com/tailwindlabs/tailwindcss/discussions/9993
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
+  .mdc-notched-outline__notch {
+  border-right-style: hidden;
+}
+.mat-mdc-input-element {
+  box-shadow: none !important;
+}
+
 @layer base {
   a {
     @apply underline text-blue-600 hover:text-blue-800;
@@ -30,6 +39,19 @@ body {
   width: 20px;
   height: 20px;
 }
+
+button.mat-mdc-icon-button.mat-mdc-button-base.inline-button {
+  vertical-align: sub;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  mat-icon {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+  }
+}
+
 
 .small-icon-button {
   width: 24px !important;
