@@ -1,5 +1,5 @@
-<div fxLayoutAlign="center">
-  <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="800px">
+<div class="flex justify-center">
+  <div class="w-full xl:w-[1000px] flex flex-col gap-4">
     <mat-card>
       <mat-card-content>
         <h2>CIP 27 - CNFT Community Royalties Standard</h2>
@@ -13,7 +13,7 @@
             >
           </p>
 
-          <div fxLayout="column">
+          <div class="flex flex-col">
             <!-- POLICY -->
             <app-policy-selector
               [createPolicies]="true"
@@ -26,40 +26,35 @@
             </app-policy-selector>
 
             <!-- Percent -->
-            <div>
-              <mat-form-field fxFlex appearance="outline" fxFlex="100%">
-                <mat-label>Royalties in %</mat-label>
-                <input
-                  matInput
-                  [(ngModel)]="percent"
-                  name="percent"
-                  required
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="10"
-                  (input)="inputChanged(percent)"
-                />
-              </mat-form-field>
-            </div>
+            <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+              <mat-label>Royalties in %</mat-label>
+              <input
+                matInput
+                [(ngModel)]="percent"
+                name="percent"
+                required
+                type="number"
+                min="0"
+                max="100"
+                step="10"
+                (input)="inputChanged(percent)"
+              />
+            </mat-form-field>
 
             <!-- Address -->
-            <div>
-              <mat-form-field fxFlex appearance="outline" fxFlex="100%">
-                <mat-label>Royalties address</mat-label>
-                <input
-                  matInput
-                  [(ngModel)]="addr"
-                  name="addr"
-                  required
-                  (input)="inputChanged(addr)"
-                  minlength="59"
-                />
-              </mat-form-field>
-            </div>
+            <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+              <mat-label>Royalties address</mat-label>
+              <input
+                matInput
+                [(ngModel)]="addr"
+                name="addr"
+                required
+                (input)="inputChanged(addr)"
+                minlength="59"
+              />
+            </mat-form-field>
           </div>
         </form>
-        <br />
 
         <!-- fund instruction-->
         <form #fundForm="ngForm" [hidden]="instructionsForm.invalid">
@@ -74,7 +69,7 @@
       </mat-card-content>
     </mat-card>
 
-    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+    <div class="flex gap-2">
       <button
         mat-raised-button
         color="accent"
