@@ -1,8 +1,8 @@
 <h1 class="mat-h1">Latest Cardano NFTs</h1>
 
 <p>
-  <span class="flex flex-row justify-center items-center">
-    <mat-form-field appearance="outline" class="w-full xl:w-[500px]">
+  <span class="flex justify-center">
+    <mat-form-field appearance="outline" class="w-full xl:w-[600px]">
       <input
         matInput
         placeholder="Search token name or policy id"
@@ -22,9 +22,9 @@
   </span>
 </p>
 
-<div class="flex flex-row justify-center items-center">
+<div class="flex justify-center">
   <div
-    class="flex flex-wrap gap-2 justify-center items-start grow-0 shrink basis-[1200px] mb-2"
+    class="flex flex-wrap gap-4 justify-center w-full xl:w-[1200px]"
     infiniteScroll
     (scrolled)="onScroll()"
     [infiniteScrollDistance]="3"
@@ -40,7 +40,7 @@
           {{ token.slotNo ?? 0 | slot | date : "medium" }}
         </a>
       </div>
-      <div class="w-full sm:w-[290px]">
+      <div class="w-full sm:w-[280px]">
         <app-latest-tokens-mini
           [tokenListItem]="token"
           (click)="details(token)"

@@ -1,7 +1,12 @@
 <h1 class="mat-h1">My Tokens</h1>
 
-<p fxLayout="row" fxLayoutAlign="center" class="search-box" fxLayoutGap="10px">
-  <mat-form-field appearance="outline" fxFlex="500px" fxFlex.lt-md="100%">
+<p
+  class="search-box flex justify-center gap-2"
+  fxLayout="row"
+  fxLayoutAlign="center"
+  fxLayoutGap="10px"
+>
+  <mat-form-field appearance="outline" class="w-full xl:w-[600px]">
     <input
       matInput
       placeholder="Enter your staking or any used address"
@@ -10,9 +15,9 @@
   </mat-form-field>
   <span>
     <button
-      mat-raised-button
+      mat-fab
       color="accent"
-      style="margin-top: 4px; height: 51px"
+      style="height: 55px"
       type="button"
       (click)="update()"
     >
@@ -21,29 +26,18 @@
   </span>
 </p>
 
-<div fxLayout="row" fxLayoutAlign="center">
-  <div
-    fxLayout="row wrap"
-    fxLayoutGap="10px grid"
-    fxLayoutAlign="center top"
-    infiniteScroll
-    [infiniteScrollDistance]="3"
-    infiniteScrollContainer=".my-sidenav-content"
-    [fromRoot]="true"
-    fxFlex="0 1 1200px"
-    fxFlex.lt-md="100%"
-  >
+<div class="flex justify-center">
+  <div class="flex flex-wrap gap-4 justify-center w-full xl:w-[1200px]">
     <ng-container *ngFor="let token of myTokens; let i = index">
       <div
-        class="policyId"
-        fxFlex="100%"
+        class="policyId w-full"
         *ngIf="i == 0 || token.maPolicyId != myTokens[i - 1].maPolicyId"
       >
         <a [routerLink]="['/latest']" [queryParams]="{ q: token.maPolicyId }">
           {{ token.maPolicyId }}
         </a>
       </div>
-      <div fxFlex="100%" fxFlex.gt-xs="300px">
+      <div class="w-full sm:w-[280px]">
         <app-latest-tokens-mini
           [tokenListItem]="token"
           (click)="details(token)"
