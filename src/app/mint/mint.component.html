@@ -2,7 +2,7 @@
   <app-policy-selector
     [disabled]="stepper.selectedIndex > 0"
     (changedPolicyId)="changePolicyId($event)"
-    class="w-full xl:w-[1000px]"
+    class="w-full xl:w-[800px]"
   >
     <mat-hint *ngIf="tokens.length == 0"
       >Your policy is fresh, you might want to to
@@ -134,7 +134,7 @@
     <ng-template matStepLabel>Fund Account</ng-template>
 
     <form #fundForm="ngForm" class="step-content flex flex-col items-center">
-      <div class="w-full sm:w-[1000px] flex flex-col gap-4">
+      <div class="w-full xl:w-[1000px] flex flex-col gap-4">
         <!-- FUND -->
         <mat-card>
           <mat-card-content>

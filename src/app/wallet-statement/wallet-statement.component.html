@@ -1,14 +1,14 @@
-<div fxLayoutAlign="center">
-  <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="1000px">
+<div class="flex justify-center">
+  <div class="flex flex-col gap-4 w-full xl:w-[1000px]">
     <h1 class="mat-h1">Wallet statement</h1>
 
     <p
+      class="search-box flex justify-center gap-2"
       fxLayout="row"
       fxLayoutAlign="center"
-      class="search-box"
       fxLayoutGap="10px"
     >
-      <mat-form-field appearance="outline" fxFlex="500px" fxFlex.lt-md="100%">
+      <mat-form-field appearance="outline" class="w-full xl:w-[600px]">
         <textarea
           placeholder="Enter your staking address stake1..."
           matInput
@@ -20,9 +20,9 @@
 
       <span>
         <button
-          mat-raised-button
+          mat-fab
           color="accent"
-          style="margin-top: 4px; height: 51px"
+          style="height: 55px"
           type="button"
           (click)="update()"
         >
@@ -51,7 +51,7 @@
             mat-header-cell
             *matHeaderCellDef
             mat-sort-header
-            style="width: 125px"
+            style="width: 150px"
           >
             Timestamp
           </th>
