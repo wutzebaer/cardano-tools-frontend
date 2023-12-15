@@ -1,8 +1,7 @@
-<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+<div class="flex justify-center">
   <app-policy-selector
     (changedPolicyId)="changePolicyId($event)"
-    fxFlex="100%"
-    fxFlex.gt-sm="550px"
+    class="w-full xl:w-[1000px]"
   >
     <mat-hint *ngIf="tokens.length == 0"
       >Your policy is fresh, you might want to to
@@ -11,8 +10,8 @@
   </app-policy-selector>
 </div>
 
-<div fxLayoutAlign="center">
-  <div fxLayout="column" fxLayoutGap="15px" fxFlex="100%" fxFlex.gt-md="1000px">
+<div class="flex flex-col items-center">
+  <div class="w-full xl:w-[1000px] flex flex-col gap-4">
     <mat-accordion class="accordion-headers-align">
       <mat-expansion-panel [expanded]="true">
         <mat-expansion-panel-header>

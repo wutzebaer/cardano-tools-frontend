@@ -73,7 +73,7 @@
           [(ngModel)]="whitelistString"
           matInput
           cdkTextareaAutosize
-          placeholder="one address per line"
+          placeholder="one address per line, e.g. stake1uxyt389wtpccs6t26f248d9qszgxmya2qc6a3k06jw2el9g42aktg"
           (change)="formatWhitelist()"
         ></textarea>
       </mat-form-field>
@@ -148,7 +148,7 @@
     </p>
   </div>
 
-  <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+  <div class="flex flex-row gap-2">
     <button mat-raised-button color="primary" [disabled]="drop.running">
       <mat-icon>save</mat-icon>
       <span> Save</span>
