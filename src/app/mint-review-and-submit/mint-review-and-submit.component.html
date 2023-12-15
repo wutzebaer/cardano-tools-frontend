@@ -1,4 +1,4 @@
-<div fxLayout="column" fxLayoutGap="15px">
+<div class="flex flex-col gap-4">
   <mat-card>
     <mat-card-content>
       <h2>Review and Submit</h2>
@@ -7,7 +7,7 @@
         <p>The tokens will be sent back to your address</p>
 
         <p>
-          The change of <b>{{ adaChange | number: "1.0-6" }}&nbsp;₳</b> will
+          The change of <b>{{ adaChange | number : "1.0-6" }}&nbsp;₳</b> will
           also be sent to your address
         </p>
 
@@ -51,12 +51,8 @@
             <mat-expansion-panel-header>
               <mat-panel-title> Tokens </mat-panel-title>
             </mat-expansion-panel-header>
-            <div fxLayout="row wrap" fxLayoutGap="10px grid">
+            <div class="grid grid-cols-3 gap-4">
               <div
-                fxFlex="100%"
-                fxFlex.gt-sm="50%"
-                fxFlex.gt-md="50%"
-                fxFlex.gt-lg="33%"
                 *ngFor="
                   let token of mintTransaction.mintOrderSubmission?.tokens
                 "
@@ -71,7 +67,7 @@
         </mat-accordion>
 
         <mat-checkbox
-          fxHide
+          class="cdk-visually-hidden"
           #submittedInput="ngModel"
           name="submitted"
           [(ngModel)]="submitted"
@@ -80,7 +76,7 @@
       </div>
     </mat-card-content>
   </mat-card>
-  <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+  <div class="flex flex-row gap-2">
     <button mat-raised-button color="primary" matStepperPrevious>
       <mat-icon>fast_rewind</mat-icon>
       Back

@@ -12,93 +12,12 @@
 </div>
 
 <mat-horizontal-stepper linear="true" #stepper>
-
-    <!-- fund step -->
-    <mat-step [stepControl]="fundForm.control">
-      <ng-template matStepLabel>Fund Account</ng-template>
-  
-      <form #fundForm="ngForm" class="step-content" fxLayoutAlign="center">
-        <div
-          fxFlex="100%"
-          fxFlex.gt-md="991px"
-          fxLayout="column"
-          fxLayoutGap="15px"
-        >
-          <!-- FUND -->
-          <mat-card>
-            <mat-card-content>
-              <h2>Fund Account</h2>
-              <app-fund-account
-                #fundAccount
-                [activeStep]="stepper.selectedIndex == 1"
-                [mintTransaction]="mintTransaction"
-                (updateMintTransaction)="updateMintTransaction()"
-                [mintOrderSubmission]="mintOrderSubmission"
-                [showPin]="true"
-                [showTip]="false"
-              ></app-fund-account>
-            </mat-card-content>
-          </mat-card>
-  
-          <!-- Buttons -->
-          <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-            <button
-              mat-raised-button
-              color="primary"
-              matStepperPrevious
-              fxFlex.lt-sm
-            >
-              <mat-icon>fast_rewind</mat-icon>
-              <span fxHide.lt-sm> Back</span>
-            </button>
-            <button
-              mat-raised-button
-              color="accent"
-              (click)="updateFunds()"
-              fxFlex.lt-sm
-            >
-              <mat-icon>refresh</mat-icon>
-              <span fxHide.lt-sm> Refresh</span>
-            </button>
-            <button
-              [disabled]="fundAccount.invalid || loadingInput.invalid"
-              mat-raised-button
-              color="primary"
-              matStepperNext
-              fxFlex.lt-sm
-            >
-              <mat-icon>fast_forward</mat-icon>
-              <span fxHide.lt-sm> Proceed</span>
-            </button>
-          </div>
-  
-          <!-- PREVIEW -->
-          <div fxFlex="100%" fxFlex.gt-md="991px">
-            <div fxLayout="row wrap" fxLayoutGap="10px grid">
-              <div
-                fxFlex="100%"
-                fxFlex.gt-sm="50%"
-                fxFlex.gt-md="50%"
-                fxFlex.gt-lg="33%"
-                *ngFor="let token of mintTransaction.mintOrderSubmission?.tokens"
-              >
-                <app-mint-token-mini
-                  [token]="token"
-                  [mintOrderSubmission]="mintTransaction.mintOrderSubmission!"
-                ></app-mint-token-mini>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </mat-step>
-
-    
+  <!-- NFT STEP -->
   <mat-step [stepControl]="nftForm.control">
     <ng-template matStepLabel>Configure NFTs</ng-template>
 
     <form #nftForm="ngForm" class="step-content">
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
         <!-- Token Cards-->
         <div>
           <div
@@ -210,28 +129,83 @@
     </form>
   </mat-step>
 
+  <!-- fund step -->
+  <mat-step [stepControl]="fundForm.control">
+    <ng-template matStepLabel>Fund Account</ng-template>
+
+    <form #fundForm="ngForm" class="step-content flex flex-col items-center">
+      <div class="w-full sm:w-[1000px] flex flex-col gap-4">
+        <!-- FUND -->
+        <mat-card>
+          <mat-card-content>
+            <h2>Fund Account</h2>
+            <app-fund-account
+              #fundAccount
+              [activeStep]="stepper.selectedIndex == 1"
+              [mintTransaction]="mintTransaction"
+              (updateMintTransaction)="updateMintTransaction()"
+              [mintOrderSubmission]="mintOrderSubmission"
+              [showPin]="true"
+              [showTip]="false"
+            ></app-fund-account>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Buttons -->
+        <div class="flex flex-row gap-2">
+          <button
+            mat-raised-button
+            color="primary"
+            matStepperPrevious
+            fxFlex.lt-sm
+          >
+            <mat-icon>fast_rewind</mat-icon>
+            <span fxHide.lt-sm> Back</span>
+          </button>
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="updateFunds()"
+            fxFlex.lt-sm
+          >
+            <mat-icon>refresh</mat-icon>
+            <span fxHide.lt-sm> Refresh</span>
+          </button>
+          <button
+            [disabled]="fundAccount.invalid || loadingInput.invalid"
+            mat-raised-button
+            color="primary"
+            matStepperNext
+            fxFlex.lt-sm
+          >
+            <mat-icon>fast_forward</mat-icon>
+            <span fxHide.lt-sm> Proceed</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-step>
 
   <!-- review step -->
   <mat-step [stepControl]="reviewForm.control">
     <ng-template matStepLabel>Review and submit</ng-template>
-    <form #reviewForm="ngForm" class="step-content" fxLayoutAlign="center">
+
+    <form #reviewForm="ngForm" class="step-content flex flex-col items-center">
       <app-mint-review-and-submit
-        fxFlex="100%"
-        fxFlex.gt-md="991px"
+        class="w-full sm:w-[1000px]"
         [mintTransaction]="mintTransaction"
         (updateMintTransaction)="updateMintTransaction()"
         (mintSuccess)="mintSuccess()"
       ></app-mint-review-and-submit>
     </form>
   </mat-step>
-
   <!-- receipt step -->
   <mat-step [stepControl]="successForm.control">
     <ng-template matStepLabel>Confirmation</ng-template>
-    <form #successForm="ngForm" class="step-content" fxLayoutAlign="center">
+
+    <form #successForm="ngForm" class="step-content flex flex-col items-center">
       <app-mint-success
-        fxFlex="100%"
-        fxFlex.gt-md="991px"
+        class="w-full sm:w-[1000px]"
         [mintTransaction]="mintTransaction"
         (restart)="restart()"
       ></app-mint-success>

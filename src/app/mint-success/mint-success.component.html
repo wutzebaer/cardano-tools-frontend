@@ -1,4 +1,4 @@
-<div fxLayout="column" fxLayoutGap="15px">
+<div class="flex flex-col gap-4">
   <mat-card>
     <mat-card-content>
       <h1>Success</h1>
@@ -9,12 +9,7 @@
           until it appears in the blockchain
         </p>
 
-        <p
-          style="text-align: center"
-          fyLayout="row"
-          fxLayoutAlign="center center"
-          fxLayoutGap="5px"
-        >
+        <p style="text-align: center">
           <b class="address"
             ><a
               target="_blank"
@@ -27,8 +22,8 @@
         </p>
 
         <p>
-          The change of <b>{{ adaChange | number: "1.0-6" }}&nbsp;₳</b> has also
-          be sent to your address
+          The change of <b>{{ adaChange | number : "1.0-6" }}&nbsp;₳</b> has
+          also be sent to your address
         </p>
 
         <!-- key -->
@@ -46,12 +41,8 @@
           recover your keys.
         </p>
 
-        <div fxLayout="row wrap" fxLayoutGap="10px grid">
+        <div class="grid grid-cols-3 gap-4">
           <div
-            fxFlex="100%"
-            fxFlex.gt-sm="50%"
-            fxFlex.gt-md="50%"
-            fxFlex.gt-lg="33%"
             *ngFor="let token of mintTransaction.mintOrderSubmission?.tokens"
           >
             <app-mint-token-mini
@@ -63,7 +54,7 @@
       </div>
     </mat-card-content>
   </mat-card>
-  <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+  <div class="flex flex-row gap-2">
     <button mat-raised-button color="primary" (click)="restartMinting()">
       <mat-icon>restart_alt</mat-icon>
       Mint more tokens

@@ -2,6 +2,7 @@
   <mat-card-content>
     <h2>{{ token.assetName }}</h2>
 
+    <!-- IMAGE UPLOAD -->
     <div class="flex flex-row justify-center items-center">
       <div class="upload-wrapper">
         <input
@@ -77,13 +78,9 @@
       </div>
     </div>
 
+    <!-- poolpm link and nft switch -->
     <div style="padding-bottom: 1.25em" class="flex items-center">
-      <a
-        type="button"
-        mat-button
-        (click)="openPoolPmPreview()"
-        target="_blank"
-      >
+      <a type="button" mat-button (click)="openPoolPmPreview()" target="_blank">
         <img
           width="24"
           height="24"
@@ -103,6 +100,7 @@
       </span>
     </div>
 
+    <!-- Other files -->
     <div
       class="flex flex-row"
       style="padding-bottom: 1.25em"
@@ -126,6 +124,7 @@
       </mat-chip-listbox>
     </div>
 
+    <!-- INPUTS -->
     <div class="flex flex-row gap-2">
       <!-- Asset Name -->
       <mat-form-field class="w-full" appearance="outline">
