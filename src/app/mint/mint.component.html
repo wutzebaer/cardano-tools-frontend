@@ -2,7 +2,7 @@
   <app-policy-selector
     [disabled]="stepper.selectedIndex > 0"
     (changedPolicyId)="changePolicyId($event)"
-    class="w-full xl:w-[800px]"
+    class="w-full xl:w-[850px]"
   >
     <mat-hint *ngIf="tokens.length == 0"
       >Your policy is fresh, you might want to to
@@ -68,10 +68,9 @@
             color="accent"
             type="button"
             (click)="addToken()"
-            fxFlex.lt-sm
           >
             <mat-icon>generating_tokens</mat-icon>
-            <span fxHide.lt-sm> Add</span>
+            <span>Add</span>
           </button>
 
           <!-- multi add files as tokens -->
@@ -83,10 +82,10 @@
             name="multiadd"
             multiple
           />
-          <label for="multiadd" fxFlex.lt-sm>
-            <a mat-raised-button color="accent" type="button" fxFlex.lt-sm>
+          <label for="multiadd">
+            <a mat-raised-button color="accent" type="button">
               <mat-icon>generating_tokens</mat-icon>
-              <span> Multi</span>
+              <span>Multi</span>
             </a>
           </label>
 
@@ -98,7 +97,7 @@
             type="button"
           >
             <mat-icon>settings</mat-icon>
-            <span fxHide.lt-sm> Advanced</span>
+            <span>Advanced</span>
           </button>
 
           <!-- next step -->
@@ -107,10 +106,9 @@
             color="primary"
             matStepperNext
             [disabled]="tokenCountInput.invalid || loadingInput.invalid"
-            fxFlex.lt-sm
           >
             <mat-icon>fast_forward</mat-icon>
-            <span fxHide.lt-sm> Proceed</span>
+            <span>Proceed</span>
           </button>
 
           <!-- next step -->
@@ -119,10 +117,9 @@
             color="primary"
             (click)="mintOnDemand()"
             [disabled]="tokenCountInput.invalid || loadingInput.invalid"
-            fxFlex.lt-sm
           >
             <mat-icon>water_drop</mat-icon>
-            <span fxHide.lt-sm> Dropper</span>
+            <span>Dropper</span>
           </button>
         </div>
       </div>
@@ -153,33 +150,22 @@
 
         <!-- Buttons -->
         <div class="flex flex-row gap-2">
-          <button
-            mat-raised-button
-            color="primary"
-            matStepperPrevious
-            fxFlex.lt-sm
-          >
+          <button mat-raised-button color="primary" matStepperPrevious>
             <mat-icon>fast_rewind</mat-icon>
-            <span fxHide.lt-sm> Back</span>
+            <span>Back</span>
           </button>
-          <button
-            mat-raised-button
-            color="accent"
-            (click)="updateFunds()"
-            fxFlex.lt-sm
-          >
+          <button mat-raised-button color="accent" (click)="updateFunds()">
             <mat-icon>refresh</mat-icon>
-            <span fxHide.lt-sm> Refresh</span>
+            <span>Refresh</span>
           </button>
           <button
             [disabled]="fundAccount.invalid || loadingInput.invalid"
             mat-raised-button
             color="primary"
             matStepperNext
-            fxFlex.lt-sm
           >
             <mat-icon>fast_forward</mat-icon>
-            <span fxHide.lt-sm> Proceed</span>
+            <span>Proceed</span>
           </button>
         </div>
       </div>

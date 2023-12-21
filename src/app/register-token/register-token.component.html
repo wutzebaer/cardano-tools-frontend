@@ -1,7 +1,6 @@
 <form
   #registerForm="ngForm"
   class="step-content"
-  fxLayoutAlign="center"
   (ngSubmit)="generateRegistration()"
 >
   <div class="flex justify-center">
@@ -235,7 +234,7 @@
           [disabled]="registerForm.invalid"
         >
           <mat-icon>fast_forward</mat-icon>
-          <span fxHide.lt-sm> Proceed</span>
+          <span> Proceed</span>
         </button>
       </div>
     </div>

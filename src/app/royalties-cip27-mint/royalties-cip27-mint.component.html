@@ -26,7 +26,7 @@
             </app-policy-selector>
 
             <!-- Percent -->
-            <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+            <mat-form-field appearance="outline">
               <mat-label>Royalties in %</mat-label>
               <input
                 matInput
@@ -42,7 +42,7 @@
             </mat-form-field>
 
             <!-- Address -->
-            <mat-form-field fxFlex appearance="outline" fxFlex="100%">
+            <mat-form-field appearance="outline">
               <mat-label>Royalties address</mat-label>
               <input
                 matInput
@@ -70,24 +70,18 @@
     </mat-card>
 
     <div class="flex gap-2">
-      <button
-        mat-raised-button
-        color="accent"
-        (click)="updateFunds()"
-        fxFlex.lt-sm
-      >
+      <button mat-raised-button color="accent" (click)="updateFunds()">
         <mat-icon>refresh</mat-icon>
-        <span fxHide.lt-sm> Refresh</span>
+        <span> Refresh</span>
       </button>
       <button
         mat-raised-button
         color="primary"
         [disabled]="instructionsForm.invalid || fundForm.invalid"
-        fxFlex.lt-sm
         (click)="generateCip27()"
       >
         <mat-icon>token</mat-icon>
-        <span fxHide.lt-sm> Submit</span>
+        <span> Submit</span>
       </button>
     </div>
 

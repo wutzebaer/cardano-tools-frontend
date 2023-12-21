@@ -3,7 +3,7 @@ import {
   Component,
   Input,
   OnDestroy,
-  Output
+  Output,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
@@ -38,6 +38,10 @@ export class PolicySelectorComponent implements AfterViewInit, OnDestroy {
 
     this.policiesSubscription = accountService.policies.subscribe(
       (policies) => {
+        if (this.policies?.length && policies.length > this.policies?.length) {
+          this.selectedPolicyId = undefined;
+        }
+
         this.policies = policies;
 
         // policyid from localStorage is invalid
@@ -81,7 +85,7 @@ export class PolicySelectorComponent implements AfterViewInit, OnDestroy {
   }
 
   findUnlockedPolicy(policies: PolicyPrivate[]): PolicyPrivate {
-    return policies.find((p) => this.getTimeLeft(p) > 0)!;
+    return policies.reverse().find((p) => this.getTimeLeft(p) > 0)!;
   }
 
   policyChanged($event?: MatSelectChange) {

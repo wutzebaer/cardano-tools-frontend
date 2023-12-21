@@ -2,7 +2,7 @@
   <mat-card-content>
     <h2>{{ token.assetName }}</h2>
 
-    <div class="preview" fxLayout="row" fxLayoutAlign="center center">
+    <div class="preview">
       <img *ngIf="previewType.startsWith('image')" [src]="previewUrl" />
       <audio
         *ngIf="previewType.startsWith('audio')"

@@ -13,9 +13,9 @@
       [value]="policy.policyId"
       [disabled]="getTimeLeft(policy) <= 0"
     >
-      <span *ngIf="getTimeLeft(policy) > 0">{{
-        getTimeLeftString(policy)
-      }}</span>
+      <span *ngIf="getTimeLeft(policy) > 0"
+        >[{{ getTimeLeftString(policy) }}]</span
+      >
       <span *ngIf="getTimeLeft(policy) <= 0">[LOCKED]</span>
       {{ policy.name }}
       {{ policy.policyId }}
