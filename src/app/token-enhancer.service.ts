@@ -28,7 +28,7 @@ export class TokenEnhancerService {
 
     // timestamp
     tokenDataWithMetadata.timestamp = new Date(
-      (1596491091 + (tokenDataWithMetadata.slotNo - 4924800)) * 1000,
+      (1596491091 + (tokenDataWithMetadata.slotNo - 4924800)) * 1000
     );
 
     // find lockdate
@@ -68,7 +68,7 @@ export class TokenEnhancerService {
         metaData['files'].forEach((file) => {
           if (file.src && (file.mediatype || file.mediaType)) {
             tokenDataWithMetadata.mediaTypes.push(
-              file.mediatype || file.mediaType,
+              file.mediatype || file.mediaType
             );
             tokenDataWithMetadata.mediaUrls.push(this.toIpfsUrl(file.src));
           }
@@ -122,6 +122,10 @@ export class TokenEnhancerService {
   }
 
   toIpfsUrl(ipfs: string) {
+    if (!ipfs) {
+      return ipfs;
+    }
+
     if (Array.isArray(ipfs)) {
       ipfs = ipfs.join('');
     }
