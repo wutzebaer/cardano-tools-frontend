@@ -15,7 +15,7 @@ import { RoyaltiesCip27MintComponent } from './royalties-cip27-mint/royalties-ci
 
 const routes: Routes = [
   { path: '', redirectTo: '/latest', pathMatch: 'full' },
-  { path: 'europool', component: EuroPoolComponent },
+  { path: 'chien', component: EuroPoolComponent },
   { path: 'mint', component: MintComponent },
   { path: 'burn', component: BurnTokensComponent },
   { path: 'burn-address', component: BurnComponent },
