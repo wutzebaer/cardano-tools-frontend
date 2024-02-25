@@ -1,4 +1,29 @@
-<button mat-raised-button>
-  <mat-icon>water_drop</mat-icon>
-  <span > Dropper</span>
+<!-- Nothing selected -->
+<button mat-raised-button [matMenuTriggerFor]="menu" *ngIf="walletInfo">
+  <mat-icon><img width="24" height="24" [src]="walletInfo.icon" /></mat-icon>
+  {{ walletInfo.name }} {{ balance | ada }}
 </button>
+
+<!-- something selected-->
+<button mat-raised-button [matMenuTriggerFor]="menu" *ngIf="!walletInfo">
+  <mat-icon>link</mat-icon> Connect
+</button>
+
+<!-- menu -->
+<mat-menu #menu="matMenu">
+  <button
+    *ngFor="let entry of cardano | keyvalue"
+    mat-menu-item
+    (click)="connect(entry.key)"
+  >
+    <mat-icon><img width="24" height="24" [src]="entry.value.icon" /></mat-icon>
+    {{ entry.value.name }}
+  </button>
+  <button *ngIf="walletConnector" mat-menu-item (click)="connect('')">
+    <mat-icon>link_off</mat-icon>
+    Disconnect
+  </button>
+  <span *ngIf="!cardano.size" mat-menu-item
+    >No cardano dapp connector found</span
+  >
+</mat-menu>

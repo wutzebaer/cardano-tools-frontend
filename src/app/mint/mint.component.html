@@ -111,7 +111,7 @@
             <span>Proceed</span>
           </button>
 
-          <!-- next step -->
+          <!-- to drop -->
           <button
             mat-raised-button
             color="primary"
@@ -120,6 +120,17 @@
           >
             <mat-icon>water_drop</mat-icon>
             <span>Dropper</span>
+          </button>
+
+          <!-- direct mint -->
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="instantMint()"
+            [disabled]="tokenCountInput.invalid || loadingInput.invalid"
+          >
+            <mat-icon>water_drop</mat-icon>
+            <span>Instant Mint</span>
           </button>
         </div>
       </div>

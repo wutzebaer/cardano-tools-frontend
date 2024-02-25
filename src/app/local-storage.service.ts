@@ -37,4 +37,11 @@ export class LocalStorageService {
   retrievePolicyId(): string | null {
     return localStorage.getItem('policyId');
   }
+  storeWallet(wallet: string) {
+    localStorage.setItem('wallet', wallet);
+  }
+
+  retrieveWallet(): string | null {
+    return localStorage.getItem('wallet');
+  }
 }

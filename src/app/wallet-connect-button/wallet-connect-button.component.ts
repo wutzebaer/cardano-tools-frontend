@@ -1,5 +1,12 @@
-import { WalletConnectServiceService } from './../wallet-connect-service.service';
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { LocalStorageService } from '../local-storage.service';
+import {
+  Cardano,
+  DappWallet,
+  WalletConnectService,
+} from '../wallet-connect.service';
+import { CardanoDappService } from '../cardano-dapp.service';
 
 @Component({
   selector: 'app-wallet-connect-button',
@@ -7,9 +14,40 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./wallet-connect-button.component.scss'],
 })
 export class WalletConnectButtonComponent implements OnInit {
-  constructor(
-    private walletConnectServiceService: WalletConnectServiceService
-  ) {}
+  private dappWalletSubscription: Subscription;
 
-  ngOnInit(): void {}
+  cardano: Cardano;
+  dappWallet?: DappWallet;
+
+  constructor(
+    private walletConnectServiceService: WalletConnectService,
+    private localStorageService: LocalStorageService,
+    private cardanoDappService: CardanoDappService
+  ) {
+    this.cardano = this.walletConnectServiceService.getCardano();
+    this.dappWalletSubscription =
+      this.walletConnectServiceService.dappWallet$.subscribe((dappWallet) => {
+        this.dappWallet = dappWallet;
+      });
+  }
+
+  ngOnInit() {}
+
+  ngOnDestroy(): void {
+    this.dappWalletSubscription.unsubscribe();
+  }
+
+  get balance() {
+    return this.dappWallet?.balance;
+  }
+  get walletInfo() {
+    return this.dappWallet?.walletInfo;
+  }
+  get walletConnector() {
+    return this.dappWallet?.walletConnector;
+  }
+
+  connect(walletKey: string) {
+    this.walletConnectServiceService.connect(walletKey);
+  }
 }
