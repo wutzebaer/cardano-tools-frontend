@@ -19,6 +19,11 @@ export interface WalletInfo {
   enable: () => Promise<WalletConnection>;
 }
 
+export interface WalletError {
+  code: number;
+  info: string;
+}
+
 export interface WalletConnection {
   getBalance: () => Promise<string>;
   getChangeAddress: () => Promise<string>;
@@ -26,6 +31,7 @@ export interface WalletConnection {
   getUtxos: () => Promise<string[]>;
   getCollateral: () => Promise<string[]>;
   signTx: (cbor: string, partialSign: boolean) => Promise<string>;
+  submitTx: (cbor: string) => Promise<string>;
 }
 
 export type DappWallet = {
@@ -81,6 +87,7 @@ export class WalletConnectService {
 
   getDappWallet() {
     if (!this.dappWalletSubject.value) {
+      alert('Please connect wallet first');
       throw new Error('No wallet available');
     }
     return this.dappWalletSubject.value;
@@ -91,18 +98,27 @@ export class WalletConnectService {
   }
 
   public async connect(walletKey: string) {
-    const walletInfo = this.cardano.get(walletKey);
-    const walletConnector = await walletInfo?.enable();
+    this.dappWalletSubject.next(undefined);
+    this.localStorageService.storeWallet(walletKey);
 
-    if (!walletInfo || !walletConnector) {
-      this.dappWalletSubject.next(undefined);
-    } else {
-      this.dappWalletSubject.next({
-        walletInfo,
-        walletConnector,
-      });
-      this.localStorageService.storeWallet(walletKey);
-      this.updateBalance();
+    try {
+      const walletInfo = this.cardano.get(walletKey);
+      const walletConnector = await walletInfo?.enable();
+      if (walletInfo && walletConnector) {
+        this.dappWalletSubject.next({
+          walletInfo,
+          walletConnector,
+        });
+        this.updateBalance();
+      }
+    } catch (error: any) {
+      if (this.isCardanoDAppError(error)) {
+        console.error('Caught Cardano dApp Error:', error.code, error.info);
+        alert(error.info);
+      } else {
+        console.error('Unknown error:', error);
+        alert(JSON.stringify(error));
+      }
     }
   }
 
@@ -119,5 +135,11 @@ export class WalletConnectService {
         balance,
       });
     }
+  }
+
+  public isCardanoDAppError(error: any): error is WalletError {
+    return (
+      error && typeof error.code === 'number' && typeof error.info === 'string'
+    );
   }
 }

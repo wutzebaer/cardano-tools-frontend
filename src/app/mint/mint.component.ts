@@ -12,18 +12,6 @@ import { NgModel } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
-import {
-  Address,
-  BigNum,
-  CoinSelectionStrategyCIP2,
-  MultiAsset,
-  TransactionBuilder,
-  TransactionOutput,
-  TransactionUnspentOutput,
-  TransactionUnspentOutputs,
-  Value,
-  min_ada_required,
-} from '@emurgo/cardano-serialization-lib-browser';
 import { Subscription } from 'rxjs';
 import { AccountService } from 'src/app/account.service';
 import { AjaxInterceptor } from 'src/app/ajax.interceptor';
@@ -36,16 +24,13 @@ import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-fo
 import {
   AccountPrivate,
   MintOrderSubmission,
+  PolicyPrivate,
   Transaction,
 } from 'src/cardano-tools-client';
 import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 import { CardanoDappService } from '../cardano-dapp.service';
-import { CardanoUtils } from '../cardano-utils';
 import { TokenEnhancerService } from '../token-enhancer.service';
-import {
-  WalletConnectService,
-  txBuilderConfig,
-} from '../wallet-connect.service';
+import { WalletConnectService } from '../wallet-connect.service';
 import { MintRestInterfaceService } from './../../cardano-tools-client/api/mintRestInterface.service';
 
 @Component({
@@ -59,6 +44,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('mintForm') components!: QueryList<MintFormComponent>;
 
   account?: AccountPrivate;
+  policies?: PolicyPrivate[];
   funds?: number;
   fundingAddresses?: string[];
   mintOrderSubmission!: MintOrderSubmission;
@@ -66,6 +52,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
   loading = false;
   tokens: TokenListItem[] = [];
 
+  policiesSubscription: Subscription;
   accountSubscription: Subscription;
   fundsSubscription: Subscription;
   fundingAddressesSubscription: Subscription;
@@ -109,6 +96,12 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
       this.account = account;
     });
 
+    this.policiesSubscription = accountService.policies.subscribe(
+      (policies) => {
+        this.policies = policies;
+      }
+    );
+
     this.fundingAddressesSubscription =
       accountService.fundingAddresses.subscribe((fundingAddresses) => {
         this.fundingAddresses = fundingAddresses;
@@ -138,6 +131,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     this.accountSubscription.unsubscribe();
     this.fundsSubscription.unsubscribe();
     this.fundingAddressesSubscription.unsubscribe();
+    this.policiesSubscription.unsubscribe();
   }
 
   changePolicyId(policyId: string) {
@@ -296,60 +290,22 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async instantMint() {
-    const targetAddress =
-      'addr1qx6pnsm9n3lrvtwx24kq7a0mfwq2txum2tvtaevnpkn4mpyghzw2ukr33p5k45j42w62pqysdkf65p34mrvl4yu4n72s7yfgkq';
-    const sendAmount = 1_000_000 * 100;
-
-    const wallet = this.walletConnectService.getDappWallet().walletConnector;
-    const collateral = await wallet.getCollateral();
-    const changeAddress = await wallet.getChangeAddress();
-    const rawUtxos = CardanoUtils.shuffleArray(
-      (await wallet.getUtxos()).filter((item) => !collateral.includes(item))
+    const policy = this.policies?.find(
+      (p) => p.policyId === this.mintOrderSubmission.policyId
     );
-    const transactionUnspentOutputs = TransactionUnspentOutputs.new();
-    const utxos = rawUtxos
-      .map((ru) => {
-        console.log(ru);
-        return TransactionUnspentOutput.from_bytes(Buffer.from(ru, 'hex'));
-      })
-      .filter((utxo) => utxo.output().amount().multiasset());
-    for (const utxo of utxos) {
-      transactionUnspentOutputs.add(utxo);
+    if (!policy) {
+      return;
     }
 
-    for (let i = 0; i < 10; i++) {
-      try {
-        const txBuilder = this.walletConnectService.getTxBuilder();
-        // add output
-        const output = TransactionOutput.new(
-          Address.from_bech32(targetAddress),
-          Value.new(BigNum.from_str(sendAmount.toString()))
-        );
-        txBuilder.add_output(output);
-
-        txBuilder.add_inputs_from(
-          transactionUnspentOutputs,
-          CoinSelectionStrategyCIP2.LargestFirstMultiAsset
-        );
-
-        txBuilder.add_change_if_needed(
-          Address.from_bytes(Buffer.from(changeAddress, 'hex'))
-        );
-
-        const tx = txBuilder.build_tx();
-        //console.log(tx.to_json());
-
-        try {
-          await wallet.signTx(Buffer.from(tx.to_bytes()).toString('hex'), true);
-        } catch (error) {
-          console.log(error);
-        }
-        break;
-      } catch (error) {
-        console.log('retry', i, error);
-      }
+    try {
+      const txHash = await this.cardanoDappService.mintTokens(
+        policy,
+        this.mintOrderSubmission.tokens,
+        this.buildMetadata()
+      );
+      console.log('Tx submitted', txHash);
+    } catch (error) {
+      alert(error);
     }
-
-    if (true) return;
   }
 }
