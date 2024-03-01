@@ -13,10 +13,10 @@
 
 <mat-horizontal-stepper linear="true" #stepper>
   <!-- NFT STEP -->
-  <mat-step [stepControl]="nftForm.control">
+  <mat-step >
     <ng-template matStepLabel>Configure NFTs</ng-template>
 
-    <form #nftForm="ngForm" class="step-content">
+    <form #nftForm="ngForm" class="step-content" (submit)="mint()">
       <div class="flex flex-col gap-2">
         <!-- Token Cards-->
         <div>
@@ -100,37 +100,29 @@
             <span>Advanced</span>
           </button>
 
-          <!-- next step -->
-          <button
-            mat-raised-button
-            color="primary"
-            matStepperNext
-            [disabled]="tokenCountInput.invalid || loadingInput.invalid"
-          >
-            <mat-icon>fast_forward</mat-icon>
-            <span>Proceed</span>
-          </button>
-
           <!-- to drop -->
           <button
             mat-raised-button
-            color="primary"
             (click)="mintOnDemand()"
             [disabled]="tokenCountInput.invalid || loadingInput.invalid"
           >
             <mat-icon>water_drop</mat-icon>
-            <span>Dropper</span>
+            <span>Copy to mint on demand</span>
           </button>
 
           <!-- direct mint -->
           <button
             mat-raised-button
             color="primary"
-            (click)="instantMint()"
             [disabled]="tokenCountInput.invalid || loadingInput.invalid"
+            type="submit"
           >
-            <mat-icon>water_drop</mat-icon>
-            <span>Instant Mint</span>
+            <mat-icon *ngIf="!minting">savings</mat-icon>
+            <mat-icon *ngIf="minting"
+              ><mat-spinner diameter="18" color="accent"></mat-spinner
+            ></mat-icon>
+
+            <span>Mint</span>
           </button>
         </div>
       </div>

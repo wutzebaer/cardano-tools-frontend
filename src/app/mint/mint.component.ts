@@ -8,7 +8,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
@@ -32,6 +32,7 @@ import { CardanoDappService } from '../cardano-dapp.service';
 import { TokenEnhancerService } from '../token-enhancer.service';
 import { WalletConnectService } from '../wallet-connect.service';
 import { MintRestInterfaceService } from './../../cardano-tools-client/api/mintRestInterface.service';
+import { MintSuccessPopupComponent } from '../mint-success-popup/mint-success-popup.component';
 
 @Component({
   selector: 'app-mint',
@@ -42,6 +43,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild('tokenCountInput') tokenCountInput!: NgModel;
   @ViewChildren('mintForm') components!: QueryList<MintFormComponent>;
+  @ViewChild('nftForm') nftForm!: NgForm;
 
   account?: AccountPrivate;
   policies?: PolicyPrivate[];
@@ -50,6 +52,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
   mintOrderSubmission!: MintOrderSubmission;
   mintTransaction!: Transaction;
   loading = false;
+  minting = false;
   tokens: TokenListItem[] = [];
 
   policiesSubscription: Subscription;
@@ -289,7 +292,13 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  async instantMint() {
+  async mint() {
+    if (!this.nftForm.valid) {
+      console.log('invalid', this.nftForm);
+      return;
+    }
+
+    this.minting = true;
     const policy = this.policies?.find(
       (p) => p.policyId === this.mintOrderSubmission.policyId
     );
@@ -303,9 +312,19 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
         this.mintOrderSubmission.tokens,
         this.buildMetadata()
       );
-      console.log('Tx submitted', txHash);
+
+      this.dialog.open(MintSuccessPopupComponent, {
+        width: '600px',
+        maxWidth: '90vw',
+        data: { txHash: txHash },
+        closeOnNavigation: true,
+      });
+
+      this.restart();
     } catch (error) {
       alert(error);
     }
+
+    this.minting = false;
   }
 }

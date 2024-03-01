@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Success</h2>
+
+<mat-dialog-content>
+  <p>
+    Your Transaction has been submitted it might take serveral minutes until it
+    appears in the blockchain
+  </p>
+
+  <p>
+    <b class="address"
+      ><a
+        target="_blank"
+        href="https://cexplorer.io/search?query={{ txHash }}"
+        >{{ txHash }}</a
+      ></b
+    >
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Ok</button>
+</mat-dialog-actions>
