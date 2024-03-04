@@ -1,5 +1,3 @@
-import { Policy } from './../cardano-tools-client/model/policy';
-import { MintOrderSubmission } from './../cardano-tools-client/model/mintOrderSubmission';
 import { Injectable } from '@angular/core';
 import {
   Address,
@@ -9,6 +7,7 @@ import {
   CoinSelectionStrategyCIP2,
   Ed25519KeyHash,
   Int,
+  LinearFee,
   MultiAsset,
   NativeScript,
   NativeScripts,
@@ -21,8 +20,8 @@ import {
   TimelockStart,
   Transaction,
   TransactionBuilder,
+  TransactionBuilderConfigBuilder,
   TransactionOutput,
-  TransactionOutputBuilder,
   TransactionUnspentOutput,
   TransactionUnspentOutputs,
   TransactionWitnessSet,
@@ -31,12 +30,9 @@ import {
   make_vkey_witness,
   min_ada_required,
 } from '@emurgo/cardano-serialization-lib-browser';
-import { CardanoUtils } from './cardano-utils';
-import {
-  WalletConnectService,
-  txBuilderConfig,
-} from './wallet-connect.service';
 import { PolicyPrivate, TokenSubmission } from 'src/cardano-tools-client';
+import { CardanoUtils } from './cardano-utils';
+import { WalletConnectService } from './wallet-connect.service';
 
 export interface MultiAssetOutput {
   policy_id: ScriptHash;
@@ -51,6 +47,15 @@ export interface SimpleScript {
   slot?: number;
   keyHash?: string;
 }
+
+export const txBuilderConfig = TransactionBuilderConfigBuilder.new()
+  .fee_algo(LinearFee.new(BigNum.from_str('44'), BigNum.from_str('155381')))
+  .coins_per_utxo_word(BigNum.from_str('34482'))
+  .pool_deposit(BigNum.from_str('500000000'))
+  .key_deposit(BigNum.from_str('2000000'))
+  .max_value_size(5000)
+  .max_tx_size(16384)
+  .build();
 
 @Injectable({
   providedIn: 'root',
@@ -211,7 +216,7 @@ export class CardanoDappService {
     let lastError;
     for (let i = 0; i < 100; i++) {
       try {
-        const txBuilder = this.walletConnectService.getTxBuilder();
+        const txBuilder = TransactionBuilder.new(txBuilderConfig);
 
         txBuilder.set_ttl(CardanoUtils.currentSlot() + 60 * 10);
 

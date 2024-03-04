@@ -64,8 +64,6 @@ import { MintOnDemandFormComponent } from './mint-on-demand-form/mint-on-demand-
 import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions/mint-on-demand-instructions.component';
 import { MintOnDemandComponent } from './mint-on-demand/mint-on-demand.component';
 import { MintPolicyFormComponent } from './mint-policy-form/mint-policy-form.component';
-import { MintReviewAndSubmitComponent } from './mint-review-and-submit/mint-review-and-submit.component';
-import { MintSuccessComponent } from './mint-success/mint-success.component';
 import { MintTokenMiniComponent } from './mint-token-mini/mint-token-mini.component';
 import { MintComponent } from './mint/mint.component';
 import { MyTokensComponent } from './my-tokens/my-tokens.component';
@@ -101,9 +99,7 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
     MinValidatorDirective,
     MaxValidatorDirective,
     MaxBytesValidatorDirective,
-    MintReviewAndSubmitComponent,
     MintTokenMiniComponent,
-    MintSuccessComponent,
     FooterComponent,
     TermsOfServiceComponent,
     ContactComponent,

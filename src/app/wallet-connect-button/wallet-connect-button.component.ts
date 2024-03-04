@@ -7,6 +7,7 @@ import {
   WalletConnectService,
 } from '../wallet-connect.service';
 import { CardanoDappService } from '../cardano-dapp.service';
+import { ErrorService } from '../error.service';
 
 @Component({
   selector: 'app-wallet-connect-button',
@@ -22,7 +23,8 @@ export class WalletConnectButtonComponent implements OnInit {
   constructor(
     private walletConnectServiceService: WalletConnectService,
     private localStorageService: LocalStorageService,
-    private cardanoDappService: CardanoDappService
+    private cardanoDappService: CardanoDappService,
+    private errorService: ErrorService
   ) {
     this.cardano = this.walletConnectServiceService.getCardano();
     this.dappWalletSubscription =
@@ -47,7 +49,11 @@ export class WalletConnectButtonComponent implements OnInit {
     return this.dappWallet?.walletConnector;
   }
 
-  connect(walletKey: string) {
-    this.walletConnectServiceService.connect(walletKey);
+  async connect(walletKey: string) {
+    try {
+      await this.walletConnectServiceService.connect(walletKey);
+    } catch (error) {
+      this.errorService.handleError(error);
+    }
   }
 }
