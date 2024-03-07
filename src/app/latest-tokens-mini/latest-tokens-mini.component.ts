@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TokenDataWithMetadata } from '../token-enhancer.service';
+import { TokenListItem } from 'src/dbsync-client';
 import { TokenEnhancerService } from './../token-enhancer.service';
-import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 
 @Component({
   selector: 'app-latest-tokens-mini',

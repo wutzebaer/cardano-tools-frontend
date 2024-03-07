@@ -52,6 +52,13 @@ export interface SimpleScript {
   keyHash?: string;
 }
 
+export interface BurnToken {
+  policyId: string;
+  maName: string;
+  amount: number;
+  utxo: TransactionUnspentOutput;
+}
+
 export const txBuilderConfig = TransactionBuilderConfigBuilder.new()
   .fee_algo(LinearFee.new(BigNum.from_str('44'), BigNum.from_str('155381')))
   .coins_per_utxo_word(BigNum.from_str('34482'))
@@ -151,6 +158,40 @@ export class CardanoDappService {
     // pin files
     if (pin) {
       await this.mintRestInterfaceService.pinFiles(txHash).toPromise();
+    }
+
+    return txHash;
+  }
+
+  public async burnTokens(policy: PolicyPrivate, tokens: BurnToken[]) {
+    const nativeScript = this.toNativeScript(JSON.parse(policy.policy));
+    const tx = await this.buildTransaction((txBuilder: TransactionBuilder) => {
+      for (const token of tokens) {
+        const assetName = AssetName.new(Buffer.from(token.maName, 'hex'));
+
+        const utxo: TransactionUnspentOutput = token.utxo;
+        txBuilder.add_input(
+          utxo.output().address(), // Die Adresse, von der aus die Münzen gesendet werden
+          utxo.input(), // Das TransactionInput-Objekt, das zum UTXO gehört
+          utxo.output().amount() // Der Betrag des UTXO
+        );
+
+        txBuilder.add_mint_asset(
+          nativeScript,
+          assetName,
+          Int.new_i32(-token.amount)
+        );
+      }
+    });
+
+    // submit
+    const txHash = await this.submitTransaction(tx, policy);
+
+    // wait for confirmation
+    while (
+      !(await this.mintRestInterfaceService.txConfirmed(txHash).toPromise())
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
     return txHash;

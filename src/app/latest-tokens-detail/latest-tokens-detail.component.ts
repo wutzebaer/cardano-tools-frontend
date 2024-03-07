@@ -1,7 +1,6 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TableRow } from '../mint-token-mini/mint-token-mini.component';
 import { TokenDataWithMetadata } from '../token-enhancer.service';
 import { TokenListItem } from 'src/dbsync-client';
 
@@ -16,7 +15,7 @@ export class LatestTokensDetailComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { tokenListItem: TokenListItem },
     private clipboard: Clipboard,
-    private dialogRef: MatDialog,
+    private dialogRef: MatDialog
   ) {
     this.tokenListItem = data.tokenListItem;
   }

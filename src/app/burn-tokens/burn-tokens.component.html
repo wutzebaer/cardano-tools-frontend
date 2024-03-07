@@ -4,33 +4,34 @@
       <mat-card-content>
         <h2>Burn NFTs of your unlocked policies</h2>
 
-        <form #instructionsForm="ngForm">
-          <!-- POLICY -->
-          <app-policy-selector
-            [createPolicies]="false"
-            (changedPolicyId)="changePolicyId($event)"
-          >
-          </app-policy-selector>
+        <!-- POLICY -->
+        <app-policy-selector
+          [createPolicies]="false"
+          (changedPolicyId)="changePolicyId($event)"
+        >
+        </app-policy-selector>
 
-          <h2>Tokens to burn</h2>
-          <div *ngIf="!tokens.length">
-            Currently no tokens in your connected wallet
+        <h2>Tokens to burn</h2>
+        <div *ngIf="!tokens.length">
+          Currently no tokens in your connected wallet
+        </div>
+        <div class="flex justify-center">
+          <div class="flex flex-wrap gap-4 justify-center w-full xl:w-[1200px]">
+            <ng-container *ngFor="let token of tokens; let i = index">
+              <div
+                class="w-full sm:w-[280px] token"
+                [class.selected]="selectedTokens.includes(token)"
+                (click)="toggleSelection(token)"
+              >
+                <app-token-mini
+                  [policyId]="token.policyId"
+                  [assetName]="token.maName"
+                  [amount]="token.amount"
+                ></app-token-mini>
+              </div>
+            </ng-container>
           </div>
-          <div class="flex justify-center">
-            <div
-              class="flex flex-wrap gap-4 justify-center w-full xl:w-[1200px]"
-            >
-              <ng-container *ngFor="let token of tokens; let i = index">
-                <div class="w-full sm:w-[280px]">
-                  <app-latest-tokens-mini
-                    [tokenListItem]="token"
-                    (click)="details(token)"
-                  ></app-latest-tokens-mini>
-                </div>
-              </ng-container>
-            </div>
-          </div>
-        </form>
+        </div>
       </mat-card-content>
     </mat-card>
 
@@ -38,11 +39,13 @@
       <button
         mat-raised-button
         color="primary"
-        [disabled]="instructionsForm.invalid"
         (click)="burn()"
-        [disabled]="!tokens.length"
+        [disabled]="!selectedTokens.length || minting"
       >
-        <mat-icon>local_fire_department</mat-icon>
+        <mat-icon *ngIf="!minting">local_fire_department</mat-icon>
+        <mat-icon *ngIf="minting"
+          ><mat-spinner diameter="18" color="accent"></mat-spinner
+        ></mat-icon>
         <span>Burn</span>
       </button>
     </div>

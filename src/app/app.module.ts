@@ -64,7 +64,6 @@ import { MintOnDemandFormComponent } from './mint-on-demand-form/mint-on-demand-
 import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions/mint-on-demand-instructions.component';
 import { MintOnDemandComponent } from './mint-on-demand/mint-on-demand.component';
 import { MintPolicyFormComponent } from './mint-policy-form/mint-policy-form.component';
-import { MintTokenMiniComponent } from './mint-token-mini/mint-token-mini.component';
 import { MintComponent } from './mint/mint.component';
 import { MyTokensComponent } from './my-tokens/my-tokens.component';
 import { NavComponent } from './nav/nav.component';
@@ -82,6 +81,8 @@ import { LocaleInitializerService } from './locale-initializer.service';
 import { DatePipe } from '@angular/common';
 import { WalletConnectButtonComponent } from './wallet-connect-button/wallet-connect-button.component';
 import { MintSuccessPopupComponent } from './mint-success-popup/mint-success-popup.component';
+import { TokenMiniComponent } from './token-mini/token-mini.component';
+import { BurnTokensSuccessComponent } from './burn-tokens-success/burn-tokens-success.component';
 
 export function initApp(localeInitializerService: LocaleInitializerService) {
   return () => localeInitializerService.initialize();
@@ -99,7 +100,6 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
     MinValidatorDirective,
     MaxValidatorDirective,
     MaxBytesValidatorDirective,
-    MintTokenMiniComponent,
     FooterComponent,
     TermsOfServiceComponent,
     ContactComponent,
@@ -131,6 +131,8 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
     JsonFormatPipe,
     WalletConnectButtonComponent,
     MintSuccessPopupComponent,
+    TokenMiniComponent,
+    BurnTokensSuccessComponent,
   ],
   imports: [
     ApiModule,
