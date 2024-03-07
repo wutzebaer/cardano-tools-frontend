@@ -30,7 +30,11 @@ import {
   make_vkey_witness,
   min_ada_required,
 } from '@emurgo/cardano-serialization-lib-browser';
-import { PolicyPrivate, TokenSubmission } from 'src/cardano-tools-client';
+import {
+  MintRestInterfaceService,
+  PolicyPrivate,
+  TokenSubmission,
+} from 'src/cardano-tools-client';
 import { CardanoUtils } from './cardano-utils';
 import { WalletConnectService } from './wallet-connect.service';
 
@@ -61,7 +65,10 @@ export const txBuilderConfig = TransactionBuilderConfigBuilder.new()
   providedIn: 'root',
 })
 export class CardanoDappService {
-  constructor(private walletConnectService: WalletConnectService) {}
+  constructor(
+    private walletConnectService: WalletConnectService,
+    private mintRestInterfaceService: MintRestInterfaceService
+  ) {}
 
   public async sendAda(targetAddress: Address, amount: BigNum) {
     const output = TransactionOutput.new(targetAddress, Value.new(amount));
@@ -74,10 +81,14 @@ export class CardanoDappService {
   public async mintTokens(
     policy: PolicyPrivate,
     tokens: TokenSubmission[],
-    metadata: any
+    metadata: any,
+    pin: boolean
   ) {
     const changeAddress = await this.getChangeAddress();
     const nativeScript = this.toNativeScript(JSON.parse(policy.policy));
+    const pinFee = await this.mintRestInterfaceService
+      .calculatePinFee(JSON.stringify(metadata))
+      .toPromise();
 
     const tx = await this.buildTransaction((txBuilder: TransactionBuilder) => {
       const assetsMap = Assets.new();
@@ -106,13 +117,43 @@ export class CardanoDappService {
         )
       );
 
+      const metadataKey = Object.keys(metadata)[0];
       txBuilder.add_json_metadatum(
-        BigNum.from_str('721'),
-        JSON.stringify(metadata['721'])
+        BigNum.from_str(metadataKey),
+        JSON.stringify(metadata[metadataKey])
       );
+
+      if (pin) {
+        const pledgeAddressBech =
+          changeAddress.network_id() === 0
+            ? 'addr_test1qqypqe4g9kw9aeuuxp94lcuk0v6k0z79n2f8de8nnm7uwwsxu2hyfhlkwuxupa9d5085eunq2qywy7hvmvej456flknsymw6pl'
+            : 'addr1qx6pnsm9n3lrvtwx24kq7a0mfwq2txum2tvtaevnpkn4mpyghzw2ukr33p5k45j42w62pqysdkf65p34mrvl4yu4n72s7yfgkq';
+
+        txBuilder.add_output(
+          TransactionOutput.new(
+            Address.from_bech32(pledgeAddressBech),
+            Value.new(BigNum.from_str(pinFee.toString()))
+          )
+        );
+      }
     });
 
-    return await this.submitTransaction(tx, policy);
+    // submit
+    const txHash = await this.submitTransaction(tx, policy);
+
+    // wait for confirmation
+    while (
+      !(await this.mintRestInterfaceService.txConfirmed(txHash).toPromise())
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+
+    // pin files
+    if (pin) {
+      await this.mintRestInterfaceService.pinFiles(txHash).toPromise();
+    }
+
+    return txHash;
   }
 
   public async submitTransaction(tx: Transaction, policy?: PolicyPrivate) {
@@ -203,12 +244,10 @@ export class CardanoDappService {
     const rawUtxos = CardanoUtils.shuffleArray(
       (await wallet.getUtxos()).filter((item) => !collateral.includes(item))
     );
+    const utxos = rawUtxos.map((ru) => {
+      return TransactionUnspentOutput.from_bytes(Buffer.from(ru, 'hex'));
+    });
     const transactionUnspentOutputs = TransactionUnspentOutputs.new();
-    const utxos = rawUtxos
-      .map((ru) => {
-        return TransactionUnspentOutput.from_bytes(Buffer.from(ru, 'hex'));
-      })
-      .filter((utxo) => utxo.output().amount().multiasset());
     for (const utxo of utxos) {
       transactionUnspentOutputs.add(utxo);
     }

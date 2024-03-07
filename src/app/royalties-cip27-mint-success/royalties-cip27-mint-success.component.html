@@ -1,18 +1,13 @@
 <h2 mat-dialog-title>Success</h2>
 
 <mat-dialog-content>
-  <p>
-    Your Transaction has been submitted it might take serveral minutes until it
-    appears in the blockchain
-  </p>
+  <p>Your Transaction has been submitted.</p>
 
   <p>
     <b class="address"
-      ><a
-        target="_blank"
-        href="https://cexplorer.io/search?query={{ transaction.txId }}"
-        >{{ transaction.txId }}</a
-      ></b
+      ><a target="_blank" href="https://cexplorer.io/search?query={{ txId }}">{{
+        txId
+      }}</a></b
     >
   </p>
 </mat-dialog-content>

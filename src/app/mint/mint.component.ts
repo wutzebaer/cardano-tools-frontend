@@ -70,7 +70,8 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     private tokenApi: RestHandlerService,
     private cardanoDappService: CardanoDappService,
     private router: Router,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private mintRestInterfaceService: MintRestInterfaceService
   ) {
     this.initializeValues();
 
@@ -102,19 +103,6 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {}
-
-  discardPolicy() {
-    const dialogRef = this.dialog.open(MintPolicyFormComponent, {
-      width: '800px',
-      maxWidth: '90vw',
-      closeOnNavigation: true,
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (!result) {
-        return;
-      }
-    });
-  }
 
   ngOnInit(): void {
     this.addToken();
@@ -238,7 +226,8 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
       const txHash = await this.cardanoDappService.mintTokens(
         policy,
         this.mintOrderSubmission.tokens,
-        this.buildMetadata()
+        this.buildMetadata(),
+        this.mintOrderSubmission.pin
       );
 
       this.dialog.open(MintSuccessPopupComponent, {

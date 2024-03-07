@@ -30,7 +30,7 @@ export class ErrorService {
 
     this.snackBar.open(message, 'close', {
       verticalPosition: 'top',
-      duration: 1000 * 3,
+      duration: 1000 * 5,
     });
   }
 

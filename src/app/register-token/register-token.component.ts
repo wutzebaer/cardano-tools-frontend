@@ -53,7 +53,7 @@ export class RegisterTokenComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private dbsyncApi: RestHandlerService,
     private tokenEnhancerService: TokenEnhancerService,
-    private httpClient: HttpClient,
+    private httpClient: HttpClient
   ) {
     this.accountSubscription = accountService.account.subscribe((account) => {
       this.account = account;
@@ -62,7 +62,7 @@ export class RegisterTokenComponent implements OnInit, OnDestroy {
     this.policiesSubscription = accountService.policies.subscribe(
       (policies) => {
         this.policies = policies;
-      },
+      }
     );
   }
 
@@ -123,9 +123,9 @@ export class RegisterTokenComponent implements OnInit, OnDestroy {
 
   generateRegistration() {
     this.api
-      .generateTokenRegistration(
+      .generateTokenRegistrationForm(
         JSON.stringify(this.registrationMetadata),
-        this.file as Blob,
+        this.file as Blob
       )
       .subscribe((tokenRegistration) => {
         this.dialog.open(RegisterTokenSuccessComponent, {

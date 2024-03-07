@@ -1,3 +1,4 @@
+import { ApiModule } from 'src/cardano-tools-client';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { LayoutModule } from '@angular/cdk/layout';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -32,7 +33,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { BackendApiModule } from 'src/cardano-tools-client';
 import { DbsyncApiModule } from 'src/dbsync-client';
 import { MaxValidatorDirective } from 'src/max-validator.directive';
 import { BASE_PATH as BACKEND_BASE_PATH } from './../cardano-tools-client/variables';
@@ -133,6 +133,7 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
     MintSuccessPopupComponent,
   ],
   imports: [
+    ApiModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -150,7 +151,6 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
     MatSelectModule,
     MatRadioModule,
     FormsModule,
-    BackendApiModule,
     DbsyncApiModule,
     MatChipsModule,
     MatAutocompleteModule,

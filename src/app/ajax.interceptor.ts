@@ -17,9 +17,13 @@ export class AjaxInterceptor implements HttpInterceptor {
 
   intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler,
+    next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    const hideLoader = request.params.get('afterMintid') != null;
+    const hideLoader =
+      request.params.get('afterMintid') != null ||
+      request.url.indexOf('calculatePinFee') !== -1 ||
+      request.url.indexOf('txConfirmed') !== -1 ||
+      request.url.indexOf('pinFiles') !== -1;
 
     if (!hideLoader) {
       this.counter++;
@@ -46,7 +50,7 @@ export class AjaxInterceptor implements HttpInterceptor {
           this.counter--;
           this.ajaxStatusChanged$.emit(this.counter > 0);
         }
-      }),
+      })
     );
   }
 }

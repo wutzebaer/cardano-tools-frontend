@@ -97,7 +97,7 @@ export class AccountService {
   createPolicy(policyConfig: PolicyConfigPrivate) {
     let accountKey = this.localStorageService.retrieveAccountKey();
     return this.api
-      .createNewPolicy(accountKey!, policyConfig)
+      .createNewPolicy(policyConfig, accountKey!)
       .subscribe(() => this.updatePolicies());
   }
 }

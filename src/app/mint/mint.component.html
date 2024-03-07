@@ -54,6 +54,12 @@
       required
     ></mat-checkbox>
 
+    <div class="flex flex-row gap-2">
+      <mat-checkbox name="pin" [(ngModel)]="mintOrderSubmission.pin"
+        >Pin Files on IPFS</mat-checkbox
+      >
+    </div>
+
     <!-- Buttons -->
     <div class="flex flex-row gap-2">
       <!-- add token -->
@@ -108,7 +114,7 @@
       <button
         mat-raised-button
         color="primary"
-        [disabled]="tokenCountInput.invalid || loadingInput.invalid"
+        [disabled]="tokenCountInput.invalid || loadingInput.invalid || minting"
         type="submit"
       >
         <mat-icon *ngIf="!minting">savings</mat-icon>

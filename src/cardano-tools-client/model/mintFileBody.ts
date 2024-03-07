@@ -9,12 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { TokenSubmission } from './tokenSubmission';
 
-export interface MintOrderSubmission { 
-    tokens: Array<TokenSubmission>;
-    targetAddress?: string;
-    pin: boolean;
-    policyId: string;
-    metaData?: string;
+export interface MintFileBody { 
+    file: Blob;
 }
