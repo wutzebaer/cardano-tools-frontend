@@ -1,5 +1,3 @@
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import {
   AfterViewInit,
@@ -10,9 +8,11 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AccountService } from 'src/app/account.service';
 import { AjaxInterceptor } from 'src/app/ajax.interceptor';
 import { MintFormAdvancedComponent } from 'src/app/mint-form-advanced/mint-form-advanced.component';
@@ -22,16 +22,18 @@ import {
 } from 'src/app/mint-form/mint-form.component';
 import { MintPolicyFormComponent } from 'src/app/mint-policy-form/mint-policy-form.component';
 import {
-  TokenDataWithMetadata,
-  TokenEnhancerService,
-} from '../token-enhancer.service';
-import {
   AccountPrivate,
   MintOrderSubmission,
-  MintRestInterfaceService,
+  PolicyPrivate,
   Transaction,
 } from 'src/cardano-tools-client';
 import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
+import { CardanoDappService } from '../cardano-dapp.service';
+import { TokenEnhancerService } from '../token-enhancer.service';
+import { WalletConnectService } from '../wallet-connect.service';
+import { MintRestInterfaceService } from './../../cardano-tools-client/api/mintRestInterface.service';
+import { MintSuccessPopupComponent } from '../mint-success-popup/mint-success-popup.component';
+import { ErrorService } from '../error.service';
 
 @Component({
   selector: 'app-mint',
@@ -39,21 +41,17 @@ import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
   styleUrls: ['./mint.component.scss'],
 })
 export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild('tokenCountInput') tokenCountInput!: NgModel;
   @ViewChildren('mintForm') components!: QueryList<MintFormComponent>;
+  @ViewChild('nftForm') nftForm!: NgForm;
 
-  account?: AccountPrivate;
-  funds?: number;
-  fundingAddresses?: string[];
+  policies?: PolicyPrivate[];
   mintOrderSubmission!: MintOrderSubmission;
-  mintTransaction!: Transaction;
   loading = false;
+  minting = false;
   tokens: TokenListItem[] = [];
 
-  accountSubscription: Subscription;
-  fundsSubscription: Subscription;
-  fundingAddressesSubscription: Subscription;
+  policiesSubscription: Subscription;
 
   initializeValues() {
     this.mintOrderSubmission = {
@@ -63,54 +61,25 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
       policyId: '',
       metaData: '{}',
     };
-    this.mintTransaction = {
-      rawData: '',
-      txId: '',
-      fee: 0,
-      outputs: '',
-      inputs: '',
-      metaDataJson: '',
-      mintOrderSubmission: this.mintOrderSubmission,
-      minOutput: 1000000,
-      txSize: 0,
-      signedData: '',
-    };
   }
 
   constructor(
-    private api: MintRestInterfaceService,
     ajaxInterceptor: AjaxInterceptor,
     private dialog: MatDialog,
     private accountService: AccountService,
     private tokenApi: RestHandlerService,
-    private tokenEnhancerService: TokenEnhancerService,
-    private router: Router
+    private cardanoDappService: CardanoDappService,
+    private router: Router,
+    private errorService: ErrorService,
+    private mintRestInterfaceService: MintRestInterfaceService
   ) {
     this.initializeValues();
 
-    this.accountSubscription = accountService.account.subscribe((account) => {
-      this.account = account;
-    });
-
-    this.fundingAddressesSubscription =
-      accountService.fundingAddresses.subscribe((fundingAddresses) => {
-        this.fundingAddresses = fundingAddresses;
-        if (
-          fundingAddresses.indexOf(
-            this.mintOrderSubmission.targetAddress ?? ''
-          ) === -1
-        ) {
-          this.mintOrderSubmission.targetAddress = fundingAddresses[0];
-        }
-      });
-
-    this.fundsSubscription = accountService.funds.subscribe((funds) => {
-      let balanceChanged = funds != this.funds;
-      this.funds = funds;
-      if (this.stepper?.selectedIndex > 0 && balanceChanged) {
-        this.updateMintTransaction();
+    this.policiesSubscription = accountService.policies.subscribe(
+      (policies) => {
+        this.policies = policies;
       }
-    });
+    );
 
     ajaxInterceptor.ajaxStatusChanged$.subscribe(
       (ajaxStatus) => (this.loading = ajaxStatus)
@@ -118,9 +87,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.accountSubscription.unsubscribe();
-    this.fundsSubscription.unsubscribe();
-    this.fundingAddressesSubscription.unsubscribe();
+    this.policiesSubscription.unsubscribe();
   }
 
   changePolicyId(policyId: string) {
@@ -135,37 +102,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mintOrderSubmission.policyId = policyId;
   }
 
-  ngAfterViewInit() {
-    this.stepper.selectionChange.subscribe((event: StepperSelectionEvent) => {
-      if (event.previouslySelectedIndex == 0) {
-        this.updateMintTransaction();
-      }
-    });
-  }
-
-  updateMintTransaction() {
-    const metaData = this.buildMetadata();
-    let metaDataString = JSON.stringify(metaData, null, 3);
-    this.mintOrderSubmission.metaData = metaDataString;
-    this.api
-      .buildMintTransaction(this.account!.key, this.mintOrderSubmission)
-      .subscribe((mintTransaction) => {
-        this.mintTransaction = mintTransaction;
-      });
-  }
-
-  discardPolicy() {
-    const dialogRef = this.dialog.open(MintPolicyFormComponent, {
-      width: '800px',
-      maxWidth: '90vw',
-      closeOnNavigation: true,
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (!result) {
-        return;
-      }
-    });
-  }
+  ngAfterViewInit() {}
 
   ngOnInit(): void {
     this.addToken();
@@ -206,16 +143,7 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
     this.accountService.updateFunds();
   }
 
-  mintSuccess() {
-    this.stepper.selectedIndex = 3;
-    this.stepper.steps.forEach((s) => (s.editable = false));
-  }
-
   restart() {
-    this.stepper.steps.forEach((s) => (s.editable = true));
-    this.stepper.steps.forEach((s) => (s.completed = false));
-    this.stepper.selectedIndex = 0;
-
     const oldPolicyId = this.mintOrderSubmission.policyId;
     this.initializeValues();
     this.addToken();
@@ -276,5 +204,44 @@ export class MintComponent implements OnInit, AfterViewInit, OnDestroy {
           this.buildMetadata()['721'][this.mintOrderSubmission.policyId],
       },
     });
+  }
+
+  async mint() {
+    // check valid
+    if (!this.nftForm.valid) {
+      return;
+    }
+
+    // find policy
+    const policy = this.policies?.find(
+      (p) => p.policyId === this.mintOrderSubmission.policyId
+    );
+    if (!policy) {
+      return;
+    }
+
+    // mint
+    try {
+      this.minting = true;
+      const txHash = await this.cardanoDappService.mintTokens(
+        policy,
+        this.mintOrderSubmission.tokens,
+        this.buildMetadata(),
+        this.mintOrderSubmission.pin
+      );
+
+      this.dialog.open(MintSuccessPopupComponent, {
+        width: '600px',
+        maxWidth: '90vw',
+        data: { txHash: txHash },
+        closeOnNavigation: true,
+      });
+
+      this.restart();
+    } catch (error) {
+      this.errorService.handleError(error);
+    } finally {
+      this.minting = false;
+    }
   }
 }

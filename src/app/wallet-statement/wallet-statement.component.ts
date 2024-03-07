@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,9 +7,8 @@ import {
   PriceDto,
   WalletStatementRestInterfaceService,
 } from 'src/cardano-tools-client';
-import { LocalStorageService } from './../local-storage.service';
 import * as XLSX from 'xlsx';
-import { DatePipe } from '@angular/common';
+import { LocalStorageService } from './../local-storage.service';
 
 @Component({
   selector: 'app-wallet-statement',

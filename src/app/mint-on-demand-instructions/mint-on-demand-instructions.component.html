@@ -19,18 +19,9 @@
           {{ publicDropInfo.price / 1000000 | number : "1.0-6" }} ₳ left!
         </p>
 
-        <h2>How to buy</h2>
+        <h2>Mint</h2>
 
-        <!--
-                <ul>
-                    <li>Choose the quantity you would like to purchase</li>
-                    <li>Send the correct amount of ADA to the wallet address below</li>
-                    <li>Wait to receive the NFTs in your wallet</li>
-                </ul>
-                -->
-
-        <h3><b>Step 1:</b> Choose the quantity you would like to purchase</h3>
-        <p>
+        <div class="flex flex-col mb-4">
           <mat-form-field appearance="outline">
             <mat-label>Amount</mat-label>
             <mat-select [(ngModel)]="amount">
@@ -42,43 +33,22 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-        </p>
 
-        <h3>
-          <b>Step 2:</b> Send the correct amount of ADA to the wallet address
-          below
-        </h3>
-        <p>
-          Please send
-          <b
-            >{{
-              (publicDropInfo.price / 1000000) * amount | number : "1.0-6"
-            }}
-            ₳</b
-          >
           <button
-            mat-icon-button
-            class="inline-button"
-            (click)="
-              copyToClipboard(
-                ((publicDropInfo.price / 1000000) * amount).toString()
-              )
-            "
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="pay()"
+            [disabled]="minting"
           >
-            <mat-icon>content_copy</mat-icon>
-          </button>
+            <mat-icon *ngIf="!minting">savings</mat-icon>
+            <mat-icon *ngIf="minting"
+              ><mat-spinner diameter="18" color="accent"></mat-spinner
+            ></mat-icon>
 
-          to address <b>{{ publicDropInfo.address }}</b>
-          <button
-            mat-icon-button
-            class="inline-button"
-            (click)="copyToClipboard(publicDropInfo.address)"
-          >
-            <mat-icon>content_copy</mat-icon>
+            <span>Mint</span>
           </button>
-        </p>
-
-        <h3><b>Step 3:</b> Wait to receive the NFTs in your wallet</h3>
+        </div>
 
         <h2>Terms & Conditions.</h2>
         <p>

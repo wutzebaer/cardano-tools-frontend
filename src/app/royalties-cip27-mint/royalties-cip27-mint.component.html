@@ -37,7 +37,6 @@
                 min="0"
                 max="100"
                 step="10"
-                (input)="inputChanged(percent)"
               />
             </mat-form-field>
 
@@ -49,39 +48,26 @@
                 [(ngModel)]="addr"
                 name="addr"
                 required
-                (input)="inputChanged(addr)"
                 minlength="59"
               />
             </mat-form-field>
           </div>
         </form>
-
-        <!-- fund instruction-->
-        <form #fundForm="ngForm" [hidden]="instructionsForm.invalid">
-          <app-fund-account
-            #fundAccount
-            [activeStep]="true"
-            [mintTransaction]="mintTransaction"
-            (updateMintTransaction)="buildTransaction()"
-            [mintOrderSubmission]="mintOrderSubmission"
-          ></app-fund-account>
-        </form>
       </mat-card-content>
     </mat-card>
 
     <div class="flex gap-2">
-      <button mat-raised-button color="accent" (click)="updateFunds()">
-        <mat-icon>refresh</mat-icon>
-        <span> Refresh</span>
-      </button>
       <button
         mat-raised-button
         color="primary"
-        [disabled]="instructionsForm.invalid || fundForm.invalid"
+        [disabled]="instructionsForm.invalid || minting"
         (click)="generateCip27()"
       >
-        <mat-icon>token</mat-icon>
-        <span> Submit</span>
+        <mat-icon *ngIf="!minting">token</mat-icon>
+        <mat-icon *ngIf="minting"
+          ><mat-spinner diameter="18" color="accent"></mat-spinner
+        ></mat-icon>
+        <span>Mint</span>
       </button>
     </div>
 

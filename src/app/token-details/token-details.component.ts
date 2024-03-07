@@ -3,11 +3,15 @@ import { Location } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
-import { TableRow } from '../mint-token-mini/mint-token-mini.component';
 import {
   TokenDataWithMetadata,
   TokenEnhancerService,
 } from '../token-enhancer.service';
+
+interface TableRow {
+  name: string;
+  value: any;
+}
 
 @Component({
   selector: 'app-token-details',
@@ -29,7 +33,7 @@ export class TokenDetailsComponent implements OnInit {
     private api: RestHandlerService,
     private clipboard: Clipboard,
     private snackBar: MatSnackBar,
-    private location: Location,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -67,7 +71,7 @@ export class TokenDetailsComponent implements OnInit {
     return (
       window.location.origin +
       this.location.prepareExternalUrl(
-        'latest?q=' + this.tokenDataWithMetadata?.fingerprint,
+        'latest?q=' + this.tokenDataWithMetadata?.fingerprint
       )
     );
   }
@@ -91,9 +95,9 @@ export class TokenDetailsComponent implements OnInit {
         JSON.stringify(
           JSON.parse(this.tokenDataWithMetadata!.metadata!),
           null,
-          3,
+          3
         ) +
-        ',',
+        ','
     );
   }
 }

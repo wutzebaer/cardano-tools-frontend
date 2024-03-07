@@ -176,15 +176,15 @@ export class MintOnDemandFormComponent implements OnInit {
         persistedDrop.id;
       this.dropRestInterfaceService
         .updateDrop(
+          this.drop,
           this.account!.key,
           this.policyId,
-          persistedDrop.id,
-          this.drop
+          persistedDrop.id
         )
         .subscribe(() => {});
     } else {
       this.dropRestInterfaceService
-        .createDrop(this.account!.key, this.policyId, this.drop)
+        .createDrop(this.drop, this.account!.key, this.policyId)
         .subscribe(() => {
           delete history.state.mintMetadata;
           this.dropChanged.next();

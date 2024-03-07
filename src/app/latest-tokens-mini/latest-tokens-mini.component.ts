@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TokenDataWithMetadata } from '../token-enhancer.service';
+import { TokenListItem } from 'src/dbsync-client';
 import { TokenEnhancerService } from './../token-enhancer.service';
-import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 
 @Component({
   selector: 'app-latest-tokens-mini',
@@ -12,13 +11,10 @@ export class LatestTokensMiniComponent implements OnInit {
   @Input() tokenListItem!: TokenListItem;
   imageUrl?: string;
 
-  constructor(
-    private api: RestHandlerService,
-    private tokenEnhancerService: TokenEnhancerService,
-  ) {}
+  constructor(private tokenEnhancerService: TokenEnhancerService) {}
   ngOnInit(): void {
     this.imageUrl = this.tokenEnhancerService.toIpfsUrl(
-      this.tokenListItem.image,
+      this.tokenListItem.image
     );
   }
 }

@@ -1,3 +1,4 @@
+import { ApiModule } from 'src/cardano-tools-client';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { LayoutModule } from '@angular/cdk/layout';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -32,7 +33,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { BackendApiModule } from 'src/cardano-tools-client';
 import { DbsyncApiModule } from 'src/dbsync-client';
 import { MaxValidatorDirective } from 'src/max-validator.directive';
 import { BASE_PATH as BACKEND_BASE_PATH } from './../cardano-tools-client/variables';
@@ -64,9 +64,6 @@ import { MintOnDemandFormComponent } from './mint-on-demand-form/mint-on-demand-
 import { MintOnDemandInstructionsComponent } from './mint-on-demand-instructions/mint-on-demand-instructions.component';
 import { MintOnDemandComponent } from './mint-on-demand/mint-on-demand.component';
 import { MintPolicyFormComponent } from './mint-policy-form/mint-policy-form.component';
-import { MintReviewAndSubmitComponent } from './mint-review-and-submit/mint-review-and-submit.component';
-import { MintSuccessComponent } from './mint-success/mint-success.component';
-import { MintTokenMiniComponent } from './mint-token-mini/mint-token-mini.component';
 import { MintComponent } from './mint/mint.component';
 import { MyTokensComponent } from './my-tokens/my-tokens.component';
 import { NavComponent } from './nav/nav.component';
@@ -83,6 +80,9 @@ import { WalletStatementComponent } from './wallet-statement/wallet-statement.co
 import { LocaleInitializerService } from './locale-initializer.service';
 import { DatePipe } from '@angular/common';
 import { WalletConnectButtonComponent } from './wallet-connect-button/wallet-connect-button.component';
+import { MintSuccessPopupComponent } from './mint-success-popup/mint-success-popup.component';
+import { TokenMiniComponent } from './token-mini/token-mini.component';
+import { BurnTokensSuccessComponent } from './burn-tokens-success/burn-tokens-success.component';
 
 export function initApp(localeInitializerService: LocaleInitializerService) {
   return () => localeInitializerService.initialize();
@@ -100,9 +100,6 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
     MinValidatorDirective,
     MaxValidatorDirective,
     MaxBytesValidatorDirective,
-    MintReviewAndSubmitComponent,
-    MintTokenMiniComponent,
-    MintSuccessComponent,
     FooterComponent,
     TermsOfServiceComponent,
     ContactComponent,
@@ -133,8 +130,12 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
     HexToStringPipe,
     JsonFormatPipe,
     WalletConnectButtonComponent,
+    MintSuccessPopupComponent,
+    TokenMiniComponent,
+    BurnTokensSuccessComponent,
   ],
   imports: [
+    ApiModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -152,7 +153,6 @@ export function initApp(localeInitializerService: LocaleInitializerService) {
     MatSelectModule,
     MatRadioModule,
     FormsModule,
-    BackendApiModule,
     DbsyncApiModule,
     MatChipsModule,
     MatAutocompleteModule,

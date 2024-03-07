@@ -1,19 +1,17 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AccountPrivate, Drop } from 'src/cardano-tools-client';
-import { DropRestInterfaceService } from './../../cardano-tools-client/api/dropRestInterface.service';
-import { TokenRestInterfaceService } from './../../cardano-tools-client/api/tokenRestInterface.service';
+import {
+  AccountPrivate,
+  Drop,
+  DropRestInterfaceService,
+} from 'src/cardano-tools-client';
+import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 import { DropNftTransient } from './../../cardano-tools-client/model/dropNftTransient';
 import { DropTransient } from './../../cardano-tools-client/model/dropTransient';
 import { AccountService } from './../account.service';
-import {
-  TokenDataWithMetadata,
-  TokenEnhancerService,
-} from './../token-enhancer.service';
-import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
+import { TokenEnhancerService } from './../token-enhancer.service';
 
 @Component({
   selector: 'app-mint-on-demand',

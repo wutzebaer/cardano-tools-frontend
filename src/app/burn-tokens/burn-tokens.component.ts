@@ -1,171 +1,149 @@
-import { TokenSubmission } from './../../cardano-tools-client/model/tokenSubmission';
-import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
-import { NgForm } from '@angular/forms';
-import {
-  debounceTime,
-  switchMap,
-  tap,
-  distinctUntilChanged,
-  map,
-} from 'rxjs/operators';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { interval, Subscription, Subject } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription, interval } from 'rxjs';
 import {
   AccountPrivate,
   MintOrderSubmission,
   MintRestInterfaceService,
   PolicyPrivate,
-  TokenRestInterfaceService,
+  TokenSubmission,
   Transaction,
 } from 'src/cardano-tools-client';
+import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
+import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
 import { AccountService } from './../account.service';
 import { AjaxInterceptor } from './../ajax.interceptor';
+import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
+import { TokenEnhancerService } from './../token-enhancer.service';
+import { BurnToken, CardanoDappService } from '../cardano-dapp.service';
+import { DappWallet, WalletConnectService } from '../wallet-connect.service';
 import {
-  TokenDataWithMetadata,
-  TokenEnhancerService,
-} from './../token-enhancer.service';
-import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
+  AssetName,
+  TransactionUnspentOutput,
+} from '@emurgo/cardano-serialization-lib-browser';
+import { ErrorService } from '../error.service';
+import { BurnTokensSuccessComponent } from '../burn-tokens-success/burn-tokens-success.component';
+
 @Component({
   selector: 'app-burn-tokens',
   templateUrl: './burn-tokens.component.html',
   styleUrls: ['./burn-tokens.component.scss'],
 })
 export class BurnTokensComponent implements OnDestroy {
-  @ViewChild('instructionsForm') instructionsForm!: NgForm;
-
-  account?: AccountPrivate;
+  dappWallet?: DappWallet;
   policies?: PolicyPrivate[];
   policy?: PolicyPrivate;
-  fundingAddresses?: string[];
-  allTokens: TokenListItem[] = [];
-  filteredTokens: TokenListItem[] = [];
-  percent: number = 20;
-  addr: string = '';
-  loading = false;
+  minting = false;
 
-  timer: Subscription;
-  accountSubscription: Subscription;
+  tokens: BurnToken[] = [];
+  selectedTokens: BurnToken[] = [];
+
   policiesSubscription: Subscription;
-  fundingAddressesSubscription: Subscription;
 
   constructor(
     public dialog: MatDialog,
     private accountService: AccountService,
     private tokenApi: RestHandlerService,
-    private tokenEnhancerService: TokenEnhancerService,
     private clipboard: Clipboard,
     private api: MintRestInterfaceService,
-    ajaxInterceptor: AjaxInterceptor,
     private snackBar: MatSnackBar,
+    private cardanoDappService: CardanoDappService,
+    private walletConnectService: WalletConnectService,
+    private errorService: ErrorService
   ) {
-    this.accountSubscription = accountService.account.subscribe((account) => {
-      this.account = account;
+    this.policiesSubscription = accountService.policies.subscribe(
+      (policies) => {
+        this.policies = policies;
+      }
+    );
+
+    this.walletConnectService.dappWallet$.subscribe((dappWallet) => {
+      this.dappWallet = dappWallet;
       this.updateTokens();
     });
-    this.policiesSubscription = accountService.policies.subscribe(
-      (policies) => (this.policies = policies),
-    );
-    this.fundingAddressesSubscription =
-      accountService.fundingAddresses.subscribe(
-        (fundingAddresses) => (this.fundingAddresses = fundingAddresses),
-      );
-
-    this.timer = interval(10000).subscribe(() => {
-      if (this.filteredTokens.length === 0) {
-        this.updateTokens();
-        this.accountService.updateFunds();
-      }
-    });
-    ajaxInterceptor.ajaxStatusChanged$.subscribe(
-      (ajaxStatus) => (this.loading = ajaxStatus),
-    );
   }
 
   ngOnDestroy(): void {
-    this.timer.unsubscribe();
-    this.accountSubscription.unsubscribe();
     this.policiesSubscription.unsubscribe();
-    this.fundingAddressesSubscription.unsubscribe();
   }
 
-  filterTokens() {
-    if (this.account && this.policy) {
-      this.filteredTokens = this.allTokens.filter(
-        (t) => t.maPolicyId == this.policy?.policyId,
-      );
+  toggleSelection(token: BurnToken) {
+    const index = this.selectedTokens.indexOf(token);
+    if (index !== -1) {
+      this.selectedTokens.splice(index, 1);
+    } else {
+      this.selectedTokens.push(token);
     }
   }
 
-  updateTokens() {
-    this.tokenApi
-      .getAddressTokenList(this.account!.address.address)
-      .subscribe((tokens) => {
-        this.allTokens = tokens;
-        this.filterTokens();
-      });
-  }
+  async updateTokens() {
+    if (!this.policy || !this.dappWallet) {
+      return;
+    }
 
-  copyToClipboard(value: string) {
-    this.clipboard.copy(value);
-    let snackBarRef = this.snackBar.open(
-      'Copied to clipboard: ' + value,
-      undefined,
-      { duration: 2000 },
-    );
+    const tokens: BurnToken[] = [];
+    const rawUtxos = await this.dappWallet.walletConnector.getUtxos();
+    const utxos = rawUtxos.map((ru) => TransactionUnspentOutput.from_hex(ru));
+    for (const utxo of utxos) {
+      const multiAsset = utxo.output().amount().multiasset();
+      if (!multiAsset) continue;
+      const scriptHashes = multiAsset.keys();
+      for (let i = 0; i < scriptHashes.len(); i++) {
+        const scriptHash = scriptHashes.get(i);
+        if (scriptHash.to_hex() === this.policy.policyId) {
+          const assets = multiAsset.get(scriptHash)!;
+          const assetNames = assets.keys();
+          for (let j = 0; j < assetNames.len(); j++) {
+            const assetName = assetNames.get(j);
+            const value = assets.get(assetName)!;
+            tokens.push({
+              policyId: this.policy.policyId,
+              maName: Buffer.from(assetName.name()).toString('hex'),
+              amount: Number(value.to_str()),
+              utxo: utxo,
+            });
+          }
+        }
+      }
+    }
+
+    this.tokens = tokens;
+    this.selectedTokens = [];
   }
 
   changePolicyId(policyId: string) {
     this.policy = this.policies?.find((p) => p.policyId === policyId);
-    this.filterTokens();
+    this.updateTokens();
   }
 
-  details(token: TokenListItem) {
-    this.dialog.open(LatestTokensDetailComponent, {
-      width: '750px',
-      maxWidth: '90vw',
-      data: { tokenListItem: token },
-      closeOnNavigation: true,
-    });
-  }
+  async burn() {
+    if (!this.policy) {
+      return;
+    }
 
-  burn() {
-    let mintOrderSubmission: MintOrderSubmission = {
-      tokens: this.filteredTokens.map(
-        (t) =>
-          ({
-            amount: -t.quantity,
-            assetName: Buffer.from(t.maName, 'hex').toString(),
-          }) as TokenSubmission,
-      ),
-      targetAddress: this.fundingAddresses![0],
-      pin: false,
-      policyId: this.policy!.policyId,
-    };
+    try {
+      this.minting = true;
+      const txId = await this.cardanoDappService.burnTokens(
+        this.policy,
+        this.selectedTokens
+      );
 
-    this.api
-      .buildMintTransaction(this.account!.key, mintOrderSubmission)
-      .subscribe({
-        next: (mintTransaction: Transaction) => {
-          if (confirm('Do you really want to submit this burn transaction?')) {
-            this.api
-              .submitMintTransaction(this.account!.key, mintTransaction)
-              .subscribe({
-                complete: () => {
-                  this.instructionsForm.reset();
-                  this.dialog.open(RoyaltiesCip27MintSuccessComponent, {
-                    width: '600px',
-                    maxWidth: '90vw',
-                    data: { transaction: mintTransaction },
-                    closeOnNavigation: true,
-                  });
-                },
-              });
-          }
-        },
+      this.updateTokens();
+
+      this.dialog.open(BurnTokensSuccessComponent, {
+        width: '600px',
+        maxWidth: '90vw',
+        data: { txId },
+        closeOnNavigation: true,
       });
+    } catch (error) {
+      console.log(error);
+      this.errorService.handleError(error);
+    } finally {
+      this.minting = false;
+    }
   }
 }

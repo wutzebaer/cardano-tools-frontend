@@ -37,7 +37,6 @@
     class="my-sidenav-content flex-col"
     style="display: flex"
   >
-
     <!-- BLUE TOOLBAR ON TOP-->
     <mat-toolbar color="primary" class="mat-elevation-z8">
       <img class="logo" src="/assets/logo.png" />
@@ -46,7 +45,7 @@
       <span *ngIf="funds" class="slogan"
         >Balance: {{ funds / 1000000 | number : "1.0-6" }}&nbsp;₳</span
       >
-      <!-- <app-wallet-connect-button></app-wallet-connect-button> -->
+      <app-wallet-connect-button></app-wallet-connect-button>
       <span class="example-spacer"></span>
       <button
         type="button"
@@ -58,8 +57,7 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
     </mat-toolbar>
-  
-  
+
     <div class="main-content flex flex-col gap-2">
       <!-- FUND VOTE -->
       <mat-card *ngIf="false" class="notice"
@@ -137,7 +135,6 @@
       </div>
 
       <router-outlet></router-outlet>
-      
     </div>
     <app-footer class="mt-auto"></app-footer>
   </mat-sidenav-content>

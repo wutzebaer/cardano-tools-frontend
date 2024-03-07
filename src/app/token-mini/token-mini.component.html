@@ -1,0 +1,30 @@
+<mat-card>
+  <mat-card-content>
+    <div class="flex flex-col gap-2">
+      <div class="title">
+        {{ tokenDetails?.metaDataObject.name || tokenDetails?.maName }}
+      </div>
+
+      <div class="preview flex justify-center items-center">
+        <!-- image -->
+        <ng-container *ngIf="imageUrl; else noimage">
+          <img #imagetag [src]="imageUrl" loading="lazy" />
+        </ng-container>
+
+        <!-- no image -->
+        <ng-template #noimage>
+          <mat-icon
+            class="big-icon"
+            color="primary"
+            fontSet="material-icons-outlined"
+            >generating_tokens</mat-icon
+          >
+        </ng-template>
+      </div>
+
+      <div class="icons" *ngIf="amount">
+        <span class="title">{{ amount }}x</span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

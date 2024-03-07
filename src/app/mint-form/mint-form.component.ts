@@ -62,7 +62,7 @@ export class MintFormComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private api: MintRestInterfaceService,
     private cdRef: ChangeDetectorRef,
-    public tokenEnhancerService: TokenEnhancerService,
+    public tokenEnhancerService: TokenEnhancerService
   ) {
     MintFormComponent.globalCounter++;
     this.counter = MintFormComponent.globalCounter;
@@ -176,7 +176,7 @@ export class MintFormComponent implements OnInit {
     if (this.metaData.image) {
       this.previewType = 'image';
       this.previewUrl = this.tokenEnhancerService.toIpfsUrl(
-        this.metaData.image,
+        this.metaData.image
       );
     } else {
       this.previewType = '';
@@ -231,7 +231,7 @@ export class MintFormComponent implements OnInit {
         this.updatePreview();
       };
     } else {
-      this.api.postFile(file as Blob, 'events', true).subscribe({
+      this.api.postFileForm(file as Blob, 'events', true).subscribe({
         error: (error) => {
           this.uploadProgress = 0;
         },
@@ -296,7 +296,7 @@ export class MintFormComponent implements OnInit {
     };
     window.open(
       'https://pool.pm/test/metadata?metadata=' +
-        encodeURIComponent(encodeURIComponent(JSON.stringify(metadata))),
+        encodeURIComponent(encodeURIComponent(JSON.stringify(metadata)))
     );
   }
 

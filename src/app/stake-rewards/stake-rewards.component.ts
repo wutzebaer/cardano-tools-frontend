@@ -74,7 +74,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private stakeRewardRestInterfaceService: StakeRewardRestInterfaceService,
     private mintRestInterfaceService: MintRestInterfaceService,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {
     restHandlerService
       .getPoolList()
@@ -88,7 +88,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
       if (this.oldFunds !== funds && this.rewardForm?.valid) {
         this.oldFunds = funds;
         let excludedStakers: string[] = Object.entries(
-          this.excludedStakersCheckboxes,
+          this.excludedStakersCheckboxes
         )
           .filter((entry) => entry[1])
           .map((entry) => entry[0]);
@@ -99,7 +99,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
           excludedStakers: excludedStakers,
         };
         this.stakeRewardRestInterfaceService
-          .getEpochStakes(this.account!.key, this.poolHash, this.epoch, request)
+          .getEpochStakes(request, this.account!.key, this.poolHash, this.epoch)
           .subscribe((result) => {
             this.epochStakes = result;
             this.dataSource.data = result;
@@ -135,14 +135,14 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
     const filterValue = this.poolHash.toLowerCase();
     this.filteredOptions.next(
       this.poolList.filter((option) =>
-        option.tickerName.toLowerCase().includes(filterValue),
-      ),
+        option.tickerName.toLowerCase().includes(filterValue)
+      )
     );
   }
 
   buildTransaction() {
     this.stakeRewardRestInterfaceService
-      .buildTransaction(this.account!.key, this.message, this.epochStakes)
+      .buildTransaction(this.epochStakes, this.message, this.account!.key)
       .subscribe((mintTransaction) => {
         this.mintTransaction = mintTransaction;
         this.isValid = true;
@@ -156,7 +156,7 @@ export class StakeRewardsComponent implements OnInit, OnDestroy {
   submit() {
     if (confirm('Do you really want to submit this transaction?')) {
       this.mintRestInterfaceService
-        .submitMintTransaction(this.account!.key, this.mintTransaction)
+        .submitMintTransaction(this.mintTransaction, this.account!.key)
         .subscribe({
           complete: () => {
             this.dialog.open(RoyaltiesCip27MintSuccessComponent, {
