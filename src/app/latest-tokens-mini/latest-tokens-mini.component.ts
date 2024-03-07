@@ -12,13 +12,10 @@ export class LatestTokensMiniComponent implements OnInit {
   @Input() tokenListItem!: TokenListItem;
   imageUrl?: string;
 
-  constructor(
-    private api: RestHandlerService,
-    private tokenEnhancerService: TokenEnhancerService,
-  ) {}
+  constructor(private tokenEnhancerService: TokenEnhancerService) {}
   ngOnInit(): void {
     this.imageUrl = this.tokenEnhancerService.toIpfsUrl(
-      this.tokenListItem.image,
+      this.tokenListItem.image
     );
   }
 }

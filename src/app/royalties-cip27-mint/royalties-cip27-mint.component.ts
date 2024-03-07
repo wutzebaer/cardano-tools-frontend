@@ -1,28 +1,16 @@
-import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject, Subscription, interval } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
-import { AccountService } from './../account.service';
-import { AjaxInterceptor } from './../ajax.interceptor';
-import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
+import { Subscription } from 'rxjs';
 import {
-  TokenDataWithMetadata,
-  TokenEnhancerService,
-} from './../token-enhancer.service';
-import {
-  AccountPrivate,
-  MintOrderSubmission,
-  MintRestInterfaceService,
   PolicyPrivate,
-  TokenSubmission,
-  Transaction,
+  TokenSubmission
 } from 'src/cardano-tools-client';
+import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 import { CardanoDappService } from '../cardano-dapp.service';
 import { ErrorService } from '../error.service';
+import { AccountService } from './../account.service';
+import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
 
 @Component({
   selector: 'app-royalties-cip27-mint',
@@ -45,9 +33,6 @@ export class RoyaltiesCip27MintComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private accountService: AccountService,
     private dbsyncApi: RestHandlerService,
-    private clipboard: Clipboard,
-    private mintRestInterfaceService: MintRestInterfaceService,
-    private snackBar: MatSnackBar,
     private cardanoDappService: CardanoDappService,
     private errorService: ErrorService
   ) {

@@ -9,15 +9,18 @@ import {
   MintOrderSubmission,
   MintRestInterfaceService,
   PolicyPrivate,
+  TokenSubmission,
   Transaction,
 } from 'src/cardano-tools-client';
 import { RestHandlerService, TokenListItem } from 'src/dbsync-client';
 import { LatestTokensDetailComponent } from '../latest-tokens-detail/latest-tokens-detail.component';
-import { TokenSubmission } from './../../cardano-tools-client/model/tokenSubmission';
 import { AccountService } from './../account.service';
 import { AjaxInterceptor } from './../ajax.interceptor';
 import { RoyaltiesCip27MintSuccessComponent } from './../royalties-cip27-mint-success/royalties-cip27-mint-success.component';
 import { TokenEnhancerService } from './../token-enhancer.service';
+import { CardanoDappService } from '../cardano-dapp.service';
+import { DappWallet, WalletConnectService } from '../wallet-connect.service';
+import { AssetName, TransactionUnspentOutput } from '@emurgo/cardano-serialization-lib-browser';
 @Component({
   selector: 'app-burn-tokens',
   templateUrl: './burn-tokens.component.html',
@@ -26,90 +29,88 @@ import { TokenEnhancerService } from './../token-enhancer.service';
 export class BurnTokensComponent implements OnDestroy {
   @ViewChild('instructionsForm') instructionsForm!: NgForm;
 
-  account?: AccountPrivate;
+  dappWallet?: DappWallet;
   policies?: PolicyPrivate[];
   policy?: PolicyPrivate;
-  fundingAddresses?: string[];
-  allTokens: TokenListItem[] = [];
-  filteredTokens: TokenListItem[] = [];
-  percent: number = 20;
-  addr: string = '';
+  tokens: TokenListItem[] = [];
   loading = false;
 
-  timer: Subscription;
-  accountSubscription: Subscription;
   policiesSubscription: Subscription;
-  fundingAddressesSubscription: Subscription;
 
   constructor(
     public dialog: MatDialog,
     private accountService: AccountService,
     private tokenApi: RestHandlerService,
-    private tokenEnhancerService: TokenEnhancerService,
     private clipboard: Clipboard,
     private api: MintRestInterfaceService,
-    ajaxInterceptor: AjaxInterceptor,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cardanoDappService: CardanoDappService,
+    private walletConnectService: WalletConnectService
   ) {
-    this.accountSubscription = accountService.account.subscribe((account) => {
-      this.account = account;
+    this.policiesSubscription = accountService.policies.subscribe(
+      (policies) => {
+        this.policies = policies;
+      }
+    );
+
+    this.walletConnectService.dappWallet$.subscribe((dappWallet) => {
+      this.dappWallet = dappWallet;
       this.updateTokens();
     });
-    this.policiesSubscription = accountService.policies.subscribe(
-      (policies) => (this.policies = policies)
-    );
-    this.fundingAddressesSubscription =
-      accountService.fundingAddresses.subscribe(
-        (fundingAddresses) => (this.fundingAddresses = fundingAddresses)
-      );
-
-    this.timer = interval(10000).subscribe(() => {
-      if (this.filteredTokens.length === 0) {
-        this.updateTokens();
-        this.accountService.updateFunds();
-      }
-    });
-    ajaxInterceptor.ajaxStatusChanged$.subscribe(
-      (ajaxStatus) => (this.loading = ajaxStatus)
-    );
   }
 
   ngOnDestroy(): void {
-    this.timer.unsubscribe();
-    this.accountSubscription.unsubscribe();
     this.policiesSubscription.unsubscribe();
-    this.fundingAddressesSubscription.unsubscribe();
   }
 
-  filterTokens() {
-    if (this.account && this.policy) {
-      this.filteredTokens = this.allTokens.filter(
-        (t) => t.maPolicyId == this.policy?.policyId
-      );
+  async updateTokens() {
+    if (!this.policy || !this.dappWallet) {
+      return;
     }
-  }
 
-  updateTokens() {
-    this.tokenApi
-      .getAddressTokenList(this.account!.address.address)
-      .subscribe((tokens) => {
-        this.allTokens = tokens;
-        this.filterTokens();
-      });
-  }
+    const tokens: TokenListItem[] = [];
 
-  copyToClipboard(value: string) {
-    this.clipboard.copy(value);
-    let snackBarRef = this.snackBar.open(
-      'Copied to clipboard: ' + value,
-      undefined,
-      { duration: 2000 }
-    );
+    const rawUtxos = await this.dappWallet.walletConnector.getUtxos();
+    const utxos = rawUtxos.map((ru) => TransactionUnspentOutput.from_hex(ru));
+    for (const utxo of utxos) {
+      const multiAsset = utxo.output().amount().multiasset();
+      if (!multiAsset) continue;
+      const scriptHashes = multiAsset.keys();
+      for (let i = 0; i < scriptHashes.len(); i++) {
+        const scriptHash = scriptHashes.get(i);
+        if (scriptHash.to_hex() === this.policy.policyId) {
+          const assets = multiAsset.get(scriptHash)!;
+          const assetNames = assets.keys();
+          for (let j = 0; j < assetNames.len(); j++) {
+            const assetName = assetNames.get(j);
+            const value = assets.get(assetName)!;
+            
+            
+            tokens.push({
+              maPolicyId: this.policy.policyId,
+              maName: assetName.to_hex(),
+              maFingerprint: '',
+              quantity: Number(value.to_str()),
+              name: Buffer.from(assetName.name()).toString(),
+              image: '',
+            });
+
+            console.log(
+              scriptHash.to_hex(),
+              Buffer.from(assetName.name()).toString(),
+              value?.to_js_value()
+            );
+          }
+        }
+      }
+    }
+
+    this.tokens = tokens;
   }
 
   changePolicyId(policyId: string) {
     this.policy = this.policies?.find((p) => p.policyId === policyId);
-    this.filterTokens();
+    this.updateTokens();
   }
 
   details(token: TokenListItem) {
@@ -122,7 +123,7 @@ export class BurnTokensComponent implements OnDestroy {
   }
 
   burn() {
-    let mintOrderSubmission: MintOrderSubmission = {
+    /*     let mintOrderSubmission: MintOrderSubmission = {
       tokens: this.filteredTokens.map(
         (t) =>
           ({
@@ -155,6 +156,6 @@ export class BurnTokensComponent implements OnDestroy {
               });
           }
         },
-      });
+      }); */
   }
 }
