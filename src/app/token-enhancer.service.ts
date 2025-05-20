@@ -131,7 +131,6 @@ export class TokenEnhancerService {
     }
 
     if ((ipfs as string).startsWith('data:')) {
-      // return this.sanitizer.bypassSecurityTrustResourceUrl(ipfs) as string;
       return ipfs;
     }
 
